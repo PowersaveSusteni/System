@@ -1,0 +1,87 @@
+﻿@using Microsoft.AspNetCore.Mvc.Localization
+
+@inject IViewLocalizer Localizer
+@model Susteni.Models.Ship.ShipModel
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+
+
+<form id="generatorModesForm" style="margin-bottom: 0px;">
+    <input hidden asp-for="ShipGeneratorModes.GeneratorModesGuid" class="form-control k-textbox">
+    <input hidden asp-for="ShipGeneratorModes.GeneratorGuid" class="form-control k-textbox">
+    <input hidden asp-for="ShipGeneratorModes.OperationModeGuid" class="form-control k-textbox">
+    <input hidden asp-for="ShipGeneratorModes.Name" class="form-control k-textbox">
+    <input hidden asp-for="ShipGeneratorModes.HoursPrYear" class="form-control k-textbox">
+    <input hidden asp-for="ShipGeneratorModes.ProfilGuid" class="form-control k-textbox">
+    <input hidden asp-for="ShipGeneratorModes.kW" class="form-control k-textbox">
+    <input hidden asp-for="ShipGeneratorModes.PercentLoadNew" class="form-control k-textbox">
+    <input hidden asp-for="ShipGeneratorModes.PercentSavingNew" class="form-control k-textbox">
+
+    <div class="row align-items-center" style="display: flex; flex-direction: row;">
+        <label class="col-3 col-form-label">Hours before</label>
+        <div class="col-3">
+            @(Html.Kendo().NumericTextBox<double>()
+                .Name("ShipGeneratorModes.HoursBefore")
+                .HtmlAttributes(new { style = "width: 100px;" })
+                .Format("##")
+                .Step(10)
+                .Value(Model.ShipGeneratorModes.HoursBefore)
+                )
+        </div>
+        <label class="col-3 col-form-label">Hours after</label>
+        <div class="col-3">
+            @(Html.Kendo().NumericTextBox<double>()
+                .Name("ShipGeneratorModes.HoursAfter")
+                .HtmlAttributes(new { style = "width: 100px;" })
+                .Format("##")
+                .Step(10)
+                .Value(Model.ShipGeneratorModes.HoursAfter)
+                )
+        </div>
+    </div>
+
+    <div class="row align-items-center" style="display: flex; flex-direction: row;">
+        <label class="col-3 col-form-label">Load before</label>
+        <div class="col-3">
+            @(Html.Kendo().NumericTextBox<decimal>()
+                .Name("ShipGeneratorModes.PercentLoad")
+                .HtmlAttributes(new { style = "width: 100px;" })
+                .Format("#####.00")
+                .Decimals(2)
+                .Value(Model.ShipGeneratorModes.PercentLoad)
+                )
+            %
+        </div>
+        <label class="col-3 col-form-label">New load</label>
+        <div class="col-3">
+            @(Html.Kendo().NumericTextBox<decimal>()
+                .Name("ShipGeneratorModes.PercentSaving")
+                .HtmlAttributes(new { style = "width: 100px;" })
+                .Format("#####.00")
+                .Decimals(2)
+                .Value(Model.ShipGeneratorModes.PercentSaving)
+                )
+            %
+        </div>
+    </div>
+
+    <div class="row align-items-center" style="display: flex; flex-direction: row; margin-top: 10px;">
+        <div class="col-3"></div>
+        <div class="col-3">
+            @(Html.Kendo().CheckBox().Name("ShipGeneratorModes.ActiveBefore").Checked(Model.ShipGeneratorModes.ActiveBefore).Label("Active before"))
+        </div>
+        <div class="col-3"></div>
+        <div class="col-3">
+            @(Html.Kendo().CheckBox().Name("ShipGeneratorModes.Active").Checked(Model.ShipGeneratorModes.Active).Label("Active after"))
+        </div>
+    </div>
+
+    <div class="row" style="margin-top: 15px;">
+        <div class="col-12">
+            <button type="button" onclick="closeGeneratorMode()" class="commandModernRed" style="width: 120px; float: right">Cancel</button>
+            <button type="button" onclick="saveGeneratorModes()" class="commandModernGreen" style="width: 120px; float: right">Save</button>
+            <button type="button" onclick="copyGeneratorModes()" class="commandModernGreen" style="width: 120px; float: right">Copy</button>
+        </div>
+
+    </div>
+
+</form>

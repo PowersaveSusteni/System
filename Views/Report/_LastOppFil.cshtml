@@ -1,0 +1,46 @@
+﻿<div class="form-group row" style="margin-top: 20px;">
+
+    <div class="col-lg-4" style="margin-left: 20px;" id="tips">
+        <p class="unselectable">
+            For å laste opp en fil, trykk på knappen <strong>Velg...</strong>.<br /><br />
+            Du KAN ikke velge mer enn en fil.
+            <br /><br>
+            Godkjente filtyper<br>
+            Microsoft Word - DOCX<br>
+            Crystal report - RPT <br>
+            Telerik reaport - TRDX.
+        </p>
+    </div>
+
+
+    <div class="col-lg-6">
+        <div class="row">
+            <div class="col-12">
+                @(Html.Kendo().CheckBox().Name("erstattSiste").Checked(false).Label("Erstatt siste rapportversjon"))
+            </div>
+        </div>
+
+        <div class="row" style="margin-top: 20px;">
+            <div class="col-lg-12">
+                @(Html.Kendo().Upload()
+                    .Name("Files")
+                    .Multiple(false)
+                    .Validation(v => v.AllowedExtensions(".docx", ".trdx", ".rpt", ".pdf"))
+                    .Async(a => a
+                        .Save("Async_SaveRapportDocFil", "Upload")
+                        .AutoUpload(true)
+                        )
+                    .Events(e => e
+                        .Upload("onUploadTemplate").Complete("onUploadSuccess"))
+                )
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    p {
+        font-size: 14px;
+    }
+</style>
+

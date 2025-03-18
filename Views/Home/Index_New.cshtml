@@ -1,0 +1,13 @@
+﻿
+
+@(Html.Kendo().PDFViewer()
+    .Name("pdfViewerRapport")
+    .PdfjsProcessing(pdf => pdf.File(@Url.Content("")))
+    .Height(800)
+)
+
+<script>
+    $(document).ready(function () {
+        var pdfViewer = $("#pdfViewerRapport").getKendoPDFViewer(); //get a reference to the PDFViewer
+    });
+</script>

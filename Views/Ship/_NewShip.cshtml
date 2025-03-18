@@ -1,0 +1,116 @@
+﻿@using Microsoft.AspNetCore.Mvc.Localization
+
+@inject IViewLocalizer Localizer
+@model Susteni.Models.Ship.ShipModel
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+
+@{
+    ViewData["Title"] = Localizer["Fuel savings"];
+    ViewData["LogOnOk"] = "2";
+    ViewData["Menu"] = "Admin";
+}
+
+<form id="newShip" onsubmit="return false;" class="mt-3">
+
+    <input hidden asp-for="NewShip.OperationModes" class="form-control k-textbox">
+    <input hidden asp-for="NewShip.Generators" class="form-control k-textbox">
+
+
+    <div class="row">
+        <div class="col-4">
+            @(Html.Kendo().DropDownList()
+                .Name("NewShip.ShipTypeGuid")
+                .DataTextField("Name")
+                .DataValueField("ShipTypeGuid")
+                .OptionLabel(Localizer["Choose type from list ..."].Value)
+                .OptionLabelTemplate("<span><i>" + Localizer["Choose type from list ..."].Value + "</i></span>")
+                .Height(200)
+                .Value(Model.NewShip.ShipTypeGuid)
+                .Events(e => e.Change("onShipTypeChange"))
+                .DataSource(dataSource => dataSource
+                    .Ajax()
+                    .Read(read => read.Action("GetShipTypeList", "Ship"))
+                    )
+                )
+        </div>
+        <div class="col-8">
+
+            <div class="row align-items-center" style="display: flex; flex-direction: row;">
+                <label class="col-2 col-form-label">Name</label>
+                <div class="col-lg-6">
+                    <input asp-for="NewShip.Name" class="form-control k-textbox nodvendigFelt">
+                </div>
+                <label class="col-2 col-form-label">Build year</label>
+                <div class="col-lg-2">
+                    <input asp-for="NewShip.YearOfBuilt" class="form-control k-textbox">
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="row" style="margin-top: 20px;">
+                        <div class="col-6">
+                            <h5>Operation mode</h5>
+                            @(Html.Kendo().Grid<Susteni.Models.ShipTypeOperationModesItem>()
+                                .Name("shipTypeOperationModeList")
+                                .Columns(columns =>
+                                {
+                                    columns.Select().Width(40);
+                                    columns.Bound(q => q.OperationModeGuid).Visible(false);
+                                    columns.Bound(q => q.Name).Title(Localizer["Name"].Value);
+                                    columns.Bound(q => q.NumberGenerators).Width(90).Title(Localizer["Gen. req."].Value);
+                                })
+                                .Scrollable()
+                                .Height(300)
+                                .Events(e => e.DataBound("onShipTypeOMDataBound"))
+                                .Selectable(s => s
+                                    .Mode(GridSelectionMode.Multiple)
+                                    .Type(GridSelectionType.Row)
+                                    .CheckboxSelection(true))
+                                .DataSource(dataSource => dataSource
+                                    .Ajax()
+                                    .Read(read => read.Action("GetShipTypeOperationModesListe", "Functions").Data("filterShipType"))
+                                    )
+                                )
+                        </div>
+                        <div class="col-6">
+                            <h5>Generators</h5>
+                            @(Html.Kendo().Grid<Susteni.Models.ShipTypeGeneratorsItem>()
+                                .Name("shipTypeGeneratorList")
+                                .Columns(columns =>
+                                {
+                                    columns.Select().Width(40);
+                                    columns.Bound(q => q.GeneratorGuid).Visible(false);
+                                    columns.Bound(q => q.Name).Title(Localizer["Name"].Value);
+                                    columns.Bound(q => q.kW).Width(80).Title(Localizer["kW"].Value);
+                                })
+                                .Scrollable()
+                                .Height(300)
+                                .Events(e => e.DataBound("onShipTypeGDataBound"))
+                                .Selectable(s => s
+                                    .Mode(GridSelectionMode.Multiple)
+                                    .Type(GridSelectionType.Row)
+                                    .CheckboxSelection(true))
+                                .DataSource(dataSource => dataSource
+                                    .Ajax()
+                                    .Read(read => read.Action("GetShipTypeGeneratorsListe", "Functions").Data("filterShipType"))
+                                    )
+                                )
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row" style="margin-top: 20px;">
+
+                <div class="col-12">
+
+                    <button type="button" onclick="closeNewShip()" class="commandModernRed" style="width: 150px; float: right">Close</button>
+
+                    <button type="button" onclick="createNewShip()" class="commandModernGreen" style="width: 150px; float: right">Create ship</button>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</form>

@@ -1,0 +1,104 @@
+﻿@using Microsoft.AspNetCore.Mvc.Localization
+
+@inject IViewLocalizer Localizer
+@model Susteni.Models.Ship.ShipModel
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+
+@{
+    ViewData["Title"] = Localizer["Vendors"];
+    ViewData["LogOnOk"] = "2";
+    ViewData["Menu"] = "Admin";
+}
+
+<script>
+
+    var generatorVendorGuid = "";
+    var fuelConsGuid = "";
+
+    function filterVendor() {
+        return { GeneratorVendorGuid: generatorVendorGuid }
+    }
+
+    function onVendorChange(e) {
+        var grid = $("#vendorList").data("kendoGrid");
+        var selected = grid.select();
+        var data = grid.dataItem(selected);
+
+        generatorVendorGuid = data.GeneratorVendorGuid;
+        document.getElementById("btnImport").disabled = true;
+
+        $("#generatorModelList").data("kendoGrid").dataSource.read();
+        }
+
+    function onGenModelChange() {
+        var grid = $("#generatorModelList").data("kendoGrid");
+        var selected = grid.select();
+        var data = grid.dataItem(selected);
+
+        generatorModelGuid = data.GeneratorModelGuid;
+
+        document.getElementById("btnImport").disabled = false;
+    }
+</script>
+
+<div class="row">
+    <div class="col-12" style="margin-bottom: 10px;">
+        <button disabled id="btnImport" type="button" onclick="ImportGenerator()" class="commandModern">Import</button>
+    </div>
+    <div class="col-6">
+
+        <div class="row">
+
+            <div class="col-12">
+                <label>List of vendors</label>
+            </div>
+            <div class="col-12">
+                @(Html.Kendo().Grid<Susteni.Models.GeneratorVendorItem>()
+                    .Name("vendorList")
+                    .Columns(columns =>
+                    {
+                        columns.Bound(q => q.GeneratorVendorGuid).Visible(false);
+                        columns.Bound(q => q.Vendor).Width(400).Title(Localizer["Vendor"].Value);
+                    })
+                    .Scrollable()
+                    .Height(300)
+                    .Events(e => e.Change("onVendorChange"))
+                    .Selectable(s => s
+                        .Mode(GridSelectionMode.Multiple)
+                        .Type(GridSelectionType.Row))
+                    .DataSource(dataSource => dataSource
+                        .Ajax()
+                        .Read(read => read.Action("GetGeneratorVendorList", "Functions"))
+                        )
+                    )
+
+            </div>
+
+
+        </div>
+
+    </div>
+    <div class="col-6">
+        <label>Models</label>
+
+        @(Html.Kendo().Grid<Susteni.Models.GeneratorModelItem>()
+            .Name("generatorModelList")
+            .Columns(columns =>
+            {
+                columns.Bound(q => q.GeneratorModelGuid).Visible(false);
+                columns.Bound(q => q.GeneratorVendorGuid).Visible(false);
+                columns.Bound(q => q.Model).Width(400).Title(Localizer["Model"].Value);
+            })
+            .Scrollable()
+            .Height(300)
+            .Events(e => e.Change("onGenModelChange"))
+            .Selectable(s => s
+                .Mode(GridSelectionMode.Multiple)
+                .Type(GridSelectionType.Row))
+            .DataSource(dataSource => dataSource
+                .Ajax()
+                .Read(read => read.Action("GetGeneratorModelList", "Functions").Data("filterVendor"))
+                )
+            )
+    </div>
+</div>

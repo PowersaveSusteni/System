@@ -1,0 +1,178 @@
+﻿@using Microsoft.AspNetCore.Mvc.Localization
+
+@inject IViewLocalizer Localizer
+@model Susteni.Models.Funksjoner.FunctionsModel
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+
+<script>
+
+
+    
+    function saveFuelType() {
+        var cc = $("#TypeFuel_CarbonContent").data("kendoNumericTextBox").value();
+        var cf = $("#TypeFuel_Cf").data("kendoNumericTextBox").value();
+        var dmgo = $("#TypeFuel_DensityMGO").data("kendoNumericTextBox").value();
+        var m = $("#TypeFuel_Metan").data("kendoNumericTextBox").value();
+        var lg = $("#TypeFuel_Lystgass").data("kendoNumericTextBox").value();
+        var nox = $("#TypeFuel_NOx").data("kendoNumericTextBox").value();
+        var sox = $("#TypeFuel_SOx").data("kendoNumericTextBox").value();
+
+        cc = cc.toString().replace(".",",");
+        cf = cf.toString().replace(".",",");
+        dmgo = dmgo.toString().replace(".",",");
+        m = m.toString().replace(".",",");
+        lg = lg.toString().replace(".",",");
+        nox = nox.toString().replace(".",",");
+        sox = sox.toString().replace(".",",");
+        
+        document.getElementById("CarbonContent2").value = cc;
+        document.getElementById("Cf2").value = cf;
+        document.getElementById("DensityMGO2").value = dmgo;
+        document.getElementById("Metan2").value = m;
+        document.getElementById("Lystgass2").value = lg;
+        document.getElementById("NOx2").value = nox;
+        document.getElementById("SOx2").value = sox;
+
+
+        var $this = $('#fuelTypeForm').serialize();
+
+        $.ajax({
+            url: '@Url.Action("SetTypeFuel", "Functions")',
+            type: "PUSH",
+            data: $this,
+            dataType: "json"
+            })
+        .done(function (result) {
+            var popup = $('#dialogEquipment').data("kendoWindow");
+            popup.close();
+            $("#fuelTypeList").data("kendoGrid").dataSource.read();
+            });
+        }
+
+</script>
+
+<form id="fuelTypeForm">
+    <div class="row">
+        <div class="col-6">
+            <button class="commandModernGreen" onclick="saveFuelType()"><img src="@Url.Content("~/images/")lagre.svg" alt="Ja" width='24' height='24' style="margin-right: 7px;"/>Save</button>
+        </div> 
+    </div>
+
+    <div class="row">
+        <div class="col-12" style="margin-bottom: 0px; margin-top: 10px;">
+            <div class="panel with-nav-tabs panel-default" id="dataenter" style="padding: 10px;">
+
+                <input type = "hidden" asp-for="TypeFuel.FuelTypeGuid" class="form-control">
+
+                <input type = "hidden" id="CarbonContent2" asp-for="TypeFuel.CarbonContent2" class="form-control">
+                <input type = "hidden" id="Cf2" asp-for="TypeFuel.Cf2" class="form-control">
+                <input type = "hidden" id="DensityMGO2" asp-for="TypeFuel.DensityMGO2" class="form-control">
+                <input type = "hidden" id="Metan2" asp-for="TypeFuel.Metan2" class="form-control">
+                <input type = "hidden" id="Lystgass2" asp-for="TypeFuel.Lystgass2" class="form-control">
+                <input type = "hidden" id="NOx2" asp-for="TypeFuel.NOx2" class="form-control">
+                <input type = "hidden" id="SOx2" asp-for="TypeFuel.SOx2" class="form-control">
+
+                <div class="row align-items-center" style="display: flex; flex-direction: row;">
+                    <label class="col-2 col-form-label">Name</label>
+                    <div class="col-md-10">
+                        <input asp-for="TypeFuel.Name" class="form-control k-textbox">
+                    </div>
+                </div>
+
+                    <div class="row align-items-center" style="display: flex; flex-direction: row;">
+                        <Label class="col-2 col-form-label">@Localizer["CarbonContent"]</label>
+                        <div class="col-2">
+                            @(Html.Kendo().NumericTextBox<double>()
+                                .Name("TypeFuel.CarbonContent")
+                                .Format("n4")
+                                .Decimals(4)
+                                .Min(0)
+                                .Max(100)
+                                .Value(Model.TypeFuel.CarbonContent)
+                                .HtmlAttributes(new { style = "width: 100%"})
+                            )
+                        </div>
+                        <Label class="col-2 col-form-label">@Localizer["Cf"]</label>
+                        <div class="col-2">
+                            @(Html.Kendo().NumericTextBox<double>()
+                                .Name("TypeFuel.Cf")
+                                .Format("n4")
+                                .Decimals(4)
+                                .Value(Model.TypeFuel.Cf)
+                                .HtmlAttributes(new { style = "width: 100%"})
+                            )
+                        </div>
+
+                        <Label class="col-2 col-form-label">@Localizer["Density"]</label>
+                        <div class="col-2">
+                            @(Html.Kendo().NumericTextBox<double>()
+                                .Name("TypeFuel.DensityMGO")
+                                .Format("n4")
+                                .Decimals(4)
+                                .Min(0)
+                                .Max(100)
+                                .Value(Model.TypeFuel.DensityMGO)
+                                .HtmlAttributes(new { style = "width: 100%"})
+                            )
+                        </div>
+                    </div>
+
+                    <div class="row align-items-center" style="display: flex; flex-direction: row;">
+                        <Label class="col-2 col-form-label">@Localizer["Metan"]</label>
+                            <div class="col-2">
+                            @(Html.Kendo().NumericTextBox<double>()
+                                .Name("TypeFuel.Metan")
+                                .Format("n4")
+                                .Decimals(4)
+                                .Min(0)
+                                .Max(100)
+                                .Value(Model.TypeFuel.Metan)
+                                .HtmlAttributes(new { style = "width: 100%"})
+                            )
+                        </div>
+                        <Label class="col-2 col-form-label">@Localizer["Lystgass"]</label>
+                        <div class="col-2">
+                            @(Html.Kendo().NumericTextBox<double>()
+                                .Name("TypeFuel.Lystgass")
+                                .Format("n4")
+                                .Decimals(4)
+                                .Min(0)
+                                .Max(100)
+                                .Value(Model.TypeFuel.Lystgass)
+                                .HtmlAttributes(new { style = "width: 100%"})
+                            )
+                    </div>
+                </div>
+
+                    <div class="row align-items-center" style="display: flex; flex-direction: row;">
+                        <Label class="col-2 col-form-label">@Localizer["NOx"]</label>
+                            <div class="col-3">
+                            @(Html.Kendo().NumericTextBox<double>()
+                                .Name("TypeFuel.NOx")
+                                .Format("n8")
+                                .Decimals(8)
+                                .Min(0)
+                                .Max(100)
+                                .Value(Model.TypeFuel.NOx)
+                                .HtmlAttributes(new { style = "width: 100%"})
+                            )
+                        </div>
+                        <div class="col-1"></div>
+                        <Label class="col-2 col-form-label">@Localizer["SOx"]</label>
+                        <div class="col-3">
+                            @(Html.Kendo().NumericTextBox<double>()
+                                .Name("TypeFuel.SOx")
+                                .Format("n8")
+                                .Decimals(8)
+                                .Min(0)
+                                .Max(100)
+                                .Value(Model.TypeFuel.SOx)
+                                .HtmlAttributes(new { style = "width: 100%"})
+                            )
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</form>

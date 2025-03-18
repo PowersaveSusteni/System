@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="32px" height="32px" viewBox="0 0 32 32" enable-background="new 0 0 32 32" xml:space="preserve">
+  <g id="icon">
+    <ellipse cx="12.5259" cy="6.86904" rx="5.74665" ry="5.70175" fill="#f9e9b3" stroke="none" stroke-width="0.7" stroke-linecap="round" stroke-linejoin="round" fill-opacity="1"/>
+    <path d="m28,7.36508c0,0,-0.249404,6.8335,-2.98413,9.62793,-2.73472,2.79444,-6.7108,2.09913,-6.75508,7.7445,-0.04428,5.64537,9.60998,1.37225,9.7392,5.73868,-2.60094,0,-5.68007,-0.03699,-12.0311,-0.03699,-6.351,0,-9.3496,0.03699,-12.0007,0.03699,0.015588,-3.16359,9.67493,0.0049,9.68007,-5.73868,0.0051,-5.74356,-4.27369,-4.72689,-6.6642,-7.7445C4.59362,13.9754,3.97292,7.42797,3.97292,7.42797L28,7.36508" fill="#fbe57f" stroke="#f3c61a" stroke-width="0.2" stroke-linecap="round" stroke-miterlimit="5" stroke-linejoin="round" fill-opacity="1" stroke-opacity="1"/>
+  </g>
+</svg>

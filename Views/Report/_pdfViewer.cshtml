@@ -1,0 +1,22 @@
+﻿@(Html.Kendo().PDFViewer()
+    .Name("pdfViewerRapport")
+    .PdfjsProcessing(pdf => pdf.File(@Url.Content("")))
+    .Height(800)
+    )
+
+<script>
+    $(document).ready(function () {
+        // $.ajax({
+        //     type: "GET",
+        //     url: '@Url.Action("GetReportDocument", "Report")',
+        //     data: { reportFilesGuid: "d9fecace-aa92-4476-805b-ca1db2b3aaf4" }
+        //     })
+        // .done(function (result) {
+        //     console.log(result);
+        //     var pdfViewer = $("#pdfViewerRapport").getKendoPDFViewer();
+        //     if (pdfViewer) {
+        //         pdfViewer.fromFile({data: result});
+        //         }
+        //     });
+    });
+</script>

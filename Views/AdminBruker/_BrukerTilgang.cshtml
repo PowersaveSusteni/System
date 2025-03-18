@@ -1,0 +1,191 @@
+﻿@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
+@model Susteni.Models.Admin.AdminModel
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+
+
+<div class="row" id="brukerTilgangForm">
+
+    <div style="display: none">
+        <input asp-for="BrukerTilgang.BrukerTilgangGuid" class="form-control">
+        <input type = "hidden" asp-for="BrukerTilgang.SoknId" class="form-control">
+        <input type = "hidden" asp-for="BrukerTilgang.SoknNr" class="form-control">
+        <input type = "hidden" asp-for="BrukerTilgang.BrukerId" class="form-control">
+        <input type = "hidden" asp-for="BrukerTilgang.SoknId" class="form-control">
+
+        <input type = "hidden" asp-for="BrukerTilgang.Program_GUID" class="form-control">
+        <input type = "hidden" asp-for="BrukerTilgang.Ressurs_GUID" class="form-control">
+
+        <input type = "hidden" asp-for="BrukerTilgang.DB_PASSORD" class="form-control">
+        <input type = "hidden" asp-for="BrukerTilgang.DB_BRUKERNAVN" class="form-control">
+        <input type = "hidden" asp-for="BrukerTilgang.ADRESSE_INFO" class="form-control">
+        <input type = "hidden" asp-for="BrukerTilgang.SPRAAK" class="form-control">
+
+        <input type = "hidden" asp-for="BrukerTilgang.PRESTEGJELD_ID" class="form-control">
+        <input type = "hidden" asp-for="BrukerTilgang.KLIENT_NAVN" class="form-control">
+        <input type="hidden" asp-for="BrukerTilgang.STANDARD_KLIENT" class="form-control">
+
+
+        <input type = "checkbox" asp-for="BrukerTilgang.Konfirmasjon_A" class="form-control">
+        <input type = "checkbox" asp-for="BrukerTilgang.Bank" class="form-control">
+
+        <input type = "checkbox" asp-for="BrukerTilgang.BesokTjeneste" class="form-control">
+        <input type = "checkbox" asp-for="BrukerTilgang.Aktiviteter_U" class="form-control">
+        <input type = "checkbox" asp-for="BrukerTilgang.Aktiviteter_A" class="form-control">
+
+        <input type = "checkbox" asp-for="BrukerTilgang.BesokTj_L" class="form-control">
+        <input type = "checkbox" asp-for="BrukerTilgang.BesokTj_S" class="form-control">
+        <input type = "checkbox" asp-for="BrukerTilgang.BesokTj_U" class="form-control">
+
+
+        <input type = "checkbox" asp-for="BrukerTilgang.Innutmelding_A" class="form-control">
+        <input type = "checkbox" asp-for="BrukerTilgang.Daap_A" class="form-control">
+        <input type = "checkbox" asp-for="BrukerTilgang.Folkeregister" class="form-control">
+        <input type = "checkbox" asp-for="BrukerTilgang.BesokTj_U" class="form-control">
+
+        <input type="checkbox" asp-for="BrukerTilgang.TIDSPLAN_GUDSTJENESTE_W" class="form-control">
+        <input type="checkbox" asp-for="BrukerTilgang.FASTE_DATA_R" class="form-control">
+        <input type="checkbox" asp-for="BrukerTilgang.FASTE_DATA_W" class="form-control">
+
+        <input type="checkbox" asp-for="BrukerTilgang.AVHOLDT" class="form-control">
+        <input type="checkbox" asp-for="BrukerTilgang.ARKIV_DOK_R" class="form-control">
+        <input type="checkbox" asp-for="BrukerTilgang.ARKIV_DOK_W" class="form-control">
+        <input type="checkbox" asp-for="BrukerTilgang.ARKIV_SAK_R" class="form-control">
+        <input type="checkbox" asp-for="BrukerTilgang.ARKIV_SAK_W" class="form-control">
+
+
+        <input type="checkbox" asp-for="BrukerTilgang.ARKIV_MOTE_R" class="form-control">
+        <input type="checkbox" asp-for="BrukerTilgang.ARKIV_MOTE_W" class="form-control">
+        <input type="checkbox" asp-for="BrukerTilgang.TIDSPLAN_ROM_R" class="form-control">
+        <input type="checkbox" asp-for="BrukerTilgang.TIDSPLAN_ROM_W" class="form-control">
+
+        <input type="checkbox" asp-for="BrukerTilgang.TIDSPLAN_PERS_R" class="form-control">
+        <input type="checkbox" asp-for="BrukerTilgang.TIDSPLAN_PERS_W" class="form-control">
+        <input type="checkbox" asp-for="BrukerTilgang.TIDSPLAN_GUDSTJENESTE" class="form-control">
+
+    </div>
+
+    <div class="col-12" style="margin-bottom: 10px;">
+        <div class="row">
+            <div class="col-4">
+                @(Html.Kendo().CheckBox().Name("BrukerTilgang.ADM").Checked(Model.BrukerTilgang.ADM).Label(Localizer["Arkiveringsadministrator"].Value))
+            </div>
+
+            <div class="col-4">
+                @(Html.Kendo().CheckBox().Name("BrukerTilgang.GDPRansvarlig").Checked(Model.BrukerTilgang.GDPRansvarlig).Label(Localizer["GDPR Ansvarlig"].Value))
+            </div>
+
+            <div class="col-4">
+                @(Html.Kendo().CheckBox().Name("BrukerTilgang.Sentralbord").Checked(Model.BrukerTilgang.Sentralbord).Label(Localizer["Sentralbord"].Value))
+            </div>
+        </div>
+    </div>
+
+    <div class="col-6">
+        <h4>Medarbeidere</h4>
+        <table style="width: 100%">
+            <tr><td></td><td>L</td><td>S</td><td>U</td></tr>
+            <tr>
+                <td>Aktiviteter</td>
+                <td>@(Html.Kendo().CheckBox().Name("BrukerTilgang.AKTIVITETER_R").Checked(Model.BrukerTilgang.AKTIVITETER_R).Label(""))</td>
+                <td>@(Html.Kendo().CheckBox().Name("BrukerTilgang.AKTIVITETER_W").Checked(Model.BrukerTilgang.AKTIVITETER_W).Label(""))</td>
+            </tr>
+
+            <tr>
+                <td>Adressering</td>
+                <td></td>
+                <td>@(Html.Kendo().CheckBox().Name("BrukerTilgang.Adresering").Checked(Model.BrukerTilgang.Adresering).Label(""))</td>
+            </tr>
+
+            <tr>
+                <td>SMS</td>
+                <td></td>
+                <td>@(Html.Kendo().CheckBox().Name("BrukerTilgang.SMS").Checked(Model.BrukerTilgang.SMS).Label(""))</td>
+            </tr>
+
+            <tr>
+                <td>Medlemmsregister</td>
+                <td></td>
+                <td>@(Html.Kendo().CheckBox().Name("BrukerTilgang.MEDLEMSREG").Checked(Model.BrukerTilgang.MEDLEMSREG).Label(""))</td>
+            </tr>
+
+
+            <tr>
+                <td>Frivillige</td>
+                <td>@(Html.Kendo().CheckBox().Name("BrukerTilgang.FRIVILLIGREG_R").Checked(Model.BrukerTilgang.FRIVILLIGREG_R).Label(""))</td>
+                <td>@(Html.Kendo().CheckBox().Name("BrukerTilgang.FRIVILLIGREG_W").Checked(Model.BrukerTilgang.FRIVILLIGREG_W).Label(""))</td>
+                <td>@(Html.Kendo().CheckBox().Name("BrukerTilgang.Frivilligreg_S").Checked(Model.BrukerTilgang.Frivilligreg_S).Label(""))</td>
+            </tr>
+
+
+            <tr>
+                <td>Råd/utvalg</td>
+                <td></td>
+                <td>@(Html.Kendo().CheckBox().Name("BrukerTilgang.RaadUtvalg").Checked(Model.BrukerTilgang.RaadUtvalg).Label(""))</td>
+                <td></td>
+            </tr>
+
+        </table>
+
+    </div>
+
+    <div class="col-6">
+        <h4>Kirkelige handlinger</h4>
+
+        <table style="width: 100%">
+            <tr><td></td><td>L</td><td>S</td><td>U</td></tr>
+
+
+            <tr>
+                <td>Gudstjeneste</td>
+                <td>@(Html.Kendo().CheckBox().Name("BrukerTilgang.GUDSTJENESTE_R").Checked(Model.BrukerTilgang.GUDSTJENESTE_R).Label(""))</td>
+                <td>@(Html.Kendo().CheckBox().Name("BrukerTilgang.GUDSTJENESTE_W").Checked(Model.BrukerTilgang.GUDSTJENESTE_W).Label(""))</td>
+                <td></td>
+            </tr>
+
+            <tr>
+                <td>Gudstjeneste Adm.</td>
+                <td></td>
+                <td>@(Html.Kendo().CheckBox().Name("BrukerTilgang.GudstjenesteAdm").Checked(Model.BrukerTilgang.GudstjenesteAdm).Label(""))</td>
+                <td></td>
+            </tr>
+
+            <tr>
+                <td>Inn/ut-melding</td>
+                <td>@(Html.Kendo().CheckBox().Name("BrukerTilgang.INNUTMELDING_R").Checked(Model.BrukerTilgang.INNUTMELDING_R).Label(""))</td>
+                <td>@(Html.Kendo().CheckBox().Name("BrukerTilgang.INNUTMELDING_W").Checked(Model.BrukerTilgang.INNUTMELDING_W).Label(""))</td>
+                <td></td>
+            </tr>
+
+            <tr>
+                <td>Dåp</td>
+                <td>@(Html.Kendo().CheckBox().Name("BrukerTilgang.DAAP_R").Checked(Model.BrukerTilgang.DAAP_R).Label(""))</td>
+                <td>@(Html.Kendo().CheckBox().Name("BrukerTilgang.DAAP_W").Checked(Model.BrukerTilgang.DAAP_W).Label(""))</td>
+                <td></td>
+            </tr>
+
+            <tr>
+                <td>Konfirmasjon</td>
+                <td>@(Html.Kendo().CheckBox().Name("BrukerTilgang.KONFIRMASJON_R").Checked(Model.BrukerTilgang.KONFIRMASJON_R).Label(""))</td>
+                <td>@(Html.Kendo().CheckBox().Name("BrukerTilgang.KONFIRMASJON_W").Checked(Model.BrukerTilgang.KONFIRMASJON_W).Label(""))</td>
+                <td>@(Html.Kendo().CheckBox().Name("BrukerTilgang.Konfirmasjon_S").Checked(Model.BrukerTilgang.Konfirmasjon_S).Label(""))</td>
+            </tr>
+
+            <tr>
+                <td>Vielse</td>
+                <td>@(Html.Kendo().CheckBox().Name("BrukerTilgang.VIELSE_R").Checked(Model.BrukerTilgang.VIELSE_R).Label(""))</td>
+                <td>@(Html.Kendo().CheckBox().Name("BrukerTilgang.VIELSE_W").Checked(Model.BrukerTilgang.VIELSE_W).Label(""))</td>
+                <td></td>
+            </tr>
+
+            <tr>
+                <td>Gravferd</td>
+                <td>@(Html.Kendo().CheckBox().Name("BrukerTilgang.DOED_R").Checked(Model.BrukerTilgang.DOED_R).Label(""))</td>
+                <td>@(Html.Kendo().CheckBox().Name("BrukerTilgang.DOED_W").Checked(Model.BrukerTilgang.DOED_W).Label(""))</td>
+                <td></td>
+            </tr>
+
+        </table>
+
+    </div>
+</div>

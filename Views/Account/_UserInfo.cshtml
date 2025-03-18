@@ -1,0 +1,220 @@
+﻿@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
+@model Susteni.Models.Account.AccountModel
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+
+
+
+<div class="container-fluid padding-0" id="profilData">
+    <input type = "hidden" asp-for="AccountUser.AktivCustomerGuid" class="form-control">
+    <input type = "hidden" asp-for="AccountUser.SmsCode" class="form-control">
+    <input type = "hidden" asp-for="AccountUser.UserName" class="form-control k-textbox">
+    <input hidden asp-for="AccountUser.UserGuid" class="form-control k-textbox">
+
+    <div class="col-12" style="margin-bottom: 0px; margin-top: 10px;">
+        <div class="panel with-nav-tabs panel-default" id="dataenter">
+            <div class="panel-body data padding-0">
+                <div class="tab-content data">
+                    <div class="panel-heading" id="Tab">
+                        <ul class="nav nav-tabs">
+                            <li class="nav-item"><a class="nav-link active" aria-current="page" href="#tabInfo" data-bs-toggle="tab">@Localizer["User information"]</a></li>
+                        </ul>
+                    </div>
+                    <div class="panel-body">
+                        <div class="tab-content" style="margin-top: 10px;">
+                            <div class="tab-pane fade show active" style="padding: 10px;" role="tabpanel" id="tabInfo">
+
+                                <div class="row align-items-center" style="display: flex; flex-direction: row;">
+                                    <label class="col-1 col-form-label">UserId</label>
+                                    <div class="col-2">
+                                        <input asp-for="AccountUser.UserId" class="form-control k-textbox" readonly>
+                                    </div>
+
+                                    <Label class="col-2 col-form-label">@Localizer["Authenticating Level"]</label>
+                                    <div class="col-3">
+                                        @(Html.Kendo().DropDownList()
+                                        .Name("AccountUser.AuthLevel")
+                                        .DataTextField("Text")
+                                        .DataValueField("Value")
+                                        .OptionLabel("Velg fra listen...")
+                                        .OptionLabelTemplate("<span><i>Velg fra listen...</i></span>")
+                                        .BindTo(new List<SelectListItem>() {
+                                            new SelectListItem() {
+                                            Text = Localizer["Username/Password"].Value , Value = "0"
+                                            },
+                                            new SelectListItem() {
+                                            Text = Localizer["2factor"].Value, Value = "1"
+                                            }
+                                        })
+                                        .Value(Model.AccountUser.AuthLevel.ToString())
+                                        .HtmlAttributes(new { style="width: 100%;" })
+                                        )
+                                    </div>
+                                    <div class="col-1"></div>
+                                    <div class="col-2">
+                                        @(Html.Kendo().CheckBox().Name("AccountUser.Activ").Checked(Model.AccountUser.Activ).Label(Localizer["Active"].Value))
+                                    </div>
+                                </div>
+
+                                <div class="row align-items-center" style="display: flex; flex-direction: row;">
+                                    <label class="col-1 col-form-label">Firstname</label>
+                                    <div class="col-md-2">
+                                        <input asp-for="AccountUser.Firstname" class="form-control k-textbox nodvendigFelt">
+                                    </div>
+                                    <label class="col-2 col-form-label">Lastname</label>
+                                    <div class="col-md-3">
+                                        <input asp-for="AccountUser.Lastname" class="form-control k-textbox nodvendigFelt">
+                                    </div>
+                                    <div class="col-1"></div>
+                                    <div class="col-2">
+                                        @(Html.Kendo().CheckBox().Name("AccountUser.SuperBruker").Checked(Model.AccountUser.SuperBruker).Label(Localizer["Superuser"].Value))
+                                    </div>
+                                </div>
+
+                                <div class="row align-items-center" style="display: flex; flex-direction: row;">
+                                    <label class="col-1 col-form-label">Mobil</label>
+                                    <div class="col-md-2">
+                                        <input asp-for="AccountUser.Mobil" class="form-control k-textbox nodvendigFelt">
+                                    </div>
+                                    <label class="col-2 col-form-label">Email</label>
+                                    <div class="col-md-3">
+                                        <input type="email" autocomplete="off" asp-for="AccountUser.Email" class="form-control k-textbox">
+                                    </div>
+                                    <div class="col-1"></div>
+                                    <div id="superAdmin" class="col-3">
+                                        @(Html.Kendo().CheckBox().Name("AccountUser.SuperAdmin").Checked(Model.AccountUser.SuperAdmin).Label(Localizer["Super administrator"].Value))
+                                    </div>
+                                </div>
+
+                                <div class="row align-items-center" style="display: flex; flex-direction: row;">
+                                    <div class="col-3"></div>
+                                    <label class="col-2 col-form-label">Active version</label>
+                                    <div class="col-2">
+                                        @(Html.Kendo().DropDownList()
+                                        .Name("AccountUser.RunVersion")
+                                        .DataTextField("Text")
+                                        .DataValueField("Value")
+                                        .BindTo(new List<SelectListItem>() {
+                                            new SelectListItem() {
+                                            Text = Localizer["Version 1"].Value , Value = "1"
+                                            },
+                                            new SelectListItem() {
+                                            Text = Localizer["Version 2"].Value, Value = "2"
+                                            }
+                                        })
+                                        .Value(Model.AccountUser.RunVersion.ToString())
+                                        .HtmlAttributes(new { style="width: 100%;" })
+                                        )
+                                    </div>                                    
+                                </div>
+
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-6" style="margin-bottom: 0px; margin-top: 10px;">
+    <div class="panel with-nav-tabs panel-default" id="dataenter">
+        <div class="panel-body data padding-0">
+            <div class="tab-content data">
+                <div class="panel-heading" id="Tab">
+                    <ul class="nav nav-tabs">
+                        <li class="nav-item"><a class="nav-link active" aria-current="page" href="#tabInfo" data-bs-toggle="tab">@Localizer["Ships"]</a></li>
+                    </ul>
+                </div>
+                <div class="panel-body">
+                    <div class="tab-content" style="margin-top: 10px;">
+                        <div class="tab-pane fade show active" style="padding: 10px;" role="tabpanel" id="tabInfo">
+
+                            <div class="row">
+                                <div class="col-12" style="margin-bottom: 12px;">
+                                <button type="button" name="Gemeinde" class="commandSmal" onclick="showUserShipsDialog()" style="width: 130px;">
+                                    @Localizer["Ships"]
+                                    <img src="~/images/vehicle-boat-cargo-filled.svg" style="width: 24px; height: 24px;" />
+                                </button>
+
+                                @(Html.Kendo().ListBox()
+                                    .Name("userShips")
+                                    .DataTextField("Name")
+                                    .DataValueField("ShipGuid")
+                                    .HtmlAttributes(new { style = "height: calc(100vh - 593px);" })
+                                    .Selectable(ListBoxSelectable.Single)
+                                    //.Events(events => events.Change("onSoknChange"))
+                                    .DataSource(dataSource => dataSource
+                                        .Ajax()
+                                        .Read(read => read.Action("GetUserShipList", "Account").Data("filterUser"))
+                                        )
+                                    )
+                                </div>
+
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+</div>
+
+</div>
+
+<script type="text/javascript">
+
+    $(document).ready(function () {
+
+        var fabAR = $("#fabAktiverRolle").getKendoFloatingActionButton();
+        var fabSR = $("#fabAvsluttRolle").getKendoFloatingActionButton();
+        var fabRR = $("#fabRedigerRolle").getKendoFloatingActionButton();
+
+        fabARText = "Legg til bruker";
+        fabSRText = "Slett bruker";
+        fabRRText = "Endre tilgang";
+
+        $("#fabAktiverRolle").hover(function () {
+            fabAR.text(fabARText);
+            fabAR.element.find(".k-fab-text")
+                .stop().toggle(200);
+        }, function () {
+                fabAR.element.find(".k-fab-text")
+                .stop()
+                .toggle(200)
+                .promise().done(function () {
+                    fabAR.text("");
+                });
+        });
+
+        $("#fabAvsluttRolle").hover(function () {
+            fabSR.text(fabSRText);
+            fabSR.element.find(".k-fab-text")
+                .stop().toggle(200);
+        }, function () {
+                fabSR.element.find(".k-fab-text")
+                .stop()
+                .toggle(200)
+                .promise().done(function () {
+                    fabSR.text("");
+                });
+        });
+
+        $("#fabRedigerRolle").hover(function () {
+            fabRR.text(fabRRText);
+            fabRR.element.find(".k-fab-text")
+                .stop().toggle(200);
+        }, function () {
+                fabRR.element.find(".k-fab-text")
+                .stop()
+                .toggle(200)
+                .promise().done(function () {
+                    fabRR.text("");
+                });
+        });
+       
+    });
+
+</script>

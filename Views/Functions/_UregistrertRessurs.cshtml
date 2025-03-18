@@ -1,0 +1,38 @@
+﻿<script>
+
+    function leggTilRessurs() {
+        xKG = document.getElementById("kalenderGuid").value;
+        xKT = document.getElementById("typeId").value;
+        xKN = document.getElementById("navnId").value;
+
+        $.ajax({
+            url: '@Url.Action("setKalenderUnregRessurs", "Kalender")',
+            data: { KalenderGuid: xKG, TypeRessurs: xKT, navn: xKN },
+            type: "GET"
+            })
+        .done(function (result) {
+            var popup = $('#DialogUregistrertRessurser').data("kendoWindow");
+            popup.close();
+            $("#SeremoniRessurser").data("kendoGrid").dataSource.read();
+            });
+    }
+
+</script>
+
+<div class ="container-fluid padding-0">
+    <input hidden id="kalenderGuid" class="form-control" />
+    <div class="row">
+        <button type="button" onclick="leggTilRessurs()" class="commandModernGreen" style="width: 160px;">Legg til ressurs</button>
+    </div>
+    <div class="row" style="margin-top: 10px;">
+        <div class="col-2">Type</div>
+        <div class="col-10"><input id="typeId" class="form-control" /></div>
+
+    </div>
+
+   <div class="row" style="margin-top: 10px;">
+        <div class="col-2">Navn</div>
+        <div class="col-10"><input id="navnId" class="form-control" /></div>
+
+    </div>
+</div>

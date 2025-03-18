@@ -1,0 +1,34 @@
+﻿@model Susteni.Models.Ship.ShipModel
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+
+<form id="profilForm" >
+    <div class="col-12" style="margin-bottom: 0px; margin-top: 10px;">
+
+        <div class="panel with-nav-tabs panel-default" id="dataenter" style="padding: 10px;">
+            <input hidden asp-for="OperationModeProfile.OperationModeProfileGuid" class="form-control">
+            <input hidden asp-for="OperationModeProfile.OperationModeGuid" class="form-control">
+            <input hidden asp-for="OperationModeProfile.ProfilGuid" class="form-control">
+            <div class="row align-items-center" style="display: flex; flex-direction: row;">
+                <Label class="col-6 col-form-label">Number of generator</label>
+                <div class="col-6">
+                @(Html.Kendo().NumericTextBox<int>()
+                    .Name("OperationModeProfile.NumberGenerator")
+                    .Format("n0")
+                    .Min(0)
+                    .Max(100)
+                    .Value(Model.OperationModeProfile.NumberGenerator)
+                    .HtmlAttributes(new { style = "width: 100%"})
+                    )
+                </div>
+            </div>
+        </div>
+
+        <div class="row" style="margin-top: 15px;">
+            <div class="col-12">
+                <button type="button" onclick="closeOperationProfileMode()" class="commandModernRed" style="width: 150px; float: right">Cancel</button>
+                <button type="button" onclick="saveOperationProfileMode()" class="commandModernGreen" style="width: 150px; float: right">Save</button>
+            </div>
+        </div>
+
+    </div>
+ </form>

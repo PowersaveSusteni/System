@@ -1,0 +1,709 @@
+﻿                    @using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
+@model Susteni.Models.ReportModel
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+
+@{
+    ViewData["Title"] = Localizer["Gravarkiv"];
+    ViewData["LogOnOk"] = "2";
+    ViewData["Menu"] = "GP";
+}
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.2.2/pdf.js"></script>
+
+<script>
+    window.pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.2.2/pdf.worker.js';
+</script>
+
+<script type="text/x-kendo-tmpl" id="templateRapport">
+    <div class="rapport">
+        <h3>#:Tittel#</h3>
+        <img src="data:image/png;base64, #:Preview#" alt="Rapport" />
+        <p>#:Beskrivelse#</p>
+    </div>
+</script>
+
+<style>
+    #lvRapporter {
+        height: 515px;
+        background-color: whitesmoke;
+        /* Avoid cutout if font or line is bigger */
+        font: inherit;
+    }
+
+     #lvRapporter .rapport {
+        float: left;
+        position: relative;
+        width: 161px;
+        height: 260px;
+        margin: 10px 5px 5px 5px;
+        padding: 0;
+    }
+
+    #lvRapporter .rapport img {
+        display: block;
+        max-width: 151px;
+        max-height: 180px;
+        margin-left: auto;
+        margin-bottom: 5px;
+        margin-right: auto;
+    }
+
+    #lvRapporter .rapport h3 {
+        margin-top: 0px;
+        margin-left: 10px;
+        text-align: center;
+        max-width: 141px;
+        line-height: 1.1em;
+        font-size: 14px;
+        font-weight: normal;
+        text-transform: uppercase;
+        color: #111;
+    }
+
+    #lvRapporter .rapport p {
+        margin-top: 10px;
+        font-size: 12px;
+        color: black;
+        }
+
+    #lvRapporter .rapport:hover h3 {
+        color: darkred;
+    }
+
+    #lvRapporter .rapport:hover p {
+        color: black;
+    }
+
+    .k-listview .k-state-selected {
+        border: 1px dashed;
+        border-color: blue;
+        border-top-left-radius: 8px;
+        border-top-right-radius: 8px;
+        background-color: white;
+        color: black;
+    }
+
+    .k-listview .k-state-selected h3 {
+        color: black;
+    }
+
+    .fixed {
+        position: absolute;
+        border: 0px solid lightgray;
+    }
+
+    #sporsmal .k-liste {
+        color: rgb(126, 126, 126);
+        border: 1px solid lightgray;
+    }
+
+    #sporsmal .k-input .k-picker {
+        border-width: 1px;
+        border-style: solid;
+        border-color: darkgray;
+    }
+
+    #sporsmal .k-input {
+        border-width: 1px;
+        border-style: solid;
+        border-color: #cdcdcd;
+    }
+
+    #sporsmal .k-input-inner {
+        padding: 0px 0px 0px 3px;
+    }
+
+    #sporsmal .k-checkbox {
+        width: 16px;
+        height: 16px;
+        background-color: white;
+        border-color: #cdcdcd;
+    }
+
+    #sporsmal select {
+        color: rgb(126, 126, 126);
+        border: 1px solid #cdcdcd;
+    }
+
+    #sporsmal .k-liste:focus {
+        color: rgb(126, 126, 126);
+        border: 1px solid #cdcdcd;
+    }
+
+    #sporsmal .k-input {
+        height: 30px;
+    }
+
+    .commandSmal img {
+        width: 24px;
+        height: 24px;
+    }
+
+    .k-fab-text {
+        display: none;
+    }
+</style>
+
+
+<script id="Rapport">
+    var firstRender = true;
+
+    function visSporsmal() {
+        var lvDocument = $("#lvRapporter").data("kendoListView");
+        var selF = lvDocument.select();
+        var selIF = lvDocument.dataItem(selF);
+        var RapId = "";
+
+        var xP = document.getElementById("idProgramId").value;
+
+        if (xP != "") { programId = xP; }
+
+        if (typeof selIF != 'undefined') {
+            RapId = selIF.RapId;
+            xINFO = document.getElementById("info");
+            xINFO.innerHTML = selIF.Beskrivelse;
+            x = document.getElementById("ReportVerdier_RapId");
+            x.value = RapId;
+            xRT = document.getElementById("ReportVerdier_RapType");
+            xRT.value = selIF.RapType;
+            $("#Report_EgenSelektering").prop("checked", selIF.EgenSelektering);
+
+        }
+
+        var fab2 = $("#fabFavorittFjern").data("kendoFloatingActionButton");
+        var fab = $("#fabFavorittAdd").data("kendoFloatingActionButton");
+
+        // if (kategori == "Favoritt") {
+        //     fab.hide();
+        //     fab2.show();
+        // }
+        // else {
+        //     fab.show();
+        //     fab2.hide();
+        // }
+
+        $.ajax({
+            url: '@Url.Action("GetReportQuestionList", "Report")',
+            type: "GET",
+            data: { RapId: RapId, hentVerdier: true },
+            dataType: "json"
+        })
+            .done(function (result) {
+
+                var number = 3;
+                var id = 0;
+                var iData = 0;
+                var container = document.getElementById("sporsmal");
+                // Clear previous contents of the container
+                while (container.hasChildNodes()) {
+                    container.removeChild(container.lastChild);
+                }
+
+                for (var i in result.Data) {
+                    var iDiv = document.createElement('div');
+
+                    iStyle = "left:" + result.Data[i].PosX + "px; top:" + result.Data[i].PosY + "px;";
+
+                    if (result.Data[i].Type == 0 && result.Data[i].Vidde == 0) {
+                        iStyle += "width: 130px;"
+                    }
+                    else {
+                        iStyle += "width: " + result.Data[i].Vidde + "px; padding: 0px;"
+                    }
+                    iDiv.id = "div-" + result.Data[i].Kode;
+                    iDiv.className = "fixed";
+                    iDiv.style = iStyle;
+                    container.appendChild(iDiv);
+
+                    // Create an <input> element, set its type and name attributes
+                    if (result.Data[i].Type == 0) {
+                        iDiv.appendChild(document.createTextNode(result.Data[i].Tekst));
+                    }
+                    else if (result.Data[i].Type == 1) {
+                        var inputHF = document.createElement("input");
+                        inputHF.name = "RapportVerdier.Verdier[" + iData + "].Kode";
+                        inputHF.value = result.Data[i].Kode;
+                        inputHF.type = "hidden";
+                        iDiv.appendChild(inputHF);
+
+                        var input = document.createElement("input");
+                        input.name = "RapportVerdier.Verdier[" + iData + "].Verdi";
+                        input.value = result.Data[i].StandardVerdi;
+                        input.style = "width: 100%;"
+                        input.className = "form-control k-textbox";
+                        iDiv.appendChild(input);
+                        iData++;
+                    }
+                    else if (result.Data[i].Type == 2) {
+                        var inputHF = document.createElement("input");
+                        inputHF.name = "RapportVerdier.Verdier[" + iData + "].Kode";
+                        inputHF.value = result.Data[i].Kode;
+                        inputHF.type = "hidden";
+                        iDiv.appendChild(inputHF);
+
+                        var input = document.createElement("input");
+                        input.name = "RapportVerdier.Verdier[" + iData + "].Verdi";
+                        input.value = result.Data[i].StandardVerdi;
+                        //input.style = "width: 100%;"
+                        input.type = "number";
+                        input.className = "form-control k-textbox";
+                        iDiv.appendChild(input);
+                        iData++;
+                    }
+                    else if (result.Data[i].Type == 4) {
+                        var inputHF = document.createElement("input");
+                        inputHF.name = "RapportVerdier.Verdier[" + iData + "].Kode";
+                        inputHF.value = result.Data[i].Kode;
+                        inputHF.type = "hidden";
+                        iDiv.appendChild(inputHF);
+
+                        var inputSpan = document.createElement("span");
+                        inputSpan.className = "k-datepicker k-input k-input-solid k-input-md k-rounded-md";
+                        inputSpan.style = "width: 120px;"
+
+                        //var inputSpanInner = document.createElement("span");
+                        //inputSpanInner.className = "k-picker-wrap k-state-default";
+
+                        var input = document.createElement("input");
+                        //input.setAttribute("data-val", "true");
+                        input.id = result.Data[i].Kode;
+                        input.name = "RapportVerdier.Verdier[" + iData + "].Verdi";
+
+                        input.type = "text";
+                        input.setAttribute("data-role", "datepicker");
+                        input.className = "k-input-inner";
+                        input.setAttribute("role", "combobox");
+                        input.setAttribute("aria-expanded", "false");
+                        //input.setAttribute("aria-haspopup", "grid");
+                        input.setAttribute("aria-owns", result.Data[i].Kode + "_dataview")
+                        input.setAttribute("autocomplete", "off");
+                        input.setAttribute("arie-disabled", "false");
+                        input.setAttribute("arie-readonly", "false");
+
+                        if (result.Data[i].StandardVerdi != "") {
+                            input.value = result.Data[i].StandardVerdi;
+                        }
+                        //input.setAttribute("asp-for", "RapportVerdier.Verdier[" + i + "].Verdi");
+                        input.style = "width: 120px;";
+
+                        //inputSpanInner.appendChild(input);
+
+                        var inputButton = document.createElement("button");
+                        //inputSpanAfter.setAttribute("unselectable", "on");
+                        inputButton.className = "k-input-button k-button k-icon-button k-button-md k-button-solid k-button-solid-base";
+                        inputButton.type = "button";
+                        inputButton.setAttribute("aria-label", "select");
+                        inputButton.setAttribute("role", "button");
+                        inputButton.setAttribute("aria-controls", result.Data[i].Kode + "_dataview")
+
+                        var inputSpanIcon = document.createElement("span");
+                        inputSpanIcon.className = "k-icon k-i-calendar k-button-icon";
+                        inputSpanIcon.before;
+                        inputButton.appendChild(inputSpanIcon);
+                        //inputSpanInner.appendChild(inputSpanAfter);
+
+                        input.appendChild(inputButton);
+                        inputSpan.appendChild(input);
+                        iDiv.appendChild(inputSpan);
+
+                        var script = document.createElement("script");
+                        script.text = "kendo.syncReady(function(){jQuery('#" + result.Data[i].Kode + "').kendoDatePicker({'format':'dd.MM.yyyy'});});"
+                        container.appendChild(script);
+
+                        iData++;
+                    }
+                    else if (result.Data[i].Type == 5) {
+                        var inputHF = document.createElement("input");
+                        inputHF.name = "RapportVerdier.Verdier[" + iData + "].Kode";
+                        inputHF.value = result.Data[i].Kode;
+                        inputHF.type = "hidden";
+                        iDiv.appendChild(inputHF);
+
+                        var input = document.createElement("input");
+                        input.name = "RapportVerdier.Verdier[" + iData + "].Verdi";
+                        input.value = result.Data[i].StandardVerdi;
+                        //input.style = "width: 100%;"
+                        input.type = "checkbox";
+                        input.className = "form-check-input";
+                        iDiv.appendChild(input);
+
+                        //var input = document.createElement("input");
+                        //input.setAttribute("data-val", "true");
+                        //input.id = result.Data[i].Kode;
+                        //input.name = "RapportVerdier.Verdier[" + iData + "].Verdi";
+                        //input.type = "checkbox";
+                        //input.setAttribute("value", "true");
+                        //input.setAttribute("data-role", "checkbox");
+                        //input.className = "k-checkbox k-checkbox-md k-rounded-md";
+                        //iDiv.appendChild(input);
+
+                        if (result.Data[i].Tekst != ".") {
+                            var inputL = document.createElement("label");
+                            var t = document.createTextNode(result.Data[i].Tekst);
+                            inputL.setAttribute("for", result.Data[i].Kode);
+                            inputL.className = "k-checkbox-label";
+                            inputL.appendChild(t);
+                            iDiv.appendChild(inputL);
+                        }
+
+                        //var inputHI = document.createElement("input");
+                        //inputHI.name = result.Data[i].Kode;
+                        //inputHI.value = "false";
+                        //inputHI.type = "hidden";
+                        //iDiv.appendChild(inputHI);
+
+                        //var script = document.createElement("script");
+                        //script.text = "kendo.syncReady(function(){jQuery(\"#" + result.Data[i].Kode + "\").kendoCheckBox({\"checked\":false,\"label\":\"" + result.Data[i].Tekst + "\"});});"
+                        //iDiv.appendChild(script);
+
+                        iData++;
+                    }
+                    else if (result.Data[i].Type == 6) {
+                        var inputHF = document.createElement("input");
+                        inputHF.name = "RapportVerdier.Verdier[" + iData + "].Kode";
+                        inputHF.value = result.Data[i].Kode;
+                        inputHF.type = "hidden";
+                        iDiv.appendChild(inputHF);
+
+                        var input = document.createElement("select");
+                        input.id = result.Data[i].Kode;
+                        input.name = "RapportVerdier.Verdier[" + iData + "].Verdi";
+                        //input.className ="k-dropdown-wrap"
+                        input.style = "width: 100%; height: 30px;"
+                        iDiv.appendChild(input);
+
+                        for (var j = 0; j < result.Data[i].Verdier.length; j++) {
+                            var option = document.createElement("option");
+                            option.value = result.Data[i].Verdier[j].Kode;
+                            option.text = result.Data[i].Verdier[j].Verdi;
+                            input.appendChild(option);
+                        }
+                        iData++;
+                    }
+                    else if (result.Data[i].Type == 7) {
+                        var inputHF = document.createElement("input");
+                        inputHF.name = "RapportVerdier.Verdier[" + iData + "].Kode";
+                        inputHF.value = result.Data[i].Kode;
+                        inputHF.type = "hidden";
+                        iDiv.appendChild(inputHF);
+
+                        var input = document.createElement("select");
+                        input.id = result.Data[i].Kode;
+                        input.name = "RapportVerdier.Verdier[" + iData + "].Verdi";
+                        input.className = "k-liste"
+                        input.setAttribute("size", "5");
+                        if (result.Data[i].Hoyde > 0) {
+                            input.style = "width: 100%; height: " + result.Data[i].Hoyde + "px;"
+                        }
+                        else {
+                            input.style = "width: 100%;"
+                        }
+                        iDiv.appendChild(input);
+
+                        for (var j = 0; j < result.Data[i].Verdier.length; j++) {
+                            var option = document.createElement("option");
+                            option.value = result.Data[i].Verdier[j].Kode;
+                            option.text = result.Data[i].Verdier[j].Verdi;
+                            input.appendChild(option);
+                        }
+                        iData++;
+                    }
+                    else if (result.Data[i].Type == 8) {
+                        var inputHF = document.createElement("input");
+                        inputHF.name = "RapportVerdier.Verdier[" + iData + "].Kode";
+                        inputHF.value = result.Data[i].Kode;
+                        inputHF.type = "hidden";
+                        iDiv.appendChild(inputHF);
+
+                        var input = document.createElement("select");
+                        input.id = result.Data[i].Kode;
+                        input.name = "RapportVerdier.Verdier[" + iData + "].Verdiliste";
+                        input.className = "k-liste"
+                        input.setAttribute("multiple", "");
+                        input.setAttribute("size", "10");
+                        input.style = "width: 100%;"
+                        iDiv.appendChild(input);
+
+                        for (var j = 0; j < result.Data[i].Verdier.length; j++) {
+                            var option = document.createElement("option");
+                            option.value = result.Data[i].Verdier[j].Kode;
+                            option.text = result.Data[i].Verdier[j].Verdi;
+                            input.appendChild(option);
+                        }
+                        iData++;
+                    }
+                    else if (result.Data[i].Type == 9) {
+                        var inputHF = document.createElement("input");
+                        inputHF.name = "RapportVerdier.Verdier[" + iData + "].Kode";
+                        inputHF.value = result.Data[i].Kode;
+                        inputHF.type = "hidden";
+                        iDiv.appendChild(inputHF);
+
+                        var input = document.createElement("input");
+                        input.name = "RapportVerdier.Verdier[" + iData + "].Verdi";
+                        input.value = result.Data[i].StandardVerdi;
+                        input.style = "width: 100%;"
+                        input.type = "number";
+                        input.className = "form-control k-textbox";
+                        iDiv.appendChild(input);
+                        iData++;
+                    }
+                    else {
+                        alert(result.Data[i].Type);
+                    }
+                }
+            });
+    }
+
+    function replaceAll(string, search, replace) {
+        return string.split(search).join(replace);
+    }
+
+    function visKategorier() {
+        $.ajax({
+            url: '@Url.Action("getRapportKategorier", "Rapport")',
+            type: "GET",
+            data: { skjerm: skjerm, kategori: kategori },
+            dataType: "json"
+        }).done(function (result) {
+
+            var number = 3;
+            var id = 0;
+            var container = document.getElementById("knapper");
+            // Clear previous contents of the container
+            while (container.hasChildNodes()) {
+                container.removeChild(container.lastChild);
+            }
+
+            iDivA = document.createElement("div");
+            iDivA.style = "display: flex; flex-direction: row;";
+            iDivA.id = "knapperad";
+            container.appendChild(iDivA);
+
+            for (var i in result.Data) {
+                var iDiv = document.createElement('button');
+                var name = result.Data[i];
+                iDiv.type = "button";
+                iDiv.id = "btn_" + result.Data[i];
+                iDiv.className = "commandSmal";
+                iDiv.style = "width: 140px; margin-right: 10px;"
+                iDiv.setAttribute("onclick", "friskopp('" + name + "')");
+                if (name == "Favoritt") {
+                    iDiv.innerHTML = "<img src='/images/star-filled.svg' width=16 height=16 alt=''> " + name;
+                }
+                else {
+                    iDiv.innerHTML = name;
+                }
+
+                iDivA.appendChild(iDiv);
+            }
+        });
+    }
+
+    function friskopp(filter) {
+        var buttons = document.getElementById("knapperad").childNodes;
+        // Clear previous contents of the container
+        for (var e in buttons) {
+            if (buttons[e].innerHTML != undefined) {
+                buttons[e].innerHTML = buttons[e].id.substr(4, 100);
+            }
+        }
+        btn = document.getElementById("btn_" + filter);
+        btn.innerHTML = "<img src='/images/star-filled.svg' width=16 height=16 alt=''> " + filter;
+        kategori = filter;
+        grd = $("#lvRapporter").data("kendoListView");
+        grd.dataSource.read();
+    }
+
+    function favorittLeggtil() {
+        var lvDocument = $("#lvRapporter").data("kendoListView");
+        var selF = lvDocument.select();
+        var selIF = lvDocument.dataItem(selF);
+        var RapId = "";
+
+        if (typeof selIF != 'undefined') {
+            RapId = selIF.RapId;
+        }
+
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("FavorittLeggtil", "Rapport")',
+            data: { rapId: RapId }
+        })
+            .done(function (result) {
+            });
+    }
+
+    function favorittFjern() {
+        var lvDocument = $("#lvRapporter").data("kendoListView");
+        var selF = lvDocument.select();
+        var selIF = lvDocument.dataItem(selF);
+        var RapId = "";
+
+        if (typeof selIF != 'undefined') {
+            RapId = selIF.RapId;
+        }
+
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("FavorittFjern", "Rapport")',
+            data: { rapId: RapId }
+        })
+            .done(function (result) {
+                lvDocument.dataSource.read();
+            });
+    }
+
+</script>
+
+
+
+<form id="rapportForm">
+    <div id="hidden" style="display: none">
+        <input asp-for="ReportVerdier.RapId">
+        <input asp-for="ReportVerdier.RapType">
+        <input asp-for="ReportVerdier.MasterVerdier">
+        <input asp-for="ReportVerdier.MasterVerdierAlle">
+        <input asp-for="ReportVerdier.MasterNavn">
+        @(Html.Kendo().CheckBox().Checked(false).Name("Report.KreverSelektering").Label(""))
+    </div>
+
+    <div>
+        <input hidden id="idProgramId">
+        <div class="form-group row" id="heading">
+            <div class="col-md-2">
+                <div style="display: flex; flex-direction: row;">
+
+                    <button type="button" onclick="ShowReport()" class="command" style="width: 170px; margin-right: 7px;">
+                        <img src="~/images/print-preview.svg" />
+                        @Localizer["Preview"]
+                        <p></p>
+                    </button>
+
+                </div>
+            </div>
+            <div class="col-5">
+                <div id="importerer" class="col-7" style="display: none">
+                    <p><span style="font-size: 18px; font-weight: 700">Creating report ...</span></p>
+                    @(Html.Kendo().Loader()
+                        .Name("loader")
+                        .Size(LoaderSize.Large)
+                        )
+                </div>
+                <div id="infoRapport" class="col-7">
+
+                </div>
+            </div>
+            <div class="col-5">
+                <div id="info" style="font-size: 16px;"></div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-12" style="height: 40px;">
+                <div id="knapper"></div>
+            </div>
+
+            <div class="col-6" style="position: relative; margin-top: 5px;">
+                @(Html.Kendo().Grid<Susteni.Models.ReportListeItem>()
+                .Name("lvRapporter")
+                    .Columns(columns =>
+                    {
+                        columns.Bound(q => q.RapId).Visible(false);
+                        columns.Bound(q => q.Tittel).Title(Localizer["Name"].Value);
+                    })                //.ClientTemplateId("templateRapport")
+                .Events(e => e.Change("visSporsmal"))
+                .DataSource(dataSource => dataSource
+                    .Ajax()
+                    .Read(read => read.Action("getRapportListe", "Report").Data("skjermFilter"))
+                    )
+                )
+
+                @(Html.Kendo().FloatingActionButton()
+                    .Name("fabFavorittAdd")
+                    .ThemeColor(FloatingActionButtonThemeColor.Success)
+                    .Size(FloatingActionButtonSize.Small)
+                    .Icon("add")
+                    .PositionMode(FloatingActionButtonPositionMode.Absolute)
+                    .Align(FloatingActionButtonAlign.TopEnd)
+                    .AlignOffset(alignOffset=>alignOffset.Horizontal(40).Vertical(10))
+                    .Events(events=>events.Click("favorittLeggtil"))
+                    .Visible(false)
+                    )
+
+                @(Html.Kendo().FloatingActionButton()
+                    .Name("fabFavorittFjern")
+                    .ThemeColor(FloatingActionButtonThemeColor.Error)
+                    .Size(FloatingActionButtonSize.Small)
+                    .PositionMode(FloatingActionButtonPositionMode.Absolute)
+                    .Icon("delete")
+                    .Align(FloatingActionButtonAlign.TopEnd)
+                    .AlignOffset(alignOffset=>alignOffset.Horizontal(40).Vertical(10))
+                    .Events(events=>events.Click("favorittFjern"))
+                    .Visible(false)
+                    )
+            </div>
+            <div class="col-6">
+                <div id="hidden" style="display: none">
+                    <input type="hidden" asp-for="ReportVerdier.RapId">
+                    <input type="hidden" asp-for="ReportVerdier.RapType">
+                    <input asp-for="ReportVerdier.MasterVerdier">
+                    <input asp-for="ReportVerdier.MasterNavn">
+                    @(Html.Kendo().CheckBox().Checked(false).Name("Rapport.EgenSelektering").Label(""))
+                 </div>
+
+                <h4>@Localizer["Report parameters"]</h4>
+                <div class="panel-body" style="background-color: #FDFDFD; border: 1px solid darkgray; height: 500px; width: 571px; ">
+                    <div class="tab-content">
+                        <div id="sporsmal"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</form>
+
+
+<script type="text/javascript">
+
+    $(document).ready(function () {
+        var fab = $("#fabFavorittAdd").getKendoFloatingActionButton();
+        var fabFS = $("#fabFavorittFjern").getKendoFloatingActionButton();
+
+
+        fabText = "Legg til som favoritt";
+        fabFSText = "Fjern fra favorittlisten";
+
+        $("#fabFavorittAdd").hover(function () {
+            fab.text(fabText);
+            fab.element.find(".k-fab-text")
+                .stop().toggle(200);
+        }, function () {
+            fab.element.find(".k-fab-text")
+                .stop()
+                .toggle(200)
+                .promise().done(function () {
+                    fab.text("");
+                });
+        });
+
+        $("#fabFavorittFjern").hover(function () {
+            fabFS.text(fabFSText);
+            fabFS.element.find(".k-fab-text")
+                .stop().toggle(200);
+        }, function () {
+            fabFS.element.find(".k-fab-text")
+                .stop()
+                .toggle(200)
+                .promise().done(function () {
+                    fabFS.text("");
+                });
+        });
+
+        // visKategorier();
+
+    });
+
+</script>

@@ -1,0 +1,1107 @@
+﻿@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
+@model Susteni.Models.Kontakt.KontaktModel
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+
+@{
+    ViewData["Title"] = Localizer["Kontakter"];
+    ViewData["LogOnOk"] = "2";
+    ViewData["Menu"] = "GP";
+}
+
+
+<script type="text/x-kendo-tmpl" id="template2">
+    <div class="folder">
+        <img src="@Url.Content("~/images/#: icon#.svg")" />
+        <p>#:fileTittel#</p>
+    </div>
+</script>
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.2.2/pdf.js"></script>
+
+
+<style>
+
+    .k-grid td {
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        }
+
+    .panel-body {
+        padding-bottom: 0px;
+    }
+
+    #kontaktListe {
+        height: 100%;
+    }
+
+    #ReskontroListe {
+        height: 100%;
+    }
+
+    div.k-listbox {
+        height: 530px;
+    }
+
+    #heading .btn img {
+        width: 48px;
+        height: 48px;
+        margin-bottom: 20px;
+        float: left;
+        margin-right: 5px;
+    }
+
+    #filterMeny .btn img {
+        width: 16px;
+        height: 16px;
+        float: left;
+        margin-right: 5px;
+        margin-bottom: 0px;
+    }
+
+    .disabled {
+        opacity: 0.5;
+        pointer-events: none;
+    }
+
+
+    .k-fab-text {
+        display: none;
+    }
+
+    .k-checkbox-label {
+        margin-right: 15px;
+    }
+
+    .btn img {
+        width: 24px;
+        height: 24px;
+    }
+
+    .btn {
+        padding: 5px;
+        background-color: aliceblue;
+        border-color: lightgray;
+    }
+
+
+    .table > tbody > tr > td {
+        padding-left: 1px;
+        padding-top: 3px;
+        margin: 6px 3px 3px 0px;
+        border: 0px;
+        vertical-align: text-bottom;
+    }
+
+    .ellipsis-overflow {
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+
+    .k-checkbox-label {
+        line-height: 28px;
+        margin-left: 10px;
+    }
+
+    #soekeFilter .command img {
+        width: 32px;
+        height: 32px;
+    }
+
+    #soekeFilter .command {
+        height: 50px;
+        font-size: 14px;
+        font-weight: normal;
+    }
+
+    #dokListe .k-listview {
+        background-color: transparent;
+        border-color: transparent;
+    }
+
+    .folder {
+        float: left;
+        position: relative;
+        margin-right: 10px;
+    }
+
+        .folder img {
+            width: 32px;
+            height: 32px;
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+            margin-top: 2px;
+        }
+
+        .folder p {
+            padding: 3px 5px 0px 5px;
+            font-size: 10px;
+            font-weight: normal;
+            color: #999;
+            text-align: center;
+            margin-bottom: 1px;
+        }
+
+        .folder:checked {
+            font-weight: bold;
+            color: red;
+        }
+
+        .folder:hover p {
+            font-weight: bold;
+            color: black;
+        }
+
+    div.k-window {
+        border: 1px solid lightgray;
+    }
+</style>
+
+
+<form action="Lagre" id="kontaktFormData" onsubmit="return false;" method="post" class="mt-3">
+    <div id="confirm"></div>
+
+    <div class="container-fluid padding-0">
+
+        <div class="form-group row" id="heading">
+
+            <div class="col-2 unselectable">
+                <h3>@Localizer["Festere"]</h3>
+            </div>
+
+            <div class="col-8">
+                <div style="display: flex; flex-direction: row;">
+
+                </div>
+            </div>
+
+            <div class="col-2">
+                <div id="infoLagring"></div>
+            </div>
+
+        </div>
+
+        <div class="row" style="border: 1px solid lightgrey; padding: 10px; margin: 5px;">
+
+            <div class="col-4">
+                <div class="row">
+
+                    <div class="col-6" style="display: flex; flex-direction: row;">
+
+                        <div>
+                            <button type="button" style="display: none" name="mappeEndre" id="mappeEndre" class="commandline">
+                                <img src="~/images/Slette.svg" />
+                                Slette
+                            </button>
+                        </div>
+
+                        <div>
+                            <button type="button" style="display: none" name="utskrift" id="utskrift" onclick="showDialogRapporter()" class="commandline">
+                                <img src="~/images/Laser.svg" />
+                                Utskrift
+                            </button>
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <div class="form-group" style="margin-top: 10px;" id="idKontaktListe">
+                    <div class="row">
+                        <div class="d-flex">
+                            <h4 class="me-auto align-self-end unselectable">@Localizer["Liste over kontakter"]</h4>
+
+                            <div class="align-items-end">
+                                <div class="dropdown">
+                                    <button class="btn dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+                                        <img src="~/images/filter.svg" />
+                                        @Localizer["Vis i listen"]
+                                    </button>
+                                    <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                                        <li><button class="dropdown-item" type="button" onclick="">@Localizer["Alle"]</button></li>
+                                        <li><button class="dropdown-item" type="button" onclick="">@Localizer["Døde festere"]</button></li>
+                                        <li><button class="dropdown-item" type="button" onclick="">@Localizer["Doble festere"]</button></li>
+                                        <li><button class="dropdown-item" type="button" onclick="">@Localizer["Doble personnummer"]</button></li>
+                                        <li><button class="dropdown-item" type="button" onclick="">@Localizer["Uten postnummer"]</button></li>
+                                    </ul>
+                                </div>
+                            </div>
+
+
+                        </div>
+                    </div>
+
+
+
+                    @(Html.Kendo().Grid<Susteni.Models.KontaktItem>()
+                        .Name("kontaktListe")
+                        .Columns(columns =>
+                        {
+                            columns.Bound(q => q.KontaktGuid).Visible(false);
+                            columns.Bound(q => q.PersonNr).Width(120).Title(Localizer["Personnr"].Value);
+                            columns.Bound(q => q.FulltNavn).Title(Localizer["Navn"].Value);
+                            columns.Bound(q => q.Adresse).Title(Localizer["Adresse"].Value);
+                            columns.Bound(q => q.PostNr).Width(70).Title(Localizer["Postnr"].Value);
+                        })
+                        .Scrollable()
+                        .HtmlAttributes(new { style = "height: calc(100vh - 235px);" })
+                        .Events(e => e.Change("onKontaktChange").DataBound("onKontaktDataBound"))
+                        .Selectable(s => s
+                        .Mode(GridSelectionMode.Single)
+                        .Type(GridSelectionType.Row))
+                        .DataSource(dataSource => dataSource
+                        .Ajax()
+                        .Read(read => read.Action("GetKontaktListe", "Kontakt").Data("filterKontaktliste"))
+                        )
+                        )
+                </div>
+
+            </div>
+
+            <div class="col-md-8">
+                <partial name="_FesterInfo" />                
+            </div>
+
+        </div>
+
+    </div>
+
+</form>
+
+
+<script id="successTemplate" type="text/x-kendo-template">
+    <div class="upload-success">
+        <img src="@Url.Content("~/images/True.svg")" style="float:left; height:48px; width:48px; margin-right: 16px;"/>
+        <p>#= message #</p>
+    </div>
+</script>
+
+<script id="infoTemplate" type="text/x-kendo-template">
+    <div class="new-mail">
+        <img src="@Url.Content("~/images/button-info.svg")" style="float:left; height:48px; width:48px; margin-right: 16px;"/>
+        <p>#= message #</p>
+    </div>
+</script>
+
+<script id="errorTemplate" type="text/x-kendo-template">
+    <div class="wrong-pass">
+        <img src="@Url.Content("~/images/warning-sign-filled.svg")" style="float:left; height:48px; width:48px; margin-right: 16px;"/>
+        <p>#= message #</p>
+    </div>
+</script>
+
+
+
+@(Html.Kendo().Notification()
+    .Name("lagreNotification")
+    .Position(p => p.Pinned(true).Top(30).Right(30))
+    .Stacking(NotificationStackingSettings.Down)
+    .AutoHideAfter(5000)
+    .Templates(t =>
+    {
+        t.Add().Type("success").ClientTemplateID("successTemplate");
+        t.Add().Type("error").ClientTemplateID("errorTemplate");
+        t.Add().Type("info").ClientTemplateID("infoTemplate");
+    })
+)
+
+
+
+<script id="liste-template" type="text/x-kendo-template">
+    <span class="k-state-default" style="font-weight: #:data.BoldTekst#; color:#:data.BoldTekstColor#;">#: data.Navn#</span>
+</script>
+
+
+@(Html.Kendo().Window()
+    .Name("DialogHjelp")
+    .Title(Localizer["Hjelp"].Value)
+    .Visible(false)
+    .Height(800)
+    .Width(1200)
+    .Modal(true)
+    .Draggable()
+    )
+
+@(Html.Kendo().Window()
+    .Name("DialogHistorikk")
+    .Title(Localizer["Historikk"].Value)
+    .Visible(false)
+    .Width(1200)
+    .Modal(true)
+    .Draggable()
+    )
+
+<script id="hjelp">
+
+    function showHelp() {
+        $.ajax({
+            url: '@Url.Action("DialogHjelp", "Hjelp")',
+            type: 'GET'
+        }).done(function (result) {
+            $('#DialogHjelp').html(result);
+            var popup = $('#DialogHjelp').data("kendoWindow");
+            popup.center().open();
+        });
+    }
+
+    function hjelpFilter() {
+        return { Modul: 400, Skjerm: "Kontakt" }
+    }
+
+</script>
+
+<script id="dialogbokser">
+
+
+
+    function showDialogHistorikk() {
+        var grdFolkeregister = $("#folkeregisterGrid").data("kendoGrid");
+        var selectedF = grdFolkeregister.select();
+        var selItemF = grdFolkeregister.dataItem(selectedF);
+        var personNr = selItemF.PersonNr;
+
+        $.ajax({
+            type: "GET",
+            url: '@Url.Action("HentHistorikklisteFraFolkeregister", "Funksjoner")',
+            data: { personNr: personNr },
+            dataType: 'json'
+            })
+        .done(function (result) {
+            if (result.Result == true) {
+                resultatIdHistorikk = result.NewId;
+                $.ajax({
+                    url: "/Rutiner/DialogHistorikk",
+                    method: 'GET',
+                    success: function (result) {
+                        $('#DialogHistorikk').html(result);
+
+                        var grid = $("#historikkGrid").data("kendoGrid");
+                        grid.dataSource.read();
+
+                            var popup = $('#DialogHistorikk').data("kendoWindow");
+                        popup.center().open();
+                        }
+                });
+
+                }
+            });
+        
+    }
+
+    function showDialogFamilie() {
+        var grdFolkeregister = $("#folkeregisterGrid").data("kendoGrid");
+        var selectedF = grdFolkeregister.select();
+        var selItemF = grdFolkeregister.dataItem(selectedF);
+        var personNr = selItemF.PersonNr;
+
+        $.ajax({
+            type: "GET",
+            url: '@Url.Action("HentFamilieFraFolkeregister", "Funksjoner")',
+            data: { Fodselsnummer: personNr },
+            dataType: 'json'
+        })
+            .done(function (result) {
+                if (result.Result == true) {
+                    resultatIdHistorikk = result.NewId;
+                    $.ajax({
+                        url: "/Rutiner/DialogHistorikk",
+                        method: 'GET',
+                        success: function (result) {
+                            $('#DialogHistorikk').html(result);
+
+                            var grid = $("#historikkGrid").data("kendoGrid");
+                            grid.dataSource.read();
+
+                            var popup = $('#DialogHistorikk').data("kendoWindow");
+                            popup.center().open();
+                        }
+                    });
+
+                }
+            });
+
+    }
+
+</script>
+
+<script id="filter">
+    var sqlFilter = "";
+    var filterStatus = "Status<=2";
+    var filterType = "";
+    var resultatId = 0;
+    var resultatIdHistorikk = 0;
+    var canSearching = true;
+    var skjerm = "Stell";
+    var kategori = "";
+    var vis = "";
+    var registreringGuid = "";
+    var stellType = 0;
+    var Aar = 2022;
+    var antall = 1000;
+    var stringFilter = "KontaktGuid IN (SELECT Kontakt_GUID FROM GRAVSTED WHERE Fellesraad='AktivFellesraad')";
+    var sortering = "";
+    var KontaktGuid = "";
+
+    function filterfelt(e) {
+        x = document.getElementById("soekeFilter");
+        grid = $("#kontaktListe").data("kendoGrid");
+
+        if (e.checked) {
+            x.style.display = "block";
+            xG = document.getElementById("kontaktListe");
+            xG.style = "height: calc(100vh - 533px);"
+        }
+        else {
+            x.style.display = "none";
+            xG = document.getElementById("kontaktListe");
+            xG.style = "height: calc(100vh - 360px);"
+        }
+        grid.refresh();
+    }
+
+    function filterKontaktliste() {
+        return { antall: antall, stringFilter: stringFilter, sortering: sortering }
+    }
+
+    function filterKontakt() {
+        return { KontaktGuid: KontaktGuid }
+    }
+
+    function SetStatus(e) {
+        filterStatus = e;
+        grd = $("#stellavtaleListe").data("kendoGrid");
+        grd.dataSource.read();
+    }
+
+    function skjermFilter() {
+        return { skjerm: skjerm, kategori: kategori }
+    }
+
+
+    function filterTG() {
+        filterTekst = "TjenesteGruppe='GS' AND Tekst like '%rente%'";
+        return { filterTekst: filterTekst }
+    }
+
+    function SetType(e) {
+        filterType = e;
+        grd = $("#stellavtaleListe").data("kendoGrid");
+        grd.dataSource.read();
+    }
+
+    function stellFilter() {
+        sqlFilter = filterStatus;
+        if (filterType != "" && sqlFilter != "") {
+            sqlFilter += " AND " + filterType;
+        }
+        else if (filterType != "") {
+            sqlFilter = filterType;
+        }
+
+        if (stringfilter != "") {
+            if (sqlFilter != "") {
+                sqlFilter += " AND " + stringfilter;
+            }
+            else {
+                sqlFilter = stringfilter;
+            }
+        }
+
+        return { filterTekst: sqlFilter }
+    }
+
+    function statusFilter() {
+        var ddl = $("#StellAvtale_Status").data("kendoDropDownList");
+        var selectedS = ddl.select();
+        var selItemS = ddl.dataItem(selectedS);
+        var Status = 0;
+
+        if (typeof selItemS != 'undefined') {
+            Status = selItemS.Value;
+        }
+
+        return { Status: Status }
+    }
+
+    function filterSok(e) {
+        return {
+            resultatId: resultatId, sortering: "Etternavn, Fornavn"
+        }
+    }
+
+    function filterSokHistorikk(e) {
+        return {
+            resultatId: resultatIdHistorikk, sortering: "StatusDato DESC"
+        }
+    }
+
+    function filterStellGuid() {
+        return { stellGuid: stellGuid }
+    }
+
+    function filterAvtale() {
+        return { stellAvtaleGuid: stellAvtaleGuid }
+    }
+
+    function filterMail() {
+        return { mailId: mailId }
+    }
+
+    function filterTjeneste() {
+        var filterTR = "T.TjenesteGruppe='GS'";
+        return { filterTekst: filterTR }
+    }
+
+    function filterEngrafo() {
+        xSA = document.getElementById("StellAvtale_StellavtaleGuid");
+        xMG = document.getElementById("StellAvtale_Mappe_GUID");
+        return { KontaktGuid: "", EksternGuid: xSA.value, MappeGuid: xMG.value }
+    }
+
+    function filterBank() {
+        return { BankId: BankId }
+    }
+
+
+    function filterRegistrering() {
+        return { registreringGuid: registreringGuid }
+    }
+
+    function filterCaseId() {
+        xKG = document.getElementById("Kontakt_KontaktGuid");
+        filter = "Registrering_GUID IN (SELECT Registrering_GUID FROM N5_KORRESPONDANSEPART WHERE Kontakt_GUID='" + xKG.value + "')"
+
+        return { mappeGuid: filter, filterTekst: "" }
+    }
+
+</script>
+
+<script id="folkeregister">
+
+    function onSearchDataBound(e) {
+        var grid = $("#folkeregisterGrid").data("kendoGrid");
+
+        $("#folkeregisterGrid tbody tr").each(function () {
+            var currentRowData = grid.dataItem(this);
+            if (currentRowData.Adresse == "Død" || currentRowData.ErDod == true) {
+                $(this).css("color", "Red")
+            }
+
+            if (currentRowData.BackgroundColor != "") {
+                //Read field contains data if this email is readed
+                $(this).css("background-color", currentRowData.BackgroundColor)
+                }
+            });
+        }
+
+    function onKontaktDataBound(e) {
+        var grid = $("#kontaktListe").data("kendoGrid");
+
+        $("#kontaktListe tbody tr").each(function () {
+            var currentRowData = grid.dataItem(this);
+            if (currentRowData.Adresse == "Død" || currentRowData.ErDod == true) {
+                $(this).css("color", "Red")
+                }
+            });
+        }
+
+</script>
+
+<script id="events">
+    var mappeGuid = "";
+    var mailId = "";
+    var stellAvtaleGuid = "";
+    var stellGuid = "";
+    var gravGuid = "";
+    var BankId = "";
+
+    function onClose() {
+        $("#showDialogBtn").fadeIn();
+        }
+
+    function onOpen() {
+        $("#showDialogBtn").fadeOut();
+        }
+
+
+    function onKontaktChange(e) {
+        var selected = this.select();
+        var data = this.dataItem(selected);
+        resultatId = -1;
+
+        KontaktGuid = data.KontaktGuid;
+
+        $.ajax({
+            url: '@Url.Action("GetKontakt", "Rutiner")',
+            data: { kontaktGuid: KontaktGuid, viewString: "_FesterInfo" },
+            type: "GET"
+        }).done(function (result) {
+            $("#kontaktFullForm").html(result);
+            xED = document.getElementById("Kontakt_ErDod");
+            xDE = document.getElementById("dataenterpanel");
+            if (xED.checked == true) {
+                xDE.style.backgroundColor = "lightcoral";
+            }
+            else  {
+                xDE.style.backgroundColor = "";
+            }
+        });
+    }
+
+    function onFolkeregisterChange(e) {
+        var selected = this.select();
+        var data = this.dataItem(selected);
+
+        ErDod = data.ErDod;
+
+        xBF = document.getElementById("idByttFester");
+        xOF = document.getElementById("idOppdatertFester");
+        xHF = document.getElementById("idHistorikk");
+        xCF = document.getElementById("idFodselsNr");
+        xVF = document.getElementById("idFamilie");
+
+        xHF.disabled = false;
+        xCF.disabled = false;
+        xVF.disabled = false;
+
+        if (ErDod) {
+            xBF.disabled = true;
+            xOF.disabled = true;
+            }
+        else {
+            xBF.disabled = false;
+            xOF.disabled = false;
+            }
+        
+        }
+
+</script>
+
+<script id="funksjoner">
+
+    function findPoststed(e) {
+        if (e == "Bosted") {
+            var x = document.getElementById("Kontakt_BostedPostNr").value;
+            var xSted = document.getElementById("Kontakt_BostedSted");
+        }
+        else {
+            var x = document.getElementById("Kontakt_PostNr").value;
+            var xSted = document.getElementById("Kontakt_Sted");
+        }
+
+        if (x.length == 4) {
+            $.ajax({
+                url: '@Url.Action("GetPostSted", "Funksjoner")',
+                data: { postNr: x },
+                type: "GET"
+            }).done(function (result) {
+                xSted.value = result.Sted;
+            });
+        }
+        else {
+            xSted.value = "";
+            xKommuneNr.value = "";
+        };
+    }
+
+    function nyKontakt() {
+        $.ajax({
+            url: '@Url.Action("NyKontakt", "Kontakt")',
+            type: "GET"
+        }).always(function (result) {
+            $("#kontaktFullForm").html(result);
+        });
+    }
+
+    function oppdaterPersonNr() {
+        var listBoxF = $("#folkeregisterGrid").data("kendoGrid");
+        var selectedF = listBoxF.select();
+        var selItemF = listBoxF.dataItem(selectedF);
+        if (selectedF.length > 0) {
+            PersonNr = selItemF.PersonNr;
+            document.getElementById("Kontakt_PersonNr").value = PersonNr;
+        }
+    }
+
+    function oppdaterKontakt() {
+        xFN = document.getElementById("Kontakt_PersonNr");
+
+        if (xFN.value == "") {
+            var listBoxF = $("#folkeregisterGrid").data("kendoGrid");
+            var selectedF = listBoxF.select();
+            var selItemF = listBoxF.dataItem(selectedF);
+            var ressursGuid = "";
+            if (selectedF.length > 0) {
+                PersonNr = selItemF.PersonNr;
+
+                $.ajax({
+                    url: '@Url.Action("SetKontaktPersonNr", "Kontakt")',
+                    data: { kontaktGuid: KontaktGuid, personNr: PersonNr },
+                    type: "GET"
+                }).done(function (result) {
+                    vaskAdresse()
+                });
+            }
+        }
+        else {
+            vaskAdresse()
+        }
+    }
+
+    function vaskAdresse() {
+        $.ajax({
+            url: '@Url.Action("VaksAdressse", "Funksjoner")',
+            data: { kontaktGuid: KontaktGuid },
+            type: "GET"
+        }).done(function (result) {
+            $.ajax({
+                url: '@Url.Action("GetKontakt", "Rutiner")',
+                data: { kontaktGuid: KontaktGuid, viewString: "_FesterInfo" },
+                type: "GET"
+            }).done(function (result) {
+                $("#kontaktFullForm").html(result);
+                var grdKontakt = $("#kontaktListe").data("kendoGrid");
+                var selectedF = grdKontakt.select();
+                var selItemF = grdKontakt.dataItem(selectedF);
+
+                var PersonNr = document.getElementById("Kontakt_PersonNr").value;
+                var Fornavn = document.getElementById("Kontakt_Fornavn").value;
+                var Etternavn = document.getElementById("Kontakt_Etternavn").value;
+                var Adresse = document.getElementById("Kontakt_Adresse").value;
+                var Postnr = document.getElementById("Kontakt_PostNr").value;
+                                
+                selItemF.set("PersonNr", PersonNr);
+                selItemF.set("FulltNavn", Fornavn + " " + Etternavn);
+                selItemF.set("Adresse", Adresse);
+                selItemF.set("PostNr", Postnr);
+                grdBestilling.select(selectedF);
+
+                var notification = $("#lagreNotification").data("kendoNotification");
+                notification.show({ title: "Folkeregister", message: "Kontaktinformasjon er oppdatert fra folkeregisteret" }, "info");
+            });
+        });
+    }
+
+    function finnKontakt() {
+        stringFilter = "";
+        var kontaktType = $("#rgKontaktype").data("kendoRadioGroup");
+        var Navn = document.getElementById("SNavn").value;
+
+        if (Navn.indexOf(",") >= 0) {
+            var navnArr = Navn.split(',')
+            if (navnArr[0] != "") {
+                stringFilter += " (Fornavn like '" + navnArr[0] + "%')";
+            }
+            if (navnArr[1] != "") {
+                if (stringFilter != "") { stringFilter += " AND "; }
+                stringFilter += " (Etternavn like '" + navnArr[1] + "%')";
+            }
+        }
+        else {
+            stringFilter = "FulltNavn like '" + Navn + "%'";
+        }
+
+        if (kontaktType._value == "0") {
+            if (stringFilter != "") { stringFilter += " AND "; }
+            stringFilter += " KontaktGuid IN (SELECT Kontakt_GUID FROM GRAVSTED WHERE Fellesraad='AktivFellesraad')";
+        }
+        else if (kontaktType._value == "2") {
+            if (stringFilter != "") { stringFilter += " AND "; }
+            stringFilter += " TypeKunde = 1";
+        }
+
+        var grid = $("#kontaktListe").data("kendoGrid");
+        grid.dataSource.read();
+    }
+
+    function finnPersonFolkeregister() {
+            var listBoxF = $("#folkeregisterGrid").data("kendoGrid");
+            xFN = document.getElementById("Kontakt_PersonNr");
+            xF = document.getElementById("Kontakt_Fellesraad");
+            xFF = document.getElementById("Kontakt_Fornavn");
+            xFE = document.getElementById("Kontakt_Etternavn");
+
+            if (xFN.value != "") {
+                $.ajax({
+                    type: "GET",
+                    url: '@Url.Action("HentFamilieFraFolkeregisterByraa", "Funksjoner")',
+                    data: {Fodselsnummer: xFN.value ,Fellesraad: xF.value},
+                    dataType: 'json'
+                }).done(function (result) {
+                    if (result.Result == true) {
+                        resultatId = result.NewId;
+                        listBoxF.dataSource.read();
+                    }
+                });
+            }
+            else {
+                $.ajax({
+                    type: "GET",
+                url: '@Url.Action("HentNavnlisteFraFolkeregister", "Funksjoner")',
+                    data: { Fornavn: xFF.value, Etternavn: xFE.value },
+                    dataType: 'json'
+                }).done(function (result) {
+                    if (result.Result == true) {
+                        resultatId = result.NewId;
+                        listBoxF.dataSource.read();
+                    }
+                });
+            }
+
+    }
+
+
+    function endreKontakt() {
+        x = document.getElementById("StellAvtale_KontaktGuid")
+
+        $.ajax({
+            url: '@Url.Action("DialogKontakt", "Kontakt")',
+            type: 'GET'
+        }).done(function (result) {
+            $('#DialogKontakt').html(result);
+            $.ajax({
+                url: '@Url.Action("GetKontakt", "Kontakt")',
+                data: { kontaktGuid: x.value },
+                type: "GET"
+            }).done(function (result) {
+                $("#DialogKontakt").html(result);
+
+                var popup = $('#DialogKontakt').data("kendoWindow");
+                popup.center().open();
+            });
+        });
+    }
+
+    function byttFester() {
+        var grid = $("#folkeregisterGrid").data("kendoGrid");
+        var gridGraver = $("#KontaktGravListe").data("kendoGrid");
+        var selectedF = grid.select();
+        var selItemF = grid.dataItem(selectedF);
+
+        if (selectedF.length > 0) {
+            kontaktGuid = selItemF.KontaktGuid;
+
+            var gravsted = [];
+
+            $("#KontaktGravListe tbody tr").each(function () {
+                var currentRowData = gridGraver.dataItem(this);
+                if (!gravsted.includes(currentRowData.Gravsted_GUID)) {
+                    gravsted.push(gridGraver.dataItem(this));
+                    }
+                 });
+
+            $.ajax({
+                url: '@Url.Action("KopiKontaktFraResultat", "Funksjoner")',
+                data: { kontaktGuid: selItemF.KontaktGuid },
+                type: "POST"
+            }).done(function (result) {
+                kontaktGuid = result.NewGuid;
+
+                for (var i = 0; i < gravsted.length; i++) {
+
+                    $.ajax({
+                        type: "GET",
+                        url: '@Url.Action("SetFesterGravsted", "Gravarkiv")',
+                        data: { gravstedGuid: gravsted[i].Gravsted_GUID, kontaktGuid: kontaktGuid },
+                    }).done(function (result) {
+                        var grdGravarkiv = $("#KontaktGravListe").data("kendoGrid");
+                        grdGravarkiv.dataSource.read();
+                    });
+
+                }
+
+            });
+
+
+        };
+    }
+
+    function finnPerson() {
+        if (canSearching == true) {
+            var $this = $('#finnperson').serialize();
+            canSearching = false;
+            var listBoxF = $("#kontaktGrid").data("kendoGrid");
+
+            $.ajax({
+                type: "GET",
+                url: '@Url.Action("CreateKontaktListe", "Funksjoner")',
+                data: $this,
+                dataType: 'json'
+            }).done(function (result) {
+                canSearching = true;
+                if (result > 0) {
+                    resultatId = result;
+                    listBoxF.dataSource.read();
+                }
+            }).always(function () {
+                canSearching = true;
+            });
+        }
+    }
+
+
+    function Fakturer() {
+        var stellType = $("#StellAvtale_StellType").data("kendoRadioGroup");
+        var stellAvtaleGuid = document.getElementById("StellAvtale_StellavtaleGuid").value;
+
+        if (stellType._value == "0") {
+            $.ajax({
+                url: '@Url.Action("FakturerFond", "Stell")',
+                data: { StellAvtaleGuid: stellAvtaleGuid },
+                type: "POST"
+            }).done(function (result) {
+                if (result.Result == true) {
+                    alert("Faktura nummer " + result.NewGuid + " er opprettet");
+                }
+
+            }).fail(function (result) {
+                alert('an Error has occurred, please try again');
+            });
+        }
+        else {
+            $.ajax({
+                url: '@Url.Action("FakturerÅrsstell", "Stell")',
+                data: { StellAvtaleGuid: stellAvtaleGuid },
+                type: "POST"
+            }).done(function (result) {
+                if (result.Result == true) {
+                    alert("Faktura nummer " + result.NewGuid + " er opprettet");
+                }
+            }).fail(function (result) {
+                alert('an Error has occurred, please try again');
+            });
+        }
+    }
+
+    function Progress() {
+        var pA = document.getElementById("ProgressAntall")
+
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("Fremdrift", "Faktura")',
+            data: { tittel: "Rentefordeling" },
+            dataType: 'json'
+        }).done(function (result) {
+            pA.value = result.Antall;
+            $("#Fremdrift").data("kendoProgressBar").value(result.Fremdrift);
+        });
+    }
+</script>
+
+<script type="text/x-kendo-tmpl" id="document">
+    <div class="sms">
+        <img src="@Url.Content("~/images/social-telegram-filled.svg")"/>
+        <p>#:Name#</p>
+    </div>
+</script>
+
+<script id="mail">
+    var mailId = "";
+    var mappeGuid = "";
+
+    function filterMail() {
+        return { mailId: mailId }
+    }
+
+    function filterMappe() {
+        return { mappeGuid: mappeGuid }
+    }
+
+
+    function onMailFolderChange(e) {
+        var tree = $('#Mapper').data('kendoTreeView');
+        var dataItem = tree.dataItem(e.node);
+        mappeGuid = dataItem.id;
+
+        var listBox = $("#MailListe").data("kendoGrid");
+        listBox.refresh();
+        listBox.dataSource.read();
+    }
+
+    function onMailItemChange(e) {
+        var selected = this.select();
+        var data = this.dataItem(selected);
+
+        mailId = data.Id;
+
+        var listBox = $("#Body").data("kendoEditor");
+        listBox.body.innerHTML = data.Body;
+
+        var lvDoc = $("#emailAttachments").data("kendoGrid");
+        lvDoc.dataSource.read();
+    }
+
+</script>
+
+<script type="text/javascript">
+
+    function onSermStedChange(e) {
+        var selected = this.select();
+        var data = this.dataItem(selected);
+
+        var bestillingGuid = data.BestillingGuid;
+
+        $.ajax({
+            url: '@Url.Action("GetBestilling", "Bestilling")',
+            data: { bestillingGuid: bestillingGuid },
+            type: "GET"
+        }).done(function (result) {
+
+        });
+    }
+
+    function onSorting(arg) {
+        alert(arg.sort.field);
+        //kendoConsole.log("Sorting on field: " + arg.sort.field + ", direction:" + (arg.sort.dir || "none"));
+    }
+
+</script>
+
+<script id="lagre">
+
+
+    $(document).ready(function () {
+        var meny = document.getElementById("hmRutiner");
+        meny.classList.add("menyAktiv");
+    });
+
+
+    $(document).bind('keydown', function (e) {
+        if (e.ctrlKey && (e.which == 70)) {
+            e.preventDefault();
+            finnKontakt();
+        }
+        else if (e.ctrlKey && (e.which == 68)) {
+            e.preventDefault();
+            clearStell();
+        }
+    });
+
+    function lagreKontakt(e) {
+        var $this = $('#kontaktFormData');
+
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("LagreKontakt", "Kontakt")',
+            data: $this.serialize(),
+            dataType: 'json'
+        }).done(function (result) {
+            if (result.Result == true) {
+                document.getElementById('infoLagring').innerHTML = "<img src='@Url.Content("~/images/")database-save.png' />@Localizer["Lagret"]";
+                $('#infoLagring').fadeIn(800).delay(100).fadeOut(800);
+                var grdKontakt = $("#kontaktListe").data("kendoGrid");
+                grdKontakt.dataSource.read();
+            }
+        });
+    }
+
+
+    $(window).on("resize", function () {
+        $("#kontaktListe").data("kendoGrid").refresh();
+    });
+</script>
+
+

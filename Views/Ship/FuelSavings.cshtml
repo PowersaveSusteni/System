@@ -1,0 +1,1228 @@
+﻿@using Microsoft.AspNetCore.Mvc.Localization
+
+@inject IViewLocalizer Localizer
+@model Susteni.Models.Ship.ShipModel
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+
+@{
+    ViewData["Title"] = Localizer["Fuel savings"];
+    ViewData["LogOnOk"] = "2";
+    ViewData["Menu"] = "Admin";
+}
+
+<script type="text/x-kendo-tmpl" id="template2">
+    <div class="folder">
+        <img src="@Url.Content("~/images/#: icon#.svg")" />
+        <p>#:Tittel#</p>
+    </div>
+</script>
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.2.2/pdf.js"></script>
+
+<script>
+    window.pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.2.2/pdf.worker.js';
+</script>
+ 
+
+<style>
+
+    #dialogVisPDFRapport {
+        height: 85vh;
+        width: 90vw;
+        max-width: 1200px;
+    }
+
+    #pdfViewerRapport {
+        width: 100% !important;
+        height: 100% !important;
+    }
+
+    #dialogVisPDF {
+        height: 85vh;
+        width: 90vw;
+        max-width: 1200px;
+    }
+
+    #pdfViewer {
+        width: 100% !important;
+        height: 100% !important;
+    }
+</style>
+
+
+<form onsubmit="return false;" class="mt-3">
+    <div id="confirm"></div>
+
+    <input hidden asp-for="Ship.ShipGuid" />
+    <input hidden asp-for="Ship.Name" />
+    <input hidden asp-for="Ship.ProfilGuid" />
+    <input hidden asp-for="Ship.ProfilName" />
+
+    <div class="row" id="heading" style="min-height: 90px;">
+
+        <div class="col-xxl-3 col-xl-4 unselectable">
+            <img src="~/images/PowerSave_logo.svg" style="width: 70px; float: left; margin-right: 10px;" alt="mainlogo" />
+
+            <h2>@Localizer["Measures"]</h2>
+            <h3 id="idName"></h3>
+        </div>
+
+        <div class="col-xxl-3 col-xl-3">
+            <div style="display: flex; flex-direction: row;">
+                @if (ViewData["RunVersion"] != null && (int)ViewData["RunVersion"] == 1)
+                {
+                    <button type="button" class="commandModern" onclick="generators()"><img src="~/images/electricity-filled.svg" style="width: 24px; height: 24px; margin-right: 5px;" />Power production</button>
+                }
+                else
+                {
+                    <button type="button" class="commandModern" onclick="powerProd()"><img src="~/images/electricity-filled.svg" style="width: 24px; height: 24px; margin-right: 5px;" />Power production</button>
+                }
+                <button type="button" class="commandModern" onclick="plan()"><img src="~/images/money-coins-filled.svg" style="width: 24px; height: 24px; margin-right: 5px;" />Investment plan</button>
+                @* <button type="button" class="commandModern" onclick="showDialogRapporter()"><img src="~/images/Laser.svg" style="width: 24px; height: 24px; margin-right: 5px;" />Reports</button> *@
+            </div>
+        </div>
+
+        <div class="col-3" id="idDocumentX">
+            
+        </div>
+
+        <div class="col-xxl-3" style="display: flex; flex-direction: row; margin-top: 10px;">
+
+            <p style="margin-top: 5px;"><b>Profile: </b></p>
+            <span style="color: darkred; margin-top: 5px; margin-right: 10px;"><p id="idProfileName"></p></span>
+
+
+            <div class="btn-group" role="group">
+                <a class="dropdown-toggle commandModernNew" data-bs-toggle="dropdown" id="ddDokument" style="width: 80px;">
+                    <img src="~/images/star-filled.svg" />
+                </a>
+                <ul class="dropdown-menu" id="ddmenu">
+                    <li>
+                        <button type="button" class="commandModernInline" onclick="showDialogProfile()" style="height: 28px; padding-top:2px; width: 200px;">
+                            <img src="~/images/tool-pencil-filled.svg" />
+                            Set active profile
+                        </button>
+                    </li>
+
+                    <li>
+                        <button type="button" class="commandModernInline" onclick="newProfiles()" style="height: 28px; padding-top:2px;">
+                            <img src="~/images/Ny.svg" />
+                            New
+                        </button>
+                    </li>
+
+                    <li>
+                        <button type="button" class="commandModernInline" onclick="showDialogCopyProfiles()" style="height: 28px; padding-top:2px;">
+                            <img src="~/images/clipboard-copy.svg" />
+                            Copy
+                        </button>
+                    </li>
+
+                </ul>
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="row">
+
+        <div class="col-lg-4">
+
+            <div class="row">
+                <div class="col-4">
+                    <label>Equipment type</label>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-lg-4">
+                    @(Html.Kendo().DropDownList()
+                        .Name("equipmentTypes")
+                        .DataTextField("Name")
+                        .DataValueField("Type")
+                        .Height(200)
+                        .Events(e => e.Change("onEquipmentTypesChange"))
+                        .DataSource(dataSource => dataSource
+                            .Ajax()
+                            .Read(read => read.Action("GetShipEquipmentTypeList", "Ship"))
+                            )
+                        )
+                </div>
+            </div>
+
+            <div class="row" style="margin-top: 20px;">
+                <div class="col-12">
+                    <h4>List of measures</h4>
+                </div>
+                <div class="col-lg-12">
+                    <div style="position: relative">
+                        @(Html.Kendo().Grid<Susteni.Models.ShipEquipmentItem>()
+                            .Name("equipmentList")
+                            .Columns(columns =>
+                            {
+                                columns.Bound(q => q.EquipmentGuid).Visible(false);
+                                columns.Bound(q => q.Name).Title(Localizer["Name"].Value);
+                                columns.Bound(q => q.MaxEffect).Width(90).Title(Localizer["Max effect"].Value);
+                                columns.Bound(q => q.Cost).Width(90).Format("{0:n0}").Title(Localizer["Cost"].Value).HtmlAttributes(new { style = "text-align: right;" });
+                                columns.Bound(q => q.FinancielSupport).Format("{0:n0}%").Title(Localizer["Financial support"].Value).HtmlAttributes(new { style = "text-align: right;" });
+                                columns.Bound(q => q.Year).Width(90).Title(Localizer["Year"].Value);
+                            })
+                            .Height(265)
+                            .Scrollable()
+                            .Selectable(s => s
+                                .Mode(GridSelectionMode.Multiple)
+                                .Type(GridSelectionType.Row))
+                            .Events(e => e.Change("onEquipmentChange"))
+                            .DataSource(dataSource => dataSource
+                                .Ajax()
+                                .Read(read => read.Action("GetShipEquipmentList", "Ship").Data("filterTypes"))
+                                )
+                            )
+
+
+                        @(Html.Kendo().FloatingActionButton()
+                            .Name("equipmentAdd")
+                            .ThemeColor(FloatingActionButtonThemeColor.Success)
+                            .Size(FloatingActionButtonSize.Small)
+                            .PositionMode(FloatingActionButtonPositionMode.Absolute)
+                            .Align(FloatingActionButtonAlign.TopEnd)
+                            .AlignOffset(alignOffset => alignOffset.Horizontal(0).Vertical(10))
+                            .Icon("plusIcon")
+                            .Events(events => events.Click("showDialogEquipment"))
+                            .Visible(true)
+                            )
+
+                        @(Html.Kendo().FloatingActionButton()
+                            .Name("equipmentCopy")
+                            .ThemeColor(FloatingActionButtonThemeColor.Success)
+                            .Size(FloatingActionButtonSize.Small)
+                            .PositionMode(FloatingActionButtonPositionMode.Absolute)
+                            .Align(FloatingActionButtonAlign.TopEnd)
+                            .AlignOffset(alignOffset => alignOffset.Horizontal(0).Vertical(50))
+                            .Icon("copyIcon")
+                            .Events(events => events.Click("showDialogEquipmentCopy"))
+                            .Visible(false)
+                            )
+
+                        @(Html.Kendo().FloatingActionButton()
+                            .Name("equipmentEdit")
+                            .ThemeColor(FloatingActionButtonThemeColor.Warning)
+                            .Size(FloatingActionButtonSize.Small)
+                            .PositionMode(FloatingActionButtonPositionMode.Absolute)
+                            .Align(FloatingActionButtonAlign.TopEnd)
+                            .AlignOffset(alignOffset => alignOffset.Horizontal(0).Vertical(90))
+                            .Icon("pencilIcon")
+                            .Events(events => events.Click("showDialogEquipmentEdit"))
+                            .Visible(false)
+                            )
+
+                        @(Html.Kendo().FloatingActionButton()
+                            .Name("equipmentRemove")
+                            .ThemeColor(FloatingActionButtonThemeColor.Error)
+                            .Size(FloatingActionButtonSize.Small)
+                            .PositionMode(FloatingActionButtonPositionMode.Absolute)
+                            .Align(FloatingActionButtonAlign.TopEnd)
+                            .AlignOffset(alignOffset => alignOffset.Horizontal(0).Vertical(130))
+                            .Icon("trashIcon")
+                            .Events(events => events.Click("removeEquipment"))
+                            .Visible(false)
+                            )
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="col-lg-8">
+
+            <partial name="_FuelSavingInfo" />
+        </div>
+    </div>
+
+    <div class="row" style="margin-top: 20px;">
+        <div class="col-2">
+            <h4>Choose profile group</h4>
+            @(Html.Kendo().Grid<Susteni.Models.ProfileItem>()
+                .Name("profilesGrid")
+                .Columns(columns =>
+                {
+                    columns.Select().Width(40);
+                    columns.Bound(q => q.ProfilGuid).Visible(false);
+                    columns.Bound(q => q.Name).Title(Localizer["Measures group"].Value);
+                })
+                .Height(265)
+                .Scrollable()
+                .Events(e => e.Change("onProfileSelectedChange"))
+                .DataSource(dataSource => dataSource
+                    .Ajax()
+                .Read(read => read.Action("GetProfileList", "Ship").Data("filterShip"))
+                    )
+                )
+        </div>
+        <div class="col-10">
+            <h4>Savings per measures types and operation modes</h4>
+            @(Html.Kendo().Grid<Susteni.Models.ShipOperationSavingPowerItem>()
+                .Name("operationSavingList")
+                .Columns(columns =>
+                {
+                    columns.Bound(q => q.EquipmentTypeName).Title(Localizer["Name"].Value);
+                    columns.Bound(q => q.OperationMode1).Title(Localizer["OperationMode1"].Value).Format("{0:n0}").HtmlAttributes(new { style = "text-align: right;" });
+                    columns.Bound(q => q.OperationMode2).Title(Localizer["OperationMode2"].Value).Format("{0:n0}").HtmlAttributes(new { style = "text-align: right;" });
+                    columns.Bound(q => q.OperationMode3).Title(Localizer["OperationMode3"].Value).Format("{0:n0}").HtmlAttributes(new { style = "text-align: right;" });
+                    columns.Bound(q => q.OperationMode4).Title(Localizer["OperationMode4"].Value).Format("{0:n0}").HtmlAttributes(new { style = "text-align: right;" });
+                    columns.Bound(q => q.OperationMode5).Title(Localizer["OperationMode5"].Value).Format("{0:n0}").HtmlAttributes(new { style = "text-align: right;" });
+                    columns.Bound(q => q.OperationMode6).Title(Localizer["OperationMode6"].Value).Format("{0:n0}").HtmlAttributes(new { style = "text-align: right;" });
+                    columns.Bound(q => q.OperationMode7).Title(Localizer["OperationMode7"].Value).Format("{0:n0}").HtmlAttributes(new { style = "text-align: right;" });
+                    columns.Bound(q => q.OperationMode8).Title(Localizer["OperationMode8"].Value).Format("{0:n0}").HtmlAttributes(new { style = "text-align: right;" });
+                    columns.Bound(q => q.OperationMode9).Title(Localizer["OperationMode9"].Value).Format("{0:n0}").HtmlAttributes(new { style = "text-align: right;" });
+                })
+                .Height(265)
+                .Scrollable()
+                .Selectable(s => s
+                    .Mode(GridSelectionMode.Multiple)
+                    .Type(GridSelectionType.Row))
+                .Events(e => e.DataBound("onOSLBound"))
+                .DataSource(dataSource => dataSource
+                    .Ajax()
+                    .Read(read => read.Action("GetSavingPrModeList", "Ship").Data("filterTypes"))
+                    )
+                )
+        </div>
+
+
+    </div>
+
+</form>
+
+
+<script id="successTemplate" type="text/x-kendo-template">
+    <div class="upload-success">
+        <img src="@Url.Content("~/images/emoticon-happy.svg")" style="float:left; height:48px; width:48px; margin-right: 16px;"/>
+        <p>#= message #</p>
+    </div>
+</script>
+
+
+<script id="errorTemplate" type="text/x-kendo-template">
+    <div class="wrong-pass">
+        <img src="@Url.Content("~/images/emoticon-sad.svg")" style="float:left; height:48px; width:48px; margin-right: 16px;"/>
+        <p>#= message #</p>
+    </div>
+</script>
+
+
+@(Html.Kendo().Notification()
+    .Name("notification")
+    .Position(p => p.Pinned(true).Top(30).Right(30))
+    .Stacking(NotificationStackingSettings.Down)
+    .AutoHideAfter(5000)
+    .Templates(t =>
+    {
+        t.Add().Type("success").ClientTemplateID("successTemplate");
+        t.Add().Type("error").ClientTemplateID("errorTemplate");
+    })
+)
+
+@(Html.Kendo().Window()
+        .Name("DialogSupport")
+        .Title(Localizer["Support"].Value)
+        .Visible(false)
+        .Width(1200)
+        .Modal(true)
+        .Draggable()
+        )
+
+
+@(Html.Kendo().Window()
+    .Name("dialogLastOppBilde")
+    .Title(Localizer["Last opp bilde"].Value)
+    .HtmlAttributes("style= border:1px;")
+    .Visible(false)
+    .Width(1000)
+    .Modal(true)
+    .Draggable()
+    )
+
+@(
+Html.Kendo().Window()
+    .Name("dialogEquipment")
+    .Title(Localizer["Equipment"].Value)
+    .HtmlAttributes(new { style = "border:1px; padding-bottom: 0px; background-color: #F2F2F2;" })
+    .Visible(false)
+    .Width(800)
+    .Modal(true)
+    .Draggable()
+    )
+
+@(
+Html.Kendo().Window()
+    .Name("dialogEquipmentMode")
+    .Title(Localizer["Equipment operation mode"].Value)
+    .HtmlAttributes(new { style = "border:1px; padding-bottom: 0px; background-color: #F2F2F2;" })
+    .Visible(false)
+    .Width(500)
+    .Modal(true)
+    .Draggable()
+    )
+
+@(Html.Kendo().Window()
+    .Name("dialogNewProfile")
+    .Title(Localizer["New profile"].Value)
+    .HtmlAttributes(new { style = "border:1px; padding-bottom: 0px; background-color: #F2F2F2;" })
+    .Visible(false)
+    .Width(500)
+    .Modal(true)
+    .Draggable()
+    )
+
+@(Html.Kendo().Window()
+    .Name("DialogHjelp")
+    .Title(Localizer["Help"].Value)
+    .Visible(false)
+    .Height(800)
+    .Width(1200)
+    .Modal(true)
+    .Draggable()
+    )
+
+
+<script id="idMenu">
+
+
+    function addSupport() {
+        $.ajax({
+            url: '@Url.Action("DialogSupport", "HelpDesk")',
+            type: 'GET'
+        }).done(function (result) {
+            $('#DialogSupport').html(result);
+
+            xB = document.getElementById("idBilde");
+
+            document.getElementById("HelpDesk_Modul").value = "FuelSavings";
+            document.getElementById("HelpDesk_Program").value = "2";
+            document.getElementById("HelpDesk_Status").value = "1";
+
+            const screenshotTarget = document.body;
+
+            html2canvas(screenshotTarget).then((canvas) => {
+                const base64image = canvas.toDataURL("image/png");
+                xB.innerHTML = "<img src='" + base64image + "' style='max-height: 260px; max-width: 350px;' alt='Bilde' / >";
+                document.getElementById("HelpDesk_byte64String").value = base64image
+            });
+
+            var popup = $('#DialogSupport').data("kendoWindow");
+            popup.center().open();
+        });
+    }
+
+    function fuelSavings() {
+        shipGuid = document.getElementById("Ship_ShipGuid").value;
+        Name = document.getElementById("Ship_Name").value;
+        ProfilGuid = document.getElementById("Ship_ProfilGuid").value;
+        ProfilName = document.getElementById("Ship_ProfilName").value;
+        window.location = "../Ship/FuelSavings?shipGuid=" + shipGuid + "&Name=" + Name + "&ProfilGuid=" + ProfilGuid + "&ProfilName=" + ProfilName;
+
+    }
+
+    function generators() {
+        shipGuid = document.getElementById("Ship_ShipGuid").value;
+        Name = document.getElementById("Ship_Name").value;
+        ProfilGuid = document.getElementById("Ship_ProfilGuid").value;
+        ProfilName = document.getElementById("Ship_ProfilName").value;
+        window.location = "../Ship/ElProduction?shipGuid=" + shipGuid + "&Name=" + Name + "&ProfilGuid=" + ProfilGuid + "&ProfilName=" + ProfilName;
+    }
+
+    function powerProd() {
+        shipGuid = document.getElementById("Ship_ShipGuid").value;
+        Name = document.getElementById("Ship_Name").value;
+        ProfilGuid = document.getElementById("Ship_ProfilGuid").value;
+        ProfilName = document.getElementById("Ship_ProfilName").value;
+        window.location = "../Ship/PowerProduction?shipGuid=" + shipGuid + "&Name=" + Name + "&ProfilGuid=" + ProfilGuid + "&ProfilName=" + ProfilName;
+    }
+
+    function summary() {
+        shipGuid = document.getElementById("Ship_ShipGuid").value;
+        Name = document.getElementById("Ship_Name").value;
+        ProfilGuid = document.getElementById("Ship_ProfilGuid").value;
+        ProfilName = document.getElementById("Ship_ProfilName").value;
+        window.location = "../Ship/Summary?shipGuid=" + shipGuid + "&Name=" + Name + "&ProfilGuid=" + ProfilGuid + "&ProfilName=" + ProfilName;
+
+    }
+
+    function plan() {
+        shipGuid = document.getElementById("Ship_ShipGuid").value;
+        Name = document.getElementById("Ship_Name").value;
+        ProfilGuid = document.getElementById("Ship_ProfilGuid").value;
+        ProfilName = document.getElementById("Ship_ProfilName").value;
+        window.location = "../Ship/InvestmentPlan?shipGuid=" + shipGuid + "&Name=" + Name + "&ProfilGuid=" + ProfilGuid + "&ProfilName=" + ProfilName;
+    }
+
+</script>
+
+
+@(Html.Kendo().Dialog()
+        .Name("dialogProfil")
+        .Title("Set active profile")
+        .HtmlAttributes(new { style = "border:1px; margin: 0px; padding: 10px;" })
+        .Content(
+        "<div class='k-space-right search-wrapper'><span class='k-textbox k-input k-input-md k-rounded-md k-input-solid'><input id='idCustmerSearch' type='text' placeholder='Søk etter organisasjon' class='k-input-inner'/><span class='k-input-suffix'><span class='k-input-icon search'></span></span></span></div>" +
+
+            Html.Kendo().ListBox()
+                .Name("listProfil")
+                //.HtmlAttributes(new { style = "height: 100%;" })
+                .DataValueField("ProfilGuid")
+                .DataTextField("Name")
+                .Selectable(ListBoxSelectable.Single)
+                .DataSource(dataSource => dataSource
+                    .Ajax()
+                    .Read(read => read.Action("GetProfileList", "Ship").Data("filterShip"))
+                    )
+                .ToHtmlString()
+                )
+        .Visible(false)
+        .Width(400)
+        .Modal(true)
+        .Actions(actions =>
+        {
+            actions.Add().Text("Cancel");
+            actions.Add().Text("Set Active").Action("onActionOK").Primary(true);
+        })
+    )
+
+
+<script id="shipFunction">
+    var equipmentType = 1;
+    var shipGuid = "";
+    var Name = "";
+    var equipmentGuid = "";
+    var profilGuids = "";
+
+    function showDialogProfile() {
+        $('#dialogProfil').data("kendoDialog").open();
+    }
+
+    function onActionOK(e) {
+        var lwFellesraad = $("#listProfil").data("kendoListBox");
+
+        var selectedF = lwFellesraad.select();
+        var selItemF = lwFellesraad.dataItem(selectedF);
+        var profile = "";
+        var name = "";
+
+        if (typeof selItemF != 'undefined') {
+            profile = selItemF.ProfilGuid;
+            name = selItemF.Name;
+        }
+
+        $.ajax({
+            url: '@Url.Action("SetActivProfil", "Ship")',
+            data: { profilGuid: profile, shipGuid: shipGuid },
+            type: "GET"
+        }).always(function (result) {
+            document.getElementById("Ship_ProfilGuid").value = profile;
+            document.getElementById("Ship_ProfilName").value = name;
+            document.getElementById("idProfileName").innerHTML = name;
+            $("#equipmentList").data("kendoGrid").dataSource.read();
+            $("#equipmentModeList").data("kendoGrid").dataSource.read();
+        });
+    }
+
+    function filterShip() {
+        shipGuid = document.getElementById("Ship_ShipGuid").value;
+
+        return { shipGuid: shipGuid }
+    }
+
+    function filterTypes() {
+        shipGuid = document.getElementById("Ship_ShipGuid").value;
+        profilGuid = document.getElementById("Ship_ProfilGuid").value;
+
+        return { shipGuid: shipGuid, equipmentType: equipmentType, profilGuid: profilGuid, profilGuids: profilGuids }
+    }
+
+    function filterEquipement() {
+        profilGuid = document.getElementById("Ship_ProfilGuid").value;
+        return { equipmentGuid: equipmentGuid, shipGuid: shipGuid, profilGuid: profilGuid }
+    }
+    
+    
+    function onEquipmentTypesChange(e) {
+        var grid = $("#equipmentTypes").data("kendoDropDownList");
+        var selected = grid.select();
+        var data = grid.dataItem(selected);
+
+        equipmentType = data.Type;
+
+        $("#equipmentList").data("kendoGrid").dataSource.read();
+    }
+
+    var maxEffet = 0;
+
+    function onEquipmentChange(e) {
+        var grid = $("#equipmentList").data("kendoGrid");
+        var selected = grid.select();
+        var data = grid.dataItem(selected);
+
+        equipmentGuid = data.EquipmentGuid;
+        maxEffet = data.MaxEffect;
+
+        $('#equipmentEdit').getKendoFloatingActionButton().show();
+        $('#equipmentRemove').getKendoFloatingActionButton().show();
+        $('#equipmentCopy').getKendoFloatingActionButton().show();
+
+        $("#equipmentModeList").data("kendoGrid").dataSource.read();
+    }
+
+    $(document).ready(function () {
+        shipGuid = document.getElementById("Ship_ShipGuid").value;
+        document.getElementById("idName").innerHTML = document.getElementById("Ship_Name").value;
+
+        document.getElementById("idProfileName").innerHTML = document.getElementById("Ship_ProfilName").value;
+
+        profilGuid = document.getElementById("Ship_ProfilGuid").value;
+
+        $.ajax({
+            url: '@Url.Action("SetActiveProfile", "Ship")',
+            type: "PUSH",
+            data: { profilGuid: profilGuid, linkGuid: shipGuid },
+            dataType: "json"
+        });
+
+        ListOfDocuments();
+
+    });
+
+
+    function ListOfDocuments() {
+        var respons = "";
+        $.ajax({
+            url: '@Url.Action("GetReportDocumentListNew", "Report")',
+            type: "GET",
+            data: { screen: "EnergyOptimizing" },
+            dataType: "html"
+            })
+        .done(function (result) {
+            var pureHTML = result
+            pureHTML = replaceAll(pureHTML, "¤", "\"");
+            $("#idDocumentX").html(pureHTML);
+        });
+    }
+
+    function replaceAll(string, search, replace) {
+        return string.split(search).join(replace);
+    }
+
+</script>
+
+<script id="operataionModeFunction">
+
+    var operationModeGuid = "";
+    var equipmentModesGuid = "";
+    var equipmentGuid = "";
+    var profilGuid = "";
+
+    function newProfiles() {
+        $.ajax({
+            url: '@Url.Action("NewProfile", "Ship")',
+            type: "GET"
+            })
+        .done(function (result) {
+            $('#dialogNewProfile').html(result);
+            document.getElementById("Profile_LinkGuid").value = document.getElementById("Ship_ShipGuid").value;
+            var popup = $('#dialogNewProfile').data("kendoWindow");
+            popup.center().open();
+        });
+    }
+
+    function createProfiles() {
+        var $this = $('#profile').serialize();
+
+        $.ajax({
+            url: '@Url.Action("SetProfile", "Ship")',
+            type: "PUSH",
+            data: $this,
+            dataType: "json"
+            })
+        .done(function (result) {
+            var popup = $('#dialogNewProfile').data("kendoWindow");
+            popup.close();
+            $("#profiles").data("kendoDropDownList").dataSource.read();
+        });
+    }
+
+    function onProfileChange(e) {
+        var grid = $("#profiles").data("kendoDropDownList");
+        var selected = grid.select();
+        var data = grid.dataItem(selected);
+
+        profilGuid = data.ProfilGuid;
+        linkGuid = document.getElementById("Ship_ShipGuid").value;
+
+        $.ajax({
+            url: '@Url.Action("SetActiveProfile", "Ship")',
+            type: "PUSH",
+            data: { profilGuid: profilGuid, linkGuid: linkGuid },
+            dataType: "json"
+            })
+        .done(function (result) {
+                $("#equipmentList").data("kendoGrid").dataSource.read();
+            });
+        }
+
+    function onEquipemntModeChange(e) {
+        var grid = $("#equipmentModeList").data("kendoGrid");
+        var selected = grid.select();
+        var data = grid.dataItem(selected);
+
+        equipmentModesGuid = data.EquipmentModesGuid;
+        operationModeGuid = data.OperationModeGuid;
+        equipmentGuid = data.EquipmentGuid;
+        ppkWh = data.Effect;
+        ppSavings = data.PercentSaving;
+        ppSavingskWh = data.PercentSaving;
+
+        var fabOME = $('#operationModeEdit').getKendoFloatingActionButton();
+        fabOME.show();
+        }
+
+    function showDialogOperationModeEdit() {
+        $.ajax({
+            url: '@Url.Action("DialogEquipmentModeEdit", "Ship")',
+            data: { equipmentModesGuid: equipmentModesGuid, operationModeGuid: operationModeGuid, equipmentGuid: equipmentGuid, profilGuid: profilGuid },
+            type: "GET"
+            })
+        .done(function (result) {
+            $('#dialogEquipmentMode').html(result);
+
+            pLoad = $("#ShipEquipmentModes_PercentLoad").data("kendoNumericTextBox").value();
+            pLoadkWh = maxEffet * pLoad / 100;
+
+            ppSavings = $("#ShipEquipmentModes_PercentSaving").data("kendoNumericTextBox").value();
+            ppSavingskWh = pLoadkWh * ppSavings / 100;
+            $("#kWhSavings").data("kendoNumericTextBox").value(ppSavingskWh);
+
+
+            $("#powerSaving").data("kendoNumericTextBox").value(pLoadkWh);
+
+            var popup = $('#dialogEquipmentMode').data("kendoWindow");
+            popup.center().open();
+            });
+        }
+
+
+    function saveEqipmentMode() {
+        var $this = $('#equipmnetOperationModeForm').serialize();
+
+        $.ajax({
+            url: '@Url.Action("SetShipEquipmentModes", "Ship")',
+            type: "PUSH",
+            data: $this,
+            dataType: "json"
+            })
+        .done(function (result) {
+            var popup = $('#dialogEquipmentMode').data("kendoWindow");
+            popup.close();
+            $("#equipmentModeList").data("kendoGrid").dataSource.read();
+                $("#operationSavingList").data("kendoGrid").dataSource.read();
+            });
+        }
+
+    var ppkWh = 0;
+    var ppSavings = 0;
+    var ppSavingskWh = 0;
+
+    function closeEqipmentMode() {
+        var popup = $('#dialogEquipmentMode').data("kendoWindow");
+        popup.close();
+    }
+
+    function onPercentSavingChange() {
+        pSave = $("#ShipEquipmentModes_PercentSaving").data("kendoNumericTextBox").value();
+        pSaving = $("#powerSaving").data("kendoNumericTextBox").value();
+
+        kWhSavings = pSave * pSaving / 100;
+
+        $("#kWhSavings").data("kendoNumericTextBox").value(kWhSavings);
+    }
+
+    function onkWhSavingChange() {
+        ppSavingskWh = $("#kWhSavings").data("kendoNumericTextBox").value();
+        pSavings = $("#powerSaving").data("kendoNumericTextBox").value();
+
+        pSave = ppSavingskWh * 100 / pSavings;
+
+        $("#ShipEquipmentModes_PercentSaving").data("kendoNumericTextBox").value(pSave);
+    }
+
+
+    function onPowerSaveChange() {
+        pSavings = $("#powerSaving").data("kendoNumericTextBox").value();
+        pLoadkWh = pSavings * 100 / maxEffet;
+
+
+        $("#ShipEquipmentModes_PercentLoad").data("kendoNumericTextBox").value(pLoadkWh);
+
+        ppSavingskWh = pLoadkWh * ppSavings / 100;
+        $("#kWhSavings").data("kendoNumericTextBox").value(ppSavingskWh);
+    }
+
+    function onPercentLoadChange() {
+        pLoad = $("#ShipEquipmentModes_PercentLoad").data("kendoNumericTextBox").value();
+        pLoadkWh = maxEffet * pLoad / 100;
+
+        ppSavings = $("#ShipEquipmentModes_PercentSaving").data("kendoNumericTextBox").value();
+        ppSavingskWh = pLoadkWh * ppSavings / 100;
+        $("#kWhSavings").data("kendoNumericTextBox").value(ppSavingskWh);
+
+
+        $("#powerSaving").data("kendoNumericTextBox").value(pLoadkWh);
+    }
+
+
+    function showDialogEquipment() {
+        $.ajax({
+            url: '@Url.Action("getCurrency", "Account")',
+            type: "GET"
+        })
+            .done(function (result) {
+                var currency = result;
+
+                $.ajax({
+                    url: '@Url.Action("DialogEquipment", "Ship")',
+                    data: { shipGuid: shipGuid, equipmentType: equipmentType, profileGuid: profilGuid },
+                    type: "GET"
+                    })
+                .done(function (result) {
+                        $('#dialogEquipment').html(result);
+                        document.getElementById("currencyCode").innerHTML = currency;
+
+                    var popup = $('#dialogEquipment').data("kendoWindow");
+                    popup.center().open();
+                    });
+            });
+        }
+
+    function showDialogEquipmentCopy() {
+        $.ajax({
+            url: '@Url.Action("getCurrency", "Account")',
+            type: "GET"
+            })
+        .done(function (result) {
+            var currency = result;
+
+            $.ajax({
+                url: '@Url.Action("DialogEquipment", "Ship")',
+                data: { shipGuid: shipGuid, equipmentType: equipmentType },
+                type: "GET"
+                })
+            .done(function (result) {
+                $('#dialogEquipment').html(result);
+                document.getElementById("currencyCode").innerHTML = currency;
+                document.getElementById("ShipEquipment_EquipmentGuid").value = "";
+                var popup = $('#dialogEquipment').data("kendoWindow");
+                popup.center().open();
+                });
+            });
+        }
+
+    function showDialogEquipmentEdit() {
+        $.ajax({
+            url: '@Url.Action("getCurrency", "Account")',
+            type: "GET"
+            })
+        .done(function (result) {
+            var currency = result;
+
+            $.ajax({
+                url: '@Url.Action("DialogEquipmentEdit", "Ship")',
+                data: { equipmentGuid: equipmentGuid },
+                type: "GET"
+                })
+            .done(function (result) {
+                $('#dialogEquipment').html(result);
+                document.getElementById("currencyCode").innerHTML = currency;
+                var popup = $('#dialogEquipment').data("kendoWindow");
+                popup.center().open();
+                });
+            });
+        }
+
+
+    function saveEquipment() {
+        var $this = $('#equipmentForm').serialize();
+
+        $.ajax({
+            url: '@Url.Action("SetShipEquipment", "Ship")',
+            type: "PUSH",
+            data: $this,
+            dataType: "json"
+            })
+        .done(function (result) {
+            var popup = $('#dialogEquipment').data("kendoWindow");
+            popup.close();
+            $("#equipmentList").data("kendoGrid").dataSource.read();
+            });
+        }
+
+
+    function closeEquipment() {
+        var popup = $('#dialogEquipment').data("kendoWindow");
+        popup.close();
+    }
+
+    function removeEquipment(e) {
+        var tittel = "DELETE";
+        var nei = "No";
+        var content = "<div id='question'>Do you want to remove this equipment from the list</div>";
+
+        $("#confirm").kendoConfirm({
+            title: tittel,
+            content: content,
+            messages: {
+                okText: "yes",
+                cancel: nei
+            }
+        }).data("kendoConfirm").result.done(function () {
+            $('body').append($('<div id="confirm">'));
+
+            $.ajax({
+                url: '@Url.Action("RemoveShipEquipment", "Ship")',
+                type: "GET",
+                dataType: "json",
+                data: { equipmentGuid: equipmentGuid }
+            }).done(function (result) {
+                $("#equipmentList").data("kendoGrid").dataSource.read();
+            });
+        });
+    }
+
+    function saveGrid() {
+        var grid = $("#equipmentModeList").data("kendoGrid");
+        grid.saveChanges();
+    }
+
+    function saveOperationMode() {
+        var $this = $('#shipForm').serialize();
+
+        $.ajax({
+            url: '@Url.Action("SetShipOperationMode", "Ship")',
+            type: "PUSH",
+            data: $this
+            })
+        .done(function (result) {
+            var popup = $('#dialogOperationMode').data("kendoWindow");
+            popup.close();
+            $("#shipOperationmodeList").data("kendoGrid").dataSource.read();
+            });
+        }
+
+    function closeOperationMode() {
+        var popup = $('#dialogOperationMode').data("kendoWindow");
+        popup.close();
+        }
+
+</script>
+
+<script>
+
+    function onProfileSelectedChange() {
+        profilGuids = "";
+
+        var grid = $("#profilesGrid").data("kendoGrid");
+        var selected = [];
+
+        grid.select().each(function () {
+            selected.push(grid.dataItem(this));
+        });
+
+        if (selected.length > 0) {
+            for (var i = 0; i < selected.length; i++) {
+                if (profilGuids == "") {
+                    profilGuids = "'" + selected[i].ProfilGuid + "'";
+                }
+                else {
+                    profilGuids += ",'" + selected[i].ProfilGuid + "'";
+                }
+            }
+        }
+
+        $("#operationSavingList").data("kendoGrid").dataSource.read();
+    }
+
+    function onEquipmentModeDataBound() {
+        $("#operationSavingList").data("kendoGrid").dataSource.read();
+
+        var data = this.dataSource.data();
+        $(data).each(function () {
+            var Effect = this.HoursPrYear * this.MaxEffect * this.PercentLoad / 100;
+            var SavingEffect = Effect - (Effect * this.PercentSaving / 100);
+            this.set("Effect", Effect);
+            this.set("Saving", SavingEffect);
+        });
+
+
+    }
+
+    function onOSLBound() {
+        var grid = $("#operationSavingList").data("kendoGrid");
+
+        $.ajax({
+            url: '@Url.Action("GetShipOperationModeDataList", "Ship")',
+            type: "GET",
+            data: {shipGuid: shipGuid}
+        }).done(function (result) {
+            i = 0;
+            for (om of result) {
+                i++;
+                x = $("#operationSavingList thead [data-field=OperationMode" + i + "]");
+                x.html(om.Name);
+            }
+            for (let j = i + 1; j <= 9; j++) {
+                grid.hideColumn(j);
+            }
+
+        });
+    }
+
+
+</script>
+
+<script>
+
+    $(document).ready(function () {
+
+        var fbOMA = $("#equipmentAdd").getKendoFloatingActionButton();
+        var fbOMR = $("#equipmentRemove").getKendoFloatingActionButton();
+        var fbOME = $("#equipmentEdit").getKendoFloatingActionButton();
+        var fbOMC = $("#equipmentCopy").getKendoFloatingActionButton();
+
+        $("#equipmentAdd").prop("type", "button");
+        $("#equipmentRemove").prop("type", "button");
+        $("#equipmentEdit").prop("type", "button");
+        $("#equipmentCopy").prop("type", "button");
+
+        fbOMAText = "Add equipment";
+        fbOMRText = "Remove equipment";
+        fbOMEText = "Edit equipment";
+        fbOMCText = "Copy equipment";
+
+        $("#equipmentAdd").hover(function () {
+            fbOMA.text(fbOMAText);
+            fbOMA.element.find(".k-fab-text")
+                .stop().toggle(200);
+        }, function () {
+            fbOMA.element.find(".k-fab-text")
+                .stop()
+                .toggle(200)
+                .promise().done(function () {
+                    fbOMA.text("");
+                });
+        });
+
+        $("#equipmentCopy").hover(function () {
+            fbOMC.text(fbOMCText);
+            fbOMC.element.find(".k-fab-text")
+                .stop().toggle(200);
+        }, function () {
+            fbOMC.element.find(".k-fab-text")
+                .stop()
+                .toggle(200)
+                .promise().done(function () {
+                    fbOMC.text("");
+                });
+        });
+
+        $("#equipmentRemove").hover(function () {
+            fbOMR.text(fbOMRText);
+            fbOMR.element.find(".k-fab-text")
+                .stop().toggle(200);
+        }, function () {
+            fbOMR.element.find(".k-fab-text")
+                .stop()
+                .toggle(200)
+                .promise().done(function () {
+                    fbOMR.text("");
+                });
+        });
+
+        $("#equipmentEdit").hover(function () {
+            fbOME.text(fbOMEText);
+            fbOME.element.find(".k-fab-text")
+                .stop().toggle(200);
+        }, function () {
+            fbOME.element.find(".k-fab-text")
+                .stop()
+                .toggle(200)
+                .promise().done(function () {
+                    fbOME.text("");
+                });
+        });
+
+    });
+
+</script>
+
+<script id="hjelp">
+
+    function showHelp() {
+        $.ajax({
+            url: '@Url.Action("DialogHjelp", "Hjelp")',
+            type: 'GET'
+        }).done(function (result) {
+            $('#DialogHjelp').html(result);
+            var popup = $('#DialogHjelp').data("kendoWindow");
+            popup.center().open();
+        });
+    }
+
+  
+
+    function hjelpFilter() {
+        return { Modul: 100, Skjerm: "" }
+    }
+
+</script>
+
+
+@(Html.Kendo().Window()
+        .Name("dialogReports")
+        .Title("Reports")
+        .Visible(false)
+        .Width(1200)
+        .Modal(true)
+        .Draggable()
+        )
+
+
+
+
+@(Html.Kendo().Window()
+    .Name("dialogVisPDFRapport")
+    .Position(p => p.Top(60).Left(300))
+    .Title(Localizer["Dokument"].Value)
+    .HtmlAttributes(new { style = "border:1px; padding: 0px;" })
+    .Visible(false)
+    .Content(
+        @Html.Kendo().PDFViewer()
+            .Name("pdfViewerRapport")
+            //.Events(ev => ev.Render("onRender"))
+            .HtmlAttributes(new { style = "padding: 0px; margin: 0px;" })
+            .ToHtmlString()
+    )
+    .Modal(true)
+    .Draggable()
+    )
+
+
+<script id="reports">
+    var firstRender = true;
+    var skjerm = "EnergyOptimizing";
+    var vis = "Alle";
+    var stringfilter = "";
+    var RapId = "";
+
+
+    function ShowDocument(e) {
+       firstRender = true;
+
+       $.ajax({
+           type: "GET",
+           url: '@Url.Action("DialogVisPDF", "Report")',
+           })
+       .done(function (result) {
+            $('#dialogVisPDFRapport').html(result);
+            $('#dialogVisPDFRapport').data("kendoWindow").open();
+
+            $.ajax({
+                type: "GET",
+                url: '@Url.Action("GetReportDocument", "Report")',
+                data: { reportFilesGuid: e }
+                })
+            .done(function (result) {
+
+                var pdfViewer = $("#pdfViewerRapport").data("kendoPDFViewer");
+                pdfViewer.fromFile({data: result});
+
+                pdfViewer.loadPage(1);
+                });
+            });
+        }
+
+
+    function skjermFilter() {
+        return { skjerm: skjerm, RapType: 5 }
+    }
+
+    function showDialogRapporter() {
+        $.ajax({
+            url: "/Report/DialogReportList",
+            method: 'GET',
+            success: function (result) {
+                $('#dialogReports').html(result);
+                var popup = $('#dialogReports').data("kendoWindow");
+                popup.center().open();
+            }
+        });
+    }
+
+
+    function ShowReport() {
+        var lvDocument = $("#lvRapporter").data("kendoListView");
+        xIW = document.getElementById("importerer");
+        xIR = document.getElementById("infoRapport");
+
+        var selF = lvDocument.select();
+        var selIF = lvDocument.dataItem(selF);
+        var RapId = "";
+        var base64string = "";
+        firstRender = true;
+
+        if (typeof selIF != 'undefined') {
+            RapId = selIF.RapId;
+            x = document.getElementById("ReportVerdier_RapId");
+            xRT = document.getElementById("ReportVerdier_RapType");
+            x.value = RapId;
+            xRT.value = selIF.RapType;
+        }
+
+        var $this = $('#rapportForm').serialize();
+
+        xIW.style.display = "";
+        xIR.style.display = "none";
+
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("ShowTelerikReport", "Report")',
+            data: $this
+        }).done(function (result) {
+            xIW.style.display = "none";
+            xIR.style.display = "";
+            RapId = "X";
+            if (result.ErrorCode > 0) {
+                alert(result.ErrorTekst);
+            }
+            else {
+                var popup = $('#dialogVisPDFRapport').data("kendoWindow");
+                popup.open();
+
+                var pdfViewer = $("#pdfViewerRapport").data("kendoPDFViewer");
+                var pdfHandlerUrl = "/Report/VisRapport?rapId=" + RapId;
+
+                pdfViewer.fromFile(pdfHandlerUrl);
+                pdfViewer.loadPage(1);
+            }
+        });
+    }
+
+    function onRender(e) {
+        if (firstRender) {
+            e.sender.toolbar.zoom.combobox.value("fitToWidth");
+            e.sender.toolbar.zoom.combobox.trigger("change");
+            firstRender = false;
+        }
+    }
+
+
+</script>

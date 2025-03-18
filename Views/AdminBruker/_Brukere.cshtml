@@ -1,0 +1,165 @@
+﻿@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
+@model Susteni.Models.Admin.AdminModel
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+
+
+<script id="customer-item-template" type="text/x-kendo-template">
+    <span class="k-state-default"><h5><img src="@Url.Content("~/images/#:data.Ikon#.svg")" style="float:left;width:32px;height:32px;margin-right:10px;">#: data.Funksjon #</h5></span>
+</script>
+
+<div class="container-fluid padding-0" id="brukerRolleData">
+    
+
+    <div class="col-12 padding-0" style="margin-top: 120px;">
+
+        <div class="panel with-nav-tabs panel-default" id="dataenter">
+
+            <div id="hidden">
+
+            </div>
+
+            <div class="row">
+                <div class="col-12 align-items-center" style="display: flex; flex-direction: row;">
+                    <label class="col-form-label" style="margin-left: 10px;">@Localizer["BrukerId"]</label>
+                    <input asp-for="Bruker.BrukerId" class="form-control k-textbox" style="width: 30%;" readonly>
+                    <label class="col-form-label" style="margin-left: 10px;">@Localizer["Navn"]</label>
+                    <input readonly asp-for="Bruker.Fornavn" class="form-control k-textbox" style="width: calc(35%-50px); margin-right: 10px;">
+                    <input readonly asp-for="Bruker.Etternavn" class="form-control k-textbox" style="width: calc(35%-50px); margin-right: 10px;">
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="col-12" style="margin-bottom: 0px; margin-top: 10px;">
+
+        <div class="panel with-nav-tabs panel-default" id="dataenter" style="min-height: 500px;">
+
+            <div class="panel-body data padding-0">
+
+                <div class="tab-content data">
+
+                </div>
+            </div>
+        </div>
+    
+    </div>
+
+</div>
+
+<style>
+    #NyhetBilde img {
+        margin-top: 10px;
+        margin-left: 0px;
+        max-height: 200px;
+        height: auto;
+        width: 100%;
+        align-content: center;
+    }
+
+    table, th {
+        margin-left: 0px;
+        margin-top: 0px;
+    }
+</style>
+
+<style>
+    html body #pdfviewer {
+        width: 100% !important;
+    }
+</style>
+
+<script>
+
+    $('#myTab a').click(function (e) {
+        e.preventDefault();
+        $(this).tab('show');
+    });
+
+    // store the currently selected tab in the hash value
+    $("ul.nav-tabs > li > a").on("shown.bs.tab", function (e) {
+        var id = $(e.target).attr("href").substr(1);
+        window.location.hash = id;
+    });
+
+    $("ul.nav-tabs > li > a").on("shown.bs.tab", function (e) {
+        var id = $(e.target).attr("href").substr(1);
+        if (id != "tabRolleX" && id != "tabTilgangX") {
+            $.ajax({
+                url: '@Url.Action("SetTab", "AdminBruker")',
+                data: { tab: id },
+                type: "GET"
+            });
+        }
+    });
+</script>
+
+
+<script type="text/javascript">
+
+
+    $(document).ready(function () {
+        var fabAR = $("#fabAktiverRolle").getKendoFloatingActionButton();
+        var fabSR = $("#fabAvsluttRolle").getKendoFloatingActionButton();
+        var fabRR = $("#fabRedigerRolle").getKendoFloatingActionButton();
+        var fabS = $("#fabSkjerming").getKendoFloatingActionButton();
+
+        fabARText = "Aktiver rollen";
+        fabSRText = "Avslutt rollen";
+        fabRRText = "Rediger rollen";
+        fabSText = "Angi skjerming";
+
+        $("#fabAktiverRolle").hover(function () {
+            fabAR.text(fabARText);
+            fabAR.element.find(".k-fab-text")
+                .stop().toggle(200);
+        }, function () {
+                fabAR.element.find(".k-fab-text")
+                .stop()
+                .toggle(200)
+                .promise().done(function () {
+                    fabAR.text("");
+                });
+        });
+
+        $("#fabAvsluttRolle").hover(function () {
+            fabSR.text(fabSRText);
+            fabSR.element.find(".k-fab-text")
+                .stop().toggle(200);
+        }, function () {
+                fabSR.element.find(".k-fab-text")
+                .stop()
+                .toggle(200)
+                .promise().done(function () {
+                    fabSR.text("");
+                });
+        });
+
+        $("#fabRedigerRolle").hover(function () {
+            fabRR.text(fabRRText);
+            fabRR.element.find(".k-fab-text")
+                .stop().toggle(200);
+        }, function () {
+                fabRR.element.find(".k-fab-text")
+                .stop()
+                .toggle(200)
+                .promise().done(function () {
+                    fabRR.text("");
+                });
+        });
+
+        $("#fabSkjerming").hover(function () {
+            fabS.text(fabSText);
+            fabS.element.find(".k-fab-text")
+                .stop().toggle(200);
+        }, function () {
+            fabS.element.find(".k-fab-text")
+                .stop()
+                .toggle(200)
+                .promise().done(function () {
+                    fabS.text("");
+                });
+        });
+    });
+</script>

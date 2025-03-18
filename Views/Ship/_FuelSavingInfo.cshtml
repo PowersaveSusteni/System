@@ -1,0 +1,151 @@
+﻿@using Microsoft.AspNetCore.Mvc.Localization
+
+@inject IViewLocalizer Localizer
+@model Susteni.Models.Ship.ShipModel
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+
+<style>
+
+    .k-fab-text {
+        display: none;
+    }
+
+
+    #editor table, th {
+        margin-left: 0px;
+        margin-top: 0px;
+    }
+
+</style>
+
+
+<div id="shipForm">
+
+    <input type="hidden" asp-for="ShipEquipment.EquipmentGuid" class="form-control">
+    <input type="hidden" asp-for="ShipEquipment.EquipmentType" class="form-control">
+
+    <div class="row" style="margin-top: 82px;">
+        <div class="col-12">
+            <h4 class="unselectable">Operation mode</h4>
+        </div>
+
+@*         <div class="col-6 text-right">
+            <button class="commandModernGreen float-end" onclick="saveGrid()"><img src="@Url.Content("~/images/")lagre.svg" alt="Ja" width='24' height='24' />Update</button>
+        </div> *@
+    </div>
+
+    <div class="row">
+        <div class="col-12">
+            <div style="position: relative">
+                @(Html.Kendo().Grid<Susteni.Models.ShipEquipmentModesItem>()
+                    .Name("equipmentModeList")
+                    .Columns(columns =>
+                    {
+                        columns.Bound(q => q.EquipmentModesGuid).Visible(false);
+                        columns.Bound(q => q.OperationModeGuid).Visible(false);
+                        columns.Bound(q => q.EquipmentGuid).Visible(false);
+                        columns.Bound(q => q.Name).Width(250).Title(Localizer["Mode"].Value);
+                        columns.Bound(q => q.HoursPrYear).Title(Localizer["Hours pr. year"].Value).Visible(false);
+                        columns.Bound(q => q.MaxEffect).Title(Localizer["MaxEffect"].Value).Visible(false);
+                        columns.Bound(q => q.PercentLoad).Title(Localizer["Averag Load %"].Value);
+                        columns.Bound(q => q.Effect).Title(Localizer["Power Production - kWh"].Value).Format("{0:n0}").ClientFooterTemplate("#=sum#").HtmlAttributes(new { style = "text-align: right;" }).ClientFooterTemplate("<div style='float: right'>#= kendo.format('{0:N0}', sum)#</div>");
+                        columns.Bound(q => q.PercentSaving).Title(Localizer["Saving %"].Value);
+                        columns.Bound(q => q.Saving).Title(Localizer["New Power Consuption - kWh"].Value).Format("{0:n0}").ClientFooterTemplate("#=sum#").HtmlAttributes(new { style = "text-align: right;" }).ClientFooterTemplate("<div style='float: right'>#= kendo.format('{0:N0}', sum)#</div>");
+                        columns.Bound(q => q.PowerSaving).Title(Localizer["Power Savings - kWh"].Value).Format("{0:n0}").ClientFooterTemplate("#=sum#").HtmlAttributes(new { style = "text-align: right;" }).ClientFooterTemplate("<div style='float: right'>#= kendo.format('{0:N0}', sum)#</div>");
+                    })
+                    .Height(265)
+                    //.Editable(editable => editable.Mode(GridEditMode.InCell))
+                    .Scrollable()
+                    .Selectable(s => s
+                        .Mode(GridSelectionMode.Multiple)
+                        .Type(GridSelectionType.Row))
+                    .Events(e => e.Change("onEquipemntModeChange").DataBound("onEquipmentModeDataBound"))
+                    .DataSource(dataSource => dataSource
+                        .Ajax()
+                        .Batch(true)
+                        .ServerOperation(false)
+                        .Events(events => events.Error("errorHandler"))
+                        .Model(m => {
+                            m.Id(p => p.OperationModeGuid);
+                            m.Field(p => p.Name).Editable(false);
+                            m.Field(p => p.HoursPrYear).Editable(false);
+                            m.Field(p => p.MaxEffect).Editable(false);
+                            m.Field(p => p.Effect).Editable(true);
+                            m.Field(p => p.Saving).Editable(true);
+                            m.Field(p => p.PowerSaving).Editable(false);
+                            })
+                        .Read(read => read.Action("GetShipEquipmentModesList", "Ship").Data("filterEquipement"))
+                        .Update(update => update.Action("SaveShipEquipmentModesList", "Ship"))
+                        .Aggregates(agg => agg.Add(p => p.Effect).Sum())
+                        .Aggregates(agg => agg.Add(p => p.Saving).Sum())
+                        .Aggregates(agg => agg.Add(p => p.PowerSaving).Sum())
+                        )
+                    )
+
+                @(Html.Kendo().FloatingActionButton()
+                    .Name("operationModeEdit")
+                    .ThemeColor(FloatingActionButtonThemeColor.Warning)
+                    .Size(FloatingActionButtonSize.Small)
+                    .PositionMode(FloatingActionButtonPositionMode.Absolute)
+                    .Align(FloatingActionButtonAlign.TopEnd)
+                    .AlignOffset(alignOffset => alignOffset.Horizontal(-10).Vertical(30))
+                    .Icon("pencilIcon")
+                    .Events(events => events.Click("showDialogOperationModeEdit"))
+                    .Visible(false)
+                    )
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script type="text/javascript">
+    function errorHandler(e) {
+        if (e.errors) {
+            var message = "Errors:\n";
+            $.each(e.errors, function (key, value) {
+                if ('errors' in value) {
+                    $.each(value.errors, function () {
+                        message += this + "\n";
+                    });
+                }
+            });
+            alert(message);
+        }
+    }
+</script>
+
+<script id="dialog">
+
+
+
+</script>
+
+
+<script>
+
+    $(document).ready(function () {
+
+        var fbEOM = $("#operationModeEdit").getKendoFloatingActionButton();
+
+        $("#operationModeEdit").prop("type", "button");
+
+        fbEOMText = "Edit operation mode";
+
+        $("#operationModeEdit").hover(function () {
+            fbEOM.text(fbEOMText);
+            fbEOM.element.find(".k-fab-text")
+                .stop().toggle(200);
+        }, function () {
+            fbEOM.element.find(".k-fab-text")
+                .stop()
+                .toggle(200)
+                .promise().done(function () {
+                    fbEOM.text("");
+                });
+        });
+
+    });
+
+</script>

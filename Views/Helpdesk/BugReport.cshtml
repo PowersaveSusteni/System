@@ -1,0 +1,863 @@
+﻿@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
+@model Susteni.Models.HelpDesk.HelpDeskModel
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+
+@{
+    ViewData["Title"] = Localizer["Bug liste"];
+    ViewData["LogOnOk"] = "2";
+    ViewData["Menu"] = "Admin";
+}
+
+
+
+<script type="text/x-kendo-tmpl" id="template">
+    <div class="helpdesk">
+        <table width='98%' class='table table-borderless' style='margin: 0px; padding: 0px;'>
+            <tr class='align-top'>
+                <td rowspan='4' width='60px;'>
+                    <img src="@Url.Content("~/images/")True.svg" alt="ikon" />
+                </td>
+                <td>
+                    <h3>#:Tittel#</h3><p style='color: darkred; font-weight: 500;'>#:FerdigDatoTekst#</p>
+                </td>
+            </tr>
+             <tr>
+                 <td colspan='2'><span style='color: red'>
+                    #=PubBeskrivelse#
+                </span></td>
+            </tr>
+             <tr class='Losning'>
+                 <td colspan='2'><span style='color: green'>
+                    #=Losning#
+                </span></td>
+            </tr>
+        </table>
+    </div>
+</script>
+
+<script type="text/x-kendo-tmpl" id="templateBug">
+    <div class="helpdesk">
+        <table width='98%' class='table table-borderless' style='margin: 0px; padding: 0px;'>
+            <tr class='align-top'>
+                <td rowspan='4' width='60px;'>
+                    <img src="@Url.Content("~/images/")bug-filled.svg" alt="ikon" />
+                </td>
+                <td>
+                    <h3>#:Tittel#</h3><p style='color: darkred; font-weight: 500;'>#:FerdigDatoTekst#</p>
+                </td>
+            </tr>
+             <tr>
+                 <td colspan='2'><span style='color: red'>
+                    #=PubBeskrivelse#
+                </span></td>
+            </tr>
+        </table>
+    </div>
+</script>
+
+<style>
+
+    .k-grid td {
+        white-space: nowrap;
+        text-overflow: ellipsis;
+    }
+
+    .k-grid table {
+        table-layout: fixed;
+    }
+
+    table, th {
+        margin-left: 0px;
+        margin-top: 0px;
+    }
+
+
+    .btn img {
+        width: 24px;
+        height: 24px;
+    }
+
+    .btn {
+        padding: 5px;
+        background-color: aliceblue;
+        border-color: lightgray;
+    }
+
+   
+    .k-checkbox + .k-checkbox-label, .k-checkbox-label + .k-checkbox {
+        margin-left: 6px;
+        margin-right: 10px;
+    }
+
+    .commandMenuSmal {
+        width: 100%;
+        text-align: left;
+        border: 0px solid;
+        background-color: white;
+    }
+
+    .commandMenuSmal:hover {
+        color: darkred;
+    }
+
+    .rapport {
+        float: left;
+        position: relative;
+        width: 180px;
+        max-height: 200px;
+        margin: 10px 5px 5px 5px;
+        padding: 0;
+    }
+
+    .rapport img {
+        float: left;
+        width: 150px;
+        max-height: 150px;
+        margin-left: 10px;
+        margin-bottom: 5px;
+        margin-right: 10px;
+    }
+
+    .rapport:hover h3 {
+        color: darkred;
+    }
+
+    .rapport:hover p {
+        color: black;
+    }
+
+    .k-listview .k-state-selected {
+        border: 1px dashed;
+        border-color: blue;
+        border-top-left-radius: 8px;
+        border-top-right-radius: 8px;
+        background-color: white;
+        color: black;
+    }
+
+    .k-listview .k-state-selected h3 {
+        color: black;
+    }
+
+    .fixed {
+        position: absolute;
+        border: 0px solid lightgray;
+    }
+
+    #sporsmal .k-liste {
+        color: rgb(66, 66, 66);
+        border: 1px solid lightgray;
+    }
+
+    #sporsmal .k-liste:focus {
+        color: rgb(66, 66, 66);
+        border: 1px solid lightgray;
+    }
+
+    #sporsmal .k-input {
+        height: 30px;
+    }
+
+    .commandSmal img {
+        width: 24px;
+        height: 24px;
+    }
+
+    .k-fab-text {
+        display: none;
+    }
+
+    #grdLogg .k-grid td, .k-grid th {
+        padding: 8px 12px;
+        border-style: solid;
+        border-color: inherit;
+        outline: 0;
+        font-weight: inherit;
+        text-align: inherit;
+        overflow: visible;
+        text-overflow:inherit;
+    }
+
+    p {
+        margin-bottom: 5px;
+    }
+</style>
+
+<form controller="helpdesk" action="Lagre" id="Helpdesk" onsubmit="return false;" method="post" class="mt-3">
+    <div id="confirm"></div>
+
+    <div class="container-fluid padding-0">
+
+        <div class="row" id="heading" style="min-height: 70px;">
+
+            <div class="col-2 unselectable">
+                <h3>@Localizer["Helpdesk"]</h3>
+            </div>
+
+
+            <div class="col-8">
+                <div>
+
+                </div>
+            </div>
+            
+        </div>
+
+        <div class="row" style="border: 1px solid lightgrey; padding: 10px; margin: 5px;">
+
+            <div class="col-lg-5 col-xxl-6" id="funksjoner">
+                <h3>Løste</h3>
+                @(Html.Kendo().ListView<Susteni.Models.HelpDeskItem>()
+                    .Name("listViewHelpdesk")
+                    .TagName("div")
+                    .ClientTemplateId("template")
+                    .ClientTemplateHandler("template")
+                    .HtmlAttributes(new { style = "height: calc(100vh - 300px);" })
+                    .Selectable()
+                    .Scrollable()
+                    .DataSource(dataSource => dataSource
+                        .Ajax()
+                        .Read(read => read.Action("getHelpDeskKundeListe", "HelpDesk").Data("filterPubFerdig"))
+                        )
+                    )
+            </div>
+
+            <div class="col-lg-7 col-xxl-6">
+                <h3>Uløste</h3>
+                @(Html.Kendo().ListView<Susteni.Models.HelpDeskItem>()
+                    .Name("listViewHelpdeskBug")
+                    .TagName("div")
+                    .ClientTemplateId("templateBug")
+                    .ClientTemplateHandler("templateBug")
+                    .HtmlAttributes(new { style = "height: calc(100vh - 300px);" })
+                    .Selectable()
+                    .Scrollable()
+                    .DataSource(dataSource => dataSource
+                    .Ajax()
+                    .Read(read => read.Action("getHelpDeskKundeListe", "HelpDesk").Data("filterPub"))
+                    )
+                    )
+               
+
+            </div>
+
+        </div>
+
+    </div>
+
+</form>
+
+
+
+<style>
+    
+    .k-calendar-monthview .k-calendar-td {
+        width: 24px;
+        height: 24px;
+    }
+
+    .k-calendar-monthview .k-link {
+        width: 24px;
+        height: 24px;
+    }
+
+    .k-calendar-view {
+        min-height: 173px;
+    }
+
+    .k-calendar {
+        background-color: #f8f7f7;
+    }
+    .k-widget {
+        font-size: 12px;
+    }
+
+
+    .k-scheduler-times th {
+        border-width: 0 1px 1px 0;
+        text-align: left;
+    }
+
+    #timeline table, th {
+        margin-left: 0px;
+        margin-top: 0px;
+    }
+
+    .k-scheduler-header, .k-scheduler-view-header {
+     padding-inline-end: var(--kendo-scrollbar-width,0px);
+    }
+
+    .k-scheduler-footer {
+        display: none;
+        height: 0;
+        padding: 0;
+        overflow: hidden;
+        }
+
+    .k-scheduler-date-group {
+        display: none;
+        height: 0;
+        padding: 0;
+        overflow: hidden;
+        }
+
+    .k-event, kendo-scheduler .k-event {
+        min-height: 0px; 
+        padding-right: 0px;
+    }
+
+    #bestillingListe {
+        height: 100%;
+    }
+
+ 
+    .btn img {
+        width: 24px;
+        height: 24px;
+    }
+
+    .btn {
+        padding: 5px;
+    }
+
+    .disabled {
+        opacity: 0.5;
+        pointer-events: none;
+    }
+
+
+    .ellipsis-overflow {
+        text-overflow: ellipsis;
+        white-space:nowrap;
+    }
+
+
+    .k-checkbox-label {
+        line-height: 28px;
+        margin-left: 10px;
+    }
+
+    #omAvdode .k-checkbox-label {
+        margin-left: 10px;
+        padding-top: 30px;
+    }
+
+    #omAvdode .k-checkbox {
+        margin-top: 5px;
+        margin-bottom: 5px;
+        margin-left: 10px;
+    }
+
+    #tabKremasjon .k-checkbox-label {
+        margin-left: 10px;
+        line-height: 20px;
+    }
+
+    #tabKirkegard .k-checkbox-label {
+        margin-left: 10px;
+        line-height: 20px;
+    }
+
+    #tabSeremoni .k-checkbox-label {
+        margin-left: 10px;
+        line-height: 20px;
+    }
+
+    #tabFaktura .k-checkbox-label {
+        margin-left: 10px;
+        line-height: 20px;
+    }
+     
+    #soekeFilter .command img {
+        width: 32px;
+        height: 32px;
+    }
+
+    #soekeFilter .command {
+        height: 50px;
+        font-size: 14px;
+        font-weight: normal;
+    }
+
+    #dokListe .k-listview {
+        background-color: transparent;
+        border-color: transparent;
+    }
+
+    .folder {
+        float: left;
+        position: relative;
+        margin-right: 10px;
+    }
+
+
+    .folder img {
+        width: 32px;
+        height: 32px;
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
+        margin-top: 2px;
+    }
+
+    .folder p {
+        padding: 3px 5px 0px 5px;
+        font-size: 10px;
+        font-weight: normal;
+        color: #999;
+        text-align: center;
+        margin-bottom: 1px;
+    }
+
+    .folder:checked {
+        font-weight: bold;
+        color: red;
+    }
+
+    .folder:hover p {
+        font-weight: bold;
+        color: black;
+    }
+
+    div.k-window{
+        border: 1px solid lightgray;
+    }
+</style>
+
+<div id="DialogBildeWindows">
+    @(Html.Kendo().Window()
+        .Name("dialogBilde")
+        .Title(Localizer["Bilde"].Value)
+        .Visible(false)
+        .Modal(true)
+        .Resizable()
+        .Draggable()
+        )
+</div>
+
+<div id="helpdeskNotatdialog">
+    @(Html.Kendo().Dialog()
+        .Name("dialogHelpDeskLogg")
+        .Title("Notat")
+        .HtmlAttributes("style= border:1px;")
+        .Visible(false)
+        .Height(410)
+        .Width(1200)
+        .Modal(true)        
+        .Actions(actions => {
+            actions.Add().Text("Avbryt");
+            actions.Add().Text("Lagre").Action("lagrehelpdeskNotat").Primary(true);
+        })
+        .Events(ev => ev.Close("onClose").Open("onOpen"))
+    )
+
+    @(Html.Kendo().Dialog()
+        .Name("DialogHelpDeskBildeInfo")
+        .Title("Bilde informasjon")
+        .HtmlAttributes("style= border:1px;")
+        .Visible(false)
+        .Height(410)
+        .Width(1200)
+        .Modal(true)        
+        .Actions(actions => {
+            actions.Add().Text("Avbryt");
+            actions.Add().Text("Lagre").Action("lagrehelpdeskBilde").Primary(true);
+        })
+        .Events(ev => ev.Close("onClose").Open("onOpen"))
+    )
+</div>
+
+<script id="liste-template" type="text/x-kendo-template">
+    <span class="k-state-default" style="font-weight: #:data.BoldTekst#; color:#:data.BoldTekstColor#;">#: data.Navn#</span>
+</script>
+
+
+    @(Html.Kendo().Window()
+        .Name("DialogHjelp")
+        .Title(Localizer["Hjelp"].Value)
+        .Visible(false)
+        .Height(800)
+        .Width(1200)
+        .Modal(true)
+        .Draggable()
+        )
+
+<script id="hjelp">
+
+
+
+    function onClose() {
+        $("#showDialogBtn").fadeIn();
+        }
+
+
+
+    function onOpen() {
+        $("#showDialogBtn").fadeOut();
+        }
+
+    function showDialogNotatGrav() {
+        $.ajax({
+            url: "/HelpDesk/DialogHelpDeskLogg",
+            method: 'GET',
+            success: function (result) {
+                $('#dialogHelpDeskLogg').html(result);
+                xG = document.getElementById("HelpDeskLogg_HelpDeskGuid");
+                xG.value = HelpDeskGuid;
+                var popup = $('#dialogHelpDeskLogg').data("kendoDialog");
+                popup.open();
+                }
+            });
+        }
+
+    function showDialogBilde() {
+
+        $.ajax({
+            url: "/HelpDesk/DialogHelpDeskBilde",
+            data: {bildeGuid: HelpDeskBildeGuid},
+            method: 'GET',
+            success: function (result) {
+                $('#dialogBilde').html(result);
+                var popup = $('#dialogBilde').data("kendoWindow");
+                popup.center().open();
+                }
+            });
+        }
+
+    function showDialogEndreBilde() {
+        if (HelpDeskBildeGuid != "") {
+            $.ajax({
+                url: "/HelpDesk/DialogHelpDeskBildeInfo",
+                method: 'GET',
+                data: {bildeGuid: HelpDeskBildeGuid},
+                success: function (result) {
+                    $('#DialogHelpDeskBildeInfo').html(result);
+                    var popup = $('#DialogHelpDeskBildeInfo').data("kendoDialog");
+                    popup.open();
+                    }
+                });
+            }
+        }
+
+
+    function showDialogEndreNotatGrav() {
+        var grdNotat = $("#grdLogg").data("kendoGrid");
+        var selectedF = grdNotat.select();
+        var selItemF = grdNotat.dataItem(selectedF);
+        var HelpDeskLoggGuid = "";
+
+        if (selectedF.length > 0) {
+            HelpDeskLoggGuid = selItemF.HelpDeskLoggGuid;
+            $.ajax({
+                url: "/HelpDesk/DialogHelpDeskLogg",
+                method: 'GET',
+                success: function (result) {
+                    $('#dialogHelpDeskLogg').html(result);
+
+                    $.ajax({
+                        url: '@Url.Action("GetHelpDeskLogg", "HelpDesk")',
+                        data: { HelpDeskLoggGuid: HelpDeskLoggGuid},
+                        type: "GET"
+                        }).done(function (result) {
+                            $("#dialogHelpDeskLogg").html(result);
+                            grdNotat.dataSource.read();
+                            var popup = $('#dialogHelpDeskLogg').data("kendoDialog");
+                            popup.open();
+                        });
+                    }
+                });
+            }
+        }
+
+    function lagrehelpdeskNotat() {
+        var $this = $('#helpdeskNotat');
+
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("LagreHelpDeskLogg", "HelpDesk")',
+            data: $this.serialize(),
+            dataType: 'json'
+        }).done(function (result) {
+            if (result == true) {
+                var notification = $("#notification").data("kendoNotification");
+                notification.show({title: "Helpdesk", message: "Notatet er lagret"}, "success");
+                var grd = $("#grdLogg").data("kendoGrid");
+                grd.dataSource.read();
+                }
+            });
+         }
+
+    function lagrehelpdeskBilde() {
+        var $this = $('#helpdeskBilde');
+
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("LagreHelpDeskBilde", "HelpDesk")',
+            data: $this.serialize(),
+            dataType: 'json'
+        }).done(function (result) {
+            if (result == true) {
+                var grd = $("#lvBilder").data("kendoListView");
+                grd.dataSource.read();
+                }
+            });
+         }
+     
+    function slettNotatGrav() {
+        $("#confirm").kendoConfirm({
+            title: "Slett",
+            content: "Ønsker du å slette dette notatet?",
+            messages: {
+                okText: "Ja",
+                cancel: "Nei"
+            }
+        }).data("kendoConfirm").result.done(function () {
+            $('body').append($('<div id="confirm">'));
+
+            var grdGravNotat = $("#grdLogg").data("kendoGrid");
+            var selectedF = grdGravNotat.select();
+            var selItemF = grdGravNotat.dataItem(selectedF);
+            var HelpDeskLoggGuid = "";
+            
+            if (selectedF.length > 0) {
+                HelpDeskLoggGuid = selItemF.HelpDeskLoggGuid;
+
+                $.ajax({
+                    type: "POST",
+                    url: '@Url.Action("removeHelpDeskLogg", "HelpDesk")',
+                    data: { HelpDeskLoggGuid: HelpDeskLoggGuid },
+                }).done(function (result) {
+                    grdGravNotat.dataSource.read();
+                });
+
+                    }
+            }).fail(function () {
+            $('body').append($('<div id="confirm">'));
+        });
+        }
+
+
+ function slettBilde() {
+        $("#confirm").kendoConfirm({
+            title: "Slett",
+            content: "Ønsker du å slette dette bilde?",
+            messages: {
+                okText: "Ja",
+                cancel: "Nei"
+            }
+        }).data("kendoConfirm").result.done(function () {
+            $('body').append($('<div id="confirm">'));
+
+                $.ajax({
+                    type: "POST",
+                    url: '@Url.Action("RemoveHelpDeskBilde", "HelpDesk")',
+                    data: { HelpDeskBildeGuid: HelpDeskBildeGuid },
+                }).done(function (result) {
+                    $("#lvBilder").data("kendoListView").dataSource.read();
+                });
+
+            }).fail(function () {
+            $('body').append($('<div id="confirm">'));
+        });
+        }
+
+
+    function showHelp() {
+       $.ajax({
+            url: '@Url.Action("DialogHjelp", "Hjelp")',
+            type: 'GET'
+            }).done(function (result) {
+                $('#DialogHjelp').html(result);
+                var popup = $('#DialogHjelp').data("kendoWindow");
+                popup.center().open();
+            });
+        }
+
+    function hjelpFilter() {
+        return {Modul: 13, Skjerm: "Bestilling"}
+        }
+
+</script>
+
+<script id="filter">
+    var ressursGuid = "";
+    var fellesraad = "";
+    var currHelpdeskGuid = "";
+    var filterModul = "";
+    var filterPri = -1;
+    var filterKunde = "";
+    var filterTittel = "";
+    var filterTypeId = -1;
+
+    var status = "0,1,2,4,8,15,20";
+    var filterTekst = "";
+    var filterProgram = "Program = '2'";
+
+    function filterPubFerdig() {
+        return { filterTekst: "Publiser=1 AND Status IN (9,99)", sortering: "Ferdig DESC" }
+    }
+
+    function filterPub() {
+        return { filterTekst: "Publiser=1 AND Status NOT IN (9,99)", sortering: "Ferdig DESC" }
+    }
+
+    function onTypeIdChange(e) {
+        filterTypeId = e.newValue;
+
+        grid = $("#ticketsListe").data("kendoGrid");
+        grid.dataSource.read();
+    }
+
+    function finnModul(e) {
+        var xM = document.getElementById("filterModul").value;
+        if (xM != "") { filterModul = "Modul like '%" + xM + "%'" }
+        else { filterModul = "";}
+
+        grid = $("#ticketsListe").data("kendoGrid");
+        grid.dataSource.read();
+    }
+
+    function finnKunde(e) {
+        var xM = document.getElementById("filterKunde").value;
+        if (xM != "") { filterKunde = "Fellesraad IN (SELECT Fellesraad FROM SYSTEMINFO WHERE Navn like '%" + xM + "%') " }
+        else { filterKunde = "";}
+
+        grid = $("#ticketsListe").data("kendoGrid");
+        grid.dataSource.read();
+    }
+
+    function finnTittel(e) {
+        var xM = document.getElementById("filterTittel").value;
+        if (xM != "") { filterKunde = "Tittel like '%" + xM + "%' " }
+        else { filterKunde = "";}
+
+        grid = $("#ticketsListe").data("kendoGrid");
+        grid.dataSource.read();
+    }
+
+    function onStatusChange(e) {
+        var listBoxF = $('#Status').data("kendoMultiSelect");
+        var value = listBoxF.value();
+        
+        status = value;
+        var grd = $("#ticketsListe").data("kendoGrid");
+        grd.dataSource.read();
+        }
+
+    function onPriChange() {
+        filterPri = document.getElementById("prioritet").value;
+
+        grid = $("#ticketsListe").data("kendoGrid");
+        grid.dataSource.read();
+        }
+
+    function finnProgram(e) {
+        var selected = this.select();
+        var data = this.dataItem(selected);
+        var lest = data.Id;
+
+        if (lest != "2" && lest != "-1") {
+            filterProgram = "Program = '" + lest + "'";
+            }
+        else {
+            filterProgram = "";
+            }
+
+        grid = $("#ticketsListe").data("kendoGrid");
+        grid.dataSource.read();
+        }
+
+    function filterTickets() {
+        filterTekst = "";
+
+        if (status != "") {
+            filterTekst = "Status IN (" + status + ")";
+        }
+        if (filterProgram != "") {
+            if (filterTekst != "") { filterTekst += " AND "}
+            filterTekst += filterProgram;
+        }
+
+        if (filterModul != "") {
+            if (filterTekst != "") { filterTekst += " AND "}
+            filterTekst += filterModul;
+        }
+
+        if (filterKunde != "") {
+            if (filterTekst != "") { filterTekst += " AND "}
+            filterTekst += filterKunde;
+        }
+
+        if (filterTittel != "") {
+            if (filterTekst != "") { filterTekst += " AND "}
+            filterTekst += filterTittel;
+        }
+
+        if (filterPri > -1 ) {
+            if (filterTekst != "") { filterTekst += " AND "}
+            filterTekst += "Prioritet = " + filterPri;
+        }
+
+        if (filterTypeId >= 0 ) {
+            if (filterTekst != "") { filterTekst += " AND "}
+            filterTekst += "TypeId = " + filterTypeId;
+        }
+
+        return {filterTekst: filterTekst}
+    }
+
+    function refreshList() {
+
+
+    }
+</script>
+
+<script type="text/javascript">
+
+    function onSorting(arg) {
+            alert(arg.sort.field);
+            //kendoConsole.log("Sorting on field: " + arg.sort.field + ", direction:" + (arg.sort.dir || "none"));
+        }
+
+
+</script>
+
+
+<script>
+    var HelpDeskGuid = "";
+    var HelpDeskBildeGuid = "";
+
+    function filterHelpdesk() {
+        return {HelpDeskGuid: HelpDeskGuid}
+    }
+
+
+</script>
+
+<style>
+    div.k-listbox {
+        height: 530px;
+    }
+</style>
+
+<script>
+
+    $('#myTab a').click(function (e) {
+        e.preventDefault();
+        $(this).tab('show');
+    });
+
+    // store the currently selected tab in the hash value
+    $("ul.nav-tabs > li > a").on("shown.bs.tab", function (e) {
+        var id = $(e.target).attr("href").substr(1);
+        window.location.hash = id;
+    });
+
+    
+    $(window).on("resize", function(){
+        $("#listViewHelpdesk").data("kendoListView").refresh();
+        $("#listViewHelpdeskBug").data("kendoListView").refresh();
+        });
+
+</script>

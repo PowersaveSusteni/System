@@ -1,0 +1,93 @@
+﻿@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
+@model Susteni.Models.Account.AccountModel
+
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+
+
+<form id="wizard">
+
+    <div class="row">
+        <div class="col-12">
+            <button type="button" name="ny" class="commandMed" onclick="OpprettNyBruker()" style="width: 130px;">
+                <img src="~/images/lagre.svg" />
+                @Localizer["Create user"]
+            </button>
+        </div>
+    </div>
+
+    <div class="row">
+
+        <div class="col-12" style="margin-bottom: 0px; margin-top: 10px;">
+            <div class="panel with-nav-tabs panel-default" id="dataenter">
+                <div class="panel-body data padding-0">
+                    <div class="tab-content data">
+                        <div class="panel-heading" id="Tab">
+                            <ul class="nav nav-tabs">
+                                <li class="nav-item"><a class="nav-link active" aria-current="page" href="#tabBruker" data-bs-toggle="tab">@Localizer["User"]</a></li>
+                            </ul>
+                        </div>
+                        <div class="panel-body">
+                            <div class="tab-content" style="margin-top: 10px;">
+                                <div class="tab-pane fade show active" style="padding: 10px;" role="tabpanel" id="tabBruker">
+
+                                    <div class="row">
+                                        <div class="col-6">
+                                            <div class="row align-items-center" style="display: flex; flex-direction: row;">
+                                                <p><span style="color: darkred">Skriv inn fornavn + etternavn. Dersom brukeren skal kunne logge inn, så trykk på knappen 'Gen. pålogginginfo'</span></p>
+                                            </div>
+                                            <div class="row align-items-center" style="display: flex; flex-direction: row;">
+                                                <label class="col-2 col-form-label">Firstname</label>
+                                                <div class="col-md-10">
+                                                    <input id="BFornavn" asp-for="AccountUser.Firstname" class="form-control k-textbox">
+                                                </div>
+                                            </div>
+
+                                            <div class="row align-items-center" style="display: flex; flex-direction: row;">
+                                                <label class="col-2 col-form-label">Lastname</label>
+                                                <div class="col-md-10">
+                                                    <input id="BEtternavn" asp-for="AccountUser.Lastname" class="form-control k-textbox">
+                                                </div>
+                                            </div>
+
+                                        </div>
+
+                                        <div class="col-6">
+
+                                            <div class="row align-items-center" style="display: flex; flex-direction: row;">
+                                                <div class="col-7">
+                                                    <button type="button" onclick="getId()" class="commandSmal">
+                                                        <img src="~/images/execute.svg" style="width: 24px; height: 24px;" />
+                                                        Gen. logoninfo
+                                                    </button>
+                                                </div>
+                                            </div>
+
+   
+                                            <div class="row align-items-center" style="display: flex; flex-direction: row;">
+                                                <label class="col-3 col-form-label">User id</label>
+                                                <div class="col-md-9">
+                                                    <input id="BBrukerId" asp-for="AccountUser.UserId" class="form-control k-textbox">
+                                                </div>
+                                            </div>
+
+
+                                            <div class="row align-items-center" style="display: flex; flex-direction: row;">
+                                                <label class="col-3 col-form-label">Password</label>
+                                                <div class="col-md-9">
+                                                    <input id="BPassord" asp-for="AccountUser.Password" class="form-control k-textbox">
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</form>

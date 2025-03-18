@@ -1,0 +1,1143 @@
+﻿@using Microsoft.AspNetCore.Mvc.Localization
+
+@inject IViewLocalizer Localizer
+@model Susteni.Models.Ship.ShipModel
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+
+@{
+    ViewData["Title"] = Localizer["Investment plan"];
+    ViewData["LogOnOk"] = "2";
+    ViewData["Menu"] = "Admin";
+}
+
+<style>
+
+    .k-fab-text {
+        display: none;
+    }
+
+
+    #editor table, th {
+        margin-left: 0px;
+        margin-top: 0px;
+    }
+
+    #dialogVisPDFRapport {
+        height: 85vh;
+        width: 90vw;
+        max-width: 1200px;
+    }
+
+    #pdfViewerRapport {
+        width: 100% !important;
+        height: 100% !important;
+    }
+
+    #dialogVisPDF {
+        height: 85vh;
+        width: 90vw;
+        max-width: 1200px;
+    }
+
+    #pdfViewer {
+        width: 100% !important;
+        height: 100% !important;
+    }
+</style>
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.2.2/pdf.js"></script>
+<script>
+    window.pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.2.2/pdf.worker.js';
+</script>
+
+
+<form onsubmit="return false;" class="mt-3">
+    <div id="confirm"></div>
+    <input hidden asp-for="Ship.ShipGuid" />
+    <input hidden asp-for="Ship.Name" />
+    <input hidden asp-for="Ship.CustomerGuid" />
+    <input hidden asp-for="Ship.ProfilGuid" />
+    <input hidden asp-for="Ship.ProfilName" />
+
+    <div class="row" id="heading" style="min-height: 90px;">
+
+        <div class="col-2 unselectable">
+            <h2>@Localizer["Investment plan"]</h2>
+            <h3 id="idName"></h3>
+        </div>
+
+        <div class="col-8">
+
+            <div style="display: flex; flex-direction: row;">
+                <button type="button" class="commandModern" onclick="fuelSavings()"><img src="~/images/court-filled.svg" style="width: 24px; height: 24px; margin-right: 5px;" />Measures</button>
+                @if (ViewData["RunVersion"] != null && (int)ViewData["RunVersion"] == 1)
+                {
+                    <button type="button" class="commandModern" onclick="generators()"><img src="~/images/electricity-filled.svg" style="width: 24px; height: 24px; margin-right: 5px;" />Power production</button>
+                }
+                else
+                {
+                    <button type="button" class="commandModern" onclick="powerProd()"><img src="~/images/electricity-filled.svg" style="width: 24px; height: 24px; margin-right: 5px;" />Power production</button>
+                }
+                <button type="button" class="commandModern" onclick="showDialogWriteLetter()"><img src="~/images/document-text-graph-new.svg" style="width: 24px; height: 24px; margin-right: 5px;" />Create document</button>
+                <button type="button" class="commandModern" onclick="showDialogRapporter()"><img src="~/images/Laser.svg" style="width: 24px; height: 24px; margin-right: 5px;" />Reports</button>
+            </div>
+
+        </div>
+
+        <div class="col-2 infoArea" id="info" style="display: none">
+            <p class="unselectable" id="infoTekst">
+            </p>
+        </div>
+
+    </div>
+
+    <div class="row">
+
+        <div class="col-2" style="margin-top: 20px;">
+            <h4>Choose profile group</h4>
+            @(Html.Kendo().Grid<Susteni.Models.ProfileItem>()
+                .Name("profilesGrid")
+                .Columns(columns =>
+                {
+                    columns.Select().Width(40);
+                    columns.Bound(q => q.ProfilGuid).Visible(false);
+                    columns.Bound(q => q.Name).Title(Localizer["Profile group"].Value);
+                })
+                .Height(265)
+                .Events(e => e.Change("onProfileSelectedChange"))
+                .DataSource(dataSource => dataSource
+                    .Ajax()
+                    .Read(read => read.Action("GetProfileList", "Ship").Data("filterShip"))
+                    )
+                )
+        </div>
+
+        <div class="col-lg-5">
+
+            <div class="row" style="margin-top: 20px;">
+                <div class="col-12">
+                    <h4>List of Measures</h4>
+                </div>
+                <div class="col-lg-12">
+                    <div style="position: relative">
+                        @(Html.Kendo().Grid<Susteni.Models.InvestmentPlanItem>()
+                            .Name("equipmentList")
+                            .Columns(columns =>
+                            {
+                                columns.Bound(q => q.EquipmentGuid).Visible(false);
+                                columns.Bound(q => q.Name).Title(Localizer["Name"].Value);
+                                columns.Bound(q => q.InvYear).Width(70).Title(Localizer["Year"].Value);
+                                columns.Bound(q => q.Cost).Width(100).Title(Localizer["Total Cost"].Value).Format("{0:n0}").HtmlAttributes(new { style = "text-align: right;" });
+                                columns.Bound(q => q.FinancielSupport).Title(Localizer["Financial Support"].Value).Format("{0:n0}%").HtmlAttributes(new { style = "text-align: right;" });
+                                columns.Bound(q => q.OwnerPrice).Width(100).Title(Localizer["Investment Cost"].Value).Format("{0:n0}").HtmlAttributes(new { style = "text-align: right;" });
+                                columns.Bound(q => q.SavingsYear).Width(100).Title(Localizer["Savings/year"].Value).Format("{0:n0}").HtmlAttributes(new { style = "text-align: right;" });
+                                columns.Bound(q => q.MaintenaceCost).Width(100).Title(Localizer["Maintenance Saving"].Value).Format("{0:n0}").HtmlAttributes(new { style = "text-align: right;" });
+                                columns.Bound(q => q.PaybackTime).Width(100).Title(Localizer["Payback time"].Value).Format("{0:n0} mnd").HtmlAttributes(new { style = "text-align: right;" });
+                            })
+                            .Height(570)
+                            .Scrollable()
+                            .Sortable(x => x.SortMode(GridSortMode.MultipleColumn).AllowUnsort(true))
+                            .Navigatable()
+                            .Resizable(r => r.Columns(true))
+                            .Reorderable(r => r.Columns(true))
+                            .Selectable(s => s
+                                .Mode(GridSelectionMode.Single)
+                                .Type(GridSelectionType.Row))
+                            .Events(e => e.Change("onEquipmentChange").DataBound("createChart"))
+                            .DataSource(dataSource => dataSource
+                                .Ajax()
+                                .Read(read => read.Action("GetInvestmentPlanList", "Ship").Data("filterTypes"))
+                                )
+                            )
+
+
+                        @(Html.Kendo().FloatingActionButton()
+                            .Name("equipmentEdit")
+                            .ThemeColor(FloatingActionButtonThemeColor.Warning)
+                            .Size(FloatingActionButtonSize.Small)
+                            .PositionMode(FloatingActionButtonPositionMode.Absolute)
+                            .Align(FloatingActionButtonAlign.TopEnd)
+                            .AlignOffset(alignOffset => alignOffset.Horizontal(0).Vertical(10))
+                            .Icon("pencilIcon")
+                            .Events(events => events.Click("showDialogEquipmentEdit"))
+                            .Visible(false)
+                            )
+
+                        @(Html.Kendo().FloatingActionButton()
+                            .Name("equipmentRemove")
+                            .ThemeColor(FloatingActionButtonThemeColor.Error)
+                            .Size(FloatingActionButtonSize.Small)
+                            .PositionMode(FloatingActionButtonPositionMode.Absolute)
+                            .Align(FloatingActionButtonAlign.TopEnd)
+                            .AlignOffset(alignOffset => alignOffset.Horizontal(0).Vertical(90))
+                            .Icon("trashIcon")
+                            .Events(events => events.Click("removeEquipment"))
+                            .Visible(false)
+                            )
+
+                        @(Html.Kendo().FloatingActionButton()
+                            .Name("equipmentAdd")
+                            .ThemeColor(FloatingActionButtonThemeColor.Success)
+                            .Size(FloatingActionButtonSize.Small)
+                            .PositionMode(FloatingActionButtonPositionMode.Absolute)
+                            .Align(FloatingActionButtonAlign.TopEnd)
+                            .AlignOffset(alignOffset => alignOffset.Horizontal(0).Vertical(50))
+                            .Icon("plusIcon")
+                            .Events(events => events.Click("showDialogEquipment"))
+                            .Visible(false)
+                            )
+
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="col-lg-5">
+            <div class="row">
+                <div style="display: none"  class="row" style="margin-top: 20px;">
+                    <div class="col-12">
+                        <h4>Savings</h4>
+                        @(Html.Kendo().Grid<Susteni.Models.InvestmentPlanYearItem>()
+                            .Name("investmentPlanSavings")
+                            .Columns(columns =>
+                            {
+                                columns.Bound(q => q.ShipGuid).Visible(false);
+                                columns.Bound(q => q.EquipmentGuid).Visible(false);
+                                columns.Bound(q => q.Name).Title(Localizer["Name"].Value);
+                                columns.Bound(q => q.Year2023).Title(Localizer["2023"].Value).Format("{0:n0}").HtmlAttributes(new { style = "text-align: right;" }).ClientFooterTemplate("<div style='float: right'>#= kendo.format('{0:N0}', sum)#</div>");
+                                columns.Bound(q => q.Year2024).Title(Localizer["2024"].Value).Format("{0:n0}").HtmlAttributes(new { style = "text-align: right;" }).ClientFooterTemplate("<div style='float: right'>#= kendo.format('{0:N0}', sum)#</div>");
+                                columns.Bound(q => q.Year2025).Title(Localizer["2025"].Value).Format("{0:n0}").HtmlAttributes(new { style = "text-align: right;" }).ClientFooterTemplate("<div style='float: right'>#= kendo.format('{0:N0}', sum)#</div>");
+                                columns.Bound(q => q.Year2026).Title(Localizer["2026"].Value).Format("{0:n0}").HtmlAttributes(new { style = "text-align: right;" }).ClientFooterTemplate("<div style='float: right'>#= kendo.format('{0:N0}', sum)#</div>");
+                                columns.Bound(q => q.Year2027).Title(Localizer["2027"].Value).Format("{0:n0}").HtmlAttributes(new { style = "text-align: right;" }).ClientFooterTemplate("<div style='float: right'>#= kendo.format('{0:N0}', sum)#</div>");
+                            })
+                            .Height(265)
+                            .Scrollable()
+                            .Selectable(s => s
+                            .Mode(GridSelectionMode.Multiple)
+                            .Type(GridSelectionType.Row))
+                            .DataSource(dataSource => dataSource
+                                .Ajax()
+                                .Read(read => read.Action("GetInvestmentPlanYear", "Ship").Data("filterTypesSavings"))
+                                .Aggregates(agg => agg.Add(p => p.Year2023).Sum())
+                                .Aggregates(agg => agg.Add(p => p.Year2024).Sum())
+                                .Aggregates(agg => agg.Add(p => p.Year2025).Sum())
+                                .Aggregates(agg => agg.Add(p => p.Year2026).Sum())
+                                .Aggregates(agg => agg.Add(p => p.Year2027).Sum())
+                                )
+                            )
+                    </div>
+                </div>
+            </div> 
+
+            <div class="row" style="margin-top: 20px;">
+                <div class="col-12">
+                    <h4>Investment</h4>
+                    @(Html.Kendo().Grid<Susteni.Models.InvestmentPlanYearItem>()
+                        .Name("investmentPlanCost")
+                        .Columns(columns =>
+                        {
+                            columns.Bound(q => q.ShipGuid).Visible(false);
+                            columns.Bound(q => q.EquipmentGuid).Visible(false);
+                            columns.Bound(q => q.Name).Title(Localizer["Name"].Value);
+                            columns.Bound(q => q.Year2023).Title(Localizer["2023"].Value).Format("{0:n0}").HtmlAttributes(new { style = "text-align: right;" }).ClientFooterTemplate("<div style='float: right'>#= kendo.format('{0:N0}', sum)#</div>");
+                            columns.Bound(q => q.Year2024).Title(Localizer["2024"].Value).Format("{0:n0}").HtmlAttributes(new { style = "text-align: right;" }).ClientFooterTemplate("<div style='float: right'>#= kendo.format('{0:N0}', sum)#</div>");
+                            columns.Bound(q => q.Year2025).Title(Localizer["2025"].Value).Format("{0:n0}").HtmlAttributes(new { style = "text-align: right;" }).ClientFooterTemplate("<div style='float: right'>#= kendo.format('{0:N0}', sum)#</div>");
+                            columns.Bound(q => q.Year2026).Title(Localizer["2026"].Value).Format("{0:n0}").HtmlAttributes(new { style = "text-align: right;" }).ClientFooterTemplate("<div style='float: right'>#= kendo.format('{0:N0}', sum)#</div>");
+                            columns.Bound(q => q.Year2027).Title(Localizer["2027"].Value).Format("{0:n0}").HtmlAttributes(new { style = "text-align: right;" }).ClientFooterTemplate("<div style='float: right'>#= kendo.format('{0:N0}', sum)#</div>");
+                        })
+                        .Height(265)
+                        .Scrollable()
+                        .Selectable(s => s
+                        .Mode(GridSelectionMode.Multiple)
+                        .Type(GridSelectionType.Row))
+                        .DataSource(dataSource => dataSource
+                            .Ajax()
+                            .Read(read => read.Action("GetInvestmentPlanYear", "Ship").Data("filterTypesInvestment"))
+                            .Aggregates(agg => agg.Add(p => p.Year2023).Sum())
+                            .Aggregates(agg => agg.Add(p => p.Year2024).Sum())
+                            .Aggregates(agg => agg.Add(p => p.Year2025).Sum())
+                            .Aggregates(agg => agg.Add(p => p.Year2026).Sum())
+                            .Aggregates(agg => agg.Add(p => p.Year2027).Sum())
+                            )
+                        )
+                </div>
+            </div>
+
+            <div class="row">
+
+                <div class="col-12">
+                    <div id="chart"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+</form>
+
+
+<script id="successTemplate" type="text/x-kendo-template">
+    <div class="upload-success">
+        <img src="@Url.Content("~/images/emoticon-happy.svg")" style="float:left; height:48px; width:48px; margin-right: 16px;"/>
+        <p>#= message #</p>
+    </div>
+</script>
+
+
+<script id="errorTemplate" type="text/x-kendo-template">
+    <div class="wrong-pass">
+        <img src="@Url.Content("~/images/emoticon-sad.svg")" style="float:left; height:48px; width:48px; margin-right: 16px;"/>
+        <p>#= message #</p>
+    </div>
+</script>
+
+
+@(Html.Kendo().Notification()
+    .Name("notification")
+    .Position(p => p.Pinned(true).Top(30).Right(30))
+    .Stacking(NotificationStackingSettings.Down)
+    .AutoHideAfter(5000)
+    .Templates(t =>
+    {
+        t.Add().Type("success").ClientTemplateID("successTemplate");
+        t.Add().Type("error").ClientTemplateID("errorTemplate");
+    })
+)
+
+@(Html.Kendo().Window()
+        .Name("DialogSupport")
+        .Title(Localizer["Support"].Value)
+        .Visible(false)
+        .Width(1200)
+        .Modal(true)
+        .Draggable()
+        )
+
+
+@(Html.Kendo().Window()
+    .Name("dialogLastOppBilde")
+    .Title(Localizer["Last opp bilde"].Value)
+    .HtmlAttributes(new { style = "border:1px; padding-bottom: 0px; background-color: #F2F2F2;" })
+    .Visible(false)
+    .Width(1000)
+    .Modal(true)
+    .Draggable()
+    )
+
+@(Html.Kendo().Window()
+    .Name("dialogEquipment")
+    .Title(Localizer["Equipment"].Value)
+    .HtmlAttributes(new { style = "border:1px; padding-bottom: 0px; background-color: #F2F2F2;" })
+    .Visible(false)
+    .Width(800)
+    .Modal(true)
+    .Draggable()
+    )
+
+
+@(Html.Kendo().Window()
+    .Name("DialogHjelp")
+    .Title(Localizer["Help"].Value)
+    .Visible(false)
+    .Height(800)
+    .Width(1200)
+    .Modal(true)
+    .Draggable()
+    )
+
+<script id="idMenu">
+
+    function fuelSavings() {
+        shipGuid = document.getElementById("Ship_ShipGuid").value;
+        Name = document.getElementById("Ship_Name").value;
+        ProfilGuid = document.getElementById("Ship_ProfilGuid").value;
+        ProfilName = document.getElementById("Ship_ProfilName").value;
+        window.location = "../Ship/FuelSavings?shipGuid=" + shipGuid + "&Name=" + Name + "&ProfilGuid=" + ProfilGuid + "&ProfilName=" + ProfilName;
+
+    }
+
+    function generators() {
+        shipGuid = document.getElementById("Ship_ShipGuid").value;
+        Name = document.getElementById("Ship_Name").value;
+        ProfilGuid = document.getElementById("Ship_ProfilGuid").value;
+        ProfilName = document.getElementById("Ship_ProfilName").value;
+        window.location = "../Ship/ElProduction?shipGuid=" + shipGuid + "&Name=" + Name + "&ProfilGuid=" + ProfilGuid + "&ProfilName=" + ProfilName;
+    }
+
+    function powerProd() {
+        shipGuid = document.getElementById("Ship_ShipGuid").value;
+        Name = document.getElementById("Ship_Name").value;
+        ProfilGuid = document.getElementById("Ship_ProfilGuid").value;
+        ProfilName = document.getElementById("Ship_ProfilName").value;
+        window.location = "../Ship/PowerProduction?shipGuid=" + shipGuid + "&Name=" + Name + "&ProfilGuid=" + ProfilGuid + "&ProfilName=" + ProfilName;
+    }
+
+    function summary() {
+        shipGuid = document.getElementById("Ship_ShipGuid").value;
+        Name = document.getElementById("Ship_Name").value;
+        ProfilGuid = document.getElementById("Ship_ProfilGuid").value;
+        ProfilName = document.getElementById("Ship_ProfilName").value;
+        window.location = "../Ship/Summary?shipGuid=" + shipGuid + "&Name=" + Name + "&ProfilGuid=" + ProfilGuid + "&ProfilName=" + ProfilName;
+
+    }
+
+    function plan() {
+        shipGuid = document.getElementById("Ship_ShipGuid").value;
+        Name = document.getElementById("Ship_Name").value;
+        ProfilGuid = document.getElementById("Ship_ProfilGuid").value;
+        ProfilName = document.getElementById("Ship_ProfilName").value;
+        window.location = "../Ship/InvestmentPlan?shipGuid=" + shipGuid + "&Name=" + Name + "&ProfilGuid=" + ProfilGuid + "&ProfilName=" + ProfilName;
+    }
+
+</script>
+
+<script id="shipFunction">
+    var equipmentType = 1;
+    var shipGuid = "";
+    var equipmentGuid = "";
+    var profilGuids = "";
+
+    function filterShip() {
+        shipGuid = document.getElementById("Ship_ShipGuid").value;
+
+        return { shipGuid: shipGuid }
+    }
+
+    function filterTypes() {
+        shipGuid = document.getElementById("Ship_ShipGuid").value;
+
+        return { shipGuid: shipGuid, equipmentType: -1, profilGuids: profilGuids }
+    }
+
+    function filterTypesSavings() {
+        shipGuid = document.getElementById("Ship_ShipGuid").value;
+
+        return { shipGuid: shipGuid, field: "SavingsYear", profilGuids: profilGuids }
+    }
+
+    function filterTypesInvestment() {
+        shipGuid = document.getElementById("Ship_ShipGuid").value;
+
+        return { shipGuid: shipGuid, field: "Cost", profilGuids: profilGuids }
+    }
+
+    function filterEquipement() {
+        return { equipmentGuid: equipmentGuid, shipGuid: shipGuid }
+    }
+
+    function onProfileSelectedChange() {
+        profilGuids = "";
+
+        var grid = $("#profilesGrid").data("kendoGrid");
+        var selected = [];
+
+        grid.select().each(function () {
+            selected.push(grid.dataItem(this));
+        });
+
+        if (selected.length > 0) {
+            for (var i = 0; i < selected.length; i++) {
+                if (profilGuids == "") {
+                    profilGuids = "'" + selected[i].ProfilGuid + "'";
+                }
+                else {
+                    profilGuids += ",'" + selected[i].ProfilGuid + "'";
+                }
+            }
+        }
+
+        $("#equipmentList").data("kendoGrid").dataSource.read();
+        $("#investmentPlanSavings").data("kendoGrid").dataSource.read();
+        $("#investmentPlanCost").data("kendoGrid").dataSource.read();
+
+        getChart();
+    }
+
+
+    function onEquipmentTypesChange(e) {
+        var grid = $("#equipmentTypes").data("kendoDropDownList");
+        var selected = grid.select();
+        var data = grid.dataItem(selected);
+
+        equipmentType = data.Type;
+
+        $("#equipmentList").data("kendoGrid").dataSource.read();
+    }
+
+
+    function onEquipmentChange(e) {
+        var grid = $("#equipmentList").data("kendoGrid");
+        var selected = grid.select();
+        var data = grid.dataItem(selected);
+
+        equipmentGuid = data.EquipmentGuid;
+
+        var fabOME = $('#equipmentEdit').getKendoFloatingActionButton();
+         fabOME.show();
+        // var fabOMR = $('#equipmentRemove').getKendoFloatingActionButton();
+        // fabOMR.show();
+
+        $("#equipmentModeList").data("kendoGrid").dataSource.read();
+    }
+
+    $(document).ready(function () {
+        shipGuid = document.getElementById("Ship_ShipGuid").value;
+        document.getElementById("idName").innerHTML = document.getElementById("Ship_Name").value;
+    });
+
+</script>
+
+<script id="operataionModeFunction">
+
+    var operationModeGuid = "";
+
+    function onOperationModeChange(e) {
+        var grid = $("#shipOperationmodeList").data("kendoGrid");
+        var selected = grid.select();
+        var data = grid.dataItem(selected);
+
+        operationModeGuid = data.OperationModeGuid;
+
+        var fabOME = $('#operationModeEdit').getKendoFloatingActionButton();
+        fabOME.show();
+        var fabOMR = $('#operationModeRemove').getKendoFloatingActionButton();
+        fabOMR.show();
+
+    }
+
+
+    function showDialogEquipment() {
+        $.ajax({
+            url: '@Url.Action("DialogEquipment", "Ship")',
+            data: { shipGuid: shipGuid, equipmentType: equipmentType },
+            type: "GET"
+        })
+            .done(function (result) {
+                $('#dialogEquipment').html(result);
+                var popup = $('#dialogEquipment').data("kendoWindow");
+                popup.center().open();
+            });
+    }
+
+    function showDialogEquipmentEdit() {
+
+        $.ajax({
+            url: '@Url.Action("getCurrency", "Account")',
+            type: "GET"
+            })
+        .done(function (result) {
+            var currency = result;
+            $.ajax({
+                url: '@Url.Action("DialogEquipmentEdit", "Ship")',
+                data: { equipmentGuid: equipmentGuid },
+                type: "GET"
+                })
+            .done(function (result) {
+                $('#dialogEquipment').html(result);
+                document.getElementById("currencyCode").innerHTML = currency;
+                var popup = $('#dialogEquipment').data("kendoWindow");
+                popup.center().open();
+                });
+            });
+        }
+
+
+    function saveEquipment() {
+        var $this = $('#equipmentForm').serialize();
+
+        $.ajax({
+            url: '@Url.Action("SetShipEquipment", "Ship")',
+            type: "PUSH",
+            data: $this,
+            dataType: "json"
+        })
+            .done(function (result) {
+                var popup = $('#dialogEquipment').data("kendoWindow");
+                popup.close();
+                $("#equipmentList").data("kendoGrid").dataSource.read();
+                $("#investmentPlanSavings").data("kendoGrid").dataSource.read();
+                $("#investmentPlanCost").data("kendoGrid").dataSource.read();
+            });
+    }
+
+
+    function closeEquipment() {
+        var popup = $('#dialogEquipment').data("kendoWindow");
+        popup.close();
+    }
+
+    function removeEquipment(e) {
+        var tittel = "DELETE";
+        var nei = "No";
+        var content = "<div id='question'>Do you want to remove this equipment from the list</div>";
+
+        $("#confirm").kendoConfirm({
+            title: tittel,
+            content: content,
+            messages: {
+                okText: "yes",
+                cancel: nei
+            }
+        }).data("kendoConfirm").result.done(function () {
+            $('body').append($('<div id="confirm">'));
+
+            $.ajax({
+                url: '@Url.Action("RemoveShipEquipment", "Ship")',
+                type: "GET",
+                dataType: "json",
+                data: { equipmentGuid: equipmentGuid }
+            }).done(function (result) {
+                $("#equipmentList").data("kendoGrid").dataSource.read();
+            });
+        });
+    }
+
+    function saveGrid() {
+        var grid = $("#equipmentModeList").data("kendoGrid");
+        grid.saveChanges();
+    }
+
+    function saveOperationMode() {
+        var $this = $('#shipForm').serialize();
+
+        $.ajax({
+            url: '@Url.Action("SetShipOperationMode", "Ship")',
+            type: "PUSH",
+            data: $this
+        })
+            .done(function (result) {
+                var popup = $('#dialogOperationMode').data("kendoWindow");
+                popup.close();
+                $("#shipOperationmodeList").data("kendoGrid").dataSource.read();
+            });
+    }
+
+    function closeOperationMode() {
+        var popup = $('#dialogOperationMode').data("kendoWindow");
+        popup.close();
+    }
+
+</script>
+
+<script>
+
+    function onEquipmentModeDataBound() {
+        $("#operationSavingList").data("kendoGrid").dataSource.read();
+
+        var data = this.dataSource.data();
+        $(data).each(function () {
+            var Effect = this.HoursPrYear * this.MaxEffect * this.PercentLoad / 100;
+            var SavingEffect = Effect - (Effect * this.PercentSaving / 100);
+            this.set("Effect", Effect);
+            this.set("Saving", SavingEffect);
+        });
+
+
+    }
+
+    function onOSLBound() {
+        var grid = $("#operationSavingList").data("kendoGrid");
+
+        $.ajax({
+            url: '@Url.Action("GetShipOperationModeDataList", "Ship")',
+            type: "GET",
+            data: { shipGuid: shipGuid }
+        }).done(function (result) {
+            i = 0;
+            for (om of result) {
+                i++;
+                x = $("#operationSavingList thead [data-field=OperationMode" + i + "]");
+                x.html(om.Name);
+            }
+            for (let j = i + 1; j <= 9; j++) {
+                grid.hideColumn(j);
+            }
+
+        });
+    }
+
+
+</script>
+
+<script>
+
+    $(document).ready(function () {
+
+        var fbOMA = $("#equipmentAdd").getKendoFloatingActionButton();
+        var fbOMR = $("#equipmentRemove").getKendoFloatingActionButton();
+        var fbOME = $("#equipmentEdit").getKendoFloatingActionButton();
+
+        $("#equipmentAdd").prop("type", "button");
+        $("#equipmentRemove").prop("type", "button");
+        $("#equipmentEdit").prop("type", "button");
+
+        fbOMAText = "Add equipment";
+        fbOMRText = "Remove equipment";
+        fbOMEText = "Edit equipment";
+
+        $("#equipmentAdd").hover(function () {
+            fbOMA.text(fbOMAText);
+            fbOMA.element.find(".k-fab-text")
+                .stop().toggle(200);
+        }, function () {
+            fbOMA.element.find(".k-fab-text")
+                .stop()
+                .toggle(200)
+                .promise().done(function () {
+                    fbOMA.text("");
+                });
+        });
+
+        $("#equipmentRemove").hover(function () {
+            fbOMR.text(fbOMRText);
+            fbOMR.element.find(".k-fab-text")
+                .stop().toggle(200);
+        }, function () {
+            fbOMR.element.find(".k-fab-text")
+                .stop()
+                .toggle(200)
+                .promise().done(function () {
+                    fbOMR.text("");
+                });
+        });
+
+        $("#equipmentEdit").hover(function () {
+            fbOME.text(fbOMEText);
+            fbOME.element.find(".k-fab-text")
+                .stop().toggle(200);
+        }, function () {
+            fbOME.element.find(".k-fab-text")
+                .stop()
+                .toggle(200)
+                .promise().done(function () {
+                    fbOME.text("");
+                });
+        });
+
+    });
+
+</script>
+
+
+<script id="idChart">
+    function sleep(ms) {
+        return new Promise(resolve => setTimeout(resolve, ms));
+    }
+
+    function getChart() {
+
+        const elements = document.getElementsByClassName("chartClass");
+        while (elements.length > 0) {
+            elements[0].parentNode.removeChild(elements[0]);
+        }
+
+        produceChart();
+    }
+
+    function produceChart() {
+        var grid = $("#profilesGrid").data("kendoGrid");
+        var selected = [];
+
+        $('body').append($('<div class="row" style="display:none">'));
+
+        grid.select().each(function () {
+            var grdData = grid.dataItem(this);
+            $('body').append($('<div class="col-3 chartClass" style="display:none;" id="idChart' + grdData.ProfilGuid + '">' + grdData.Name + '<div id="chart' + grdData.ProfilGuid + '"></div></div>'));
+        });
+
+
+        grid.select().each(function () {
+            var grdData = grid.dataItem(this);
+            $.ajax({
+                url: '@Url.Action("GetInvestmentPlanData", "Ship")',
+                data: { shipGuid: shipGuid, profilGuids: grdData.ProfilGuid },
+                type: "GET"
+            }).done(function (item) {
+                if (item.SavingsYear> 0) {
+                    $("#chart" + grdData.ProfilGuid).kendoChart({
+                        dataSource: {
+                            transport: {
+                                read: {
+                                    url: "/Ship/getChartInv",
+                                    dataType: "json",
+                                    data: { invCost: item.OwnerPrice, fuelSaving: item.SavingsYear, maintSaving: item.MaintenaceCost }
+                                }
+                            }
+                        },
+                        title: {
+                            text: grdData.Name
+                        },
+                        legend: {
+                            position: "right"
+                        },
+                        seriesDefaults: {
+                            type: "donut"
+                        },
+                        series: [{
+                            field: "sum",
+                            categoryField: "periode",
+                            name: "sum"
+                        }],
+                        categoryAxis: {
+                            labels: {
+                                rotation: -90
+                            },
+                            crosshair: {
+                                visible: true
+                            }
+                        },
+                        valueAxis: { min: 0, labels: { format: "N0" } },
+                        tooltip: {
+                            visible: true,
+                            shared: true,
+                            format: "N0"
+                        }
+                    });
+                }
+            });
+        });
+
+        $('body').append($('</div>'));
+
+    }
+
+
+    function saveChart(p, t) {
+        var chart = $("#chart" + p).getKendoChart();
+        if (chart != undefined) {
+            chart.exportImage().done(function (data) {
+                $.ajax({
+                    url: "/Report/SetImage",
+                    method: 'POST',
+                    data: { profilGuid: p, profile: t, tittel: t, imageText: data },
+                    success: function (result) {
+                    }
+                });;
+            });
+        }
+    }
+
+    function createChart() {
+        var data = this.dataSource.data();
+        var grid = $("#equipmentList").data("kendoGrid");
+
+        var invCost = 0;
+        var fuelSaving = 0;
+        var maintSaving = 0;
+
+        $(data).each(function () {
+            invCost += this.OwnerPrice;
+            fuelSaving += this.SavingsYear;
+            maintSaving += this.MaintenaceCost;
+        });
+
+        $("#chart").kendoChart({
+            dataSource: {
+                transport: {
+                    read: {
+                        url: "/Ship/getChartInv",
+                        dataType: "json",
+                        data: { invCost: invCost, fuelSaving: fuelSaving, maintSaving: maintSaving }
+                    }
+                }
+            },
+            title: {
+                text: "Investment plan cost and savings"
+            },
+            legend: {
+                position: "right"
+            },
+            seriesDefaults: {
+                type: "donut"
+            },
+            series: [{
+                field: "sum",
+                categoryField: "periode",
+                name: "sum"
+            }],
+            categoryAxis: {
+                labels: {
+                    rotation: -90
+                },
+                crosshair: {
+                    visible: true
+                }
+            },
+            valueAxis: { min: 0, labels: { format: "N0" } },
+            tooltip: {
+                visible: true,
+                shared: true,
+                format: "N0"
+            }
+        });
+    }
+
+
+</script>
+
+@(Html.Kendo().Window()
+        .Name("dialogSkrivbrev")
+        .Title("Templates")
+        .Visible(false)
+        .Width(1200)
+        .Modal(false)
+        .Draggable()
+        )
+
+<script id="Writer">
+    var skjerm = "";
+    var kategori = "";
+
+
+    function showDialogWriteLetter() {
+        var grid = $("#profilesGrid").data("kendoGrid");
+
+        xSG = document.getElementById("Ship_ShipGuid");
+        xCG = document.getElementById("Ship_CustomerGuid");
+
+        $.ajax({
+            url: "/Report/ClearImage",
+            method: 'GET',
+            success: function (result) {
+                grid.select().each(function () {
+                    var grdData = grid.dataItem(this);
+                    xE = document.getElementById("chart" + grdData.ProfilGuid)
+                    if (xE != undefined) {
+                        saveChart(grdData.ProfilGuid, grdData.Name);
+                        }
+                    });
+                }
+            });
+
+
+        $.ajax({
+            url: "/Ship/CreateInvestmentPlanList",
+            method: 'GET',
+            data: { shipGuid: xSG.value, profilGuids: profilGuids },
+            success: function (result) {
+            }
+            });
+
+
+        $.ajax({
+            url: "/Report/DialogTemplates",
+            method: 'GET',
+            success: function (result) {
+                $('#dialogSkrivbrev').html(result);
+                xEMV = document.getElementById("Document_MasterVerdier");
+                xEMN = document.getElementById("Document_MasterNavn");
+
+                xEMV.value = xSG.value + "|" + xCG.value;
+                xEMN.value = "ShipGuid|CustomerGuid"
+
+                var popup = $('#dialogSkrivbrev').data("kendoWindow");
+                popup.center().open();
+            }
+        });
+
+
+    }
+
+    function LagreDocumentPDF(f) {
+        var filnavn = document.getElementById("idFilnavn").value;
+        if (filnavn == null || filnavn == "") {
+            filnavn = f;
+        }
+
+        if (filnavn == null || filnavn == "") {
+            filnavn = "dokument";
+        }
+
+        TXTextControl.saveDocument(TXTextControl.StreamType.AdobePDF, function (e) {
+            var base64string = e.data;
+
+            var a = document.createElement("a"); //Create <a>
+            a.href = "data:application/octet-stream;base64," + base64string; //Image Base64 Goes here
+            a.download = filnavn + ".pdf"; //File name Here
+            a.click();
+        });
+    }
+
+    function LagreDocumentDocX(f) {
+        var filnavn = document.getElementById("idFilnavn").value;
+        if (filnavn == null || filnavn == "") {
+            filnavn = f;
+        }
+
+        if (filnavn == null || filnavn == "") {
+            filnavn = "dokument";
+        }
+
+        TXTextControl.saveDocument(TXTextControl.StreamType.WordprocessingML, function (e) {
+            var base64string = e.data;
+
+            var a = document.createElement("a"); //Create <a>
+            a.href = "data:application/octet-stream;base64," + base64string; //Image Base64 Goes here
+            a.download = filnavn + ".docx"; //File name Here
+            a.click();
+        });
+    }
+
+</script>
+
+<script id="hjelp">
+
+    function showHelp() {
+        $.ajax({
+            url: '@Url.Action("DialogHjelp", "Hjelp")',
+            type: 'GET'
+        }).done(function (result) {
+            $('#DialogHjelp').html(result);
+            var popup = $('#DialogHjelp').data("kendoWindow");
+            popup.center().open();
+        });
+    }
+
+    function addSupport() {
+        $.ajax({
+            url: '@Url.Action("DialogSupport", "HelpDesk")',
+            type: 'GET'
+        }).done(function (result) {
+            $('#DialogSupport').html(result);
+
+            xB = document.getElementById("idBilde");
+
+            document.getElementById("HelpDesk_Modul").value = "InvestmentPlan";
+            document.getElementById("HelpDesk_Program").value = "2";
+            document.getElementById("HelpDesk_Status").value = "1";
+
+            const screenshotTarget = document.body;
+
+            html2canvas(screenshotTarget).then((canvas) => {
+                const base64image = canvas.toDataURL("image/png");
+                xB.innerHTML = "<img src='" + base64image + "' style='max-height: 260px; max-width: 350px;' alt='Bilde' / >";
+                document.getElementById("HelpDesk_byte64String").value = base64image
+            });
+
+            var popup = $('#DialogSupport').data("kendoWindow");
+            popup.center().open();
+        });
+    }
+
+
+    function hjelpFilter() {
+        return { Modul: 300, Skjerm: "" }
+    }
+
+</script>
+
+
+@(Html.Kendo().Window()
+        .Name("dialogReports")
+        .Title("Reports")
+        .Visible(false)
+        .Width(1200)
+        .Modal(true)
+        .Draggable()
+        )
+
+
+
+
+@(Html.Kendo().Window()
+    .Name("dialogVisPDFRapport")
+    .Position(p => p.Top(60).Left(300))
+    .Title(Localizer["Dokument"].Value)
+    .HtmlAttributes(new { style = "border:1px; padding: 0px;" })
+    .Visible(false)
+    .Content(
+        @Html.Kendo().PDFViewer()
+            .Name("pdfViewerRapport")
+            //.Events(ev => ev.Render("onRender"))
+            .HtmlAttributes(new { style = "padding: 0px; margin: 0px;" })
+            .ToHtmlString()
+    )
+    .Modal(true)
+    .Draggable()
+    )
+
+
+<script id="reports">
+    var firstRender = true;
+    var skjerm = "InvestmentPlan";
+    var vis = "Alle";
+    var stringfilter = "";
+    var RapId = "";
+
+    function skjermFilter() {
+        return { skjerm: skjerm, RapType: 5 }
+    }
+
+    function showDialogRapporter() {
+        $.ajax({
+            url: "/Report/DialogReportList",
+            method: 'GET',
+            success: function (result) {
+                $('#dialogReports').html(result);
+                var popup = $('#dialogReports').data("kendoWindow");
+                popup.center().open();
+            }
+        });
+    }
+
+
+    function ShowReport() {
+        var lvDocument = $("#lvRapporter").data("kendoListView");
+        xIW = document.getElementById("importerer");
+        xIR = document.getElementById("infoRapport");
+
+        var selF = lvDocument.select();
+        var selIF = lvDocument.dataItem(selF);
+        var RapId = "";
+        var base64string = "";
+        firstRender = true;
+
+        if (typeof selIF != 'undefined') {
+            RapId = selIF.RapId;
+            x = document.getElementById("ReportVerdier_RapId");
+            xRT = document.getElementById("ReportVerdier_RapType");
+            x.value = RapId;
+            xRT.value = selIF.RapType;
+        }
+
+        var $this = $('#rapportForm').serialize();
+
+        xIW.style.display = "";
+        xIR.style.display = "none";
+
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("ShowTelerikReport", "Report")',
+            data: $this
+        }).done(function (result) {
+            xIW.style.display = "none";
+            xIR.style.display = "";
+            RapId = "X";
+            if (result.ErrorCode > 0) {
+                alert(result.ErrorTekst);
+            }
+            else {
+                var popup = $('#dialogVisPDFRapport').data("kendoWindow");
+                popup.open();
+
+                var pdfViewer = $("#pdfViewerRapport").data("kendoPDFViewer");
+                var pdfHandlerUrl = "/Report/VisRapport?rapId=" + RapId;
+
+                pdfViewer.fromFile(pdfHandlerUrl);
+                pdfViewer.loadPage(1);
+            }
+        });
+    }
+
+    function onRender(e) {
+        if (firstRender) {
+            e.sender.toolbar.zoom.combobox.value("fitToWidth");
+            e.sender.toolbar.zoom.combobox.trigger("change");
+            firstRender = false;
+        }
+    }
+
+
+</script>

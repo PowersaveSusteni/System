@@ -1,0 +1,73 @@
+﻿@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
+@model Susteni.Models.Help.HjelpModel
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+
+@{
+    ViewData["Title"] = Localizer["Daap"];
+    ViewData["LogOnOk"] = "2";
+    ViewData["Menu"] = "KH";
+}
+
+
+<script>
+
+    function visHjelp() {
+        var selected = this.select();
+        var data = this.dataItem(selected);
+
+        if (data != null) {
+            HelpGuid = data.HelpGuid;
+
+            $.ajax({
+                url: '@Url.Action("GetHelpInfo", "Hjelp")',
+                type: "GET",
+                data: { HelpGuid: HelpGuid },
+                dataType: "html"
+            }).done(function (result) {
+                var pureHTML = result
+                pureHTML = pureHTML.replace('{"EncodedContent":{"Value":"', "").replace('"}}','');
+                $("#hjelpInfo").html(pureHTML);
+            });
+        }
+    }
+
+</script>
+
+<form asp-controller="Hjelp" asp-action="Lagre" id="formDaap" onsubmit="return false;" method="post" class="mt-3" autocomplete="off">
+
+    <div class="row">
+        
+            
+        <div class="col-lg-4" style="height: 465px;" id="idDaapsListe">
+            @(Html.Kendo().Grid<Susteni.Models.HelpSystemItem>()
+                .Name("lstHjelpInfo")
+                .Columns(columns =>
+                {
+                    columns.Bound(q => q.HelpGuid).Visible(false);
+                    columns.Bound(q => q.Title).Title("Choose tema from the list");
+                })
+                .Sortable()
+                .Navigatable()
+                .Scrollable()
+                .Height(700)
+                .Selectable(s => s
+                    .Mode(GridSelectionMode.Single)
+                    .Type(GridSelectionType.Row))
+                .Events(events => events
+                    .Change("visHjelp"))
+                .DataSource(dataSource => dataSource
+                    .Ajax()
+                    .Read(read => read.Action("getHelpSystemListe", "Hjelp").Data("hjelpFilter"))
+                    )
+                )
+        </div>
+
+        <div class="col-8">
+            <partial name="_HelpSystemInfo" />
+        </div>
+
+</div>
+
+
+</form>

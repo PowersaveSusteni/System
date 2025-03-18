@@ -1,0 +1,3 @@
+﻿<Project>
+  <Import Project="..\build\KipWeb5.props" />
+</Project>

@@ -1,0 +1,280 @@
+﻿@using Microsoft.AspNetCore.Mvc.Localization
+
+@inject IViewLocalizer Localizer
+@model Susteni.Models.Funksjoner.FunctionsModel
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+
+@{
+    ViewData["Title"] = Localizer["Powerproduction types"];
+    ViewData["LogOnOk"] = "2";
+    ViewData["Menu"] = "Admin";
+}
+
+<form onsubmit="return false;" class="mt-3">
+    <div id="confirm"></div>
+
+    <div class="row" id="heading" style="min-height: 90px;">
+
+        <div class="col-4 unselectable">
+            <h2>@Localizer["Powerproduction types"]</h2>
+        </div>
+
+        <div class="col-2 infoArea" id="info" style="display: none">
+            <p class="unselectable" id="infoTekst">
+            </p>
+        </div>
+
+    </div>
+
+    <div class="row">
+
+        <div class="col-lg-6">
+
+            <div class="row" style="margin-top: 20px;">
+                <div class="col-12">
+                    <label>List of powerproduction types</label>
+                </div>
+                <div class="col-lg-12">
+                    <div style="position: relative">
+                        @(Html.Kendo().Grid<Susteni.Models.TypePowerProductionItem>()
+                            .Name("powerproductionTypeList")
+                            .Columns(columns =>
+                            {
+                                columns.Bound(q => q.TypeGuid).Visible(false);
+                                columns.Bound(q => q.Name).Width(400).Title(Localizer["Name"].Value);
+                            })
+                            .Scrollable()
+                            .Events(e => e.Change("onPpTypeChange"))
+                            .Selectable(s => s
+                                .Mode(GridSelectionMode.Multiple)
+                                .Type(GridSelectionType.Row))
+                            .DataSource(dataSource => dataSource
+                            .Ajax()
+                            .Read(read => read.Action("GetTypePowerProductionList", "Functions"))
+                            )
+                            )
+
+
+                        @(Html.Kendo().FloatingActionButton()
+                            .Name("ppTypeAdd")
+                            .ThemeColor(FloatingActionButtonThemeColor.Success)
+                            .Size(FloatingActionButtonSize.Small)
+                            .PositionMode(FloatingActionButtonPositionMode.Absolute)
+                            .Align(FloatingActionButtonAlign.TopEnd)
+                            .AlignOffset(alignOffset => alignOffset.Horizontal(0).Vertical(10))
+                            .Icon("plusIcon")
+                            .Events(events => events.Click("addPpType"))
+                            .Visible(true)
+                            )
+
+                        @(Html.Kendo().FloatingActionButton()
+                            .Name("ppTypeEdit")
+                            .ThemeColor(FloatingActionButtonThemeColor.Warning)
+                            .Size(FloatingActionButtonSize.Small)
+                            .PositionMode(FloatingActionButtonPositionMode.Absolute)
+                            .Align(FloatingActionButtonAlign.TopEnd)
+                            .AlignOffset(alignOffset => alignOffset.Horizontal(0).Vertical(50))
+                            .Icon("pencilIcon")
+                            .Events(events => events.Click("editPpType"))
+                            .Visible(false)
+                            )
+
+                        @(Html.Kendo().FloatingActionButton()
+                            .Name("ppTypeRemove")
+                            .ThemeColor(FloatingActionButtonThemeColor.Error)
+                            .Size(FloatingActionButtonSize.Small)
+                            .PositionMode(FloatingActionButtonPositionMode.Absolute)
+                            .Align(FloatingActionButtonAlign.TopEnd)
+                            .AlignOffset(alignOffset => alignOffset.Horizontal(0).Vertical(90))
+                            .Icon("trashIcon")
+                            .Events(events => events.Click("removePpType"))
+                            .Visible(false)
+                            )
+
+
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+</form>
+
+
+<script id="successTemplate" type="text/x-kendo-template">
+    <div class="upload-success">
+        <img src="@Url.Content("~/images/emoticon-happy.svg")" style="float:left; height:48px; width:48px; margin-right: 16px;"/>
+        <p>#= message #</p>
+    </div>
+</script>
+
+
+<script id="errorTemplate" type="text/x-kendo-template">
+    <div class="wrong-pass">
+        <img src="@Url.Content("~/images/emoticon-sad.svg")" style="float:left; height:48px; width:48px; margin-right: 16px;"/>
+        <p>#= message #</p>
+    </div>
+</script>
+
+
+@(Html.Kendo().Notification()
+    .Name("notification")
+    .Position(p => p.Pinned(true).Top(30).Right(30))
+    .Stacking(NotificationStackingSettings.Down)
+    .AutoHideAfter(5000)
+    .Templates(t =>
+    {
+        t.Add().Type("success").ClientTemplateID("successTemplate");
+        t.Add().Type("error").ClientTemplateID("errorTemplate");
+    })
+)
+
+@(Html.Kendo().Window()
+        .Name("DialogSupport")
+        .Title(Localizer["Support"].Value)
+        .Visible(false)
+        .Width(1200)
+        .Modal(true)
+        .Draggable()
+        )
+
+
+@(Html.Kendo().Window()
+    .Name("DialogHjelp")
+    .Title(Localizer["Help"].Value)
+    .Visible(false)
+    .Height(800)
+    .Width(1200)
+    .Modal(true)
+    .Draggable()
+    )
+
+@(Html.Kendo().Window()
+    .Name("dialogPpType")
+    .Title(Localizer["Powerproduction"].Value)
+    .Visible(false)
+    .Width(800)
+    .Modal(true)
+    .Draggable()
+    )
+
+
+<script id="hjelp">
+
+    function showHelp() {
+        $.ajax({
+            url: '@Url.Action("DialogHjelp", "Hjelp")',
+            type: 'GET'
+        }).done(function (result) {
+            $('#DialogHjelp').html(result);
+            var popup = $('#DialogHjelp').data("kendoWindow");
+            popup.center().open();
+        });
+    }
+
+    function addSupport() {
+        $.ajax({
+            url: '@Url.Action("DialogSupport", "HelpDesk")',
+            type: 'GET'
+        }).done(function (result) {
+            $('#DialogSupport').html(result);
+
+            xB = document.getElementById("idBilde");
+
+            document.getElementById("HelpDesk_Modul").value = "PowerproductionType";
+            document.getElementById("HelpDesk_Program").value = "2";
+            document.getElementById("HelpDesk_Status").value = "1";
+
+            const screenshotTarget = document.body;
+
+            html2canvas(screenshotTarget).then((canvas) => {
+                const base64image = canvas.toDataURL("image/png");
+                xB.innerHTML = "<img src='" + base64image + "' style='max-height: 260px; max-width: 350px;' alt='Bilde' / >";
+                document.getElementById("HelpDesk_byte64String").value = base64image
+            });
+
+            var popup = $('#DialogSupport').data("kendoWindow");
+            popup.center().open();
+        });
+    }
+
+
+    function hjelpFilter() {
+        return { Modul: 900, Skjerm: "" }
+    }
+
+</script>
+
+
+
+<script>
+    var ppTypeGuid = "";
+
+    function onPpTypeChange(e) {
+        var grid = $("#powerproductionTypeList").data("kendoGrid");
+        var selected = grid.select();
+        var data = grid.dataItem(selected);
+
+        ppTypeGuid = data.TypeGuid;
+
+        var fabSTE = $('#ppTypeEdit').getKendoFloatingActionButton();
+        fabSTE.show();
+
+        var fabSTR = $('#ppTypeRemove').getKendoFloatingActionButton();
+        fabSTR.show();
+    }
+
+    function editPpType() {
+        $.ajax({
+            url: '@Url.Action("GetTypePowerProduction", "Functions")',
+            data: { TypeGuid: ppTypeGuid },
+            type: 'GET'
+        }).done(function (result) {
+            $('#dialogPpType').html(result);
+            var popup = $('#dialogPpType').data("kendoWindow");
+            popup.center().open();
+        });
+    }
+
+    function addPpType() {
+        $.ajax({
+            url: '@Url.Action("GetTypePowerProduction", "Functions")',
+            data: { TypeGuid: "" },
+            type: 'GET'
+        }).done(function (result) {
+            $('#dialogPpType').html(result);
+            var popup = $('#dialogPpType').data("kendoWindow");
+            popup.center().open();
+        });
+    }
+
+    function removePpType(e) {
+        var tittel = "DELETE";
+        var nei = "No";
+        var content = "<div id='question'>Do you want to remove this powerproduction type</div>";
+
+        $("#confirm").kendoConfirm({
+            title: tittel,
+            content: content,
+            messages: {
+                okText: "yes",
+                cancel: nei
+            }
+        })
+            .data("kendoConfirm").result.done(function () {
+                $('body').append($('<div id="confirm">'));
+
+                $.ajax({
+                    url: '@Url.Action("RemoveTypePowerProduction", "Functions")',
+                    type: "GET",
+                    dataType: "json",
+                    data: { TypeGuid: ppTypeGuid }
+                })
+                    .done(function (result) {
+                        $("#powerproductionTypeList").data("kendoGrid").dataSource.read();
+                    });
+            });
+    }
+
+</script>

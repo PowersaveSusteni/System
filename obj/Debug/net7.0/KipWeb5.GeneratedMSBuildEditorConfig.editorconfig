@@ -1,0 +1,1925 @@
+is_global = true
+build_property.TargetFramework = net7.0
+build_property.TargetFramework = net7.0
+build_property.TargetPlatformMinVersion = 
+build_property.TargetPlatformMinVersion = 
+build_property.UsingMicrosoftNETSdkWeb = true
+build_property.UsingMicrosoftNETSdkWeb = true
+build_property.ProjectTypeGuids = 
+build_property.ProjectTypeGuids = 
+build_property.InvariantGlobalization = 
+build_property.InvariantGlobalization = 
+build_property.PlatformNeutralAssembly = 
+build_property.PlatformNeutralAssembly = 
+build_property.EnforceExtendedAnalyzerRules = 
+build_property.EnforceExtendedAnalyzerRules = 
+build_property._SupportedPlatformList = Linux,macOS,Windows
+build_property._SupportedPlatformList = Linux,macOS,Windows
+build_property.RootNamespace = KipWeb5
+build_property.RootNamespace = KipWeb5
+build_property.ProjectDir = C:\Visual Studio\KipWeb5\
+build_property.RazorLangVersion = 7.0
+build_property.SupportLocalizedComponentNames = 
+build_property.GenerateRazorMetadataSourceChecksumAttributes = true
+build_property.MSBuildProjectDirectory = C:\Visual Studio\KipWeb5
+build_property._RazorSourceGeneratorDebug = 
+
+[C:/Visual Studio/KipWeb5/Views/Account/Eier.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWNjb3VudFxFaWVyLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Account/Kunder.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWNjb3VudFxLdW5kZXIuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Account/_BrukerImport.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWNjb3VudFxfQnJ1a2VySW1wb3J0LmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Account/_BrukerRessurs.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWNjb3VudFxfQnJ1a2VyUmVzc3Vycy5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Account/_EierInfo.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWNjb3VudFxfRWllckluZm8uY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Account/_KundeInfo.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWNjb3VudFxfS3VuZGVJbmZvLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Account/_NyKunde.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWNjb3VudFxfTnlLdW5kZS5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Account/_OAuth.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWNjb3VudFxfT0F1dGguY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/AdminBruker/Bruker.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWRtaW5CcnVrZXJcQnJ1a2VyLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/AdminBruker/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWRtaW5CcnVrZXJcSW5kZXguY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/AdminBruker/NyBruker.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWRtaW5CcnVrZXJcTnlCcnVrZXIuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/AdminBruker/_Brukere.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWRtaW5CcnVrZXJcX0JydWtlcmUuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/AdminBruker/_BrukerInfo.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWRtaW5CcnVrZXJcX0JydWtlckluZm8uY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/AdminBruker/_BrukerTilgang.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWRtaW5CcnVrZXJcX0JydWtlclRpbGdhbmcuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/AdminBruker/_NyBruker.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWRtaW5CcnVrZXJcX055QnJ1a2VyLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/AdminBruker/_NyttPassord.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWRtaW5CcnVrZXJcX055dHRQYXNzb3JkLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/AdminOffer/Adresseliste.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWRtaW5PZmZlclxBZHJlc3NlbGlzdGUuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/AdminOffer/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWRtaW5PZmZlclxJbmRleC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/AdminOffer/OfferAar.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWRtaW5PZmZlclxPZmZlckFhci5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/AdminOffer/_Adresse.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWRtaW5PZmZlclxfQWRyZXNzZS5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/AdminOffer/_KirkeaaretLastOpp.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWRtaW5PZmZlclxfS2lya2VhYXJldExhc3RPcHAuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/AdminRessurs/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWRtaW5SZXNzdXJzXEluZGV4LmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/AdminRessurs/_NyRessurs.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWRtaW5SZXNzdXJzXF9OeVJlc3N1cnMuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/AdminRessurs/_Ressurs.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWRtaW5SZXNzdXJzXF9SZXNzdXJzLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/AdminRessurs/_Rom.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWRtaW5SZXNzdXJzXF9Sb20uY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/AdminRessurs/_Tider.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWRtaW5SZXNzdXJzXF9UaWRlci5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/AdminRolle/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWRtaW5Sb2xsZVxJbmRleC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/AdminRolle/_Rolle.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWRtaW5Sb2xsZVxfUm9sbGUuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Aktiviteter/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWt0aXZpdGV0ZXJcSW5kZXguY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Aktiviteter/_Aktivitet.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWt0aXZpdGV0ZXJcX0FrdGl2aXRldC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Aktiviteter/_AktivitetAPP.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWt0aXZpdGV0ZXJcX0FrdGl2aXRldEFQUC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Aktiviteter/_AktivitetBilde.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWt0aXZpdGV0ZXJcX0FrdGl2aXRldEJpbGRlLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Aktiviteter/_Aktiviteten.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWt0aXZpdGV0ZXJcX0FrdGl2aXRldGVuLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Aktiviteter/_AktivitetEndre.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWt0aXZpdGV0ZXJcX0FrdGl2aXRldEVuZHJlLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Aktiviteter/_AktiviteterTidspunkt.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWt0aXZpdGV0ZXJcX0FrdGl2aXRldGVyVGlkc3B1bmt0LmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Aktiviteter/_AktivitetFakturer.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWt0aXZpdGV0ZXJcX0FrdGl2aXRldEZha3R1cmVyLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Aktiviteter/_AktivitetGenerell.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWt0aXZpdGV0ZXJcX0FrdGl2aXRldEdlbmVyZWxsLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Aktiviteter/_AktivitetImport.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWt0aXZpdGV0ZXJcX0FrdGl2aXRldEltcG9ydC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Aktiviteter/_AktivitetMedlem.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWt0aXZpdGV0ZXJcX0FrdGl2aXRldE1lZGxlbS5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Aktiviteter/_AktivitetMedlemmer.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWt0aXZpdGV0ZXJcX0FrdGl2aXRldE1lZGxlbW1lci5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Aktiviteter/_AktivitetMoteplan.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWt0aXZpdGV0ZXJcX0FrdGl2aXRldE1vdGVwbGFuLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Aktiviteter/_AktivitetMoteplanNy.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWt0aXZpdGV0ZXJcX0FrdGl2aXRldE1vdGVwbGFuTnkuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Aktiviteter/_AktivitetMoteRediger.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWt0aXZpdGV0ZXJcX0FrdGl2aXRldE1vdGVSZWRpZ2VyLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Aktiviteter/_AktivitetNy.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWt0aXZpdGV0ZXJcX0FrdGl2aXRldE55LmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Aktiviteter/_AktivitetPortal.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWt0aXZpdGV0ZXJcX0FrdGl2aXRldFBvcnRhbC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Aktiviteter/_AktivitetTilgang.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWt0aXZpdGV0ZXJcX0FrdGl2aXRldFRpbGdhbmcuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Aktiviteter/_AktivitetVerv.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWt0aXZpdGV0ZXJcX0FrdGl2aXRldFZlcnYuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Aktiviteter/_LastOppBilde.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWt0aXZpdGV0ZXJcX0xhc3RPcHBCaWxkZS5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Bestilling/BestillingEnkel.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQmVzdGlsbGluZ1xCZXN0aWxsaW5nRW5rZWwuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Bestilling/BestillingRediger.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQmVzdGlsbGluZ1xCZXN0aWxsaW5nUmVkaWdlci5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Bestilling/BestillingSok.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQmVzdGlsbGluZ1xCZXN0aWxsaW5nU29rLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Bestilling/ByraListe.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQmVzdGlsbGluZ1xCeXJhTGlzdGUuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Bestilling/DobleBestillinger.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQmVzdGlsbGluZ1xEb2JsZUJlc3RpbGxpbmdlci5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Bestilling/ForesendelsePapir.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQmVzdGlsbGluZ1xGb3Jlc2VuZGVsc2VQYXBpci5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Bestilling/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQmVzdGlsbGluZ1xJbmRleC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Bestilling/KalenderBestilling.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQmVzdGlsbGluZ1xLYWxlbmRlckJlc3RpbGxpbmcuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Bestilling/KremasjonStasjoner.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQmVzdGlsbGluZ1xLcmVtYXNqb25TdGFzam9uZXIuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Bestilling/Unntakskalender.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQmVzdGlsbGluZ1xVbm50YWtza2FsZW5kZXIuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Bestilling/UrneTeam.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQmVzdGlsbGluZ1xVcm5lVGVhbS5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Bestilling/VarselPoliti.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQmVzdGlsbGluZ1xWYXJzZWxQb2xpdGkuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Bestilling/_BestillingEnkelInfo.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQmVzdGlsbGluZ1xfQmVzdGlsbGluZ0Vua2VsSW5mby5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Bestilling/_BestillingInfo.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQmVzdGlsbGluZ1xfQmVzdGlsbGluZ0luZm8uY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Bestilling/_BestillingInfoByra.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQmVzdGlsbGluZ1xfQmVzdGlsbGluZ0luZm9CeXJhLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Bestilling/_BestillingListe.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQmVzdGlsbGluZ1xfQmVzdGlsbGluZ0xpc3RlLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Bestilling/_ByraInfo.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQmVzdGlsbGluZ1xfQnlyYUluZm8uY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Bestilling/_EndreSeremonitidspunkt.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQmVzdGlsbGluZ1xfRW5kcmVTZXJlbW9uaXRpZHNwdW5rdC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Bestilling/_Fakturalinje.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQmVzdGlsbGluZ1xfRmFrdHVyYWxpbmplLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Bestilling/_Gravseddel.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQmVzdGlsbGluZ1xfR3JhdnNlZGRlbC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Bestilling/_KalenderBestillingInfo.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQmVzdGlsbGluZ1xfS2FsZW5kZXJCZXN0aWxsaW5nSW5mby5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Bestilling/_KisteHistorikk.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQmVzdGlsbGluZ1xfS2lzdGVIaXN0b3Jpa2suY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Bestilling/_KremasjonStasjoner.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQmVzdGlsbGluZ1xfS3JlbWFzam9uU3Rhc2pvbmVyLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Bestilling/_KremasjonStasjonerInfo.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQmVzdGlsbGluZ1xfS3JlbWFzam9uU3Rhc2pvbmVySW5mby5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Bestilling/_OmGraven.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQmVzdGlsbGluZ1xfT21HcmF2ZW4uY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Bestilling/_ReserverGrav.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQmVzdGlsbGluZ1xfUmVzZXJ2ZXJHcmF2LmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Bestilling/_Unntak.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQmVzdGlsbGluZ1xfVW5udGFrLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Bestilling/_Unntakskalender.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQmVzdGlsbGluZ1xfVW5udGFrc2thbGVuZGVyLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Bestilling/_UrneTeamInfo.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQmVzdGlsbGluZ1xfVXJuZVRlYW1JbmZvLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Byraa/Byraaer.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQnlyYWFcQnlyYWFlci5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Byraa/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQnlyYWFcSW5kZXguY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Byraa/MineByra.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQnlyYWFcTWluZUJ5cmEuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Byraa/_BestillingInfoByra.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQnlyYWFcX0Jlc3RpbGxpbmdJbmZvQnlyYS5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Byraa/_BestillingNy.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQnlyYWFcX0Jlc3RpbGxpbmdOeS5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Byraa/_ByraaerInfo.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQnlyYWFcX0J5cmFhZXJJbmZvLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Byraa/_MineByraInfo.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQnlyYWFcX01pbmVCeXJhSW5mby5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Byraa/_NyBestilling.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQnlyYWFcX055QmVzdGlsbGluZy5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Daap/DaapListe.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRGFhcFxEYWFwTGlzdGUuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Daap/DaapNy.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRGFhcFxEYWFwTnkuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Daap/DaapRediger.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRGFhcFxEYWFwUmVkaWdlci5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Daap/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRGFhcFxJbmRleC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Daap/_Daap.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRGFhcFxfRGFhcC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Daap/_DaapEkirkebok.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRGFhcFxfRGFhcEVraXJrZWJvay5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Daap/_DaapImport.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRGFhcFxfRGFhcEltcG9ydC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Daap/_DaapNy.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRGFhcFxfRGFhcE55LmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Daap/_Fadder.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRGFhcFxfRmFkZGVyLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Engrafo/AdmEnhet.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRW5ncmFmb1xBZG1FbmhldC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Engrafo/Arkiv.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRW5ncmFmb1xBcmtpdi5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Engrafo/Gruppe.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRW5ncmFmb1xHcnVwcGUuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Engrafo/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRW5ncmFmb1xJbmRleC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Engrafo/Moter.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRW5ncmFmb1xNb3Rlci5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Engrafo/Utvalgssaker.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRW5ncmFmb1xVdHZhbGdzc2FrZXIuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Engrafo/VedlikeholdMal.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRW5ncmFmb1xWZWRsaWtlaG9sZE1hbC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Engrafo/_AdmEnhetInfo.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRW5ncmFmb1xfQWRtRW5oZXRJbmZvLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Engrafo/_ArkivInfo.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRW5ncmFmb1xfQXJraXZJbmZvLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Engrafo/_BrukerRolle.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRW5ncmFmb1xfQnJ1a2VyUm9sbGUuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Engrafo/_Dokumentbeskrivelse.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRW5ncmFmb1xfRG9rdW1lbnRiZXNrcml2ZWxzZS5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Engrafo/_Ekspeder.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRW5ncmFmb1xfRWtzcGVkZXIuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Engrafo/_GruppeInfo.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRW5ncmFmb1xfR3J1cHBlSW5mby5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Engrafo/_Journal.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRW5ncmFmb1xfSm91cm5hbC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Engrafo/_Journalpost.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRW5ncmFmb1xfSm91cm5hbHBvc3QuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Engrafo/_LastOppMal.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRW5ncmFmb1xfTGFzdE9wcE1hbC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Engrafo/_Mappe.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRW5ncmFmb1xfTWFwcGUuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Engrafo/_pdfViewer.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRW5ncmFmb1xfcGRmVmlld2VyLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Engrafo/_Registrering.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRW5ncmFmb1xfUmVnaXN0cmVyaW5nLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Engrafo/_Saksmappe.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRW5ncmFmb1xfU2Frc21hcHBlLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Engrafo/_SjekkInnDokument.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRW5ncmFmb1xfU2pla2tJbm5Eb2t1bWVudC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Engrafo/_UtvalssakBehandling.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRW5ncmFmb1xfVXR2YWxzc2FrQmVoYW5kbGluZy5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Engrafo/_VedlikeholdMal.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRW5ncmFmb1xfVmVkbGlrZWhvbGRNYWwuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Engrafo/_VedlikeholdMalPreview.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRW5ncmFmb1xfVmVkbGlrZWhvbGRNYWxQcmV2aWV3LmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Engrafo/_Writer.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRW5ncmFmb1xfV3JpdGVyLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Engrafo/_Writer2.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRW5ncmFmb1xfV3JpdGVyMi5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Faktura/Abonement.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRmFrdHVyYVxBYm9uZW1lbnQuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Faktura/Eksport.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRmFrdHVyYVxFa3Nwb3J0LmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Faktura/FakturaSvarUt.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRmFrdHVyYVxGYWt0dXJhU3ZhclV0LmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Faktura/Festeavgift.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRmFrdHVyYVxGZXN0ZWF2Z2lmdC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Faktura/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRmFrdHVyYVxJbmRleC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Faktura/Innbetaling.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRmFrdHVyYVxJbm5iZXRhbGluZy5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Faktura/Ordre.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRmFrdHVyYVxPcmRyZS5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Faktura/Purring.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRmFrdHVyYVxQdXJyaW5nLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Faktura/Utskrift.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRmFrdHVyYVxVdHNrcmlmdC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Faktura/_AbonementInfo.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRmFrdHVyYVxfQWJvbmVtZW50SW5mby5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Faktura/_AbonnementInnhold.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRmFrdHVyYVxfQWJvbm5lbWVudElubmhvbGQuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Faktura/_Eksport.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRmFrdHVyYVxfRWtzcG9ydC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Faktura/_Faktura.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRmFrdHVyYVxfRmFrdHVyYS5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Faktura/_FakturaInnbetaling.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRmFrdHVyYVxfRmFrdHVyYUlubmJldGFsaW5nLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Faktura/_FakturaLinje.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRmFrdHVyYVxfRmFrdHVyYUxpbmplLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Faktura/_FilerLastOppBBS.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRmFrdHVyYVxfRmlsZXJMYXN0T3BwQkJTLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Faktura/_Ordre.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRmFrdHVyYVxfT3JkcmUuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Faktura/_OrdreInfo.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRmFrdHVyYVxfT3JkcmVJbmZvLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Faktura/_Ordrelinje.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRmFrdHVyYVxfT3JkcmVsaW5qZS5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Faktura/_TjenesteReg.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRmFrdHVyYVxfVGplbmVzdGVSZWcuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Foresporsel/FinnKompetansePersoner.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRm9yZXNwb3JzZWxcRmlubktvbXBldGFuc2VQZXJzb25lci5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Foresporsel/index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRm9yZXNwb3JzZWxcaW5kZXguY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Foresporsel/_ForesporselInfo.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRm9yZXNwb3JzZWxcX0ZvcmVzcG9yc2VsSW5mby5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Frivilligbors/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRnJpdmlsbGlnYm9yc1xJbmRleC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Frivilligbors/Ministrantoppgaver.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRnJpdmlsbGlnYm9yc1xNaW5pc3RyYW50b3BwZ2F2ZXIuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Frivilligbors/_FrivilligborsInfo.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRnJpdmlsbGlnYm9yc1xfRnJpdmlsbGlnYm9yc0luZm8uY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Frivilligbors/_MinistrantoppgaveInfo.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRnJpdmlsbGlnYm9yc1xfTWluaXN0cmFudG9wcGdhdmVJbmZvLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Frivillig/AjaxContent.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRnJpdmlsbGlnXEFqYXhDb250ZW50LmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Frivillig/Foresporsel.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRnJpdmlsbGlnXEZvcmVzcG9yc2VsLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Frivillig/FrivilligImport.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRnJpdmlsbGlnXEZyaXZpbGxpZ0ltcG9ydC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Frivillig/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRnJpdmlsbGlnXEluZGV4LmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Frivillig/MinKirkeApp.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRnJpdmlsbGlnXE1pbktpcmtlQXBwLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Frivillig/_FrivilligeFravaer.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRnJpdmlsbGlnXF9Gcml2aWxsaWdlRnJhdmFlci5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Frivillig/_FrivilligeGodtgjorelse.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRnJpdmlsbGlnXF9Gcml2aWxsaWdlR29kdGdqb3JlbHNlLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Frivillig/_FrivilligeRelasjonAdm.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRnJpdmlsbGlnXF9Gcml2aWxsaWdlUmVsYXNqb25BZG0uY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Frivillig/_FrivilligFravaer.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRnJpdmlsbGlnXF9Gcml2aWxsaWdGcmF2YWVyLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Frivillig/_FrivilligFravaerListe.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRnJpdmlsbGlnXF9Gcml2aWxsaWdGcmF2YWVyTGlzdGUuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Frivillig/_FrivilligGodtgjorelseListe.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRnJpdmlsbGlnXF9Gcml2aWxsaWdHb2R0Z2pvcmVsc2VMaXN0ZS5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Frivillig/_FrivilligGruppe.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRnJpdmlsbGlnXF9Gcml2aWxsaWdHcnVwcGUuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Frivillig/_FrivilligGruppeInnhold.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRnJpdmlsbGlnXF9Gcml2aWxsaWdHcnVwcGVJbm5ob2xkLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Frivillig/_FrivilligImportInfo.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRnJpdmlsbGlnXF9Gcml2aWxsaWdJbXBvcnRJbmZvLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Frivillig/_FrivilligInfo.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRnJpdmlsbGlnXF9Gcml2aWxsaWdJbmZvLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Frivillig/_FrivilligKompetanse.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRnJpdmlsbGlnXF9Gcml2aWxsaWdLb21wZXRhbnNlLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Frivillig/_FrivilligKompetanseListe.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRnJpdmlsbGlnXF9Gcml2aWxsaWdLb21wZXRhbnNlTGlzdGUuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Frivillig/_FrivilligPerson.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRnJpdmlsbGlnXF9Gcml2aWxsaWdQZXJzb24uY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Frivillig/_FrivilligPersonAnnet.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRnJpdmlsbGlnXF9Gcml2aWxsaWdQZXJzb25Bbm5ldC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Frivillig/_FrivilligPersonFunksjon.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRnJpdmlsbGlnXF9Gcml2aWxsaWdQZXJzb25GdW5rc2pvbi5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Frivillig/_FrivilligPersonFunksjonListe.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRnJpdmlsbGlnXF9Gcml2aWxsaWdQZXJzb25GdW5rc2pvbkxpc3RlLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Frivillig/_FrivilligPersonFunksjonListeInfo.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRnJpdmlsbGlnXF9Gcml2aWxsaWdQZXJzb25GdW5rc2pvbkxpc3RlSW5mby5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Frivillig/_FrivilligPersonInfo.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRnJpdmlsbGlnXF9Gcml2aWxsaWdQZXJzb25JbmZvLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Frivillig/_FrivilligPersonKH.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRnJpdmlsbGlnXF9Gcml2aWxsaWdQZXJzb25LSC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Frivillig/_FrivilligRelasjon.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRnJpdmlsbGlnXF9Gcml2aWxsaWdSZWxhc2pvbi5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Frivillig/_FrivilligRelasjonInfo.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRnJpdmlsbGlnXF9Gcml2aWxsaWdSZWxhc2pvbkluZm8uY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Funksjoner/Delta.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRnVua3Nqb25lclxEZWx0YS5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Funksjoner/Endringslogg.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRnVua3Nqb25lclxFbmRyaW5nc2xvZ2cuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Funksjoner/FrieFelt.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRnVua3Nqb25lclxGcmllRmVsdC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Funksjoner/Gridmal.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRnVua3Nqb25lclxHcmlkbWFsLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Funksjoner/Gridmaler.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRnVua3Nqb25lclxHcmlkbWFsZXIuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Funksjoner/MinKirkeapp.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRnVua3Nqb25lclxNaW5LaXJrZWFwcC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Funksjoner/Nyheter.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRnVua3Nqb25lclxOeWhldGVyLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Funksjoner/Oppgave.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRnVua3Nqb25lclxPcHBnYXZlLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Funksjoner/SMSmaler.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRnVua3Nqb25lclxTTVNtYWxlci5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Funksjoner/_DeltaPerson.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRnVua3Nqb25lclxfRGVsdGFQZXJzb24uY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Funksjoner/_EndringsloggInfo.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRnVua3Nqb25lclxfRW5kcmluZ3Nsb2dnSW5mby5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Funksjoner/_FinnPersoner.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRnVua3Nqb25lclxfRmlublBlcnNvbmVyLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Funksjoner/_FinnPoststed.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRnVua3Nqb25lclxfRmlublBvc3RzdGVkLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Funksjoner/_FinnRessurs.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRnVua3Nqb25lclxfRmlublJlc3N1cnMuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Funksjoner/_FinnSokn.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRnVua3Nqb25lclxfRmlublNva24uY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Funksjoner/_FrieFeltInfo.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRnVua3Nqb25lclxfRnJpZUZlbHRJbmZvLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Funksjoner/_FrieFeltKopier.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRnVua3Nqb25lclxfRnJpZUZlbHRLb3BpZXIuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Funksjoner/_FrieFeltVerdi.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRnVua3Nqb25lclxfRnJpZUZlbHRWZXJkaS5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Funksjoner/_FunksjonerKontakt.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRnVua3Nqb25lclxfRnVua3Nqb25lcktvbnRha3QuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Funksjoner/_InfoLogg.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRnVua3Nqb25lclxfSW5mb0xvZ2cuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Funksjoner/_Melding.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRnVua3Nqb25lclxfTWVsZGluZy5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Funksjoner/_NyheterInfo.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRnVua3Nqb25lclxfTnloZXRlckluZm8uY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Funksjoner/_SMSmalInfo.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRnVua3Nqb25lclxfU01TbWFsSW5mby5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Funksjoner/_UregistrertRessurs.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRnVua3Nqb25lclxfVXJlZ2lzdHJlcnRSZXNzdXJzLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Gravarkiv/GravlagtSok.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcR3JhdmFya2l2XEdyYXZsYWd0U29rLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Gravarkiv/Gravminne.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcR3JhdmFya2l2XEdyYXZtaW5uZS5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Gravarkiv/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcR3JhdmFya2l2XEluZGV4LmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Gravarkiv/Verneplan.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcR3JhdmFya2l2XFZlcm5lcGxhbi5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Gravarkiv/_BildeRediger.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcR3JhdmFya2l2XF9CaWxkZVJlZGlnZXIuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Gravarkiv/_FeltInfo.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcR3JhdmFya2l2XF9GZWx0SW5mby5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Gravarkiv/_Festehistorikk.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcR3JhdmFya2l2XF9GZXN0ZWhpc3Rvcmlray5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Gravarkiv/_Gravarkiv.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcR3JhdmFya2l2XF9HcmF2YXJraXYuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Gravarkiv/_GravBegrens.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcR3JhdmFya2l2XF9HcmF2QmVncmVucy5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Gravarkiv/_GravFakturer.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcR3JhdmFya2l2XF9HcmF2RmFrdHVyZXIuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Gravarkiv/_GravFlytt.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcR3JhdmFya2l2XF9HcmF2Rmx5dHQuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Gravarkiv/_GravFrigi.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcR3JhdmFya2l2XF9HcmF2RnJpZ2kuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Gravarkiv/_GravInfo.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcR3JhdmFya2l2XF9HcmF2SW5mby5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Gravarkiv/_GravinfoFester.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcR3JhdmFya2l2XF9HcmF2aW5mb0Zlc3Rlci5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Gravarkiv/_Gravkort.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcR3JhdmFya2l2XF9HcmF2a29ydC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Gravarkiv/_GravlagtNotat.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcR3JhdmFya2l2XF9HcmF2bGFndE5vdGF0LmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Gravarkiv/_Gravliste.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcR3JhdmFya2l2XF9HcmF2bGlzdGUuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Gravarkiv/_GravNotat.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcR3JhdmFya2l2XF9HcmF2Tm90YXQuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Gravarkiv/_Gravplass.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcR3JhdmFya2l2XF9HcmF2cGxhc3MuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Gravarkiv/_GravplassInfo.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcR3JhdmFya2l2XF9HcmF2cGxhc3NJbmZvLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Gravarkiv/_Gravseddel.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcR3JhdmFya2l2XF9HcmF2c2VkZGVsLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Gravarkiv/_GravVern.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcR3JhdmFya2l2XF9HcmF2VmVybi5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Gravarkiv/_LastOppBilde.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcR3JhdmFya2l2XF9MYXN0T3BwQmlsZGUuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Gravarkiv/_LastOppGravbilde.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcR3JhdmFya2l2XF9MYXN0T3BwR3JhdmJpbGRlLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Gravarkiv/_RekkeInfo.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcR3JhdmFya2l2XF9SZWtrZUluZm8uY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Gravferd/BestillingNy.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcR3JhdmZlcmRcQmVzdGlsbGluZ055LmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Gravferd/EcclesiaImport.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcR3JhdmZlcmRcRWNjbGVzaWFJbXBvcnQuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Gravferd/GravferdListe.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcR3JhdmZlcmRcR3JhdmZlcmRMaXN0ZS5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Gravferd/GravferdRediger.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcR3JhdmZlcmRcR3JhdmZlcmRSZWRpZ2VyLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Gravferd/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcR3JhdmZlcmRcSW5kZXguY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Gravferd/_BestillingEkirkebok.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcR3JhdmZlcmRcX0Jlc3RpbGxpbmdFa2lya2Vib2suY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Gravferd/_BestillingInfo.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcR3JhdmZlcmRcX0Jlc3RpbGxpbmdJbmZvLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Gravferd/_Fakturalinje.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcR3JhdmZlcmRcX0Zha3R1cmFsaW5qZS5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Gravferd/_KisteHistorikk.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcR3JhdmZlcmRcX0tpc3RlSGlzdG9yaWtrLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Gravferd/_OmGraven.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcR3JhdmZlcmRcX09tR3JhdmVuLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Grunnregister/Bank.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcR3J1bm5yZWdpc3RlclxCYW5rLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Grunnregister/Dimensjoner.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcR3J1bm5yZWdpc3RlclxEaW1lbnNqb25lci5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Grunnregister/Eksportformat.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcR3J1bm5yZWdpc3RlclxFa3Nwb3J0Zm9ybWF0LmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Grunnregister/Etikett.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcR3J1bm5yZWdpc3RlclxFdGlrZXR0LmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Grunnregister/Fakturatyper.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcR3J1bm5yZWdpc3RlclxGYWt0dXJhdHlwZXIuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Grunnregister/Rapporter.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcR3J1bm5yZWdpc3RlclxSYXBwb3J0ZXIuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Grunnregister/Sokn.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcR3J1bm5yZWdpc3RlclxTb2tuLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Grunnregister/Tjenester.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcR3J1bm5yZWdpc3RlclxUamVuZXN0ZXIuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Grunnregister/VedlMaler.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcR3J1bm5yZWdpc3RlclxWZWRsTWFsZXIuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Grunnregister/_BankInfo.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcR3J1bm5yZWdpc3RlclxfQmFua0luZm8uY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Grunnregister/_EksportformatInfo.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcR3J1bm5yZWdpc3RlclxfRWtzcG9ydGZvcm1hdEluZm8uY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Grunnregister/_Etikett.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcR3J1bm5yZWdpc3RlclxfRXRpa2V0dC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Grunnregister/_FakturanummerSerie.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcR3J1bm5yZWdpc3RlclxfRmFrdHVyYW51bW1lclNlcmllLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Grunnregister/_FakturanummerSerieInfo.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcR3J1bm5yZWdpc3RlclxfRmFrdHVyYW51bW1lclNlcmllSW5mby5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Grunnregister/_FakturatyperInfo.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcR3J1bm5yZWdpc3RlclxfRmFrdHVyYXR5cGVySW5mby5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Grunnregister/_SoknInfo.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcR3J1bm5yZWdpc3RlclxfU29rbkluZm8uY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Grunnregister/_Tjeneste.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcR3J1bm5yZWdpc3RlclxfVGplbmVzdGUuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Grunnregister/_TjenestePrismatrise.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcR3J1bm5yZWdpc3RlclxfVGplbmVzdGVQcmlzbWF0cmlzZS5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Grunnregister/_VedlMalerInfo.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcR3J1bm5yZWdpc3RlclxfVmVkbE1hbGVySW5mby5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Gudstjeneste/GudstjenesteListe.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcR3Vkc3RqZW5lc3RlXEd1ZHN0amVuZXN0ZUxpc3RlLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Gudstjeneste/GudstjenesteNy.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcR3Vkc3RqZW5lc3RlXEd1ZHN0amVuZXN0ZU55LmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Gudstjeneste/GudstjenesteRediger.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcR3Vkc3RqZW5lc3RlXEd1ZHN0amVuZXN0ZVJlZGlnZXIuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Gudstjeneste/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcR3Vkc3RqZW5lc3RlXEluZGV4LmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Gudstjeneste/LivetsGang.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcR3Vkc3RqZW5lc3RlXExpdmV0c0dhbmcuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Gudstjeneste/Offer.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcR3Vkc3RqZW5lc3RlXE9mZmVyLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Gudstjeneste/OfferAdresse.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcR3Vkc3RqZW5lc3RlXE9mZmVyQWRyZXNzZS5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Gudstjeneste/_Gudstjeneste.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcR3Vkc3RqZW5lc3RlXF9HdWRzdGplbmVzdGUuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Gudstjeneste/_GudstjenesteNy.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcR3Vkc3RqZW5lc3RlXF9HdWRzdGplbmVzdGVOeS5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Gudstjeneste/_GudstjenesteProgram.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcR3Vkc3RqZW5lc3RlXF9HdWRzdGplbmVzdGVQcm9ncmFtLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Gudstjeneste/_GudstjenesteRediger.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcR3Vkc3RqZW5lc3RlXF9HdWRzdGplbmVzdGVSZWRpZ2VyLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Gudstjeneste/_GudstjenesteRessurser.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcR3Vkc3RqZW5lc3RlXF9HdWRzdGplbmVzdGVSZXNzdXJzZXIuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Gudstjeneste/_GudstjenesteRessursPlan.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcR3Vkc3RqZW5lc3RlXF9HdWRzdGplbmVzdGVSZXNzdXJzUGxhbi5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Gudstjeneste/_InviterMenigheter.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcR3Vkc3RqZW5lc3RlXF9JbnZpdGVyTWVuaWdoZXRlci5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Gudstjeneste/_InviterTilMenighet.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcR3Vkc3RqZW5lc3RlXF9JbnZpdGVyVGlsTWVuaWdoZXQuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Gudstjeneste/_LastOppBilde.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcR3Vkc3RqZW5lc3RlXF9MYXN0T3BwQmlsZGUuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Gudstjeneste/_NyeGudstjenester.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcR3Vkc3RqZW5lc3RlXF9OeWVHdWRzdGplbmVzdGVyLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Gudstjeneste/_OfferAdresseInfo.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcR3Vkc3RqZW5lc3RlXF9PZmZlckFkcmVzc2VJbmZvLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Gudstjeneste/_ProgramLeddAdd.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcR3Vkc3RqZW5lc3RlXF9Qcm9ncmFtTGVkZEFkZC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/HelpDesk/BrukerHDFerdig.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSGVscERlc2tcQnJ1a2VySERGZXJkaWcuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/HelpDesk/BrukerHDLogg.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSGVscERlc2tcQnJ1a2VySERMb2dnLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/HelpDesk/BugReport.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSGVscERlc2tcQnVnUmVwb3J0LmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/HelpDesk/HelpDesk.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSGVscERlc2tcSGVscERlc2suY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/HelpDesk/Support.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSGVscERlc2tcU3VwcG9ydC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/HelpDesk/SupportEndre.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSGVscERlc2tcU3VwcG9ydEVuZHJlLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/HelpDesk/_HelpDeskBilde.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSGVscERlc2tcX0hlbHBEZXNrQmlsZGUuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/HelpDesk/_HelpDeskBildeFull.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSGVscERlc2tcX0hlbHBEZXNrQmlsZGVGdWxsLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/HelpDesk/_HelpDeskBildeInfo.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSGVscERlc2tcX0hlbHBEZXNrQmlsZGVJbmZvLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/HelpDesk/_HelpDeskInfo.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSGVscERlc2tcX0hlbHBEZXNrSW5mby5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/HelpDesk/_HelpDeskLogg.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSGVscERlc2tcX0hlbHBEZXNrTG9nZy5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Hjelp/HelpSystem.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSGplbHBcSGVscFN5c3RlbS5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Hjelp/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSGplbHBcSW5kZXguY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Hjelp/_HelpInfo.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSGplbHBcX0hlbHBJbmZvLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Hjelp/_HelpSystemInfo.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSGplbHBcX0hlbHBTeXN0ZW1JbmZvLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Home/About.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxBYm91dC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Home/Admin.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxBZG1pbi5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Home/Byra.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxCeXJhLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Home/Contact.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxDb250YWN0LmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Home/Engrafo.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxFbmdyYWZvLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Home/GP.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxHUC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Home/Grunnregister.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxHcnVubnJlZ2lzdGVyLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Home/HD.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxIRC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Home/Hjem.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxIamVtLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Home/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxJbmRleC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Home/KH.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxLSC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Home/Krematorium.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxLcmVtYXRvcml1bS5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Home/kWeb.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxrV2ViLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Home/Login.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxMb2dpbi5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Home/LoginError.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxMb2dpbkVycm9yLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Home/Logout.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxMb2dvdXQuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Home/Medarbeider.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxNZWRhcmJlaWRlci5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Home/Oko.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxPa28uY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Home/Privacy.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxQcml2YWN5LmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Home/Rapporter.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxSYXBwb3J0ZXIuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Home/Rutiner.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxSdXRpbmVyLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Home/signin-oidc.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxzaWduaW4tb2lkYy5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Home/signout-oidc.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxzaWdub3V0LW9pZGMuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Home/Sokn.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxTb2tuLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Home/Statistikk.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxTdGF0aXN0aWtrLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Home/UnauthorizedTenant.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxVbmF1dGhvcml6ZWRUZW5hbnQuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Home/Utsending.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxVdHNlbmRpbmcuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Home/_Bruker.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxfQnJ1a2VyLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Home/_ByraInfo2.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxfQnlyYUluZm8yLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Kalender/FinnTidspunkt.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcS2FsZW5kZXJcRmlublRpZHNwdW5rdC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Kalender/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcS2FsZW5kZXJcSW5kZXguY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Kalender/_FinnTidspunktInfo.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcS2FsZW5kZXJcX0Zpbm5UaWRzcHVua3RJbmZvLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Kalender/_Gruppe.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcS2FsZW5kZXJcX0dydXBwZS5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Kalender/_Kalender.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcS2FsZW5kZXJcX0thbGVuZGVyLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Kalender/_NyAvtale.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcS2FsZW5kZXJcX055QXZ0YWxlLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Kart/Kart.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcS2FydFxLYXJ0LmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Kart/KartBrukFull.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcS2FydFxLYXJ0QnJ1a0Z1bGwuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Kart/KartDefinisjon.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcS2FydFxLYXJ0RGVmaW5pc2pvbi5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Kart/_KartDefinisjonInfo.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcS2FydFxfS2FydERlZmluaXNqb25JbmZvLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Konfirmasjon/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcS29uZmlybWFzam9uXEluZGV4LmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Konfirmasjon/KonfirmantListe.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcS29uZmlybWFzam9uXEtvbmZpcm1hbnRMaXN0ZS5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Konfirmasjon/KonfirmasjonRediger.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcS29uZmlybWFzam9uXEtvbmZpcm1hc2pvblJlZGlnZXIuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Konfirmasjon/Ministrantoppgaver.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcS29uZmlybWFzam9uXE1pbmlzdHJhbnRvcHBnYXZlci5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Konfirmasjon/_ImportDNKM.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcS29uZmlybWFzam9uXF9JbXBvcnRETktNLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Konfirmasjon/_KonfirmantEkirkebok.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcS29uZmlybWFzam9uXF9Lb25maXJtYW50RWtpcmtlYm9rLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Konfirmasjon/_KonfirmantFremmote.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcS29uZmlybWFzam9uXF9Lb25maXJtYW50RnJlbW1vdGUuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Konfirmasjon/_KonfirmantImport.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcS29uZmlybWFzam9uXF9Lb25maXJtYW50SW1wb3J0LmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Konfirmasjon/_KonfirmantKull.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcS29uZmlybWFzam9uXF9Lb25maXJtYW50S3VsbC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Konfirmasjon/_KonfirmantKullInfo.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcS29uZmlybWFzam9uXF9Lb25maXJtYW50S3VsbEluZm8uY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Konfirmasjon/_KonfirmantNy.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcS29uZmlybWFzam9uXF9Lb25maXJtYW50TnkuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Konfirmasjon/_Konfirmasjon.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcS29uZmlybWFzam9uXF9Lb25maXJtYXNqb24uY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Konfirmasjon/_KonfirmasjonGruppeInfo.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcS29uZmlybWFzam9uXF9Lb25maXJtYXNqb25HcnVwcGVJbmZvLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Konfirmasjon/_KonfirmasjonGrupper.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcS29uZmlybWFzam9uXF9Lb25maXJtYXNqb25HcnVwcGVyLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Konfirmasjon/_KonfirmasjonNy.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcS29uZmlybWFzam9uXF9Lb25maXJtYXNqb25OeS5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Konfirmasjon/_KonfirmasjonTider.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcS29uZmlybWFzam9uXF9Lb25maXJtYXNqb25UaWRlci5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Konfirmasjon/_KonfirmasjonTiderInfo.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcS29uZmlybWFzam9uXF9Lb25maXJtYXNqb25UaWRlckluZm8uY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Konfirmasjon/_UndervisningPlan.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcS29uZmlybWFzam9uXF9VbmRlcnZpc25pbmdQbGFuLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Konfirmasjon/_UndervisningsGruppe.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcS29uZmlybWFzam9uXF9VbmRlcnZpc25pbmdzR3J1cHBlLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Konfirmasjon/_UndervisningsplanNy.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcS29uZmlybWFzam9uXF9VbmRlcnZpc25pbmdzcGxhbk55LmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Kontakt/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcS29udGFrdFxJbmRleC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Kontakt/KontaktKort.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcS29udGFrdFxLb250YWt0S29ydC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Kontakt/_GravinfoFester.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcS29udGFrdFxfR3JhdmluZm9GZXN0ZXIuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Kontakt/_Kontakt.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcS29udGFrdFxfS29udGFrdC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Kontakt/_KontaktFull.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcS29udGFrdFxfS29udGFrdEZ1bGwuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Krematorium/Bestillinger.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcS3JlbWF0b3JpdW1cQmVzdGlsbGluZ2VyLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Krematorium/KremasjonerPlanlegg.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcS3JlbWF0b3JpdW1cS3JlbWFzam9uZXJQbGFubGVnZy5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Krematorium/StasjonStatus.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcS3JlbWF0b3JpdW1cU3Rhc2pvblN0YXR1cy5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Krematorium/Urnebooking.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcS3JlbWF0b3JpdW1cVXJuZWJvb2tpbmcuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Krematorium/_BestillingInfo.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcS3JlbWF0b3JpdW1cX0Jlc3RpbGxpbmdJbmZvLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Krematorium/_UrnebookingInfo.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcS3JlbWF0b3JpdW1cX1VybmVib29raW5nSW5mby5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/kWebAvdeling/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3Nca1dlYkF2ZGVsaW5nXEluZGV4LmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/kWebAvdeling/_Avdeling.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3Nca1dlYkF2ZGVsaW5nXF9BdmRlbGluZy5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/kWebBilde/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3Nca1dlYkJpbGRlXEluZGV4LmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/kWebBilde/_Bilde.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3Nca1dlYkJpbGRlXF9CaWxkZS5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/kWebBilde/_BildeLastOpp.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3Nca1dlYkJpbGRlXF9CaWxkZUxhc3RPcHAuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/kWebBilde/_FinnBilde.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3Nca1dlYkJpbGRlXF9GaW5uQmlsZGUuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/kWebBilde/_MappeNy.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3Nca1dlYkJpbGRlXF9NYXBwZU55LmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/kWebBruker/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3Nca1dlYkJydWtlclxJbmRleC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/kWebBruker/_kWebBruker.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3Nca1dlYkJydWtlclxfa1dlYkJydWtlci5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/kWebDokument/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3Nca1dlYkRva3VtZW50XEluZGV4LmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/kWebDokument/_Dokument.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3Nca1dlYkRva3VtZW50XF9Eb2t1bWVudC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/kWebDokument/_DokumentTypeNy.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3Nca1dlYkRva3VtZW50XF9Eb2t1bWVudFR5cGVOeS5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/kWebDokument/_DokumentWriter.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3Nca1dlYkRva3VtZW50XF9Eb2t1bWVudFdyaXRlci5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/kWebDokument/_FilerLastOpp.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3Nca1dlYkRva3VtZW50XF9GaWxlckxhc3RPcHAuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/kWebFiler/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3Nca1dlYkZpbGVyXEluZGV4LmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/kWebForfatter/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3Nca1dlYkZvcmZhdHRlclxJbmRleC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/kWebForfatter/_kWebForfatter.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3Nca1dlYkZvcmZhdHRlclxfa1dlYkZvcmZhdHRlci5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/kWebLink/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3Nca1dlYkxpbmtcSW5kZXguY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/kWebLink/_Link.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3Nca1dlYkxpbmtcX0xpbmsuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/kWebLink/_MenyLink.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3Nca1dlYkxpbmtcX01lbnlMaW5rLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/kWebListe/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3Nca1dlYkxpc3RlXEluZGV4LmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/kWebListe/_FinnBilde.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3Nca1dlYkxpc3RlXF9GaW5uQmlsZGUuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/kWebListe/_Liste.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3Nca1dlYkxpc3RlXF9MaXN0ZS5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/kWebListe/_ListeInnhold.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3Nca1dlYkxpc3RlXF9MaXN0ZUlubmhvbGQuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/kWebMenighetsblad/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3Nca1dlYk1lbmlnaGV0c2JsYWRcSW5kZXguY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/kWebMenighetsblad/_Menighetsblad.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3Nca1dlYk1lbmlnaGV0c2JsYWRcX01lbmlnaGV0c2JsYWQuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/kWebMenighetsblad/_PDFLastOpp.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3Nca1dlYk1lbmlnaGV0c2JsYWRcX1BERkxhc3RPcHAuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/kWebMeny/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3Nca1dlYk1lbnlcSW5kZXguY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/kWebMeny/_Meny.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3Nca1dlYk1lbnlcX01lbnkuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/kWebMeny/_MenyNy.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3Nca1dlYk1lbnlcX01lbnlOeS5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/kWebMeny/_SubMenyNy.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3Nca1dlYk1lbnlcX1N1Yk1lbnlOeS5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/kWebMeny/_VenstreMenyNy.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3Nca1dlYk1lbnlcX1ZlbnN0cmVNZW55TnkuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/kWebNyhet/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3Nca1dlYk55aGV0XEluZGV4LmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/kWebNyhet/_Nyhet.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3Nca1dlYk55aGV0XF9OeWhldC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/kWebSpalte/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3Nca1dlYlNwYWx0ZVxJbmRleC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/kWebSpalte/_Spalte.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3Nca1dlYlNwYWx0ZVxfU3BhbHRlLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/kWebSys/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3Nca1dlYlN5c1xJbmRleC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/kWebSys/_kWebSystem.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3Nca1dlYlN5c1xfa1dlYlN5c3RlbS5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/kWebVideo/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3Nca1dlYlZpZGVvXEluZGV4LmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/kWebVideo/_Video.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3Nca1dlYlZpZGVvXF9WaWRlby5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/kWebVideo/_VideoLastOpp.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3Nca1dlYlZpZGVvXF9WaWRlb0xhc3RPcHAuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Mail/SendEpost.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTWFpbFxTZW5kRXBvc3QuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Mail/_Mail.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTWFpbFxfTWFpbC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Mail/_MailList.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTWFpbFxfTWFpbExpc3QuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Medlemsregister/Medlemsregister.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTWVkbGVtc3JlZ2lzdGVyXE1lZGxlbXNyZWdpc3Rlci5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/MinSide/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTWluU2lkZVxJbmRleC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/MinSide/Rapport/RapportDef.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTWluU2lkZVxSYXBwb3J0XFJhcHBvcnREZWYuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/MinSide/Rapport/Rapportliste.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTWluU2lkZVxSYXBwb3J0XFJhcHBvcnRsaXN0ZS5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/MinSide/Rapport/SkrivBrev.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTWluU2lkZVxSYXBwb3J0XFNrcml2QnJldi5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/MinSide/Rapport/SQLMaler.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTWluU2lkZVxSYXBwb3J0XFNRTE1hbGVyLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/MinSide/Rapport/_LastOppFil.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTWluU2lkZVxSYXBwb3J0XF9MYXN0T3BwRmlsLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/MinSide/Rapport/_pdfViewer.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTWluU2lkZVxSYXBwb3J0XF9wZGZWaWV3ZXIuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/MinSide/Rapport/_RapportDefInfo.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTWluU2lkZVxSYXBwb3J0XF9SYXBwb3J0RGVmSW5mby5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/MinSide/Rapport/_RapportFormler.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTWluU2lkZVxSYXBwb3J0XF9SYXBwb3J0Rm9ybWxlci5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/MinSide/Rapport/_RapportSporsmaal.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTWluU2lkZVxSYXBwb3J0XF9SYXBwb3J0U3BvcnNtYWFsLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/MinSide/Rapport/_RapportSQL.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTWluU2lkZVxSYXBwb3J0XF9SYXBwb3J0U1FMLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/MinSide/Rapport/_SQLMal.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTWluU2lkZVxSYXBwb3J0XF9TUUxNYWwuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/MinSide/Rapport/_Telerik.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTWluU2lkZVxSYXBwb3J0XF9UZWxlcmlrLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/MinSide/Registrer.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTWluU2lkZVxSZWdpc3RyZXIuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Rapport/MasseBrev.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUmFwcG9ydFxNYXNzZUJyZXYuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Rapport/RapportDef.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUmFwcG9ydFxSYXBwb3J0RGVmLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Rapport/Rapportliste.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUmFwcG9ydFxSYXBwb3J0bGlzdGUuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Rapport/SkrivBrev.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUmFwcG9ydFxTa3JpdkJyZXYuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Rapport/SQLMaler.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUmFwcG9ydFxTUUxNYWxlci5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Rapport/_LastOppFil.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUmFwcG9ydFxfTGFzdE9wcEZpbC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Rapport/_LastOppPreview.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUmFwcG9ydFxfTGFzdE9wcFByZXZpZXcuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Rapport/_pdfViewer.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUmFwcG9ydFxfcGRmVmlld2VyLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Rapport/_RapportDefInfo.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUmFwcG9ydFxfUmFwcG9ydERlZkluZm8uY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Rapport/_RapportFormler.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUmFwcG9ydFxfUmFwcG9ydEZvcm1sZXIuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Rapport/_RapportSporsmaal.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUmFwcG9ydFxfUmFwcG9ydFNwb3JzbWFhbC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Rapport/_RapportSQL.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUmFwcG9ydFxfUmFwcG9ydFNRTC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Rapport/_SQLMal.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUmFwcG9ydFxfU1FMTWFsLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Rapport/_Telerik.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUmFwcG9ydFxfVGVsZXJpay5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Rutiner/Festere.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUnV0aW5lclxGZXN0ZXJlLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Rutiner/HelpDesk.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUnV0aW5lclxIZWxwRGVzay5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Rutiner/_AdresseHistorikk.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUnV0aW5lclxfQWRyZXNzZUhpc3Rvcmlray5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Rutiner/_FesterInfo.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUnV0aW5lclxfRmVzdGVySW5mby5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Shared/EditorTemplates/Boolean.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXEVkaXRvclRlbXBsYXRlc1xCb29sZWFuLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Shared/EditorTemplates/Country.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXEVkaXRvclRlbXBsYXRlc1xDb3VudHJ5LmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Shared/EditorTemplates/Currency.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXEVkaXRvclRlbXBsYXRlc1xDdXJyZW5jeS5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Shared/EditorTemplates/Date.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXEVkaXRvclRlbXBsYXRlc1xEYXRlLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Shared/EditorTemplates/DateTime.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXEVkaXRvclRlbXBsYXRlc1xEYXRlVGltZS5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Shared/EditorTemplates/Email.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXEVkaXRvclRlbXBsYXRlc1xFbWFpbC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Shared/EditorTemplates/EmailAddress.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXEVkaXRvclRlbXBsYXRlc1xFbWFpbEFkZHJlc3MuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Shared/EditorTemplates/GridForeignKey.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXEVkaXRvclRlbXBsYXRlc1xHcmlkRm9yZWlnbktleS5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Shared/EditorTemplates/Integer.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXEVkaXRvclRlbXBsYXRlc1xJbnRlZ2VyLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Shared/EditorTemplates/Number.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXEVkaXRvclRlbXBsYXRlc1xOdW1iZXIuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Shared/EditorTemplates/Password.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXEVkaXRvclRlbXBsYXRlc1xQYXNzd29yZC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Shared/EditorTemplates/String.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXEVkaXRvclRlbXBsYXRlc1xTdHJpbmcuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Shared/EditorTemplates/Time.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXEVkaXRvclRlbXBsYXRlc1xUaW1lLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Shared/EditorTemplates/Url.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXEVkaXRvclRlbXBsYXRlc1xVcmwuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Shared/Error.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXEVycm9yLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Shared/_CookieConsentPartial.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXF9Db29raWVDb25zZW50UGFydGlhbC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Shared/_Layout.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXF9MYXlvdXQuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Shared/_Login.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXF9Mb2dpbi5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Shared/_LoginPartial.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXF9Mb2dpblBhcnRpYWwuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Shared/_ValidationScriptsPartial.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXF9WYWxpZGF0aW9uU2NyaXB0c1BhcnRpYWwuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Sokn/Sokn.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU29rblxTb2tuLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Statistikk/StatistikkKA.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU3RhdGlzdGlra1xTdGF0aXN0aWtrS0EuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Stell/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU3RlbGxcSW5kZXguY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Stell/_OkonomiEndre.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU3RlbGxcX09rb25vbWlFbmRyZS5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Stell/_OkonomiNy.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU3RlbGxcX09rb25vbWlOeS5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Stell/_Renter.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU3RlbGxcX1JlbnRlci5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Stell/_Stell.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU3RlbGxcX1N0ZWxsLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Stell/_StellFakturering.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU3RlbGxcX1N0ZWxsRmFrdHVyZXJpbmcuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Stell/_StellGraver.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU3RlbGxcX1N0ZWxsR3JhdmVyLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Stell/_StellTjeneste.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU3RlbGxcX1N0ZWxsVGplbmVzdGUuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Stell/_TilbudStyrking.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU3RlbGxcX1RpbGJ1ZFN0eXJraW5nLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Stell/_TrekkFond.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU3RlbGxcX1RyZWtrRm9uZC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Support/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU3VwcG9ydFxJbmRleC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Vielse/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcVmllbHNlXEluZGV4LmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Vielse/VielseListe.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcVmllbHNlXFZpZWxzZUxpc3RlLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Vielse/VielseRediger.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcVmllbHNlXFZpZWxzZVJlZGlnZXIuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Vielse/_NyVielse.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcVmllbHNlXF9OeVZpZWxzZS5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Vielse/_Vielse.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcVmllbHNlXF9WaWVsc2UuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Vielse/_VielseEkirkebok.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcVmllbHNlXF9WaWVsc2VFa2lya2Vib2suY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Vielse/_VielseImport.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcVmllbHNlXF9WaWVsc2VJbXBvcnQuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/Vielse/_VielseNy.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcVmllbHNlXF9WaWVsc2VOeS5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/_ViewImports.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcX1ZpZXdJbXBvcnRzLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/KipWeb5/Views/_ViewStart.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcX1ZpZXdTdGFydC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 

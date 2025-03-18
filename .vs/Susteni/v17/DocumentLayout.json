@@ -1,0 +1,237 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "C:\\Visual Studio\\Susteni Web\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{253612B8-493C-47D7-BDBE-87A4C4D081EE}|Susteni.csproj|c:\\visual studio\\susteni web\\views\\helpdesk\\_helpdeskinfo.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{253612B8-493C-47D7-BDBE-87A4C4D081EE}|Susteni.csproj|solutionrelative:views\\helpdesk\\_helpdeskinfo.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{253612B8-493C-47D7-BDBE-87A4C4D081EE}|Susteni.csproj|c:\\visual studio\\susteni web\\controllers\\reportcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{253612B8-493C-47D7-BDBE-87A4C4D081EE}|Susteni.csproj|solutionrelative:controllers\\reportcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{253612B8-493C-47D7-BDBE-87A4C4D081EE}|Susteni.csproj|c:\\visual studio\\susteni web\\controllers\\helpdeskcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{253612B8-493C-47D7-BDBE-87A4C4D081EE}|Susteni.csproj|solutionrelative:controllers\\helpdeskcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{253612B8-493C-47D7-BDBE-87A4C4D081EE}|Susteni.csproj|c:\\visual studio\\susteni web\\controllers\\functionscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{253612B8-493C-47D7-BDBE-87A4C4D081EE}|Susteni.csproj|solutionrelative:controllers\\functionscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{253612B8-493C-47D7-BDBE-87A4C4D081EE}|Susteni.csproj|c:\\visual studio\\susteni web\\controllers\\rutinercontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{253612B8-493C-47D7-BDBE-87A4C4D081EE}|Susteni.csproj|solutionrelative:controllers\\rutinercontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{253612B8-493C-47D7-BDBE-87A4C4D081EE}|Susteni.csproj|c:\\visual studio\\susteni web\\models\\functions\\functionsitem.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{253612B8-493C-47D7-BDBE-87A4C4D081EE}|Susteni.csproj|solutionrelative:models\\functions\\functionsitem.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{253612B8-493C-47D7-BDBE-87A4C4D081EE}|Susteni.csproj|c:\\visual studio\\susteni web\\controllers\\accountcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{253612B8-493C-47D7-BDBE-87A4C4D081EE}|Susteni.csproj|solutionrelative:controllers\\accountcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{253612B8-493C-47D7-BDBE-87A4C4D081EE}|Susteni.csproj|c:\\visual studio\\susteni web\\views\\helpdesk\\helpdesk.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{253612B8-493C-47D7-BDBE-87A4C4D081EE}|Susteni.csproj|solutionrelative:views\\helpdesk\\helpdesk.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{253612B8-493C-47D7-BDBE-87A4C4D081EE}|Susteni.csproj|c:\\visual studio\\susteni web\\views\\report\\reportdef.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{253612B8-493C-47D7-BDBE-87A4C4D081EE}|Susteni.csproj|solutionrelative:views\\report\\reportdef.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{253612B8-493C-47D7-BDBE-87A4C4D081EE}|Susteni.csproj|c:\\visual studio\\susteni web\\views\\ship\\ships.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{253612B8-493C-47D7-BDBE-87A4C4D081EE}|Susteni.csproj|solutionrelative:views\\ship\\ships.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{253612B8-493C-47D7-BDBE-87A4C4D081EE}|Susteni.csproj|c:\\visual studio\\susteni web\\views\\ship\\_generator.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{253612B8-493C-47D7-BDBE-87A4C4D081EE}|Susteni.csproj|solutionrelative:views\\ship\\_generator.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{253612B8-493C-47D7-BDBE-87A4C4D081EE}|Susteni.csproj|c:\\visual studio\\susteni web\\views\\ship\\powerproduction.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{253612B8-493C-47D7-BDBE-87A4C4D081EE}|Susteni.csproj|solutionrelative:views\\ship\\powerproduction.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{253612B8-493C-47D7-BDBE-87A4C4D081EE}|Susteni.csproj|c:\\visual studio\\susteni web\\controllers\\shipcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{253612B8-493C-47D7-BDBE-87A4C4D081EE}|Susteni.csproj|solutionrelative:controllers\\shipcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 143,
+          "SelectedChildIndex": 0,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "ReportController.cs",
+              "DocumentMoniker": "C:\\Visual Studio\\Susteni Web\\Controllers\\ReportController.cs",
+              "RelativeDocumentMoniker": "Controllers\\ReportController.cs",
+              "ToolTip": "C:\\Visual Studio\\Susteni Web\\Controllers\\ReportController.cs",
+              "RelativeToolTip": "Controllers\\ReportController.cs",
+              "ViewState": "AgIAAAEAAAAAAAAAAAAAADABAAA3AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-03-12T11:36:47.233Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 8,
+              "Title": "ReportDef.cshtml",
+              "DocumentMoniker": "C:\\Visual Studio\\Susteni Web\\Views\\Report\\ReportDef.cshtml",
+              "RelativeDocumentMoniker": "Views\\Report\\ReportDef.cshtml",
+              "ToolTip": "C:\\Visual Studio\\Susteni Web\\Views\\Report\\ReportDef.cshtml",
+              "RelativeToolTip": "Views\\Report\\ReportDef.cshtml",
+              "ViewState": "AgIAAG4AAAAAAAAAAADwv44AAABFAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-03-12T11:32:39.944Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 11,
+              "Title": "PowerProduction.cshtml",
+              "DocumentMoniker": "C:\\Visual Studio\\Susteni Web\\Views\\Ship\\PowerProduction.cshtml",
+              "RelativeDocumentMoniker": "Views\\Ship\\PowerProduction.cshtml",
+              "ToolTip": "C:\\Visual Studio\\Susteni Web\\Views\\Ship\\PowerProduction.cshtml",
+              "RelativeToolTip": "Views\\Ship\\PowerProduction.cshtml",
+              "ViewState": "AgIAAJAAAAAAAAAAAAAAACMAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-03-12T11:28:24.191Z"
+            }
+          ]
+        },
+        {
+          "DockedWidth": 155,
+          "SelectedChildIndex": 2,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "HelpdeskController.cs",
+              "DocumentMoniker": "C:\\Visual Studio\\Susteni Web\\Controllers\\HelpdeskController.cs",
+              "RelativeDocumentMoniker": "Controllers\\HelpdeskController.cs",
+              "ToolTip": "C:\\Visual Studio\\Susteni Web\\Controllers\\HelpdeskController.cs",
+              "RelativeToolTip": "Controllers\\HelpdeskController.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAADgBAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-03-12T12:48:58.027Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "RutinerController.cs",
+              "DocumentMoniker": "C:\\Visual Studio\\Susteni Web\\Controllers\\RutinerController.cs",
+              "RelativeDocumentMoniker": "Controllers\\RutinerController.cs",
+              "ToolTip": "C:\\Visual Studio\\Susteni Web\\Controllers\\RutinerController.cs",
+              "RelativeToolTip": "Controllers\\RutinerController.cs",
+              "ViewState": "AgIAAA8AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-03-12T12:20:13.816Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "_HelpDeskInfo.cshtml",
+              "DocumentMoniker": "C:\\Visual Studio\\Susteni Web\\Views\\Helpdesk\\_HelpDeskInfo.cshtml",
+              "RelativeDocumentMoniker": "Views\\Helpdesk\\_HelpDeskInfo.cshtml",
+              "ToolTip": "C:\\Visual Studio\\Susteni Web\\Views\\Helpdesk\\_HelpDeskInfo.cshtml",
+              "RelativeToolTip": "Views\\Helpdesk\\_HelpDeskInfo.cshtml",
+              "ViewState": "AgIAAKsAAAAAAAAAAAAowN8AAABtAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-03-12T12:09:58.252Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "FunctionsItem.cs",
+              "DocumentMoniker": "C:\\Visual Studio\\Susteni Web\\Models\\Functions\\FunctionsItem.cs",
+              "RelativeDocumentMoniker": "Models\\Functions\\FunctionsItem.cs",
+              "ToolTip": "C:\\Visual Studio\\Susteni Web\\Models\\Functions\\FunctionsItem.cs",
+              "RelativeToolTip": "Models\\Functions\\FunctionsItem.cs",
+              "ViewState": "AgIAACwBAAAAAAAAAAApwD8BAAAuAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-03-12T11:37:09.637Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 9,
+              "Title": "Ships.cshtml",
+              "DocumentMoniker": "C:\\Visual Studio\\Susteni Web\\Views\\Ship\\Ships.cshtml",
+              "RelativeDocumentMoniker": "Views\\Ship\\Ships.cshtml",
+              "ToolTip": "C:\\Visual Studio\\Susteni Web\\Views\\Ship\\Ships.cshtml",
+              "RelativeToolTip": "Views\\Ship\\Ships.cshtml",
+              "ViewState": "AgIAAFgBAAAAAAAAAAAmwGIBAAAwAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-03-12T11:27:23.371Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "FunctionsController.cs",
+              "DocumentMoniker": "C:\\Visual Studio\\Susteni Web\\Controllers\\FunctionsController.cs",
+              "RelativeDocumentMoniker": "Controllers\\FunctionsController.cs",
+              "ToolTip": "C:\\Visual Studio\\Susteni Web\\Controllers\\FunctionsController.cs",
+              "RelativeToolTip": "Controllers\\FunctionsController.cs",
+              "ViewState": "AgIAAEMDAAAAAAAAAAAnwFYDAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-03-12T11:31:24.21Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
+              "Title": "HelpDesk.cshtml",
+              "DocumentMoniker": "C:\\Visual Studio\\Susteni Web\\Views\\Helpdesk\\HelpDesk.cshtml",
+              "RelativeDocumentMoniker": "Views\\Helpdesk\\HelpDesk.cshtml",
+              "ToolTip": "C:\\Visual Studio\\Susteni Web\\Views\\Helpdesk\\HelpDesk.cshtml",
+              "RelativeToolTip": "Views\\Helpdesk\\HelpDesk.cshtml",
+              "ViewState": "AgIAAC8BAAAAAAAAAAAAAFEBAAAkAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-03-12T11:56:48.112Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "AccountController.cs",
+              "DocumentMoniker": "C:\\Visual Studio\\Susteni Web\\Controllers\\AccountController.cs",
+              "RelativeDocumentMoniker": "Controllers\\AccountController.cs",
+              "ToolTip": "C:\\Visual Studio\\Susteni Web\\Controllers\\AccountController.cs",
+              "RelativeToolTip": "Controllers\\AccountController.cs",
+              "ViewState": "AgIAABoAAAAAAAAAAAAQwAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-03-12T12:20:11.27Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 10,
+              "Title": "_Generator.cshtml",
+              "DocumentMoniker": "C:\\Visual Studio\\Susteni Web\\Views\\Ship\\_Generator.cshtml",
+              "RelativeDocumentMoniker": "Views\\Ship\\_Generator.cshtml",
+              "ToolTip": "C:\\Visual Studio\\Susteni Web\\Views\\Ship\\_Generator.cshtml",
+              "RelativeToolTip": "Views\\Ship\\_Generator.cshtml",
+              "ViewState": "AgIAAO4AAAAAAAAAAAD4vw8BAABvAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-03-12T11:30:07.752Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 12,
+              "Title": "ShipController.cs",
+              "DocumentMoniker": "C:\\Visual Studio\\Susteni Web\\Controllers\\ShipController.cs",
+              "RelativeDocumentMoniker": "Controllers\\ShipController.cs",
+              "ToolTip": "C:\\Visual Studio\\Susteni Web\\Controllers\\ShipController.cs",
+              "RelativeToolTip": "Controllers\\ShipController.cs",
+              "ViewState": "AgIAAI0BAAAAAAAAAAAvwKwBAAAqAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-03-12T11:29:38.388Z"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

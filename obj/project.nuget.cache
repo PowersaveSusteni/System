@@ -1,0 +1,357 @@
+{
+  "version": 2,
+  "dgSpecHash": "YRwTeHHP/Z0=",
+  "success": false,
+  "projectFilePath": "C:\\Users\\ItamarAugustoSilvaRi\\Desktop\\PowerSave\\Susteni.csproj",
+  "expectedPackageFiles": [],
+  "logs": [
+    {
+      "code": "NU1301",
+      "level": "Error",
+      "message": "The local source 'C:\\Program Files (x86)\\Progress\\Telerik UI for ASP.NET Core R2 2021\\wrappers\\aspnetcore\\Binaries\\AspNet.Core' doesn't exist.",
+      "libraryId": "Azure.Identity"
+    },
+    {
+      "code": "NU1301",
+      "level": "Error",
+      "message": "The local source 'C:\\Program Files (x86)\\Progress\\Telerik UI for ASP.NET Core R2 2021\\' doesn't exist.",
+      "libraryId": "Azure.Identity"
+    },
+    {
+      "code": "NU1301",
+      "level": "Error",
+      "message": "The local source 'C:\\Program Files (x86)\\Progress\\Telerik UI for ASP.NET Core R2 2021\\' doesn't exist.",
+      "libraryId": "Grpc.AspNetCore"
+    },
+    {
+      "code": "NU1301",
+      "level": "Error",
+      "message": "The local source 'C:\\Program Files (x86)\\Progress\\Telerik UI for ASP.NET Core R2 2021\\wrappers\\aspnetcore\\Binaries\\AspNet.Core' doesn't exist.",
+      "libraryId": "Grpc.AspNetCore"
+    },
+    {
+      "code": "NU1301",
+      "level": "Error",
+      "message": "The local source 'C:\\Program Files (x86)\\Progress\\Telerik UI for ASP.NET Core R2 2021\\' doesn't exist.",
+      "libraryId": "Ical.Net"
+    },
+    {
+      "code": "NU1301",
+      "level": "Error",
+      "message": "The local source 'C:\\Program Files (x86)\\Progress\\Telerik UI for ASP.NET Core R2 2021\\wrappers\\aspnetcore\\Binaries\\AspNet.Core' doesn't exist.",
+      "libraryId": "Ical.Net"
+    },
+    {
+      "code": "NU1301",
+      "level": "Error",
+      "message": "The local source 'C:\\Program Files (x86)\\Progress\\Telerik UI for ASP.NET Core R2 2021\\' doesn't exist.",
+      "libraryId": "Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation"
+    },
+    {
+      "code": "NU1301",
+      "level": "Error",
+      "message": "The local source 'C:\\Program Files (x86)\\Progress\\Telerik UI for ASP.NET Core R2 2021\\wrappers\\aspnetcore\\Binaries\\AspNet.Core' doesn't exist.",
+      "libraryId": "Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation"
+    },
+    {
+      "code": "NU1301",
+      "level": "Error",
+      "message": "The local source 'C:\\Program Files (x86)\\Progress\\Telerik UI for ASP.NET Core R2 2021\\' doesn't exist.",
+      "libraryId": "Microsoft.AspNetCore.Session"
+    },
+    {
+      "code": "NU1301",
+      "level": "Error",
+      "message": "The local source 'C:\\Program Files (x86)\\Progress\\Telerik UI for ASP.NET Core R2 2021\\wrappers\\aspnetcore\\Binaries\\AspNet.Core' doesn't exist.",
+      "libraryId": "Microsoft.AspNetCore.Session"
+    },
+    {
+      "code": "NU1301",
+      "level": "Error",
+      "message": "The local source 'C:\\Program Files (x86)\\Progress\\Telerik UI for ASP.NET Core R2 2021\\' doesn't exist.",
+      "libraryId": "Microsoft.CodeAnalysis"
+    },
+    {
+      "code": "NU1301",
+      "level": "Error",
+      "message": "The local source 'C:\\Program Files (x86)\\Progress\\Telerik UI for ASP.NET Core R2 2021\\wrappers\\aspnetcore\\Binaries\\AspNet.Core' doesn't exist.",
+      "libraryId": "Microsoft.CodeAnalysis"
+    },
+    {
+      "code": "NU1301",
+      "level": "Error",
+      "message": "The local source 'C:\\Program Files (x86)\\Progress\\Telerik UI for ASP.NET Core R2 2021\\' doesn't exist.",
+      "libraryId": "Microsoft.Data.Sqlite"
+    },
+    {
+      "code": "NU1301",
+      "level": "Error",
+      "message": "The local source 'C:\\Program Files (x86)\\Progress\\Telerik UI for ASP.NET Core R2 2021\\wrappers\\aspnetcore\\Binaries\\AspNet.Core' doesn't exist.",
+      "libraryId": "Microsoft.Data.Sqlite"
+    },
+    {
+      "code": "NU1301",
+      "level": "Error",
+      "message": "The local source 'C:\\Program Files (x86)\\Progress\\Telerik UI for ASP.NET Core R2 2021\\' doesn't exist.",
+      "libraryId": "Microsoft.EntityFrameworkCore"
+    },
+    {
+      "code": "NU1301",
+      "level": "Error",
+      "message": "The local source 'C:\\Program Files (x86)\\Progress\\Telerik UI for ASP.NET Core R2 2021\\wrappers\\aspnetcore\\Binaries\\AspNet.Core' doesn't exist.",
+      "libraryId": "Microsoft.EntityFrameworkCore"
+    },
+    {
+      "code": "NU1301",
+      "level": "Error",
+      "message": "The local source 'C:\\Program Files (x86)\\Progress\\Telerik UI for ASP.NET Core R2 2021\\' doesn't exist.",
+      "libraryId": "Microsoft.EntityFrameworkCore.InMemory"
+    },
+    {
+      "code": "NU1301",
+      "level": "Error",
+      "message": "The local source 'C:\\Program Files (x86)\\Progress\\Telerik UI for ASP.NET Core R2 2021\\' doesn't exist.",
+      "libraryId": "Microsoft.Identity.Web"
+    },
+    {
+      "code": "NU1301",
+      "level": "Error",
+      "message": "The local source 'C:\\Program Files (x86)\\Progress\\Telerik UI for ASP.NET Core R2 2021\\' doesn't exist.",
+      "libraryId": "Microsoft.Identity.Web.MicrosoftGraph"
+    },
+    {
+      "code": "NU1301",
+      "level": "Error",
+      "message": "The local source 'C:\\Program Files (x86)\\Progress\\Telerik UI for ASP.NET Core R2 2021\\wrappers\\aspnetcore\\Binaries\\AspNet.Core' doesn't exist.",
+      "libraryId": "Microsoft.EntityFrameworkCore.InMemory"
+    },
+    {
+      "code": "NU1301",
+      "level": "Error",
+      "message": "The local source 'C:\\Program Files (x86)\\Progress\\Telerik UI for ASP.NET Core R2 2021\\wrappers\\aspnetcore\\Binaries\\AspNet.Core' doesn't exist.",
+      "libraryId": "Microsoft.Identity.Web"
+    },
+    {
+      "code": "NU1301",
+      "level": "Error",
+      "message": "The local source 'C:\\Program Files (x86)\\Progress\\Telerik UI for ASP.NET Core R2 2021\\wrappers\\aspnetcore\\Binaries\\AspNet.Core' doesn't exist.",
+      "libraryId": "Microsoft.Identity.Web.MicrosoftGraph"
+    },
+    {
+      "code": "NU1301",
+      "level": "Error",
+      "message": "The local source 'C:\\Program Files (x86)\\Progress\\Telerik UI for ASP.NET Core R2 2021\\' doesn't exist.",
+      "libraryId": "Newtonsoft.Json"
+    },
+    {
+      "code": "NU1301",
+      "level": "Error",
+      "message": "The local source 'C:\\Program Files (x86)\\Progress\\Telerik UI for ASP.NET Core R2 2021\\' doesn't exist.",
+      "libraryId": "System.Drawing.Common"
+    },
+    {
+      "code": "NU1301",
+      "level": "Error",
+      "message": "The local source 'C:\\Program Files (x86)\\Progress\\Telerik UI for ASP.NET Core R2 2021\\' doesn't exist.",
+      "libraryId": "Node.js"
+    },
+    {
+      "code": "NU1301",
+      "level": "Error",
+      "message": "The local source 'C:\\Program Files (x86)\\Progress\\Telerik UI for ASP.NET Core R2 2021\\' doesn't exist.",
+      "libraryId": "System.ServiceModel.Duplex"
+    },
+    {
+      "code": "NU1301",
+      "level": "Error",
+      "message": "The local source 'C:\\Program Files (x86)\\Progress\\Telerik UI for ASP.NET Core R2 2021\\wrappers\\aspnetcore\\Binaries\\AspNet.Core' doesn't exist.",
+      "libraryId": "Newtonsoft.Json"
+    },
+    {
+      "code": "NU1301",
+      "level": "Error",
+      "message": "The local source 'C:\\Program Files (x86)\\Progress\\Telerik UI for ASP.NET Core R2 2021\\wrappers\\aspnetcore\\Binaries\\AspNet.Core' doesn't exist.",
+      "libraryId": "System.Drawing.Common"
+    },
+    {
+      "code": "NU1301",
+      "level": "Error",
+      "message": "The local source 'C:\\Program Files (x86)\\Progress\\Telerik UI for ASP.NET Core R2 2021\\wrappers\\aspnetcore\\Binaries\\AspNet.Core' doesn't exist.",
+      "libraryId": "Node.js"
+    },
+    {
+      "code": "NU1301",
+      "level": "Error",
+      "message": "The local source 'C:\\Program Files (x86)\\Progress\\Telerik UI for ASP.NET Core R2 2021\\wrappers\\aspnetcore\\Binaries\\AspNet.Core' doesn't exist.",
+      "libraryId": "System.ServiceModel.Duplex"
+    },
+    {
+      "code": "NU1301",
+      "level": "Error",
+      "message": "The local source 'C:\\Program Files (x86)\\Progress\\Telerik UI for ASP.NET Core R2 2021\\' doesn't exist.",
+      "libraryId": "System.ServiceModel.Federation"
+    },
+    {
+      "code": "NU1301",
+      "level": "Error",
+      "message": "The local source 'C:\\Program Files (x86)\\Progress\\Telerik UI for ASP.NET Core R2 2021\\' doesn't exist.",
+      "libraryId": "System.ServiceModel.Http"
+    },
+    {
+      "code": "NU1301",
+      "level": "Error",
+      "message": "The local source 'C:\\Program Files (x86)\\Progress\\Telerik UI for ASP.NET Core R2 2021\\wrappers\\aspnetcore\\Binaries\\AspNet.Core' doesn't exist.",
+      "libraryId": "System.ServiceModel.Federation"
+    },
+    {
+      "code": "NU1301",
+      "level": "Error",
+      "message": "The local source 'C:\\Program Files (x86)\\Progress\\Telerik UI for ASP.NET Core R2 2021\\wrappers\\aspnetcore\\Binaries\\AspNet.Core' doesn't exist.",
+      "libraryId": "System.ServiceModel.Http"
+    },
+    {
+      "code": "NU1301",
+      "level": "Error",
+      "message": "The local source 'C:\\Program Files (x86)\\Progress\\Telerik UI for ASP.NET Core R2 2021\\' doesn't exist.",
+      "libraryId": "System.ServiceModel.Security"
+    },
+    {
+      "code": "NU1301",
+      "level": "Error",
+      "message": "The local source 'C:\\Program Files (x86)\\Progress\\Telerik UI for ASP.NET Core R2 2021\\' doesn't exist.",
+      "libraryId": "System.ServiceModel.NetTcp"
+    },
+    {
+      "code": "NU1301",
+      "level": "Error",
+      "message": "The local source 'C:\\Program Files (x86)\\Progress\\Telerik UI for ASP.NET Core R2 2021\\wrappers\\aspnetcore\\Binaries\\AspNet.Core' doesn't exist.",
+      "libraryId": "System.ServiceModel.Security"
+    },
+    {
+      "code": "NU1301",
+      "level": "Error",
+      "message": "The local source 'C:\\Program Files (x86)\\Progress\\Telerik UI for ASP.NET Core R2 2021\\' doesn't exist.",
+      "libraryId": "Telerik.Core.Export"
+    },
+    {
+      "code": "NU1301",
+      "level": "Error",
+      "message": "The local source 'C:\\Program Files (x86)\\Progress\\Telerik UI for ASP.NET Core R2 2021\\wrappers\\aspnetcore\\Binaries\\AspNet.Core' doesn't exist.",
+      "libraryId": "System.ServiceModel.NetTcp"
+    },
+    {
+      "code": "NU1301",
+      "level": "Error",
+      "message": "The local source 'C:\\Program Files (x86)\\Progress\\Telerik UI for ASP.NET Core R2 2021\\' doesn't exist.",
+      "libraryId": "Telerik.Documents.Core"
+    },
+    {
+      "code": "NU1301",
+      "level": "Error",
+      "message": "The local source 'C:\\Program Files (x86)\\Progress\\Telerik UI for ASP.NET Core R2 2021\\wrappers\\aspnetcore\\Binaries\\AspNet.Core' doesn't exist.",
+      "libraryId": "Telerik.Core.Export"
+    },
+    {
+      "code": "NU1301",
+      "level": "Error",
+      "message": "The local source 'C:\\Program Files (x86)\\Progress\\Telerik UI for ASP.NET Core R2 2021\\' doesn't exist.",
+      "libraryId": "Telerik.Documents.DrawingML"
+    },
+    {
+      "code": "NU1301",
+      "level": "Error",
+      "message": "The local source 'C:\\Program Files (x86)\\Progress\\Telerik UI for ASP.NET Core R2 2021\\wrappers\\aspnetcore\\Binaries\\AspNet.Core' doesn't exist.",
+      "libraryId": "Telerik.Documents.Core"
+    },
+    {
+      "code": "NU1301",
+      "level": "Error",
+      "message": "The local source 'C:\\Program Files (x86)\\Progress\\Telerik UI for ASP.NET Core R2 2021\\wrappers\\aspnetcore\\Binaries\\AspNet.Core' doesn't exist.",
+      "libraryId": "Telerik.Documents.DrawingML"
+    },
+    {
+      "code": "NU1301",
+      "level": "Error",
+      "message": "The local source 'C:\\Program Files (x86)\\Progress\\Telerik UI for ASP.NET Core R2 2021\\' doesn't exist.",
+      "libraryId": "Telerik.Documents.Fixed"
+    },
+    {
+      "code": "NU1301",
+      "level": "Error",
+      "message": "The local source 'C:\\Program Files (x86)\\Progress\\Telerik UI for ASP.NET Core R2 2021\\' doesn't exist.",
+      "libraryId": "Telerik.Documents.Flow"
+    },
+    {
+      "code": "NU1301",
+      "level": "Error",
+      "message": "The local source 'C:\\Program Files (x86)\\Progress\\Telerik UI for ASP.NET Core R2 2021\\' doesn't exist.",
+      "libraryId": "Telerik.Documents.Flow.FormatProviders.Pdf"
+    },
+    {
+      "code": "NU1301",
+      "level": "Error",
+      "message": "The local source 'C:\\Program Files (x86)\\Progress\\Telerik UI for ASP.NET Core R2 2021\\wrappers\\aspnetcore\\Binaries\\AspNet.Core' doesn't exist.",
+      "libraryId": "Telerik.Documents.Fixed"
+    },
+    {
+      "code": "NU1301",
+      "level": "Error",
+      "message": "The local source 'C:\\Program Files (x86)\\Progress\\Telerik UI for ASP.NET Core R2 2021\\wrappers\\aspnetcore\\Binaries\\AspNet.Core' doesn't exist.",
+      "libraryId": "Telerik.Documents.Flow"
+    },
+    {
+      "code": "NU1301",
+      "level": "Error",
+      "message": "The local source 'C:\\Program Files (x86)\\Progress\\Telerik UI for ASP.NET Core R2 2021\\wrappers\\aspnetcore\\Binaries\\AspNet.Core' doesn't exist.",
+      "libraryId": "Telerik.Documents.Flow.FormatProviders.Pdf"
+    },
+    {
+      "code": "NU1301",
+      "level": "Error",
+      "message": "The local source 'C:\\Program Files (x86)\\Progress\\Telerik UI for ASP.NET Core R2 2021\\' doesn't exist.",
+      "libraryId": "Telerik.Documents.ImageUtils"
+    },
+    {
+      "code": "NU1301",
+      "level": "Error",
+      "message": "The local source 'C:\\Program Files (x86)\\Progress\\Telerik UI for ASP.NET Core R2 2021\\wrappers\\aspnetcore\\Binaries\\AspNet.Core' doesn't exist.",
+      "libraryId": "Telerik.Documents.ImageUtils"
+    },
+    {
+      "code": "NU1301",
+      "level": "Error",
+      "message": "The local source 'C:\\Program Files (x86)\\Progress\\Telerik UI for ASP.NET Core R2 2021\\' doesn't exist.",
+      "libraryId": "Telerik.Documents.SpreadsheetStreaming"
+    },
+    {
+      "code": "NU1301",
+      "level": "Error",
+      "message": "The local source 'C:\\Program Files (x86)\\Progress\\Telerik UI for ASP.NET Core R2 2021\\wrappers\\aspnetcore\\Binaries\\AspNet.Core' doesn't exist.",
+      "libraryId": "Telerik.Documents.SpreadsheetStreaming"
+    },
+    {
+      "code": "NU1301",
+      "level": "Error",
+      "message": "The local source 'C:\\Program Files (x86)\\Progress\\Telerik UI for ASP.NET Core R2 2021\\' doesn't exist.",
+      "libraryId": "Telerik.UI.for.AspNet.Core"
+    },
+    {
+      "code": "NU1301",
+      "level": "Error",
+      "message": "The local source 'C:\\Program Files (x86)\\Progress\\Telerik UI for ASP.NET Core R2 2021\\' doesn't exist.",
+      "libraryId": "TXTextControl.Web"
+    },
+    {
+      "code": "NU1301",
+      "level": "Error",
+      "message": "The local source 'C:\\Program Files (x86)\\Progress\\Telerik UI for ASP.NET Core R2 2021\\wrappers\\aspnetcore\\Binaries\\AspNet.Core' doesn't exist.",
+      "libraryId": "Telerik.UI.for.AspNet.Core"
+    },
+    {
+      "code": "NU1301",
+      "level": "Error",
+      "message": "The local source 'C:\\Program Files (x86)\\Progress\\Telerik UI for ASP.NET Core R2 2021\\wrappers\\aspnetcore\\Binaries\\AspNet.Core' doesn't exist.",
+      "libraryId": "TXTextControl.Web"
+    }
+  ]
+}

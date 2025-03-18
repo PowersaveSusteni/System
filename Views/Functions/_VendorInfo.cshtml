@@ -1,0 +1,37 @@
+﻿@using Microsoft.AspNetCore.Mvc.Localization
+
+@inject IViewLocalizer Localizer
+@model Susteni.Models.Funksjoner.FunctionsModel
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+
+
+<form id="vendorForm">
+    <div class="row">
+        <div class="col-6">
+            <button type="button" class="commandModernGreen" onclick="saveVendor()"><img src="@Url.Content("~/images/")lagre.svg" alt="Ja" width='24' height='24' />Save</button>
+            <button type="button" class="commandModernGreen" onclick="closeVendor()"><img src="@Url.Content("~/images/")lagre.svg" alt="Ja" width='24' height='24' />Close</button>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-12" style="margin-bottom: 0px; margin-top: 10px;">
+            <div class="panel with-nav-tabs panel-default" id="dataenter">
+                <div class="panel-body data" style="padding: 10px;">
+
+                    <div class="panel-body">
+
+                        <input type="hidden" asp-for="GeneratorVendor.GeneratorVendorGuid" class="form-control">
+                        <div class="row align-items-center" style="display: flex; flex-direction: row;">
+                            <label class="col-1 col-form-label">Vendor</label>
+                            <div class="col-md-11">
+                                <input asp-for="GeneratorVendor.Vendor" class="form-control k-textbox">
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</form>

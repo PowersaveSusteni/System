@@ -1,0 +1,67 @@
+﻿@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+
+@using Kendo.Mvc.UI
+@model Susteni.Models.Admin.AdminModel
+
+
+<script>
+    function nyttPassord() {
+        xGP = document.getElementById("gpw").value;
+        xPW1 = document.getElementById("pwd1").value;
+        xPW2 = document.getElementById("pwd2").value;
+
+        if (xGP == "") {
+            alert("Det nye angi ditt nåværende passord");
+        }
+        else if (xPW1 == "") {
+            alert("Du må angi et passord");
+            }
+        else if (xPW1 != xPW2) {
+            alert("Det nye passordet er ulikt skrevet");
+            }
+        else {
+            $.ajax({
+                url: '@Url.Action("ByttPassord", "AdminBruker")',
+                data: { gammeltPassord: xGP, passord: xPW1 },
+                type: "POST"
+                })
+            .done(function (result) {
+                if (result.Result == true) {
+                    alert("Passordet er byttet");
+                    $('#dialogPassord').data("kendoWindow").close();
+                }
+                else {
+                    alert(result.ErrorText);
+                    }
+                });
+
+            }
+        }
+</script>
+
+<form class="mb-0">
+    <div class="row align-items-center">
+        <div class="col-12" style="display: flex; flex-direction: row;">
+            <label class="col-5">Gammelt passord</label>
+            <input type="password" id="gpw" class="form-control k-textbox" style="width: 200px;" />
+        </div>
+    </div>
+
+    <div class="row align-items-center" style="margin-top: 10px;">
+        <div class="col-12" style="display: flex; flex-direction: row;">
+            <label class="col-5">Nytt passord</label>
+            <input type="password" id="pwd1" class="form-control k-textbox" style="width: 200px;" />
+        </div>
+    </div>
+
+    <div class="row align-items-center" style="margin-top: 10px;">
+        <div class="col-12" style="display: flex; flex-direction: row;">
+            <label class="col-5">Gjenta nytt passord</label>
+            <input type="password" id="pwd2" class="form-control k-textbox" style="width: 200px;" />
+        </div>
+    </div>
+
+    <button type="button" class="command" onclick="nyttPassord()" style="width: 150px; margin-top: 20px; margin-left: 150px;">Bytt passord</button>
+</form>

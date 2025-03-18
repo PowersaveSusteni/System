@@ -1,0 +1,142 @@
+﻿@using Microsoft.AspNetCore.Mvc.Localization
+
+@inject IViewLocalizer Localizer
+@model Susteni.Models.Ship.ShipModel
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+
+<style>
+
+    .k-fab-text {
+        display: none;
+    }
+
+
+    #editor table, th {
+        margin-left: 0px;
+        margin-top: 0px;
+    }
+
+</style>
+
+
+<div id="shipForm">
+
+    <input hidden asp-for="ShipGenerator.GeneratorGuid" class="form-control">
+
+    <div class="row" style="margin-top: 35px;">
+
+
+
+
+        <div class="col-6">
+            <h4 class ="unselectable">List of power production in different sailing mode</h4>
+        </div>
+
+@*         <div class="col-6 text-right">
+            <button class="commandModernGreen float-end" onclick="saveGrid()"><img src="@Url.Content("~/images/")lagre.svg" alt="Ja" width='24' height='24' />Update</button>
+        </div> *@
+
+        <div class="col-12">
+
+            <div style="position: relative">
+                @(Html.Kendo().Grid<Susteni.Models.ShipGeneratorModesItem>()
+                    .Name("generatorModeList")
+                    .Columns(columns =>
+                    {
+                        columns.Bound(q => q.GeneratorModesGuid).Visible(false);
+                        columns.Bound(q => q.OperationModeGuid).Visible(false);
+                        columns.Bound(q => q.GeneratorGuid).Visible(false);
+                        columns.Bound(q => q.Name).Width(200).Title(Localizer["Mode"].Value);
+                        columns.Bound(q => q.HoursPrYear).Title(Localizer["Hours pr/Year"].Value).HtmlAttributes(new { style = "text-align: right;" }).ClientFooterTemplate("#=sum#").ClientFooterTemplate("<div style='float: right'>#= kendo.format('{0:N0}', sum)#</div>");
+                        columns.Bound(q => q.kW).Title(Localizer["kWe"].Value).Visible(false);
+                        columns.Bound(q => q.HoursBefore).Title(Localizer["Hours Before Measures"].Value).HtmlAttributes(new { style = "text-align: right;" }).ClientFooterTemplate("#=sum#").ClientFooterTemplate("<div style='float: right'>#= kendo.format('{0:N0}', sum)#</div>");
+                        columns.Bound(q => q.PercentLoad).Title(Localizer["Load Before Measures %"].Value).HtmlAttributes(new { style = "text-align: right;" });
+                        columns.Bound(q => q.EffectBefore).Format("{0:n0}").Title(Localizer["Power Production Before Measures (kWh)"].Value).HtmlAttributes(new { style = "text-align: right;" }).ClientFooterTemplate("#=sum#").ClientFooterTemplate("<div style='float: right'>#= kendo.format('{0:N0}', sum)#</div>");
+                        //columns.Bound(q => q.FuelBefore).Format("{0:n0}").Title(Localizer["FC Before"].Value).HtmlAttributes(new { style = "text-align: right;" }).ClientFooterTemplate("#=sum#").ClientFooterTemplate("<div style='float: right'>#= kendo.format('{0:N0}', sum)#</div>");
+                        columns.Bound(q => q.HoursAfter).Title(Localizer["Hours After Measures"].Value).HtmlAttributes(new { style = "text-align: right;" }).ClientFooterTemplate("#=sum#").ClientFooterTemplate("<div style='float: right'>#= kendo.format('{0:N0}', sum)#</div>");
+                        columns.Bound(q => q.PercentSaving).Title(Localizer["Load After Measures %"].Value).HtmlAttributes(new { style = "text-align: right;" });
+                        columns.Bound(q => q.EffectAfter).Format("{0:n0}").Title(Localizer["Power Production After Measures (kWh)"].Value).HtmlAttributes(new { style = "text-align: right;" }).ClientFooterTemplate("#=sum#").ClientFooterTemplate("<div style='float: right'>#= kendo.format('{0:N0}', sum)#</div>");
+                        //columns.Bound(q => q.FuelAfter).Format("{0:n0}").Title(Localizer["FC After"].Value).HtmlAttributes(new { style = "text-align: right;" }).ClientFooterTemplate("#=sum#").ClientFooterTemplate("<div style='float: right'>#= kendo.format('{0:N0}', sum)#</div>");
+                        columns.Bound(q => q.Saving).Format("{0:n0}").Title(Localizer["Saving in kWh"].Value).HtmlAttributes(new { style = "text-align: right;" }).ClientFooterTemplate("#=sum#").ClientFooterTemplate("<div style='float: right'>#= kendo.format('{0:N0}', sum)#</div>");
+                        //columns.Bound(q => q.MaintenanceCost).Format("{0:n0}").Title(Localizer["Maintenance savings"].Value).HtmlAttributes(new { style = "text-align: right;" }).ClientFooterTemplate("#=sum#").ClientFooterTemplate("<div style='float: right'>#= kendo.format('{0:N0}', sum)#</div>");
+                    })
+                    .Height(300)
+                    //.Editable(editable => editable.Mode(GridEditMode.InCell))
+                    .Scrollable()
+                    .Selectable(s => s
+                        .Mode(GridSelectionMode.Multiple)
+                        .Type(GridSelectionType.Row))
+                    .Events(e => e.DataBound("onGeneratorListBound").SaveChanges("onGeneratorSaved").Change("onGeneratorModeChange"))
+                    .DataSource(dataSource => dataSource
+                        .Ajax()
+                        .Batch(true)
+                        .ServerOperation(false)
+                        .Model(m =>
+                        {
+                            m.Id(p => p.OperationModeGuid);
+                            m.Field(p => p.Name).Editable(false);
+                            m.Field(p => p.HoursPrYear).Editable(false);
+                            m.Field(p => p.kW).Editable(false);
+                            m.Field(p => p.EffectBefore).Editable(false);
+                            m.Field(p => p.EffectAfter).Editable(false);
+                            m.Field(p => p.Saving).Editable(false);
+                        })
+                        .Read(read => read.Action("GetShipGeneratorsModesList", "Ship").Data("filterGenerator"))
+                        .Update(update => update.Action("SaveShipGeneratorModesList", "Ship"))
+                        .Aggregates(agg => agg.Add(p => p.HoursPrYear).Sum())
+                        .Aggregates(agg => agg.Add(p => p.HoursBefore).Sum())
+                        .Aggregates(agg => agg.Add(p => p.EffectBefore).Sum())
+                        .Aggregates(agg => agg.Add(p => p.FuelBefore).Sum())
+                        .Aggregates(agg => agg.Add(p => p.HoursAfter).Sum())
+                        .Aggregates(agg => agg.Add(p => p.EffectAfter).Sum())
+                        .Aggregates(agg => agg.Add(p => p.FuelAfter).Sum())
+                        .Aggregates(agg => agg.Add(p => p.Saving).Sum())
+                        .Aggregates(agg => agg.Add(p => p.MaintenanceCost).Sum())
+                        )
+                    )
+
+                @(Html.Kendo().FloatingActionButton()
+                    .Name("generatorModeEdit")
+                    .ThemeColor(FloatingActionButtonThemeColor.Warning)
+                    .Size(FloatingActionButtonSize.Small)
+                    .PositionMode(FloatingActionButtonPositionMode.Absolute)
+                    .Align(FloatingActionButtonAlign.TopEnd)
+                    .AlignOffset(alignOffset => alignOffset.Horizontal(-10).Vertical(50))
+                    .Icon("pencilIcon")
+                    .Events(events => events.Click("showDialogGeneratorModeEdit"))
+                    .Visible(false)
+                    )
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<script>
+
+    $(document).ready(function () {
+
+        var fbGME = $("#generatorModeEdit").getKendoFloatingActionButton();
+
+        $("#generatorModeEdit").prop("type", "button");
+
+        fbGMEText = "Edit power production";
+
+        $("#generatorModeEdit").hover(function () {
+            fbGME.text(fbGMEText);
+            fbGME.element.find(".k-fab-text")
+                .stop().toggle(200);
+        }, function () {
+            fbGME.element.find(".k-fab-text")
+                .stop()
+                .toggle(200)
+                .promise().done(function () {
+                    fbGME.text("");
+                });
+        });
+
+    });
+
+</script>

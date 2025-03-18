@@ -1,0 +1,40 @@
+﻿@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
+@model Susteni.Models.Account.AccountModel
+
+@{
+    ViewData["Title"] = Localizer["Sign in"];
+}
+
+
+<div class="form-group row">
+    <div class="col-lg-5 padding-0">
+        <table style="border-collapse: collapse; border-spacing: 0;">
+            <tr>
+                <td rowspan="2" style="width: 120px;">
+                    <img src="~/images/logo_susteni.svg" style="width: 100px" alt="mainlogo" />
+                </td>
+                <td style="font-size: 40px; font-weight: 700;  color: #346D83; margin-top:0px; margin-left: 30px; margin-bottom: 0px; vertical-align:bottom;" class="unselectable">
+                    @Localizer["Susteni"]
+                    <span style="font-size: 40px; color: #579DB6; margin-top:0px; margin-left: 5px; vertical-align: bottom;" class="unselectable">
+                        @Localizer["Office"]
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td style="font-size: 20px; font-weight: 700;  color: darkslategrey; margin-top:0px; padding-left: 1px; margin-bottom: 0px; vertical-align:text-top;" class="unselectable">
+                    Solving the waste of energy
+                </td>
+            </tr>
+        </table>
+    </div>
+</div>
+
+
+<h2 style="margin-top: 200px; margin-left: 200px; font-size: 40px; font-weight: 700;  color: #666;">
+    @Localizer["You are now signed out."]
+</h2>
+
+<script>
+    stopTimer();
+</script>

@@ -1,0 +1,1268 @@
+﻿@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
+@model Susteni.Models.Ship.ShipModel
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+
+@{
+    ViewData["Title"] = Localizer["Ship"];
+    ViewData["LogOnOk"] = "2";
+    ViewData["Menu"] = "Admin";
+}
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.2.2/pdf.js"></script>
+
+<script>
+    window.pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.2.2/pdf.worker.js';
+</script>
+
+
+<style>
+
+    #dialogVisPDFRapport {
+        height: 85vh;
+        width: 90vw;
+        max-width: 1200px;
+    }
+
+    #pdfViewerRapport {
+        width: 100% !important;
+        height: 100% !important;
+    }
+
+    #dialogVisPDF {
+        height: 85vh;
+        width: 90vw;
+        max-width: 1200px;
+    }
+
+    #pdfViewer {
+        width: 100% !important;
+        height: 100% !important;
+    }
+
+    #twVendor img {
+        width: 24px;
+        height: 24px;
+    }
+
+</style>
+
+<form id="formShip" onsubmit="return false;" method="post" class="mt-3" autocomplete="off">
+    <div id="confirm"></div>
+    <div class="row" id="heading" style="min-height: 70px;">
+
+        <div class="col-2 unselectable">
+            <h3>@Localizer["Ship"]</h3>
+        </div>
+
+        <div class="col-8">
+
+            <div style="display: flex; flex-direction: row;">
+
+                <button disabled type="button" id="btnUploadPicture" class="command" onclick="showDialogLastOppFil()" style="width: 230px; margin-right: 7px;">
+                    <img src="~/images/mail-back-filled-send.svg" />
+                    @Localizer["Upload picture"]
+                </button>
+
+                <button type="button" id="btnReports" class="command" onclick="showDialogRapporter()" style="width: 230px; margin-right: 7px;">
+                    <img src="~/images/Laser.svg" />
+                    @Localizer["Reports"]
+                </button>
+
+            </div>
+
+        </div>
+
+        <div class="col-2 infoArea" id="info" style="display: none">
+            <p class="unselectable" id="infoTekst">
+            </p>
+        </div>
+
+    </div>
+
+    <div class="row">
+
+        <div class="col-lg-4">
+
+
+            <div class="row">
+
+                <div class="col-lg-6" style="display: flex; flex-direction: row;">
+
+                    <div>
+                        <button type="button" name="nyMappe" class="commandline" onclick="showDialogNewShip()">
+                            <img src="~/images/Ny.svg" />
+                            <figcaption>New</figcaption>
+                        </button>
+                    </div>
+
+                    <div>
+                        <button type="button" class="commandline" id="btnLagre" onclick="saveShip()">
+                            <img src="~/images/Lagre.svg" />
+                            <figcaption>Save</figcaption>
+                        </button>
+                    </div>
+ 
+                    <div>
+                        <button type="button" id="idRemoveShip" onclick="removeShip()" class="commandline">
+                            <img src="~/images/trash-2.svg" />
+                            Remove
+                        </button>
+                    </div> 
+
+                </div>
+@*
+                <div class="col-lg-6">
+                    <div class="row align-items-center" style="margin-top: 10px;">
+                        <div class="col-12" style="display: flex; flex-direction: row;">
+                            <input id="BNavn" Class="form-control sokeFelt" oninput="visBestillinger()" placeholder="ship name ..." style="width: calc(100% - 30px)">
+                            <button type="button" class="commandInline" onclick="clearKunde()">
+                                <img src="~/images/button-remove.svg" />
+                            </button>
+                        </div>
+
+                    </div>
+                </div>*@
+
+            </div>
+
+
+            <div class="row" style="margin-top: 10px">
+                <div class="col-lg-12">
+                    @(Html.Kendo().Grid<Susteni.Models.ShipItem>()
+                        .Name("shipList")
+                        .Columns(columns =>
+                        {
+                            columns.Bound(q => q.ShipGuid).Visible(false).Title(Localizer["#"].Value);
+                            columns.Bound(q => q.Name).Title(Localizer["Ships"].Value);
+                        })
+                        .Height(570)
+                        .Scrollable()
+                        .Selectable(s => s
+                        .Mode(GridSelectionMode.Multiple)
+                        .Type(GridSelectionType.Row))
+                        .Events(e => e.Change("onShipChange"))
+                        .DataSource(dataSource => dataSource
+                        .Ajax()
+                        .Read(read => read.Action("GetShipsList", "Ship").Data("filterShip"))
+                        )
+                        )
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="col-lg-8">
+
+            <partial name="_ShipInfo" />
+        </div>
+    </div>
+
+</form>
+
+<script id="successTemplate" type="text/x-kendo-template">
+    <div class="upload-success">
+        <img src="@Url.Content("~/images/emoticon-happy.svg")" style="float:left; height:48px; width:48px; margin-right: 16px;"/>
+        <p>#= message #</p>
+    </div>
+</script>
+
+
+<script id="errorTemplate" type="text/x-kendo-template">
+    <div class="wrong-pass">
+        <img src="@Url.Content("~/images/emoticon-sad.svg")" style="float:left; height:48px; width:48px; margin-right: 16px;"/>
+        <p>#= message #</p>
+    </div>
+</script>
+
+
+@(Html.Kendo().Notification()
+    .Name("notification")
+    .Position(p => p.Pinned(true).Top(30).Right(30))
+    .Stacking(NotificationStackingSettings.Down)
+    .AutoHideAfter(5000)
+    .Templates(t =>
+    {
+        t.Add().Type("success").ClientTemplateID("successTemplate");
+        t.Add().Type("error").ClientTemplateID("errorTemplate");
+    })
+)
+
+
+@(Html.Kendo().Window()
+    .Name("dialogLastOppBilde")
+    .Title(Localizer["Upload picture"].Value)
+    .HtmlAttributes(new { style = "border:1px;" })
+    .Visible(false)
+    .Width(1000)
+    .Modal(true)
+    .Draggable()
+    )
+
+@(Html.Kendo().Window()
+    .Name("dialogOperationMode")
+    .Title(Localizer["Operation mode"].Value)
+    .HtmlAttributes(new { style = "border:1px;" })
+    .Visible(false)
+    .Width(600)
+    .Modal(true)
+    .Draggable()
+    )
+
+@(Html.Kendo().Window()
+    .Name("dialogGenerators")
+    .Title(Localizer["Power production"].Value)
+    .HtmlAttributes(new { style= "border:1px; margin: 0px; padding-bottom: 0px;" })
+    .Visible(false)
+    .Width(900)
+    .Modal(true)
+    .Draggable()
+    )
+
+@(Html.Kendo().Window()
+    .Name("dialogGeneratorsImport")
+    .Title(Localizer["Import generator"].Value)
+    .HtmlAttributes(new { style = "border:1px; margin: 0px; padding-bottom: 5px;" })
+    .Visible(false)
+    .Width(900)
+    .Modal(true)
+    .Draggable()
+    )
+
+@(Html.Kendo().Window()
+    .Name("dialogFuelConsumption")
+    .Title(Localizer["Fuel Consumption"].Value)
+    .HtmlAttributes(new { style= "border:1px; margin: 0px; padding-bottom: 0px;" })
+    .Visible(false)
+    .Width(600)
+    .Modal(true)
+    .Draggable()
+    )
+
+@(Html.Kendo().Window()
+    .Name("DialogHjelp")
+    .Title(Localizer["Help"].Value)
+    .Visible(false)
+    .Height(800)
+    .Width(1200)
+    .Modal(true)
+    .Draggable()
+    )
+
+
+@(Html.Kendo().Window()
+    .Name("dialogNewProfile")
+    .Title(Localizer["Profile"].Value)
+    .HtmlAttributes(new { style = "border:1px; padding-bottom: 0px; background-color: #F2F2F2;" })
+    .Visible(false)
+    .Width(500)
+    .Modal(true)
+    .Draggable()
+    )
+
+@(Html.Kendo().Window()
+    .Name("DialogShip")
+    .Title(Localizer["New ship"].Value)
+    .Visible(false)
+    .Width(1200)
+    .Modal(true)
+    .Draggable()
+    )
+
+@(Html.Kendo().Window()
+        .Name("DialogSupport")
+        .Title(Localizer["Support"].Value)
+        .Visible(false)
+        .Width(1200)
+        .Modal(true)
+        .Draggable()
+        )
+
+@(Html.Kendo().Window()
+    .Name("dialogVendor")
+    .Title("Vendor")
+    .Content(Html.Kendo().TreeView()
+        .Name("twVendor")
+        .HtmlAttributes(new { style = "height: 600px;"})
+        .DataTextField("Text")
+        .LoadOnDemand(false)
+        .DragAndDrop(true)
+        .Events(e => e.Change("onVendorChange"))
+        .DataSource(DataSource => DataSource
+            .Read(read => read.Action("getVendorTreeview", "Functions"))
+            .Model(model =>
+                            {
+                                model.Id("id");
+                                model.HasChildren("hasChildren");
+                            })
+            )
+        .ToHtmlString() +
+        "<Button disabled id='impButton' type='button' onclick='ImportFuelComsuption()' class='commandModernGreen' style='width: 150px; float: right; margin-top: 10px;'>Import</Button>" +
+        "<Button type='button' onclick='closeFuelComsuption()' class='commandModernRed' style='width: 150px; float: right; margin-top: 10px;'>Cancel</Button>"
+        )
+    .Visible(false)
+    .Width(600)
+    .Modal(true)
+    .Draggable()    
+    )
+
+<script>
+
+    function addSupport() {
+        $.ajax({
+            url: '@Url.Action("DialogSupport", "HelpDesk")',
+            type: 'GET'
+        }).done(function (result) {
+            $('#DialogSupport').html(result);
+
+            xB = document.getElementById("idBilde");
+
+            document.getElementById("HelpDesk_Modul").value = "Ship";
+            document.getElementById("HelpDesk_Tabell").value = "Ship";
+            document.getElementById("HelpDesk_LinkGuid").value = shipGuid;
+            document.getElementById("HelpDesk_Program").value = "1";
+            document.getElementById("HelpDesk_Status").value = "1";
+
+            const screenshotTarget = document.body;
+
+            html2canvas(screenshotTarget).then((canvas) => {
+                const base64image = canvas.toDataURL("image/png");
+                xB.innerHTML = "<img src='" + base64image + "' style='max-height: 260px; max-width: 350px;' alt='Bilde' / >";
+                document.getElementById("HelpDesk_byte64String").value = base64image
+            });
+
+            var popup = $('#DialogSupport').data("kendoWindow");
+            popup.center().open();
+        });
+    }
+
+
+</script>
+
+<script id="shipFunction">
+    var shipGuid = "";
+    var fuelConsFromId = "";
+    var generatorModelGuid = "";
+
+    function filterShip() {
+        return {picture: true}
+    }
+
+    function readVendor(options) {
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("getVendorTreeview", "Functions")',
+            data: { menuName: "Hovedmeny" }
+            })
+        .done(function (result) {
+            options.success([result]);
+            });
+        }
+
+    function onVendorChange(e) {
+        var selected = this.select();
+        var data = this.dataItem(selected);
+
+        console.log(data);
+        fuelConsFromId = data.id;
+
+        if (data.niva == 2) {
+            document.getElementById("impButton").disabled = false;
+        }
+        else {
+            document.getElementById("impButton").disabled = true;
+        }
+    }
+
+
+
+    function ImportFuelComsuption(e) {
+        var tittel = "IMPORT";
+        var nei = "No";
+        var content = "<div id='question'>Do you want to import selected fule consumption table to this generator\n(existing data will be deleted)</div>";
+
+        $("#confirm").kendoConfirm({
+            title: tittel,
+            content: content,
+            messages: {
+                okText: "yes",
+                cancel: nei
+            }
+        }).data("kendoConfirm").result.done(function () {
+            $('body').append($('<div id="confirm">'));
+
+            $.ajax({
+                url: '@Url.Action("ImportFuelComsuption", "Functions")',
+                type: "POST",
+                dataType: "json",
+                data: { GeneratorGuid: generatorGuid, FromGuid: fuelConsFromId}
+            }).done(function (result) {
+                $('#dialogVendor').data("kendoWindow").close();
+                $("#fuelComsumptionList").data("kendoGrid").dataSource.read();
+            });
+        });
+    }
+
+    function closeFuelComsuption() {
+        $('#dialogVendor').data("kendoWindow").close();
+    }
+
+    function filterShip() {
+        return { shipGuid: shipGuid }
+        }
+
+ 
+    function showDialogLastOppFil() {
+        $.ajax({
+            url: '@Url.Action("DialogLastOppLogo", "Ship")',
+            type: "GET"
+        })
+            .done(function (result) {
+                $('#dialogLastOppBilde').html(result);
+                var popup = $('#dialogLastOppBilde').data("kendoWindow");
+                popup.center().open();
+            });
+        }
+
+    function showDialogFuelConsumptionImport() {
+        $('#dialogVendor').data("kendoWindow").center().open();
+        }
+
+    function onUploadLogo(e) {
+        e.data = {
+            ShipGuid: shipGuid
+        };
+    }
+
+    function onUploadSuccess() {
+        var popup = $('#dialogLastOppBilde').data("kendoWindow");
+        popup.close();
+
+        $.ajax({
+            url: '@Url.Action("GetPictureShip", "Customer")',
+            type: "GET"
+        })
+            .done(function (result) {
+                var xP = document.getElementById("filPreview");
+                if (result != "") {
+                    xP.innerHTML = "<img src='data:image/Jpeg;base64," + result + "'>";
+                }
+                else {
+                    xP.innerHTML = "";
+                }
+            });
+    }
+
+    function onShipChange(e) {
+        var grid = $("#shipList").data("kendoGrid");
+        var selected = grid.select();
+        var data = grid.dataItem(selected);
+
+        shipGuid = data.ShipGuid;
+
+        $.ajax({
+            url: '@Url.Action("GetShip", "Ship")',
+            data: { shipGuid: shipGuid },
+            type: "GET"
+        }).done(function (result) {
+            $("#shipForm").html(result);
+
+            if (@ViewData["SuperAdmin"] == "0") {
+                $("#Ship_Name").data("kendoTextBox").readonly(true);
+                $("#Ship_IMO").data("kendoTextBox").readonly(true);
+            }
+            var fabOMA = $('#operationModeAdd').getKendoFloatingActionButton();
+            fabOMA.show()
+
+            $('#generatorsAdd').getKendoFloatingActionButton().show()
+            $('#generatorsImport').getKendoFloatingActionButton().show()
+
+            document.getElementById("btnUploadPicture").disabled = false;
+            document.getElementById("btnReports").disabled = false;
+            document.getElementById("btnLagre").disabled = false;
+
+            var fuelType = $("#Ship_UnitOfMeasurement").data("kendoDropDownList").text();
+            document.getElementById("fuleType").innerHTML = fuelType;
+        });
+
+    }
+
+
+
+    function onUOMChange(e) {
+
+        var fuelType = "m³";
+        if (e.sender.selectedIndex == 2)
+            fuelType = "ton";
+        document.getElementById("fuleType").innerHTML = fuelType;
+
+    }
+
+    function onShipTypeOMDataBound() {
+        var grid = $("#shipTypeOperationModeList").data("kendoGrid");
+
+        $("#shipTypeOperationModeList tbody tr").each(function () {
+            var currentRowData = grid.dataItem(this);
+            if (currentRowData.Standard) {
+                var row = grid.element.find("tr[data-uid='" + currentRowData.uid + "']");
+                grid.select(row);
+            }
+
+        });
+    }
+
+    function onShipTypeGDataBound() {
+        var grid = $("#shipTypeGeneratorList").data("kendoGrid");
+
+        $("#shipTypeGeneratorList tbody tr").each(function () {
+            var currentRowData = grid.dataItem(this);
+            if (currentRowData.Standard) {
+                var row = grid.element.find("tr[data-uid='" + currentRowData.uid + "']");
+                grid.select(row);
+            }
+
+        });
+    }
+
+    document.addEventListener('paste', function (evt) {
+        // Get the data of clipboard
+        const clipboardItems = evt.clipboardData.items;
+        const items = [].slice.call(clipboardItems).filter(function (item) {
+            // Filter the image items only
+            return item.type.indexOf('image') !== -1;
+        });
+        if (items.length === 0) {
+            return;
+        }
+
+        const item = items[0];
+        // Get the blob of image
+        const blob = item.getAsFile();
+
+        var reader = new FileReader();
+        reader.readAsDataURL(blob);
+        reader.onloadend = function () {
+            var base64data = reader.result;
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("uploadPicture", "Ship")',
+                data: { shipGuid: shipGuid, base64string: base64data },
+                dataType: 'json'
+                })
+         .done(function (result) {
+                if (result.Status != 0) {
+                    alert(result.Description)
+                    }
+                else {
+                    xFP = document.getElementById("filPreview");
+                        xFP.innerHTML = "<img src='" + base64data + "' style='max-width: 100%; max-height: 420px;'/>";
+                    }
+                });
+        }
+
+    });
+
+
+    function createNewShip(e) {
+        var gridOM = $("#shipTypeOperationModeList").data("kendoGrid");
+        var selected = [];
+
+        gridOM.select().each(function () {
+            selected.push(gridOM.dataItem(this));
+        });
+
+        var nodes = "";
+        for (var i = 0; i < selected.length; i++) {
+            if (nodes == "") {
+                nodes = selected[i].OperationModeGuid ;
+            }
+            else {
+                nodes += ";" + selected[i].OperationModeGuid;
+            }
+        }
+
+        document.getElementById("NewShip_OperationModes").value = nodes;
+
+
+        var gridOM = $("#shipTypeGeneratorList").data("kendoGrid");
+        var selected = [];
+
+        gridOM.select().each(function () {
+            selected.push(gridOM.dataItem(this));
+        });
+
+        var nodes = "";
+        for (var i = 0; i < selected.length; i++) {
+            if (nodes == "") {
+                nodes = selected[i].GeneratorGuid;
+            }
+            else {
+                nodes += ";" + selected[i].GeneratorGuid;
+            }
+            
+        }
+
+        document.getElementById("NewShip_Generators").value = nodes;
+
+        var $this = $('#newShip').serialize();
+
+        $.ajax({
+            url: '@Url.Action("CreateShip", "Ship")',
+            type: "PUSH",
+            data: $this,
+            dataType: 'json'
+            })
+        .done(function (result) {
+            if (result.Success) {
+                    $('#DialogShip').data("kendoWindow").close();
+                    $("#shipList").data("kendoGrid").dataSource.read();
+                }
+            else {
+                alert("Noe gikk galt");
+            }
+            });
+    }
+
+
+    function closeNewShip() {
+        $('#DialogShip').data("kendoWindow").close();
+    }
+
+</script>
+
+<script id="operataionModeFunction">
+    
+    var operationModeGuid = "";
+
+    function onOperationModeChange(e) {
+        var grid = $("#shipOperationmodeList").data("kendoGrid");
+        var selected = grid.select();
+        var data = grid.dataItem(selected);
+
+        operationModeGuid = data.OperationModeGuid;
+
+        var fabOME = $('#operationModeEdit').getKendoFloatingActionButton();
+        fabOME.show();
+        var fabOMR = $('#operationModeRemove').getKendoFloatingActionButton();
+        fabOMR.show();
+
+    }
+
+    function showDialogOperationMode() {
+        $.ajax({
+            url: '@Url.Action("DialogOperationMode", "Ship")',
+            type: "GET"
+            })
+        .done(function (result) {
+            $('#dialogOperationMode').html(result);
+            document.getElementById("ShipOperationMode_ShipGuid").value = document.getElementById("Ship_ShipGuid").value;
+            var popup = $('#dialogOperationMode').data("kendoWindow");
+            popup.center().open();
+            });
+        }
+
+    function showDialogOperationModeEdit() {
+        $.ajax({
+            url: '@Url.Action("DialogOperationModeEdit", "Ship")',
+            data: { operationModeGuid: operationModeGuid },
+            type: "GET"
+            })
+        .done(function (result) {
+            $('#dialogOperationMode').html(result);
+            var popup = $('#dialogOperationMode').data("kendoWindow");
+            popup.center().open();
+            });
+        }
+
+    function newShip(e) {
+        shipGuid = "";
+        operationModeGuid = "";
+
+        document.getElementById("btnUploadPicture").disabled = true;
+
+        $.ajax({
+            url: '@Url.Action("NewShip", "Ship")',
+            type: "GET"
+        }).done(function (result) {
+            $("#shipForm").html(result);
+        });
+    }
+
+    function showDialogNewShip() {
+        if (@ViewData["RunVersion"] == 1) {
+            newShip();
+        }
+        else {
+            $.ajax({
+                url: '@Url.Action("NewShipDialog", "Ship")',
+                type: 'GET'
+            }).done(function (result) {
+                $('#DialogShip').html(result);
+                var popup = $('#DialogShip').data("kendoWindow");
+                popup.center().open();
+            });
+        }
+    }
+
+    function saveShip(e) {
+        var $this = $('#formShip').serialize();
+
+        $.ajax({
+            url: '@Url.Action("SetShip", "Ship")',
+            type: "PUSH",
+            data: $this,
+            dataType: 'json'
+            })
+        .done(function (result) {
+            $("#shipList").data("kendoGrid").dataSource.read();
+            });
+        }
+
+    function removeShip(e) {
+        var tittel = "DELETE";
+        var nei = "No";
+        var content = "<div id='question'>Do you want to remove this ship and all of its connected data \n(all data will be lost for this ship)</div>";
+
+        $("#confirm").kendoConfirm({
+            title: tittel,
+            content: content,
+            messages: {
+                okText: "yes",
+                cancel: nei
+            }
+        }).data("kendoConfirm").result.done(function () {
+            $('body').append($('<div id="confirm">'));
+
+            $.ajax({
+                url: '@Url.Action("RemoveShip", "Ship")',
+                type: "GET",
+                dataType: "json",
+                data: { shipGuid: shipGuid}
+            }).done(function (result) {
+                $("#shipList").data("kendoGrid").dataSource.read();
+                $("#shipProfilesList").data("kendoGrid").dataSource.read();
+                $("#shipOperationmodeList").data("kendoGrid").dataSource.read();
+                $("#shipGeneratorList").data("kendoGrid").dataSource.read();
+            });
+        });
+    }
+
+    function saveOperationProfileMode(e) {
+        var $this = $('#operationModeForm').serialize();
+
+        $.ajax({
+            url: '@Url.Action("SetShipOperationMode", "Ship")',
+            type: "PUSH",
+            data: $this,
+            dataType: 'json'
+            })
+        .done(function (result) {
+            var popup = $('#dialogOperationMode').data("kendoWindow");
+            popup.close();
+            $("#shipOperationmodeList").data("kendoGrid").dataSource.read();
+            });
+        }
+
+    function closeOperationProfileMode() {
+        var popup = $('#dialogOperationMode').data("kendoWindow");
+        popup.close();
+        }
+
+</script>
+
+<script id="generatorFunction">
+
+    var generatorGuid = "";
+    var fuelConsGuid = "";
+
+    function filterGenerator() {
+        return { generatorGuid: generatorGuid }
+    }
+
+    function onGenerataorChange(e) {
+        var grid = $("#shipGeneratorList").data("kendoGrid");
+        var selected = grid.select();
+        var data = grid.dataItem(selected);
+
+        generatorGuid = data.GeneratorGuid;
+
+        var fabOME = $('#generatorsEdit').getKendoFloatingActionButton();
+        fabOME.show();
+        var fabOMR = $('#generatorsRemove').getKendoFloatingActionButton();
+        fabOMR.show();
+
+    }
+
+
+
+    function showDialogGenerators() {
+        $.ajax({
+            url: '@Url.Action("DialogGenerator", "Ship")',
+            type: "GET"
+            })
+        .done(function (result) {
+            $('#dialogGenerators').html(result);
+            document.getElementById("ShipGenerator_ShipGuid").value = document.getElementById("Ship_ShipGuid").value;
+            var popup = $('#dialogGenerators').data("kendoWindow");
+            popup.center().open();
+            });
+        }
+
+    function showDialogGeneratorsImport() {
+        $.ajax({
+            url: '@Url.Action("DialogGeneratorImport", "Ship")',
+            type: "GET"
+            })
+        .done(function (result) {
+            $('#dialogGeneratorsImport').html(result);
+            $('#dialogGeneratorsImport').data("kendoWindow").center().open();
+            });
+        }
+
+    function ImportGenerator() {
+        $.ajax({
+            url: '@Url.Action("ImportGeneratorModel", "Functions")',
+            type: "GET",
+            data: { shipGuid: shipGuid, generatorModelGuid: generatorModelGuid }
+            })
+        .done(function (result) {
+            $('#shipGeneratorList').data("kendoGrid").dataSource.read();
+            $('#dialogGeneratorsImport').data("kendoWindow").close();
+            });
+    }
+
+    function showDialogGeneratorsEdit() {
+        $.ajax({
+            url: '@Url.Action("DialogGeneratorEdit", "Ship")',
+            type: "GET",
+            data: { generatorGuid: generatorGuid }
+            })
+        .done(function (result) {
+            $('#dialogGenerators').html(result);
+
+                var kgF = document.getElementById("ShipGenerator_EfficientMotorSwitchboard2").value;
+                kgF = kgF.toString().replace(",",".");
+                $("#ShipGenerator_EfficientMotorSwitchboard").data("kendoNumericTextBox").value(kgF);
+
+
+                kgF = document.getElementById("ShipGenerator_KgDieselkWh2").value
+                kgF = kgF.toString().replace(",",".");
+                $("#ShipGenerator_KgDieselkWh").data("kendoNumericTextBox").value(kgF);
+
+
+                kgF = document.getElementById("ShipGenerator_MaintenanceCost2").value
+                kgF = kgF.toString().replace(",",".");
+                $("#ShipGenerator_MaintenanceCost").data("kendoNumericTextBox").value(kgF);
+
+            var popup = $('#dialogGenerators').data("kendoWindow");
+            popup.center().open();
+            });
+        }
+
+
+    function removeOperationMode(e) {
+        var tittel = "DELETE";
+        var nei = "No";
+        var content = "<div id='question'>Do you want to remove this operation mode from the ship \n(all data will be lost for this operation mode)</div>";
+
+        $("#confirm").kendoConfirm({
+            title: tittel,
+            content: content,
+            messages: {
+                okText: "yes",
+                cancel: nei
+            }
+        }).data("kendoConfirm").result.done(function () {
+            $('body').append($('<div id="confirm">'));
+
+            $.ajax({
+                url: '@Url.Action("RemoveShipOperationMode", "Ship")',
+                type: "GET",
+                dataType: "json",
+                data: { operationModeGuid: operationModeGuid }
+            }).done(function (result) {
+                $("#shipOperationmodeList").data("kendoGrid").dataSource.read();
+            });
+        });
+    }
+
+    function saveGenerator(e) {
+
+
+        var kgF = $("#ShipGenerator_EfficientMotorSwitchboard").data("kendoNumericTextBox").value();
+        kgF = kgF.toString().replace(".",",");
+        document.getElementById("ShipGenerator_EfficientMotorSwitchboard2").value = kgF;
+
+
+        kgF = $("#ShipGenerator_KgDieselkWh").data("kendoNumericTextBox").value();
+        kgF = kgF.toString().replace(".",",");
+        document.getElementById("ShipGenerator_KgDieselkWh2").value = kgF;
+
+
+        kgF = $("#ShipGenerator_MaintenanceCost").data("kendoNumericTextBox").value();
+        kgF = kgF.toString().replace(".",",");
+        document.getElementById("ShipGenerator_MaintenanceCost2").value = kgF;
+
+        var $this = $('#generatorsForm').serialize();
+
+        $.ajax({
+            url: '@Url.Action("SetShipGenerator", "Ship")',
+            type: "PUSH",
+            data: $this,
+            dataType: 'json'
+            })
+        .done(function (result) {
+            var popup = $('#dialogGenerators').data("kendoWindow");
+            popup.close();
+            $("#shipGeneratorList").data("kendoGrid").dataSource.read();
+            });
+    }
+
+
+    function closeGenerator() {
+        var popup = $('#dialogGenerators').data("kendoWindow");
+        popup.close();
+    }
+
+
+    function removeGenerator(e) {
+        var tittel = "DELETE";
+        var nei = "No";
+        var content = "<div id='question'>Do you want to remove this generator from the ship \n(all data will be lost for this operation mode)</div>";
+
+        $("#confirm").kendoConfirm({
+            title: tittel,
+            content: content,
+            messages: {
+                okText: "yes",
+                cancel: nei
+            }
+        }).data("kendoConfirm").result.done(function () {
+            $('body').append($('<div id="confirm">'));
+
+            $.ajax({
+                url: '@Url.Action("RemoveShipGenerator", "Ship")',
+                type: "GET",
+                dataType: "json",
+                data: { generatorGuid: generatorGuid }
+            }).done(function (result) {
+                $("#shipGeneratorList").data("kendoGrid").dataSource.read();
+            });
+        });
+    }
+
+    function showDialogFuelConsumptionEdit() {
+        $.ajax({
+            url: '@Url.Action("DialogFuelConsumption", "Ship")',
+            data: { generatorGuid: generatorGuid },
+            type: "GET"
+            })
+        .done(function (result) {
+            $('#dialogFuelConsumption').html(result);
+            document.getElementById("GeneratorFuelComsuption_LinkGuid").value = generatorGuid;
+            var popup = $('#dialogFuelConsumption').data("kendoWindow");
+            popup.center().open();
+        });
+    }
+
+    function onFuelConsChange(e) {
+        var grid = $("#fuelComsumptionList").data("kendoGrid");
+        var selected = grid.select();
+        var data = grid.dataItem(selected);
+
+        fuelConsGuid = data.FuelConsGuid;
+
+        var fabOME = $('#fuelComsumptionRemove').getKendoFloatingActionButton();
+        fabOME.show();
+    }
+
+
+    function saveFuelConsumption(e) {
+        var $this = $('#FuelComsuptionForm').serialize();
+
+        $.ajax({
+            url: '@Url.Action("SetGeneratorFuelComsuption", "Ship")',
+            type: "PUSH",
+            data: $this,
+            dataType: 'json'
+            })
+        .done(function (result) {
+            $("#fuelComsumptionList").data("kendoGrid").dataSource.read();
+            var popup = $('#dialogFuelConsumption').data("kendoWindow");
+            popup.close();
+            });
+        }
+
+    function closeFuelConsumption(e) {
+        var popup = $('#dialogFuelConsumption').data("kendoWindow");
+        popup.close();
+    }
+
+
+    function removeFuelConsumption(e) {
+        var tittel = "DELETE";
+        var nei = "No";
+        var content = "<div id='question'>Do you want to remove this fuel consumption from this generator</div>";
+
+        $("#confirm").kendoConfirm({
+            title: tittel,
+            content: content,
+            messages: {
+                okText: "yes",
+                cancel: nei
+            }
+        }).data("kendoConfirm").result.done(function () {
+            $('body').append($('<div id="confirm">'));
+
+            $.ajax({
+                url: '@Url.Action("RemoveGeneratorFuelComsuption", "Ship")',
+                type: "GET",
+                dataType: "json",
+                data: { FuelConsGuid: fuelConsGuid }
+            }).done(function (result) {
+                $("#fuelComsumptionList").data("kendoGrid").dataSource.read();
+            });
+        });
+    }
+
+</script>
+
+<script id="idProfile">
+    var profilGuid = "";
+
+    function onProfileChange(e) {
+        var grid = $("#shipProfilesList").data("kendoGrid");
+        var selected = grid.select();
+        var data = grid.dataItem(selected);
+
+        profilGuid = data.ProfilGuid;
+
+        $('#profileEdit').getKendoFloatingActionButton().show();
+        $('#profileRemove').getKendoFloatingActionButton().show();
+    }
+
+    function newProfiles() {
+        $.ajax({
+            url: '@Url.Action("NewProfile", "Ship")',
+            type: "GET"
+            })
+        .done(function (result) {
+            $('#dialogNewProfile').html(result);
+            document.getElementById("Profile_LinkGuid").value = document.getElementById("Ship_ShipGuid").value;
+            var popup = $('#dialogNewProfile').data("kendoWindow");
+            popup.center().open();
+            });
+        }
+
+    function createProfiles() {
+        var $this = $('#profile').serialize();
+
+        $.ajax({
+            url: '@Url.Action("SetProfile", "Ship")',
+            type: "PUSH",
+            data: $this,
+            dataType: "json"
+            })
+        .done(function (result) {
+            var popup = $('#dialogNewProfile').data("kendoWindow");
+            popup.close();
+            $("#shipProfilesList").data("kendoGrid").dataSource.read();
+            });
+        }
+
+    function showDialogProfilEdit() {
+        $.ajax({
+            url: '@Url.Action("DialogProfilEdit", "Ship")',
+            data: { profilGuid: profilGuid },
+            type: "GET"
+            })
+        .done(function (result) {
+                $('#dialogNewProfile').html(result);
+                var popup = $('#dialogNewProfile').data("kendoWindow");
+            popup.center().open();
+            });
+        }
+
+
+    function removeProfil(e) {
+        var tittel = "DELETE";
+        var nei = "No";
+        var content = "<div id='question'>Do you want to remove this profil and all of its connected data \n(all data will be lost for this profil)</div>";
+
+        $("#confirm").kendoConfirm({
+            title: tittel,
+            content: content,
+            messages: {
+                okText: "yes",
+                cancel: nei
+            }
+        }).data("kendoConfirm").result.done(function () {
+            $('body').append($('<div id="confirm">'));
+
+            $.ajax({
+                url: '@Url.Action("RemoveProfile", "Ship")',
+                type: "GET",
+                dataType: "json",
+                data: { profilGuid: profilGuid }
+            }).done(function (result) {
+                $("#shipProfilesList").data("kendoGrid").dataSource.read();
+            });
+        });
+    }
+
+
+</script>
+
+<script id="hjelp">
+
+    function showHelp() {
+        $.ajax({
+            url: '@Url.Action("DialogHjelp", "Hjelp")',
+            type: 'GET'
+        }).done(function (result) {
+            $('#DialogHjelp').html(result);
+            var popup = $('#DialogHjelp').data("kendoWindow");
+            popup.center().open();
+        });
+    }
+
+    function hjelpFilter() {
+        return { Modul: 400, Skjerm: "" }
+    }
+
+</script>
+
+<script id="new">
+    var shipTypeGuid = "";
+
+    function onShipTypeChange(e) {
+        shipTypeGuid = e.sender._cascadedValue;
+        $("#shipTypeOperationModeList").data("kendoGrid").dataSource.read();
+        $("#shipTypeGeneratorList").data("kendoGrid").dataSource.read();
+        }
+
+    function filterShipType() {
+        return { ShipTypeGuid: shipTypeGuid}
+    }
+
+</script>>
+
+@(Html.Kendo().Window()
+        .Name("dialogReports")
+        .Title("Reports")
+        .Visible(false)
+        .Width(1200)
+        .Modal(true)
+        .Draggable()
+        )
+
+
+
+
+@(Html.Kendo().Window()
+    .Name("dialogVisPDFRapport")
+    .Position(p => p.Top(60).Left(300))
+    .Title(Localizer["Dokument"].Value)
+    .HtmlAttributes(new { style = "border:1px; padding: 0px;" })
+    .Visible(false)
+    .Content(
+        @Html.Kendo().PDFViewer()
+            .Name("pdfViewerRapport")
+            //.Events(ev => ev.Render("onRender"))
+            .HtmlAttributes(new { style = "padding: 0px; margin: 0px;" })
+            .ToHtmlString()
+    )
+    .Modal(true)
+    .Draggable()
+    )
+
+
+<script id="reports">
+    var firstRender = true;
+    var skjerm = "Ship";
+    var vis = "Alle";
+    var stringfilter = "";
+    var RapId = "";
+
+    function skjermFilter() {
+        return { skjerm: skjerm, RapType: 5 }
+    }
+
+    function showDialogRapporter() {
+        $.ajax({
+            url: "/Report/DialogReportList",
+            method: 'GET',
+            success: function (result) {
+                $('#dialogReports').html(result);
+                var popup = $('#dialogReports').data("kendoWindow");
+                popup.center().open();
+            }
+        });
+    }
+
+
+    function ShowReport() {
+        var lvDocument = $("#lvRapporter").data("kendoListView");
+        xIW = document.getElementById("importerer");
+        xIR = document.getElementById("infoRapport");
+
+        var selF = lvDocument.select();
+        var selIF = lvDocument.dataItem(selF);
+        var RapId = "";
+        var base64string = "";
+        firstRender = true;
+
+        if (typeof selIF != 'undefined') {
+            RapId = selIF.RapId;
+            x = document.getElementById("ReportVerdier_RapId");
+            xRT = document.getElementById("ReportVerdier_RapType");
+            x.value = RapId;
+            xRT.value = selIF.RapType;
+        }
+
+        var $this = $('#rapportForm').serialize();
+
+        xIW.style.display = "";
+        xIR.style.display = "none";
+
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("ShowTelerikReport", "Report")',
+            data: $this
+        }).done(function (result) {
+            xIW.style.display = "none";
+            xIR.style.display = "";
+            RapId = "X";
+            if (result.ErrorCode > 0) {
+                alert(result.ErrorTekst);
+            }
+            else {
+                var popup = $('#dialogVisPDFRapport').data("kendoWindow");
+                popup.open();
+
+                var pdfViewer = $("#pdfViewerRapport").data("kendoPDFViewer");
+                var pdfHandlerUrl = "/Report/VisRapport?rapId=" + RapId;
+
+                pdfViewer.fromFile(pdfHandlerUrl);
+                pdfViewer.loadPage(1);
+            }
+        });
+    }
+
+    function onRender(e) {
+        if (firstRender) {
+            e.sender.toolbar.zoom.combobox.value("fitToWidth");
+            e.sender.toolbar.zoom.combobox.trigger("change");
+            firstRender = false;
+        }
+    }
+
+    $(document).ready(function () {
+        if (@ViewData["SuperAdmin"] == "0") {
+            $("#Ship_Name").data("kendoTextBox").readonly(true);
+            $("#Ship_IMO").data("kendoTextBox").readonly(true);
+        }
+    });
+
+</script>

@@ -1,0 +1,138 @@
+﻿@model Susteni.Models.Home.HomeModel
+
+<script type="text/x-kendo-tmpl" id="template2">
+    <div class="product">
+        <id>#:RapId#</id>
+        <h4>#:Tittel#</h4>
+        <img src="@Url.Content("~/images/")#:FilNavn#.png" alt="@Url.Content("~/images/Blank.png")" />
+        <p>#:Beskrivelse#</p>
+    </div>
+</script>
+
+<style>
+    .k-listbox {
+        height: 280px;
+    }
+
+    .k-editor-toolbar .k-tool-group .k-button-group .k-tool {
+        padding: 0px;
+        margin: 0px;
+        width: 16px;
+        height: 16px;
+        background-color: green;
+    }
+
+    .product {
+        float: left;
+        position: relative;
+        width: 250px;
+        height: 350px;
+        margin: 0 15px;
+        padding: 0;
+    }
+
+    .product img {
+        width: 210px;
+        height: 296px;
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .product h4 {
+        padding: 3px 5px 0 0;
+        font-size: 12px;
+        font-weight: bold;
+        color: #999;
+        text-align: center;
+        margin-bottom: 10px;
+    }
+
+    .product p {
+        font-size: 12px;
+        margin-top: 10px;
+    }
+
+    .product id {
+        visibility: hidden;
+    }
+
+    .product:hover {
+        font-weight: bold;
+    }
+
+    .fieldlist {
+        margin: 0 0 -1em;
+        padding: 0;
+    }
+
+    .fieldlist li {
+        list-style: none;
+        padding-bottom: 1em;
+    }
+
+    .panel {
+        margin-bottom: 0px;
+    }
+
+    #rapportMaler {
+        margin-top: 20px;
+        margin-left: 0px;
+        padding: 0px;
+        height: 428px;
+    }
+     
+</style>
+
+<div class="form-group row">
+
+    <div class="col-lg-3">
+        <button type="button" name="SendSMS" class="command" onclick="sendSMS()">
+            <img src="~/images/SendSMS.png" />
+            Versenden starten
+            <p>Schicken die SMS zu alle gewählte Personen</p>
+        </button>
+    </div>
+
+</div>
+
+
+<div class="panel with-nav-tabs panel-default padding-0" style="height: 590px;">
+    <div class="panel-body">
+
+        <div class="col-lg-7">
+
+            <h4>Rapporter</h4>
+
+                @(Html.Kendo().ListView<Susteni.Models.TreeviewItems>()
+                    .Name("rapportMaler")
+                    .TagName("div")
+                    .HtmlAttributes("style='height: 420px;'")
+                    .ClientTemplateId("template2")
+                    .Selectable()
+                    .DataSource(dataSource => dataSource
+                            .Ajax()
+                            .Read(read => read.Action("Read_RapportListe", "Funksjoner").Data("filterRapport"))
+                            .PageSize(2)
+                        )
+                    .Pageable(pageable => pageable
+                        .ButtonCount(5)
+                        )
+                    .Events(events => events.Change("onReportListChange"))
+                    )
+
+
+        </div>
+
+        <div class="col-lg-5">
+            <input type="text" value="RapId" id="RapId" name="RapId">
+
+            <div class="panel with-nav-tabs panel-default" style="margin-top: 8px; height: 528px;">
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+

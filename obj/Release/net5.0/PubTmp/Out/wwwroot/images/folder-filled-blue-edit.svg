@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="32px" height="32px" viewBox="0 0 32 32" enable-background="new 0 0 32 32" xml:space="preserve">
+  <g id="main">
+    <clipPath id="clip_mask">
+      <path d="M12.477,32H0V0h32v13.753c-0.864,-0.822,-1.774,-1.256,-2.641,-1.256c-0.651,0,-1.26,0.25,-1.717,0.707L15.528,25.385c-0.248,0.25,-0.622,0.627,-2.381,4.963L12.477,32zM20.684,30.525c-0.196,0.196,-0.471,0.47,-2.72,1.475H32V19.158L20.684,30.525z"/>
+    </clipPath>
+    <g id="icon" clip-path="url(#clip_mask)">
+      <g id="transformed_icon" transform="translate(-1 -1)">
+        <path d="M18.5,8.5H2.5V5.533C2.5,4.963,2.963,4.5,3.533,4.5H12.4c0.411,0,0.811,0.133,1.14,0.38l2.912,2.184c0.377,0.283,0.836,0.436,1.308,0.436h0.74V8.5z" fill="#FFFFFF" stroke="#0EBDFE" stroke-width="1" stroke-linecap="round" stroke-miterlimit="1"/>
+        <path d="M29.5,28.5H2.5V8.5h10.716c0.543,0,1.083,-0.068,1.609,-0.201L16.967,7.5H29.5V28.5z" fill="#85DEFF" stroke="#0EBDFE" stroke-width="1" stroke-linecap="round" stroke-miterlimit="1"/>
+      </g>
+    </g>
+    <g id="overlay">
+      <path d="M29.605,18.743l1.78,-1.774c0.659,-0.659,-1.695,-3.013,-2.354,-2.354l-1.792,1.787L29.605,18.743z" fill="#F3B8B8" stroke="#E42D2C" stroke-width="1" stroke-linecap="round" stroke-miterlimit="1"/>
+      <path d="M18.772,29.537l-0.058,0.058C18.373,29.936,14.8,31.2,14.8,31.2s1.224,-3.612,1.566,-3.953l0.058,-0.058L18.772,29.537z" fill="#FFFFFF" stroke="#383838" stroke-width="1" stroke-miterlimit="1"/>
+      <polygon points="18.772,29.537 29.605,18.743 27.239,16.402 16.424,27.189" fill="#92CBEE" stroke="#0964B0" stroke-width="1" stroke-linecap="round" stroke-miterlimit="1" stroke-linejoin="round"/>
+      <line x1="29.919" y1="19.086" x2="26.909" y2="16.082" fill="none" stroke="#787979" stroke-width="1.1" stroke-miterlimit="1"/>
+    </g>
+  </g>
+</svg>

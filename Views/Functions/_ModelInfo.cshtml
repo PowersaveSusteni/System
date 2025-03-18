@@ -1,0 +1,110 @@
+﻿@using Microsoft.AspNetCore.Mvc.Localization
+
+@inject IViewLocalizer Localizer
+@model Susteni.Models.Funksjoner.FunctionsModel
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+
+
+<form id="genModelForm">
+    <div class="row">
+        <div class="col-6">
+            <button type="button" class="commandModernGreen" onclick="saveGenModel()"><img src="@Url.Content("~/images/")lagre.svg" alt="Ja" width='24' height='24' />Save</button>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-12" style="margin-bottom: 0px; margin-top: 10px;">
+            <div class="panel with-nav-tabs panel-default" id="dataenter">
+                <div class="panel-body data" style="padding: 10px;">
+
+                    <div class="panel-body">
+
+                        <input hidden asp-for="GeneratorModel.GeneratorVendorGuid" class="form-control">
+                        <input hidden asp-for="GeneratorModel.GeneratorModelGuid" class="form-control">
+
+                        <div class="row align-items-center" style="display: flex; flex-direction: row;">
+                            <label class="col-2 col-form-label">Model</label>
+                            <div class="col-md-6">
+                                <input asp-for="GeneratorModel.Model" class="form-control k-textbox">
+                            </div>
+
+                        </div>
+
+
+
+                        <div class="row align-items-center">
+                            <label class="col-2 col-form-label">Fuel type</label>
+                            <div class="col-6">
+                                @(Html.Kendo().DropDownList()
+                                    .Name("GeneratorModel.FuelTypeGuid")
+                                    .DataTextField("Name")
+                                    .DataValueField("FuelTypeGuid")
+                                    .HtmlAttributes(new { @class = "nodvendigFelt" })
+                                    .OptionLabel(Localizer["Choose type from list ..."].Value)
+                                    .OptionLabelTemplate("<span><i>" + Localizer["Choose type from list ..."].Value + "</i></span>")
+                                    .Height(200)
+                                    .Value(Model.GeneratorModel.FuelTypeGuid)
+                                    .DataSource(dataSource => dataSource
+                                    .Ajax()
+                                    .Read(read => read.Action("GetShipFuelTypeList", "Ship"))
+                                    )
+                                    )
+                            </div>
+                        </div>
+
+                        <div class="row align-items-center">
+                            <label class="col-5 col-form-label">kWe</label>
+                            <div class="col-3">
+                                @(Html.Kendo().NumericTextBox<double>()
+                                    .Name("GeneratorModel.kW")
+                                    .HtmlAttributes(new { @class = "nodvendigFelt" })
+                                    .Format("###0")
+                                    .Step(10)
+                                    .Value(Model.GeneratorModel.kW)
+                                    )
+                            </div>
+                        </div>
+
+                        <div class="row align-items-center">
+                            <label class="col-5 col-form-label">Kg fuel/kWh</label>
+                            <div class="col-3">
+                                @(Html.Kendo().NumericTextBox<double>()
+                                    .Name("GeneratorModel.KgDieselkWh")
+                                    .HtmlAttributes(new { @class = "nodvendigFelt" })
+                                    .Format("#.00")
+                                    .Value(Model.GeneratorModel.KgDieselkWh)
+                                    )
+                            </div>
+                        </div>
+
+                        <div class="row align-items-center">
+                            <label class="col-5 col-form-label">Efficient generator to powerplant</label>
+                            <div class="col-3">
+                                @(Html.Kendo().NumericTextBox<Single>()
+                                    .Name("GeneratorModel.EfficientMotorSwitchboard")
+                                    .HtmlAttributes(new { @class = "nodvendigFelt" })
+                                    .Format("n2")
+                                    .Value(Model.GeneratorModel.EfficientMotorSwitchboard)
+                                    )
+                            </div>
+                        </div>
+
+                        <div class="row align-items-center">
+                            <label class="col-5 col-form-label">Maintenance cost per hour</label>
+                            <div class="col-3">
+                                @(Html.Kendo().NumericTextBox<Single>()
+                                    .Name("GeneratorModel.MaintenanceCost")
+                                    .HtmlAttributes(new { @class = "nodvendigFelt" })
+                                    .Format("n2")
+                                    .Value(Model.GeneratorModel.MaintenanceCost)
+                                    )
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</form>

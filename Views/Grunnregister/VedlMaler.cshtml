@@ -1,0 +1,681 @@
+﻿@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
+@model Susteni.Models.Grunnregister.GrunnregisterModel
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+
+@{
+    ViewData["Title"] = Localizer["Bank"];
+    ViewData["LogOnOk"] = "2";
+    ViewData["Menu"] = "Grunnregister";
+}
+
+<form action="Lagre" id="formTjenester" onsubmit="return false;" method="post" class="mt-3">
+    <div id="confirm"></div>
+
+    <div class="container-fluid padding-0">
+
+        <div class="form-group row" id="heading" style="height: 70px;">
+
+            <div class="col-2 unselectable">
+                <h3>@Localizer["Vedlikehold maler"]</h3>
+            </div>
+
+            <div class="col-8">
+
+                <div style="display: flex; flex-direction: row;">
+                   
+                </div>
+
+            </div>
+
+            <div class="col-2">
+                <div id="infoLagring"></div>
+            </div>
+
+        </div>
+
+        <div class="row" style="min-height: 720px; border: 1px solid lightgrey; padding-top: 10px; padding-right: 10px; margin: 5px;">
+
+            <div class="col-3">
+
+                <div id="funksjonerFinn">
+
+                    <div>
+                        <button type="button" name="ny" id="nyAvtale" class="commandline" onclick="nyBank()">
+                            <img src="~/images/Ny.svg" />
+                            @Localizer["Ny"]
+                        </button>
+                    </div>
+
+                    <div>
+                        <button type="button" id="lagreTjeneste" class="commandline" onclick="Lagre()">
+                            <img src="~/images/Lagre.svg" />
+                            @Localizer["Lagre"]
+                        </button>
+                    </div>
+
+@*                  <div>
+                        <button type="button" name="slette" id="slettAvtale" style="display: block" class="commandline" onclick="">
+                            <img src="~/images/Slette.svg" />
+                            @Localizer["Slette"]
+                        </button>
+                    </div>*@
+
+                </div>
+
+                <div class="form-group" style="margin-top: 10px;">
+                    
+                    <h3>Kommer</h3>
+
+                </div>
+
+            </div>
+
+            <div class="col-9 no-gutters" id="Kalender" style="height: 300px;">
+                @*<partial name="_BankInfo" />*@
+            </div>
+
+        </div>
+
+    </div>
+
+</form>
+
+<style>
+
+    .k-fab-text {
+        display: none;
+    }
+
+</style>
+
+<div id="dialogFakturanrSerieWindow">
+    @(Html.Kendo().Window()
+        .Name("dialogFakturanrSerie")
+        .Title(Localizer["Fakturanummer Serie"].Value)
+        .Visible(false)
+        //.Height(530)
+        .Width(1200)
+        .Modal(true)
+        .Draggable()
+        )
+</div>
+
+<div id="dialogAvtale">
+    @(Html.Kendo().Window()
+        .Name("dialogAvtale")
+        .Title(Localizer["Avtale"].Value)
+        .Visible(false)
+        .Height(700)
+        .Width(1200)
+        .Modal(true)
+        .Draggable()
+        .Events(e => e .Activate("Avtale_Open"))
+        )
+</div>
+
+<div id="dialogRapporter">
+    @(Html.Kendo().Window()
+        .Name("dialogRapporter")
+        .Title("Utskrift")
+        .Visible(false)
+        .Height(740)
+        .Width(1200)
+        .Modal(true)
+        .Draggable()
+        )
+</div>
+
+<div id="brukere">
+        @(Html.Kendo().Dialog()
+            .Name("dialogBruker")
+            .Title(Localizer["Brukere"].Value)
+            .Content(
+                Html.Kendo().ListBox()
+                    .Name("lstBrukere")                     
+                    .DataValueField("BrukerId")
+                    .DataTextField("FulltNavn")
+                    .HtmlAttributes(new { style = "margin: 0px; height: 100%;" })
+                    .DataSource(dataSource => dataSource
+                        .Ajax()
+                        .Read(read => read .Action("GetBrukerListe", "AdminBruker").Data("filterBruker")
+                        )
+                    )
+                    .ToHtmlString()
+                )
+            .Width(400)
+            .Height(600)
+            .Modal(false)
+            .Visible(false)
+            .Actions(actions =>
+            {
+                actions.Add().Text(Localizer["Avbryt"].Value);
+                actions.Add().Text(Localizer["Legg til"].Value).Action("onActionOK").Primary(true);
+            })
+            .Events(ev => ev.Close("onClose").Open("onOpen"))
+        )
+    </div>
+
+<script id="dialogbokser">
+
+    function showDialogRapporter() {
+        treeView = $("#ressurser").data("kendoTreeView");
+
+        $.ajax({
+            url: "/Rapport/DialogRapportListe",
+            method: 'GET',
+            success: function (result) {
+                $('#dialogRapporter').html(result);
+
+                xM = document.getElementById("RapportVerdier_MasterNavn");
+                xV = document.getElementById("RapportVerdier_MasterVerdier");
+                xM.value = "Ressurs_Guid";
+                xV.value = nodes;
+            }
+        });
+        var popup = $('#dialogRapporter').data("kendoWindow");
+        popup.center().open();
+    }
+
+    function showDialogFakturanrSerie() {
+        $.ajax({
+            url: "/Grunnregister/DialogFakturaNrSerie",
+            method: 'GET',
+            success: function (result) {
+                $("#dialogFakturanrSerie").html(result);                
+                var popup = $('#dialogFakturanrSerie').data("kendoWindow");
+                popup.center().open();
+            }
+        });
+    }
+
+</script>
+
+
+
+<script type="text/javascript" id="filter">
+    var ressursType = 0;
+    var skjerm = "Planlegger";
+    var kategori = "";
+    var TjenesteNr  = 0;
+
+    function filterFakturaSerie() {
+        return {Alle: true, Sortering: "FakturaNrSerie"}
+    }
+
+    function skjermFilter() {
+        return { skjerm: skjerm, kategori: kategori }
+    }
+
+    function filterTjenesteNr() {
+        return { TjenesteNr: TjenesteNr }
+    }
+
+    function filterKalenderRessurs() {
+        return { kalenderGuid: kalenderGuid }
+    }
+
+    function setRessursType(e) {
+        ressursType = e;
+
+        var liste = $("#ressurserAlle").data("kendoListBox");
+
+        if (typeof liste != 'undefined') {
+            liste.dataSource.read();
+        }
+    }
+
+    function filterBruker() {
+        return { resType: 1, filterText: "BrukerGuid IS NOT NULL"}
+    }
+
+    function leggtilrelasjon(ev, flag) {
+
+    }
+
+    function kontoFilter() {
+        konto = document.getElementById("Bank_KontoNr").value
+        return { KontoNr: konto }
+    }
+</script>
+
+<script type="text/javascript">
+
+    function showDialogBruker() {
+        $('#dialogBruker').data("kendoDialog").open();
+        $.ajax({
+                url: "/Bestilling/DialogFakturalinje",
+                method: 'GET',
+                success: function (result) {
+                    $("#dialogFakturalinje").html(result);
+                    $.ajax({
+                        url: '@Url.Action("GetBestillingFakturainnhold", "Bestilling")',
+                        data: { bestillingFaktInnholdGuid: bestillingFaktInnholdGuid},
+                        type: "GET"
+                        }).done(function (result) {
+                            $("#dialogFakturalinje").html(result);
+                            var popup = $('#dialogFakturalinje').data("kendoWindow");
+                            popup.center().open();
+                        });
+                }
+            });
+    }
+
+    function onBankChange(e) {
+        var data = $('#bank').data('kendoTreeView').dataItem(e.node);
+        BankGuid = data.id;
+
+        $.ajax({
+            url: '@Url.Action("GetBank", "Grunnregister")',
+            data: { BankGuid: BankGuid },
+            type: "GET"
+        }).done(function (result) {
+            $("#BankForm").html(result);
+            grdBB = $('#bankBruker').data('kendoGrid');
+            grdBB.dataSource.read();
+        });
+    }
+    
+    function onFakturaSerieChange(e) {
+        var selected = this.select();
+        var data = this.dataItem(selected);
+
+        var FakturaNrSerie = data.FakturaNrSerie;
+
+        $.ajax({
+            url: '@Url.Action("GetFakturaSerie", "Grunnregister")',
+            data: { FakturaNrSerie: FakturaNrSerie },
+            type: "GET"
+        }).done(function (result) {
+            $("#FakturanrSerieInfoForm").html(result);
+        }).fail(function (result) {
+            alert('an Error has occurred, please try again');
+        });
+    }
+
+</script>
+
+<script type="text/javascript" id="Bank">
+
+    function nyBank() {
+        $.ajax({
+            url: '@Url.Action("NyBank", "Grunnregister")',
+            type: "GET"
+        }).done(function (result) {
+            $("#BankForm").html(result);
+
+        });
+    }
+
+    function Lagre() {
+        var $this = $('#formTjenester').serialize();
+
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("LagreTjeneste", "Grunnregister")',
+            data: $this,
+            dataType: 'json'
+        }).always(function (result) {
+            if (result.result == true) {
+                document.getElementById('infoLagring').innerHTML = "<img src='@Url.Content("~/images/")database-save.png' />@Localizer["Lagret"]";
+                $('#infoLagring').fadeIn(100).delay(2000).fadeOut(600);
+                grdBB = $('#bank').data('kendoTreeView');
+                grdBB.dataSource.read();
+                }
+        });
+    }
+
+
+    function onActionOK(e) {
+        konto = document.getElementById("Bank_KontoNr").value
+
+        var lbF = $("#lstBrukere").data("kendoListBox");
+        var selF = lbF.select();
+        var selIF = lbF.dataItem(selF);
+        var BrukerId = "";
+
+        if (typeof selIF != 'undefined') {
+            BrukerId = selIF.BrukerId;
+        }
+
+        $.ajax({
+            url: '@Url.Action("LagreBankBruker", "Grunnregister")',
+            data: { KontoNr: konto, BrukerId: BrukerId },
+            type: "POST"
+        }).always(function (result) {
+            grdBB = $('#bankBruker').data('kendoGrid');
+            grdBB.dataSource.read();
+            });
+
+        }
+
+
+    function RemoveBankBruker(e) {
+        $("#confirm").kendoConfirm({
+            title: "Slett",
+            content: "Ønsker du å slette den valgte brukers tilgang til denne kontoen?",
+            messages: {
+                okText: "Ja",
+                cancel: "Nei"
+            }
+        }).data("kendoConfirm").result.done(function () {
+            $('body').append($('<div id="confirm">'));
+
+            konto = document.getElementById("Bank_KontoNr").value
+
+            var lbF = $("#bankBruker").data("kendoGrid");
+            var selF = lbF.select();
+            var selIF = lbF.dataItem(selF);
+            var BrukerId = "";
+
+            if (typeof selIF != 'undefined') {
+                BrukerId = selIF.Brukerid;
+            }
+
+            $.ajax({
+                url: '@Url.Action("removeBankBruker", "Grunnregister")',
+                data: { KontoNr: konto, BrukerId: BrukerId },
+                type: "POST"
+            }).always(function (result) {
+                grdBB = $('#bankBruker').data('kendoGrid');
+                grdBB.dataSource.read();
+                });
+
+            });
+        }
+
+</script>
+
+<script type="text/javascript" id="FakturanrSerie">
+
+    function nyFakturaSerie() {
+        $.ajax({
+            url: '@Url.Action("NyFakturaSerie", "Grunnregister")',
+            type: "GET"
+        }).done(function (result) {
+            $("#FakturanrSerieInfoForm").html(result);
+
+        });
+    }
+
+    function LagreFakturaSerie() {
+        var $this = $('#formFakturanummerSerie').serialize();
+
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("LagreFakturaSerie", "Grunnregister")',
+            data: $this,
+            dataType: 'json'
+        }).always(function (result) {
+            if (result == true) {
+                grdFS = $("#fakturaSerie").data("kendoGrid");
+                grdFS.dataSource.read();
+                grdBB = $('#bank').data('kendoTreeView');
+                grdBB.dataSource.read();
+
+                document.getElementById('infoLagring').innerHTML = "<img src='@Url.Content("~/images/")database-save.png' />@Localizer["Lagret"]";
+                $('#infoLagring').fadeIn(100).delay(2000).fadeOut(600);
+                }
+        });
+    }
+
+
+    function RemoveFakturaSerie(e) {
+        $("#confirm").kendoConfirm({
+            title: "Slett",
+            content: "Ønsker du å slette den valgte fakturanummer serien?",
+            messages: {
+                okText: "Ja",
+                cancel: "Nei"
+            }
+        }).data("kendoConfirm").result.done(function () {
+            $('body').append($('<div id="confirm">'));
+
+            var grdFS = $("#fakturaSerie").data("kendoGrid");
+            var selF = grdFS.select();
+            var selIF = grdFS.dataItem(selF);
+            var FakturaNrSerie = 0;
+
+            if (typeof selIF != 'undefined') {
+                FakturaNrSerie = selIF.FakturaNrSerie;
+            }
+
+            $.ajax({
+                url: '@Url.Action("removeFakturaSerie", "Grunnregister")',
+                data: { FakturaNrSerie: FakturaNrSerie },
+                type: "POST"
+            }).always(function (result) {
+                grdFS.dataSource.read();
+                grdBB = $('#bank').data('kendoTreeView');
+                grdBB.dataSource.read();
+                });
+
+            });
+        }
+
+</script>
+
+
+<script type="text/javascript">
+
+    function onError(e) {
+        this.cancelChanges();
+
+        var errorMessage = "";
+        if (e.errors) {
+            for (var error in e.errors) {
+                errorMessage += e.errors[error].errors[0] + " ";
+            }
+        }
+
+        //alert(errorMessage);
+    }
+
+
+    function onCheck() {
+        treeView = $("#ressurser").data("kendoTreeView");
+        kalender = $("#scheduler").data("kendoScheduler");
+
+        checkedNodes = getCheckedItems(treeView);
+        var nodes = "";
+        for (var i = 0; i < checkedNodes.length; i++) {
+            nodes += checkedNodes[i].id + ":";
+        }
+
+        $.ajax({
+            url: '@Url.Action("setKalenderAktivRessurs", "Kalender")',
+            data: { ressursGuid: nodes },
+            type: "GET"
+        }).done(function (result) {
+
+        }).always(function (result) {
+            kalender.resources[0].dataSource.read();
+            kalender.dataSource.read();
+            });
+    }
+
+    function getCheckedItems(treeview) {
+        var nodes = treeview.dataSource.view();
+        return getCheckedNodes(nodes);
+    }
+
+    function getCheckedNodes(nodes) {
+        var node, childCheckedNodes;
+        var checkedNodes = [];
+
+        for (var i = 0; i < nodes.length; i++) {
+            node = nodes[i];
+            if (node.checked) {
+                checkedNodes.push(node);
+            }
+
+            if (node.hasChildren) {
+                childCheckedNodes = getCheckedNodes(node.children.view());
+
+                if (childCheckedNodes.length > 0) {
+                    checkedNodes = checkedNodes.concat(childCheckedNodes);
+                }
+            }
+        }
+
+        return checkedNodes;
+    }
+
+    $(function () {
+        $("#people :checkbox").change(function (e) {
+            var checked = $.map($("#people :checked"), function (checkbox) {
+                return parseInt($(checkbox).val());
+            });
+
+            var filter = {
+                logic: "or",
+                filters: $.map(checked, function (value) {
+                    return {
+                        operator: "eq",
+                        field: "OwnerID",
+                        value: value
+                    };
+                })
+            };
+
+            var scheduler = $("#scheduler").data("kendoScheduler");
+
+            scheduler.dataSource.filter(filter);
+        });
+    })
+
+</script>
+
+<script id="treeview" type="text/kendo-ui-template">
+
+    # if (!item.items && item.spriteCssClass) { #
+    #: item.text #
+    <span class='k-icon k-i-close kendo-icon'></span>
+    # } else if(!item.items && !item.spriteCssClass) { #
+    <span class="k-sprite pdf"></span>
+    #: item.text #
+    <span class='k-icon k-i-close telerik-icon'></span>
+    # } else if (item.items && item.spriteCssClass){ #
+    #: item.text #
+    # } else { #
+    <span class="k-sprite folder"></span>
+    #: item.text #
+    # } #
+
+
+</script>
+
+<script id="treeview">
+
+    function treeViewDataBound(e) {
+        e.sender.expand(e.node);
+    }
+
+    function treeViewCheck(e) {
+        setTimeout(function () {
+            updateSelectedCount(e.sender);
+        })
+    }
+
+    function updateSelectedCount(treeView) {
+        $(".selected-count").html(getCheckedItems(treeView).length + " Employees selected");
+    }
+</script>
+
+<script>
+
+    function onClose() {
+        $("#showDialogBtn").fadeIn();
+    }
+
+    function onOpen() {
+        $("#showDialogBtn").fadeOut();
+    }
+
+
+    function showDialogRapport() {
+        $.ajax({
+            url: "/Home/DialogRapporter",
+            method: 'GET',
+            success: function (result) {
+                $('#dialogRapport').html(result);
+            }
+        });
+        var popup = $('#dialogRapport').data("kendoWindow");
+
+        popup.center().open();
+    }
+
+</script>
+
+
+<script>
+
+    var canSearching = true;
+    var resultatId = 0;
+
+    $(document).on('submit', '#finnperson', function (e) {
+        if (canSearching == true) {
+            canSearching = false;
+            var listBoxF = $("#kontaktGrid").data("kendoGrid");
+
+            e.preventDefault();
+            var $this = $(this);
+            $.ajax({
+                type: "GET",
+                url: '@Url.Action("CreateKontaktListe", "Funksjoner")',
+                data: $this.serialize(),
+                dataType: 'json'
+            }).done(function (result) {
+                canSearching = true;
+                if (result > 0) {
+                    resultatId = result;
+                    listBoxF.dataSource.read();
+                }
+            }).always(function () {
+                canSearching = true;
+            });
+        }
+    });
+
+    $(document).ready(function () {
+        clickHookup();
+
+        $("#scheduler").dblclick(function (e) {
+            var scheduler = $("#scheduler").getKendoScheduler();
+            var event = scheduler.occurrenceByUid($(this).data("uid"));
+            if (scheduler.viewName() == "month") {
+                scheduler.editEvent(event);
+            } else {
+                //alert(event.title);
+            }
+        });
+
+    })
+
+    function clickHookup() {
+            $("#VisSamlet").click(function () {
+                if (this.checked) {
+                    scheduler = $("#scheduler").data("kendoScheduler");
+                    //remove one of the groups:
+                    scheduler.options.group.resources.splice(0, 1);
+                    //refresh the view
+                    scheduler.view(scheduler.view().name);
+                }
+                else {
+                    scheduler = $("#scheduler").data("kendoScheduler");
+
+                    scheduler.options.group.resources.push("Attendees");
+                    //refresh the view
+                    scheduler.view(scheduler.view().name);
+                }
+            });
+        }
+
+    function filterSok(e) {
+        return {
+            resultatId: resultatId
+        }
+    }
+
+</script>

@@ -1,0 +1,563 @@
+﻿@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+
+@using Kendo.Mvc.UI
+@model Susteni.Models.Account.AccountModel
+
+<style>
+
+    .helpdesk {
+        position: relative;
+        margin: 0px;
+        padding: 0;
+    }
+
+    .helpdesk img {
+        width: 48px;
+        height: 48px;
+        vertical-align: top;
+        margin: auto;
+        }
+
+    .helpdesk h3 {
+        margin: 0px;
+        padding: 5px 0px 5px 0px;
+        overflow: hidden;
+        line-height: 1.1em;
+        font-size: 16px;
+        font-weight: normal;
+        text-transform: uppercase;
+        color: black;
+        }
+
+        .helpdesk button img {
+            width: 24px;
+            height: 24px;
+            margin-right: 5px;
+        }
+
+    .Losning {
+        font-weight: bold;
+        border-top: solid transparent 10px;
+        border-bottom: solid transparent 10px;
+    }
+
+    .cards-container {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+
+    .k-card {
+        width: 285px;
+        margin: 5%;
+    }
+
+    .k-card-footer {
+        text-align: center;
+    }
+
+    .k-card-image {
+        max-height: 285px;
+        width: auto;
+    }
+
+    table td, table td * {
+        vertical-align: top;
+    }
+
+
+    #Helpdesk {
+        color: black;
+        font-weight: 300;
+    }
+
+    #Helpdesk h5 {
+        font-size: 20px;
+        font-weight: bold;
+        margin-bottom: 10px;
+        }
+
+    #Helpdesk .hdBilde img {
+        width: 100%;
+        margin-top: 5px;
+        margin-bottom: 5px;
+        }
+
+    #Helpdesk .hdBildeTekst {
+        margin-bottom: 10px;
+        }
+
+    #Helpdesk .hdBrukerId {
+        margin-bottom: 3px;        
+        }
+
+    #Helpdesk .hdNotat {
+        margin-bottom: 10px;
+        font-weight: bold;
+        }
+
+    .k-dialog {
+        top: 400px !important;
+        }
+
+    .k-window {
+        top: 100px !important;
+        }
+
+</style>
+
+<script type="text/x-kendo-tmpl" id="template">
+    <div class="helpdesk">
+        <table width='98%' class='table table-borderless' style='margin: 0px; padding: 0px;'>
+            <tr class='align-top'>
+                <td rowspan='4' width='60px;'>
+                    <img src="@Url.Content("~/images/")#:data.ikon#.svg" alt="ikon" />
+                </td>
+                <td>
+                    <h3>#:Tittel#</h3><p style='color: darkred; font-weight: 500;'>#:FerdigDatoTekst#</p>
+                </td>
+                <td>
+                    <button type='button' class='commandInline' style='width: 30px;' onclick="redigerTicket('#=HelpDeskGuid#')"><img src="@Url.Content("~/images/")tool-pencil-filled.svg" width="24" height="24" alt="ikon" /></button>
+                    @*<button type='button' class='commandInline' style='width: 30px;' onclick="slettTicket('#=HelpDeskGuid#')"><img src="@Url.Content("~/images/")trash-2.svg" width="24" height="24" alt="ikon" /></button>*@
+                </td>
+            </tr>
+             <tr>
+                 <td colspan='2'>
+                    #=Beskrivelse#
+                </td>
+            </tr>
+             <tr class='Losning'>
+                 <td colspan='2'>
+                    #=Losning#
+                </td>
+            </tr> 
+            <tr>
+                <td colspan='2'>
+                    <button type='button' class='commandModernBlue' style='width: 100px;' onclick="visHelpdeskLogg('#=HelpDeskGuid#')"><img src="@Url.Content("~/images/")#=ikonLogg#.svg" width="24" height="24" alt="ikon" />Logg</button>
+                    <button type='button' class='commandModernBlue' style='width: 140px;' onclick="visHelpdeskLosning('#=HelpDeskGuid#')"><img src="@Url.Content("~/images/")eye.svg" width="24" height="24" alt="ikon" />Se løsningen</button>
+                    #if(Status > 7) {#
+                        <button type='button' class='commandModernGreen' style='width: 120px;' onclick="visHelpdeskFerdig('#=HelpDeskGuid#')"><img src="@Url.Content("~/images/")True.svg" width="24" height="24" alt="ikon" />Godkjenn</button>
+                        <button type='button' class='commandModernRed' style='width: 150px;' onclick="avvisTicket('#=HelpDeskGuid#')"><img src="@Url.Content("~/images/")Stop.svg" width="24" height="24" alt="ikon" />Avvis løsning</button>
+                    #}#
+                </td>
+
+            </tr>
+        </table>
+    </div>
+</script>
+
+<div class="form-group row" style="margin-top: 10px;">
+    <div id="confirm"></div>
+
+    <div class="col-4">
+        <img src="~/images/PowerSave_logo.svg" style="width: 100px;" alt="mainlogo" />
+    </div>
+
+    <div class="col-4" style="margin-top: 10px;">
+        <img src="data:image/jpeg;base64,@ViewData["Logo"]" style="width: 100px;  display: block; margin: auto;" />
+    </div>
+
+
+    @if (ViewData["ChangeCustomer"] != null && ViewData["ChangeCustomer"].ToString() == "1")
+    {
+    <div class="col-lg-4">
+        <button class="commandline" style="margin-top: 10px; max-width: 200px; width: 200px; float: right;" onclick="showDialogFellesraad()"><img src="~/images/company-building-filled.svg" />Change active customer</button>
+    </div>
+    }
+    
+</div>
+
+<div class="row" style="margin-top: 20px;">
+    <div class="col-12">
+        <div id="Ships"></div>
+    </div>
+</div>
+
+<img src="~/images/logo_susteni.svg" style="position: fixed; bottom: 10px; right: 10px; width: 100px;" alt="mainlogo" />
+
+<div id="dialogNyhetWindow">
+
+    @(Html.Kendo().Window()
+        .Name("DialogSupport")
+        .Title(Localizer["Support"].Value)
+        .Visible(false)
+        .Width(1200)
+        .Modal(true)
+        .Draggable()
+        )
+
+    @(Html.Kendo().Dialog()
+        .Name("dialogFellesraad")
+        .Title("Set active customer")
+        .Content(
+        Html.Kendo().ListBox()
+        .Name("listFellesraad")
+        .DataValueField("CustomerGuid")
+        .DataTextField("CustomerName")
+        .HtmlAttributes("style='height: 100%;'")
+        .Selectable(ListBoxSelectable.Single)
+        .DataSource(dataSource => dataSource
+        .Ajax()
+        .Read(read => read.Action("getCustomerList", "Customer"))
+        )
+        .ToHtmlString()
+        )
+        .Visible(false)
+        .Height(600)
+        .Width(400)
+        .Modal(true)
+        .Actions(actions =>
+        {
+            actions.Add().Text("Cancel");
+            actions.Add().Text("Set active").Action("onActionOK").Primary(true);
+        })
+        )
+</div>
+
+<style>
+    .k-listbox {
+        height: 100%;
+    }
+</style>
+
+<script>
+    var TicketGuid = "";
+    var redigerTicketOpen = false;
+
+    //window.onload = function () {
+    //    $.ajax({
+    //        url: '@Url.Action("getFellesraadNavn", "kWebSys")',
+    //        type: "GET"
+    //    }).done(function (result) {
+    //        document.getElementById('fellesraadNavn').innerHTML = result;
+    //    });
+    //};
+
+    $(document).ready(function () {
+
+        var meny = document.getElementById("hmHjem");
+        meny.classList.add("menyAktiv");
+
+        ListOfShips();
+    });
+
+
+    document.addEventListener('paste', function (evt) {
+        if (redigerTicketOpen) {
+            const clipboardItems = evt.clipboardData.items;
+            const items = [].slice.call(clipboardItems).filter(function (item) {
+                return item.type.indexOf('image') !== -1;
+            });
+            if (items.length === 0) {
+                return;
+            }
+
+            const item = items[0];
+            const blob = item.getAsFile();
+
+            var reader = new FileReader();
+            reader.readAsDataURL(blob);
+            reader.onloadend = function () {
+                var base64data = reader.result;
+
+                $.ajax({
+                    type: "POST",
+                    url: '@Url.Action("LeggTilHelpDeskBilde", "HelpDesk")',
+                    data: { HelpDeskGuid: TicketGuid, base64Image: base64data },
+                    dataType: 'json'
+                }).done(function (result) {
+                    if (result.Result == true) {
+
+                        var grdTickets = $("#lvBilder").data("kendoListView");
+                        grdTickets.dataSource.read();
+                    }
+                    else {
+                        alert(result.ErrorText);
+                    }
+
+                }).fail(function (result) {
+                    alert('an Error has occurred, please try again');
+                });
+            }
+        }
+    });
+
+    function ticketOpen() {
+        redigerTicketOpen = true;
+    }
+
+    function ticketClose() {
+        redigerTicketOpen = false;
+    }
+
+    //function visHuskeliste() {
+    //    var respons = "";
+
+    //    $.ajax({
+    //       url: '@Url.Action("GetHomeHuskeliste", "Home")',
+    //        type: "GET",
+    //        dataType: "html"
+    //    }).done(function (result) {
+    //        var pureHTML = result
+    //        pureHTML = pureHTML.replace('{"EncodedContent":{"Value":"', "").replace('"}}','');
+    //        $("#huskeliste").html(pureHTML);
+    //   });
+    //}
+
+    //function visNyheterlistexxx() {
+    //    var respons = "";
+    //    $.ajax({
+    //       url: '@Url.Action("GetHomeNyhetsliste", "Home")',
+    //        type: "GET",
+    //        dataType: "html"
+    //    }).done(function (result) {
+    //        var pureHTML = result
+    //        pureHTML = pureHTML.replace('{"EncodedContent":{"Value":"', "").replace('"}}', '');
+
+    //        pureHTML = replaceAll(pureHTML, "¤","\"");
+    //        $("#nyheter").html(pureHTML);
+    //   });;
+    //}
+
+    function replaceAll(string, search, replace) {
+        return string.split(search).join(replace);
+    }
+
+    function ListOfShips() {
+        var respons = "";
+        $.ajax({
+            url: '@Url.Action("GetListOfShips", "Home")',
+            type: "GET",
+            dataType: "html"
+        }).done(function (result) {
+            // var pureHTML = result
+            // pureHTML = pureHTML.replace('{"EncodedContent":{"Value":"', "").replace('"}}', '');
+
+            result = replaceAll(result, "¤", "\"");
+            $("#Ships").html(result);
+
+            $('.k-card-actions').each(function () {
+                $(this).removeClass().addClass("k-actions k-card-actions k-actions-vertical");
+            });
+        });
+    }
+
+    function fuelSavings(shipGuid, Name, ProfilGuid, ProfilName) {
+        window.location = "../Ship/FuelSavings?shipGuid=" + shipGuid + "&Name=" + Name + "&ProfilGuid=" + ProfilGuid + "&ProfilName=" + ProfilName;
+
+    }
+
+    function generators(shipGuid, Name, ProfilGuid, ProfilName) {
+        window.location = "../Ship/ElProduction?shipGuid=" + shipGuid + "&Name=" + Name + "&ProfilGuid=" + ProfilGuid + "&ProfilName=" + ProfilName;
+    }
+
+    function summary(shipGuid, Name, ProfilGuid, ProfilName) {
+        window.location = "../Ship/Summary?shipGuid=" + shipGuid + "&Name=" + Name + "&ProfilGuid=" + ProfilGuid + "&ProfilName=" + ProfilName;
+
+    }
+
+    function plan(shipGuid, Name, ProfilGuid, ProfilName) {
+        window.location = "../Ship/InvestmentPlan?shipGuid=" + shipGuid + "&Name=" + Name + "&ProfilGuid=" + ProfilGuid + "&ProfilName=" + ProfilName;
+    }
+
+    function powerProd(shipGuid, Name, ProfilGuid, ProfilName) {
+        window.location = "../Ship/PowerProduction?shipGuid=" + shipGuid + "&Name=" + Name + "&ProfilGuid=" + ProfilGuid + "&ProfilName=" + ProfilName;
+    }
+
+
+    function filterHelpdesk() {
+        return { HelpDeskGuid: TicketGuid }
+    }
+
+
+    function redigerTicket(ticketGuid) {
+        TicketGuid = ticketGuid;
+
+        $.ajax({
+            url: '@Url.Action("DialogTicketRediger", "HelpDesk")',
+            type: "GET",
+            data: { ticketGuid: ticketGuid },
+            })
+        .done(function (result) {
+            $("#dialogTicketRediger").html(result);
+            var popup = $('#dialogTicketRediger').data("kendoWindow");
+            popup.center().open();
+            });
+        }
+
+    function filterHelpdesk() {
+        return { HelpDeskGuid: TicketGuid }
+    }
+
+    function onBildeChange(e) {
+        var selected = this.select();
+        var data = this.dataItem(selected);
+        HelpDeskBildeGuid = data.HelpDeskBildeGuid;
+
+        $.ajax({
+            url: '@Url.Action("GetHelpDeskBilde", "HelpDesk")',
+            data: { HelpDeskBildeGuid: HelpDeskBildeGuid },
+            type: "GET"
+        }).done(function (result) {
+            $("#helpdeskbildeForm").html(result);
+        });
+    }
+
+    function slettTicket(ticketGuid) {
+        $("#confirm").kendoConfirm({
+            title: "Slett",
+            content: "Ønsker du å slette denne supportsaken?",
+            messages: {
+                okText: "Ja",
+                cancel: "Nei"
+                }
+            })
+        .data("kendoConfirm").result.done(function () {
+            $('body').append($('<div id="confirm">'));
+
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("removeHelpDesk", "HelpDesk")',
+                data: { HelpDeskGuid: ticketGuid },
+                })
+            .done(function (result) {
+                grdGravNotat.dataSource.read();
+                });
+            })
+        .fail(function () {
+            $('body').append($('<div id="confirm">'));
+            });
+        }
+
+    function slettBilde() {
+        $("#confirm").kendoConfirm({
+            title: "Slett",
+            content: "Ønsker du å slette dette bilde?",
+            messages: {
+                okText: "Ja",
+                cancel: "Nei"
+                }
+            })
+        .data("kendoConfirm").result.done(function () {
+            $('body').append($('<div id="confirm">'));
+
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("RemoveHelpDeskBilde", "HelpDesk")',
+                data: { HelpDeskBildeGuid: HelpDeskBildeGuid },
+                })
+            .done(function (result) {
+                $("#lvBilder").data("kendoListView").dataSource.read();
+                });
+            })
+        .fail(function () {
+            $('body').append($('<div id="confirm">'));
+            });
+        }
+
+    function LagreTickets() {
+        var $this = $('#Helpdesk');
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("LagreHelpDesk", "HelpDesk")',
+            data: $this.serialize(),
+            dataType: 'json'
+            })
+        .done(function (result) {
+            if (result.Result == true) {
+                currHelpdeskGuid = result.NewGuid;
+                var grdTickets = $("#ticketsListe").data("kendoGrid");
+                grdTickets.dataSource.read();
+
+                var popup = $('#dialogHDFerdig').data("kendoWindow");
+                popup.close();
+                }
+            else {
+                alert(result.ErrorText);
+                }
+            })
+        .fail(function (result) {
+            alert('an Error has occurred, please try again');
+            });
+        }
+
+    function lagrehelpdeskNotat() {
+        var $this = $('#helpdeskNotat');
+
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("LagreHelpDeskLogg", "HelpDesk")',
+            data: $this.serialize(),
+            dataType: 'json'
+            })
+        .done(function (result) {
+            if (result == true) {
+                var grd = $("#grdLogg").data("kendoGrid");
+                grd.dataSource.read();
+                }
+            });
+        }
+
+    function showDialogFellesraad() {
+        $('#listFellesraad').data("kendoListBox").dataSource.read();
+        $('#dialogFellesraad').data("kendoDialog").open();
+    }
+
+    function onOpen() {
+        $("#showDialogBtn").fadeOut();
+    }
+
+    function onClose() {
+        $("#showDialogBtn").fadeIn();
+    }
+
+    function onActionOK(e) {
+        var lwFellesraad = $("#listFellesraad").data("kendoListBox");
+
+        var selectedF = lwFellesraad.select();
+        var selItemF = lwFellesraad.dataItem(selectedF);
+
+        if (typeof selItemF != 'undefined') {
+            CustomerGuid = selItemF.CustomerGuid;
+        }
+
+        $.ajax({
+            url: '@Url.Action("SetActiveCustomerUser", "Account")',
+            data: { CustomerGuid: CustomerGuid },
+            type: "GET"
+        }).always(function (result) {
+            if (result.Status >= 0) {
+                location.reload();
+            }
+        });
+    }
+
+    function addSupport() {
+        $.ajax({
+            url: '@Url.Action("DialogSupport", "HelpDesk")',
+            type: 'GET'
+        }).done(function (result) {
+            $('#DialogSupport').html(result);
+
+            xB = document.getElementById("idBilde");
+
+            document.getElementById("HelpDesk_Modul").value = "Hjem";
+            document.getElementById("HelpDesk_Program").value = "2";
+            document.getElementById("HelpDesk_Status").value = "1";
+
+            const screenshotTarget = document.body;
+
+            html2canvas(screenshotTarget).then((canvas) => {
+                const base64image = canvas.toDataURL("image/png");
+                xB.innerHTML = "<img src='" + base64image + "' style='max-height: 260px; max-width: 350px;' alt='Bilde' / >";
+                document.getElementById("HelpDesk_byte64String").value = base64image
+            });
+
+            var popup = $('#DialogSupport').data("kendoWindow");
+            popup.center().open();
+        });
+    }
+
+</script>

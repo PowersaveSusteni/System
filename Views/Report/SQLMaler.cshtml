@@ -1,0 +1,257 @@
+﻿@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
+@model Susteni.Models.ReportModel
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@using TXTextControl.Web.MVC
+@using TXTextControl.Web
+
+@{
+    ViewData["Title"] = Localizer["SQL Maler"];
+    ViewData["LogOnOk"] = "2";
+    ViewData["Menu"] = "Admin";
+}
+
+<form action="Lagre" id="formEngrafo" onsubmit="return false;" method="post" class="mt-3">
+
+    <div class="container-fluid padding-0">
+
+        <div class="row" id="heading" style="min-height: 70px;">
+
+            <div class="col-md-2">
+                <h3>@Localizer["SQL Maler"]</h3>
+            </div>
+
+            <div class="col-md-8" style="display: flex; flex-direction: row;">
+                <div id="topmeny">
+                </div>
+            </div>
+
+            <div class="col-md-2">
+                <div id="infoLagring"></div>
+            </div>
+
+        </div>
+
+        <div class="row" style="border: 1px solid lightgrey; margin: 5px; padding-top: 10px; padding-right: 10px;">
+
+            <div class="col-3">
+                <div class="row">
+                    <div class="col-lg-7" style="display: flex; flex-direction: row;">
+
+                        <div>
+                            <button type="button" name="nyMappe" class="commandline" onclick="nyBestilling()">
+                                <img src="~/images/Ny.svg" />
+                                <figcaption>Ny</figcaption>
+                            </button>
+                        </div>
+
+                        <div>
+                            <button type="button" class="commandline" onclick="lagreBestilling()">
+                                <img src="~/images/Lagre.svg" />
+                                <figcaption>Lagre</figcaption>
+                            </button>
+                        </div>
+
+                        <div>
+                            <button type="button" style="display: none" name="mappeEndre" id="mappeEndre" class="commandline">
+                                <img src="~/images/Slette.svg" />
+                                Slette
+                            </button>
+                        </div>
+
+                    </div>
+                </div>
+
+                <div class="row" style="margin-top: 10px;">
+                    <div class="col-lg-6">
+                        <h5>Arkivsystem</h5>
+                        @(Html.Kendo().DropDownList()
+                            .Name("ArkivType")
+                            .DataTextField("Text")
+                            .DataValueField("Value")
+                            .Events(events => events
+                                .Change("onArkivTypeChange")
+                                )
+                            .BindTo(new List<SelectListItem>() {
+                                new SelectListItem() {
+                                Text = Localizer["Intern"].Value , Value = "0"
+                                },
+                                new SelectListItem() {
+                                Text = Localizer["Engrafo"].Value, Value = "1"
+                                },
+                                new SelectListItem() {
+                                Text = Localizer["DNK 360"].Value, Value = "2"
+                                }
+                            })
+                            .Value("1")
+                            .HtmlAttributes(new { style="width: 100%;" })
+                            )
+                    </div>
+                </div>
+
+                <div class="form-group" style="margin-top: 10px;">                                                
+                    <div class="form-group" id="ressurser" style="margin-top: 10px;">
+                        <h5>Maler</h5>
+                        @(Html.Kendo().TreeView()
+                        .Name("SQLMaler")
+                        .DataTextField("Name")
+                        .HtmlAttributes(new { style="background-color: white;" })
+                        .LoadOnDemand(false)
+                        .Events(events => events
+                            .Change("onSQLMalSelect")
+                            )
+                        .DataSource(DataSource => DataSource
+                            .Custom()
+                            .Transport(t => t.Read("readHandler"))
+                            .Schema(s => s.Model ( m => m.Children("items")))
+                            )
+                        )
+                    </div>
+
+                </div>
+            </div>
+
+            <div class="col-9">
+
+                <partial name="_SQLMal" />
+
+            </div>
+
+        </div>
+
+    </div>
+
+</form>
+
+
+<script id="events">
+    var modul = 0;
+    var arkivType = 1;
+
+    function readHandler(options) {
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("SQLMalerTree", "Rapport")',
+            data: {ArkivType: arkivType}
+            }).done(function(result) {
+                options.success([result]);
+            });        
+        }
+
+    function filterModul() {        
+        return {Modul: modul, ArkivType: arkivType}
+        }
+
+    function onArkivTypeChange(e) {
+        var selected = this.select();
+        var data = this.dataItem(selected);
+        arkivType = data.Value;
+        var grid = $("#SQLMaler").data("kendoTreeView");
+        grid.dataSource.read();
+        }
+    
+
+    function onSQLMalSelect() {
+        var selected = this.select();
+        var data = this.dataItem(selected);
+        sqlMalGuid = "";
+        
+
+        if (data != null) {
+            sqlMalGuid = data.id;
+            modul = data.Modul;
+
+            $.ajax({
+                url: '@Url.Action("GetRapportSqlMal", "Rapport")',
+                data: { sqlMalGuid: sqlMalGuid },
+                type: "GET"
+            }).done(function (result) {
+                $("#sqlmalerForm").html(result);
+                var grid = $("#RapportSQLMal_TilhSqlMal_GUID").data("kendoDropDownList");
+                grid.dataSource.read();
+
+            });
+        }
+    }
+
+</script>
+
+
+<script type="text/javascript">  
+
+    function onError(e) {
+        this.cancelChanges();
+
+        var errorMessage = "";
+        if (e.errors) {
+            for (var error in e.errors) {
+                errorMessage += e.errors[error].errors[0] + " ";
+            }
+        }
+        //alert(errorMessage);
+    }
+
+    function getCheckedItems(treeview) {
+        var nodes = treeview.dataSource.view();
+        return getCheckedNodes(nodes);
+    }
+
+</script>
+
+<script id="treeview" type="text/kendo-ui-template">
+
+    # if (!item.items && item.spriteCssClass) { #
+    #: item.text #
+    <span class='k-icon k-i-close kendo-icon'></span>
+    # } else if(!item.items && !item.spriteCssClass) { #
+    <span class="k-sprite pdf"></span>
+    #: item.text #
+    <span class='k-icon k-i-close telerik-icon'></span>
+    # } else if (item.items && item.spriteCssClass){ #
+    #: item.text #
+    # } else { #
+    <span class="k-sprite folder"></span>
+    #: item.text #
+    # } #
+
+</script>
+
+<script id="Lagre">
+
+     function nyBestilling() {
+        $.ajax({
+            url: '@Url.Action("NySQLMal", "Rapport")',
+            type: "GET"
+        }).always(function (result) {
+            $("#sqlmalerForm").html(result);
+            x = document.getElementById("RapportSQLMal_ArkivSystem");
+            x.value = arkivType;
+            });
+        }
+
+    function lagreBestilling() {
+        var $this = $('#formEngrafo');
+
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("LagreRapportSqlMal", "Rapport")',
+            data: $this.serialize(),
+            dataType: 'json'
+        }).done(function (result) {
+            if (result.Result == true) {
+                document.getElementById('infoLagring').innerHTML = "<img src='@Url.Content("~/images/")database-save.png' />@Localizer["Lagret"]";
+                $('#infoLagring').fadeIn(800).delay(100).fadeOut(800);
+
+                if (result.Refresh == true) {
+                    var grid = $("#SQLMaler").data("kendoTreeView");
+                    grid.dataSource.read();
+                    }
+                }
+            }).fail(function (result) {
+            alert('an Error has occurred, please try again');
+        });
+     };
+   
+</script>
+
+

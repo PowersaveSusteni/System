@@ -1,0 +1,72 @@
+﻿@using Microsoft.AspNetCore.Mvc.Localization
+
+@inject IViewLocalizer Localizer
+@model Susteni.Models.Ship.ShipModel
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+
+
+<form id="equipmnetOperationModeForm" style="margin-bottom: 0px;">
+    <input hidden asp-for="ShipEquipmentModes.OperationModeGuid" class="form-control k-textbox">
+    <input hidden asp-for="ShipEquipmentModes.EquipmentGuid" class="form-control k-textbox">
+    <input hidden asp-for="ShipEquipmentModes.EquipmentModesGuid" class="form-control k-textbox">
+    <input hidden asp-for="ShipEquipmentModes.ProfilGuid" class="form-control k-textbox">
+
+
+    <div class="row align-items-center" style="display: flex; flex-direction: row;">
+        <label class="col-4 col-form-label">Average load before</label>
+        <div class="col-4">
+            @(Html.Kendo().NumericTextBox<decimal>()
+                .Name("ShipEquipmentModes.PercentLoad")
+                .HtmlAttributes(new { style= "width: 100px;"})
+                .Events(e => e.Change("onPercentLoadChange").Spin("onPercentLoadChange"))
+                .Format("N2")
+                .Value(Model.ShipEquipmentModes.PercentLoad)
+                )
+                %
+        </div>
+        <div class="col-4">
+            @(Html.Kendo().NumericTextBox<decimal>()
+                .Name("powerSaving")
+                .Events(e => e.Change("onPowerSaveChange").Spin("onPowerSaveChange"))
+                .HtmlAttributes(new { style = "width: 100px;" })
+                .Format("N2")
+                )
+            Kw
+        </div>
+    </div>
+
+    <div class="row align-items-center" style="display: flex; flex-direction: row;">
+        <label class="col-4 col-form-label">Saving</label>
+        <div class="col-4">
+            @(Html.Kendo().NumericTextBox<decimal>()
+                .Name("ShipEquipmentModes.PercentSaving")
+                .HtmlAttributes(new { style = "width: 100px;" })
+                .Format("N2")
+                .Events(e => e.Change("onPercentSavingChange").Spin("onPercentSavingChange"))
+                .Value(Model.ShipEquipmentModes.PercentSaving)
+                )
+                %
+        </div>
+        
+        <div class="col-4">
+            @(Html.Kendo().NumericTextBox<decimal>()
+                .Name("kWhSavings")
+                .HtmlAttributes(new { style = "width: 100px;" })
+                .Format("N2")
+                .Step(1)
+                .Events(e => e.Change("onkWhSavingChange").Spin("onkWhSavingChange"))
+                )
+            kWh
+        </div>
+    </div>
+
+
+    <div class="row" style="margin-right: 10px;">
+        <div class="col-12" style="margin-top: 15px; margin-bottom: 0px; padding: 0px;">
+            <button type="button" onclick="closeEqipmentMode()" class="commandModernRed" style="width: 120px; float: right">Cancel</button>
+            <button type="button" onclick="saveEqipmentMode()" class="commandModernGreen" style="width: 120px; float: right">Save</button>
+        </div>
+
+    </div>
+
+</form>

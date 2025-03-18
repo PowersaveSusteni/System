@@ -1,0 +1,1813 @@
+﻿@using Microsoft.AspNetCore.Mvc.Localization
+
+@inject IViewLocalizer Localizer
+@model Susteni.Models.Ship.ShipModel
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+
+@{
+    ViewData["Title"] = Localizer["El production"];
+    ViewData["LogOnOk"] = "2";
+    ViewData["Menu"] = "Admin";
+}
+
+<script type="text/x-kendo-tmpl" id="template">
+    <div class="folder">
+        <img src="@Url.Content("~/images/#: icon#.svg")" />
+        <p>#:Name#</p>
+    </div>
+</script>
+
+ 
+
+<style>
+    #gauge-container {
+        width: 300px;
+        text-align: center;
+        margin: 20px auto 0 auto;
+    }
+
+    .k-arcgauge-label {
+        font-size: 30px;
+    }
+
+    #gauge {
+        margin-bottom: 10px;
+    }
+
+    #gaugeAfter {
+        margin-bottom: 10px;
+    }
+
+    table {
+        font-family: arial, sans-serif;
+        border-collapse: collapse;
+        width: 80%;
+    }
+
+    td, th {
+        border: 1px solid #dddddd;
+        text-align: left;
+        padding: 8px;
+        background-color: lightsteelblue;
+    }
+
+    .k-grid table tbody tr td {
+        border-bottom: 1px solid #dddddd !important;
+    }
+
+    tr:nth-child(even) {
+        background-color: rgba(0,0,0,0.04);
+    }
+
+    #idTabeller p {
+        font-size: 12px;
+        margin-bottom: 0px;
+    }
+
+
+    .k-fab-text {
+        display: none;
+    }
+
+
+    .folder {
+        float: left;
+        position: relative;
+        margin-right: 10px;
+    }
+
+        .folder img {
+            width: 32px;
+            height: 32px;
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+            margin-top: 2px;
+        }
+
+        .folder p {
+            padding: 3px 5px 0px 5px;
+            font-size: 10px;
+            font-weight: normal;
+            color: #999;
+            text-align: center;
+            margin-bottom: 1px;
+        }
+
+        .folder:checked {
+            font-weight: bold;
+            color: red;
+        }
+
+        .folder:hover p {
+            font-weight: bold;
+            color: black;
+        }
+
+
+</style>
+
+<style>
+
+    #dialogVisPDFRapport {
+        height: 85vh;
+        width: 90vw;
+        max-width: 1200px;
+    }
+
+    #pdfViewerRapport {
+        width: 100% !important;
+        height: 100% !important;
+    }
+
+    #dialogVisPDF {
+        height: 85vh;
+        width: 90vw;
+        max-width: 1200px;
+    }
+
+    #pdfViewer {
+        width: 100% !important;
+        height: 100% !important;
+    }
+
+
+</style>
+
+
+<form onsubmit="return false;" class="mt-3">
+
+    <input hidden asp-for="Ship.ShipGuid" />
+    <input hidden asp-for="Ship.Name" />
+    <input hidden asp-for="Ship.ProfilGuid" />
+    <input hidden asp-for="Ship.ProfilName" />
+ 
+    <div class="row" id="heading" style="min-height: 90px;">
+
+        <div class="col-xxl-3 col-xl-4 unselectable">
+            <img src="~/images/PowerSave_logo.svg" style="width: 70px; float: left; margin-right: 10px;" alt="mainlogo" />
+
+            <h2>@Localizer["Power production"]</h2>
+            <h3 id="idName"></h3>
+        </div>
+
+        <div class="col-xxl-3 col-xl-3">
+            <div style="display: flex; flex-direction: row;">
+                <button type="button" class="commandModern" onclick="fuelSavings()"><img src="~/images/subject-mecanics-filled-green-leaf.svg" style="width: 24px; height: 24px; margin-right: 5px;" />Measures</button>
+                <button type="button" class="commandModern" onclick="plan()"><img src="~/images/money-coins-filled.svg" style="width: 24px; height: 24px; margin-right: 5px;" />Investment plan</button>
+                @* <button type="button" class="commandModern" onclick="showDialogRapporter()"><img src="~/images/Laser.svg" style="width: 24px; height: 24px; margin-right: 5px;" />Reports</button> *@
+            </div>
+        </div>
+
+        <div class="col-3" id="idDocumentX">
+            
+        </div>
+
+        <div class="col-xxl-3" style="display: flex; flex-direction: row; margin-top: 10px;">
+
+            <p style="margin-top: 5px;"><b>Profile: </b></p>
+            <span style="color: darkred; margin-top: 5px; margin-right: 10px;"><p id="idProfileName"></p></span>
+
+
+            <div class="btn-group" role="group">
+                <a class="dropdown-toggle commandModernNew" data-bs-toggle="dropdown" id="ddDokument" style="width: 80px;">
+                    <img src="~/images/star-filled.svg" />
+                </a>
+                <ul class="dropdown-menu" id="ddmenu">
+                    <li>
+                        <button type="button" class="commandModernInline" onclick="showDialogProfile()" style="height: 28px; padding-top:2px; width: 200px;">
+                            <img src="~/images/tool-pencil-filled.svg" />
+                            Set active profile
+                        </button>
+                    </li>
+
+                    <li>
+                        <button type="button" class="commandModernInline" onclick="newProfiles()" style="height: 28px; padding-top:2px;">
+                            <img src="~/images/Ny.svg" />
+                            New
+                        </button>
+                    </li>
+
+                    <li>
+                        <button type="button" class="commandModernInline" onclick="showDialogCopyProfiles()" style="height: 28px; padding-top:2px;">
+                            <img src="~/images/clipboard-copy.svg" />
+                            Copy
+                        </button>
+                    </li>
+
+                </ul>
+            </div>
+
+        </div>
+
+
+    </div>
+ 
+     <div class="row" id="idTabeller">
+
+        <div class="col-xxl-7 col-xl-12">
+
+            <div class="row" style="margin-top: 35px;">
+
+                <div class="col-4">
+
+                    <div style="position: relative">
+                        @(Html.Kendo().Grid<Susteni.Models.ShipOperationModeItem>()
+                            .Name("generatorModeList")
+                            .Columns(columns =>
+                            {
+                                columns.Bound(q => q.OperationModeGuid).Visible(false);
+                                columns.Bound(q => q.OperationModeProfileGuid).Visible(false);
+                                columns.Bound(q => q.Name).Width(200).Title(Localizer["Mode"].Value);
+                                columns.Bound(q => q.NumberGenerator).Title("# Generators");
+                            })
+                            .Height(300)
+                            //.Editable(editable => editable.Mode(GridEditMode.InCell))
+                            .Scrollable()
+                            .Selectable(s => s
+                            .Mode(GridSelectionMode.Multiple)
+                            .Type(GridSelectionType.Row))
+                            .Events(e => e.Change("onGeneratorModeChange").DataBound("onGeneratorDataBound"))
+                            .DataSource(dataSource => dataSource
+                                .Ajax()
+                                .Batch(true)
+                                .ServerOperation(false)
+                                .Read(read => read.Action("GetShipOperationModeList", "Ship").Data("filterShip"))
+                                )
+                            )
+
+                        @(Html.Kendo().FloatingActionButton()
+                            .Name("operationModeEdit")
+                            .ThemeColor(FloatingActionButtonThemeColor.Success)
+                            .Size(FloatingActionButtonSize.Small)
+                            .PositionMode(FloatingActionButtonPositionMode.Absolute)
+                            .Align(FloatingActionButtonAlign.TopEnd)
+                            .AlignOffset(alignOffset => alignOffset.Horizontal(10).Vertical(10))
+                            .Icon("pencilIcon")
+                            .Events(events => events.Click("showDialogOperationModeProfile"))
+                            .Visible(true)
+                            )
+
+                    </div>
+
+
+                </div> 
+                <div class="col-8">
+
+                    <table style="width: 100%; margin:0px; padding:0px;">
+                        <tr>
+                            <th>Info</th>
+                            <th>Power kWh</th>
+                            <th>CO₂ (ton)</th>
+                            <th>NOx (ton)</th>
+                            <th>SOx (ton)</th>
+                        </tr>
+                        <tr><td>Power production before measures</td><td style="text-align: right;" id="idmBS"></td><td style="text-align: right;" id="idmBSC"></td><td style="text-align: right;" id="idmBSnoX"></td><td style="text-align: right;" id="idmBSsoX"></td></tr>
+                        <tr><td>Fuel saving power reduction</td><td style="text-align: right;" id="idmPR"></td><td style="text-align: right;"></td><td style="text-align: right;"></td><td style="text-align: right;"></td></tr>
+                        <tr><td>New necessary power production</td><td style="text-align: right;" id="idmNPP"></td><td style="text-align: right;"></td><td style="text-align: right;"></td><td style="text-align: right;"></td></tr>
+
+                        <tr><td>Power production after measures</td><td style="text-align: right;" id="idmAS"></td><td style="text-align: right;" id="idmASC"></td><td style="text-align: right;" id="idmASnoX"></td><td style="text-align: right;" id="idmASsoX"></td></tr>
+
+                        <tr><td>Maintenance saving after measures</td><td style="text-align: right;" id="idmMSAM"></td><td id="currencyCode">NOK</td><td style="text-align: right;"></td><td style="text-align: right;"></td></tr>
+                    </table>
+
+                    <table style="width: 100%; margin:0px; padding:0px;">
+                        <tr>
+                            <th>Info</th>
+                            <th>Fuel @ViewData["Units"]</th>
+                        </tr>
+                        <tr><td>Fuel using before measures</td><td style="text-align: right;" id="idmFBS"></td></tr>
+                        <tr><td>Fuel using after measures</td><td style="text-align: right;" id="idmFAS"></td></tr>
+                        <tr><td>Saving</td><td style="text-align: right;" id="idmFASaving"></td></tr>
+                    </table>
+
+                </div>
+
+                <div class="col-12" style="margin-top: 20px;" id="idGenerators">
+
+                </div>
+                <div class="col-3" style="margin-top: 20px;">
+                    <h4 style="text-align: center; color: darkred">Load before</h4>
+
+                    <div id="gauge-container">
+                        <div class="row">
+                            <div class="col-12">
+                            @(Html.Kendo().CircularGauge()
+                                .Name("gauge")
+                                .Value(0)
+                                .Scale(x => x.Min(0).Max(100))
+                                .CenterTemplate("<span style='color: #: color #;'>#: value #%</span>")
+                                .Colors(colors =>
+                                {
+                                    colors.Add().From(0).To(25).Color("#ef2a33");
+                                    colors.Add().From(25).To(50).Color("#ef9c2a");
+                                    colors.Add().From(50).To(75).Color("#99e660");
+                                    colors.Add().From(75).To(100).Color("#40bf36");
+                                })
+                                )
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-12">
+                                @(Html.Kendo().Slider()
+                                    .Name("gauge-value")
+                                    .Value(0)
+                                    .Min(0)
+                                    .Max(100)
+                                    .ShowButtons(false)
+                                    .Events(e => e.Change("updateValue"))
+                                    .HtmlAttributes(new { title = "slider" })
+                                    )
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-3" style="margin-top: 20px;">
+                    <h4 style="text-align: center; color: darkred">Load after</h4>
+                    <div id="gauge-container">
+                        <div class="row">
+                            <div class="col-12">
+                                @(Html.Kendo().CircularGauge()
+                                    .Name("gaugeAfter")
+                                    .Value(0)
+                                    .Scale(x => x.Min(0).Max(100))
+                                    .CenterTemplate("<span style='color: #: color #;'>#: value #%</span>")
+                                    .Colors(colors =>
+                                    {
+                                        colors.Add().From(0).To(25).Color("#ef2a33");
+                                        colors.Add().From(25).To(50).Color("#ef9c2a");
+                                        colors.Add().From(50).To(75).Color("#99e660");
+                                        colors.Add().From(75).To(100).Color("#40bf36");
+                                    })
+                                    )
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-12">
+                                @(Html.Kendo().Slider()
+                                    .Name("gauge-value-after")
+                                    .Value(0)
+                                    .Min(0)
+                                    .Max(100)
+                                    .ShowButtons(false)
+                                    .Events(e => e.Change("updateValueAfter"))
+                                    .HtmlAttributes(new { title = "slider" })
+                                    )
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-1"></div>
+
+                <div class="col-3">
+                    <div class="row" style="margin-top: 20px;">
+                        <div class="col-12">
+                            <button type="button" class="commandModern" onclick="AutoTune()" style="height: 48px; padding-top:2px; width: 300px; margin-left: 20px;"><img alt='Ships' src='/images/magic-wand.svg' width=32 height=32 style='vertical-align: bottom; margin-right: 20px;' />Autotune load balance</button>
+                        </div>
+                    </div>
+                    <div class="row" style="margin-top: 10px;">
+                        <div class="col-12">
+                            <button type="button" class="commandModern" onclick="AutoAdjustment()" style="height: 48px; padding-top:2px; width: 300px; margin-left: 20px;"><img alt='Ships' src='/images/magic-wand.svg' width=32 height=32 style='vertical-align: bottom; margin-right: 20px;' />Autotune saving</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="col-xxl-5 col-xl-12">
+            <div class="row" style="margin-top: 20px;">
+                <div class="col-12">
+                    <div class="panel with-nav-tabs panel-default" id="dataenter" style="height: 370px;">
+                        <div class="panel-body data padding-0">
+                            <div class="tab-content data">
+                                <div class="panel-heading" id="Tab">
+                                    <ul class="nav nav-tabs">
+                                        <li class="nav-item"><a class="nav-link active" aria-current="page" href="#tabSummary" data-bs-toggle="tab">@Localizer["Summary all operation modes"]</a></li>
+                                        <li class="nav-item"><a class="nav-link" aria-current="page" href="#tabSavings" data-bs-toggle="tab">@Localizer["Savings per Equipment types"]</a></li>
+                                    </ul>
+                                </div>
+                                <div class="panel-body">
+                                    <div class="tab-content" style="margin-top: 0px;">
+
+                                        <div class="tab-pane fade show active" style="padding: 0px;" role="tabpanel" id="tabSummary">
+
+                                            <table style="width: 100%; margin:0px; padding:0px;">
+                                                <tr>
+                                                    <th>Info</th>
+                                                    <th>Power kWh</th>
+                                                    <th>CO₂ (ton)</th>
+                                                    <th>NOx (ton)</th>
+                                                    <th>SOx (ton)</th>
+                                                </tr>
+                                                <tr><td>Power production before measures</td><td style="text-align: right;" id="idBS"></td><td style="text-align: right;" id="idBSC"></td><td style="text-align: right;" id="idBSnoX"></td><td style="text-align: right;" id="idBSsoX"></td></tr>
+                                                <tr><td>Fuel saving power reduction</td><td style="text-align: right;" id="idPR"></td><td style="text-align: right;"></td><td style="text-align: right;"></td><td style="text-align: right;"></td></tr>
+                                                <tr><td>New necessary power production</td><td style="text-align: right;" id="idNPP"></td><td style="text-align: right;"></td><td style="text-align: right;"></td><td style="text-align: right;"></td></tr>
+
+                                                <tr><td>Power production after measures</td><td style="text-align: right;" id="idAS"></td><td style="text-align: right;" id="idASC"></td><td style="text-align: right;" id="idASnoX"></td><td style="text-align: right;" id="idASsoX"></td></tr>
+
+                                                <tr><td>Maintenance saving after measures</td><td style="text-align: right;" id="idMSAM"></td><td id="currencyCode">NOK</td><td style="text-align: right;"></td><td style="text-align: right;"></td></tr>
+                                            </table>
+
+                                            <table style="width: 100%; margin:0px; padding:0px;">
+                                                <tr>
+                                                    <th>Info</th>
+                                                    <th>Fuel @ViewData["Units"]</th>
+                                                </tr>
+                                                <tr><td>Fuel using before measures</td><td style="text-align: right;" id="idFBS"></td></tr>
+                                                <tr><td>Fuel using after measures</td><td style="text-align: right;" id="idFAS"></td></tr>
+                                                <tr><td>Saving</td><td style="text-align: right;" id="idFASaving"></td></tr>
+                                            </table>
+
+                                        </div>
+
+                                        <div class="tab-pane fade" style="padding: 0px;" role="tabpanel" id="tabSavings">
+                                            @(Html.Kendo().Grid<Susteni.Models.ShipOperationSavingPowerItem>()
+                                                .Name("operationSavingList")
+                                                .Columns(columns =>
+                                                {
+                                                    columns.Bound(q => q.EquipmentTypeName).Title(Localizer["Name"].Value);
+                                                    columns.Bound(q => q.OperationMode1).Title(Localizer["OperationMode1"].Value).Format("{0:n0}").ClientFooterTemplate("#=sum#").HtmlAttributes(new { style = "text-align: right;" }).ClientFooterTemplate("<div style='float: right'>#= kendo.format('{0:N0}', sum)#</div>");
+                                                    columns.Bound(q => q.OperationMode2).Title(Localizer["OperationMode2"].Value).Format("{0:n0}").ClientFooterTemplate("#=sum#").HtmlAttributes(new { style = "text-align: right;" }).ClientFooterTemplate("<div style='float: right'>#= kendo.format('{0:N0}', sum)#</div>");
+                                                    columns.Bound(q => q.OperationMode3).Title(Localizer["OperationMode3"].Value).Format("{0:n0}").ClientFooterTemplate("#=sum#").HtmlAttributes(new { style = "text-align: right;" }).ClientFooterTemplate("<div style='float: right'>#= kendo.format('{0:N0}', sum)#</div>");
+                                                    columns.Bound(q => q.OperationMode4).Title(Localizer["OperationMode4"].Value).Format("{0:n0}").ClientFooterTemplate("#=sum#").HtmlAttributes(new { style = "text-align: right;" }).ClientFooterTemplate("<div style='float: right'>#= kendo.format('{0:N0}', sum)#</div>");
+                                                    columns.Bound(q => q.OperationMode5).Title(Localizer["OperationMode5"].Value).Format("{0:n0}").ClientFooterTemplate("#=sum#").HtmlAttributes(new { style = "text-align: right;" }).ClientFooterTemplate("<div style='float: right'>#= kendo.format('{0:N0}', sum)#</div>");
+                                                    columns.Bound(q => q.OperationMode6).Title(Localizer["OperationMode6"].Value).Format("{0:n0}").ClientFooterTemplate("#=sum#").HtmlAttributes(new { style = "text-align: right;" }).ClientFooterTemplate("<div style='float: right'>#= kendo.format('{0:N0}', sum)#</div>");
+                                                    columns.Bound(q => q.OperationMode7).Title(Localizer["OperationMode7"].Value).Format("{0:n0}").ClientFooterTemplate("#=sum#").HtmlAttributes(new { style = "text-align: right;" }).ClientFooterTemplate("<div style='float: right'>#= kendo.format('{0:N0}', sum)#</div>");
+                                                    columns.Bound(q => q.OperationMode8).Title(Localizer["OperationMode8"].Value).Format("{0:n0}").ClientFooterTemplate("#=sum#").HtmlAttributes(new { style = "text-align: right;" }).ClientFooterTemplate("<div style='float: right'>#= kendo.format('{0:N0}', sum)#</div>");
+                                                    columns.Bound(q => q.OperationMode9).Title(Localizer["OperationMode9"].Value).Format("{0:n0}").ClientFooterTemplate("#=sum#").HtmlAttributes(new { style = "text-align: right;" }).ClientFooterTemplate("<div style='float: right'>#= kendo.format('{0:N0}', sum)#</div>");
+                                                })
+                                                .Height(290)
+                                                .Scrollable()
+                                                .Selectable(s => s
+                                                .Mode(GridSelectionMode.Multiple)
+                                                .Type(GridSelectionType.Row))
+                                                .Events(e => e.DataBound("onOSLBound"))
+
+                                                .DataSource(dataSource => dataSource
+                                                .Ajax()
+                                                .Read(read => read.Action("GetSavingPrModeList", "Ship").Data("filterTypes"))
+                                                .Aggregates(agg => agg.Add(p => p.OperationMode1).Sum())
+                                                .Aggregates(agg => agg.Add(p => p.OperationMode2).Sum())
+                                                .Aggregates(agg => agg.Add(p => p.OperationMode3).Sum())
+                                                .Aggregates(agg => agg.Add(p => p.OperationMode4).Sum())
+                                                .Aggregates(agg => agg.Add(p => p.OperationMode5).Sum())
+                                                .Aggregates(agg => agg.Add(p => p.OperationMode6).Sum())
+                                                .Aggregates(agg => agg.Add(p => p.OperationMode7).Sum())
+                                                .Aggregates(agg => agg.Add(p => p.OperationMode8).Sum())
+                                                .Aggregates(agg => agg.Add(p => p.OperationMode9).Sum())
+                                                )
+                                                )
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12" style="margin-top: 10px; margin-bottom: 10px;">
+                    <div id="chart"></div>
+                </div>
+                <div class="col-2"></div>
+                <div class="col-1" style="background-color: #1a4d5a"></div>
+                <div class="col-2">Before measures</div>
+                <div class="col-1" style="background-color: #5797d1"></div>
+                <div class="col-2">After measures</div>
+                <div class="col-1" style="background-color: #01a379"></div>
+                <div class="col-2">Savings</div>
+            </div>
+        </div>
+
+    </div> 
+
+
+
+</form>
+
+
+<script id="successTemplate" type="text/x-kendo-template">
+    <div class="upload-success">
+        <img src="@Url.Content("~/images/emoticon-happy.svg")" style="float:left; height:48px; width:48px; margin-right: 16px;"/>
+        <p>#= message #</p>
+    </div>
+</script>
+
+
+<script id="errorTemplate" type="text/x-kendo-template">
+    <div class="wrong-pass">
+        <img src="@Url.Content("~/images/emoticon-sad.svg")" style="float:left; height:48px; width:48px; margin-right: 16px;"/>
+        <p>#= message #</p>
+    </div>
+</script>
+
+
+@(Html.Kendo().Notification()
+    .Name("notification")
+    .Position(p => p.Pinned(true).Top(30).Right(30))
+    .Stacking(NotificationStackingSettings.Down)
+    .AutoHideAfter(5000)
+    .Templates(t =>
+    {
+        t.Add().Type("success").ClientTemplateID("successTemplate");
+        t.Add().Type("error").ClientTemplateID("errorTemplate");
+    })
+)
+
+
+@(Html.Kendo().Window()
+    .Name("dialogLastOppBilde")
+    .Title(Localizer["Last opp bilde"].Value)
+    .HtmlAttributes(new { style = "border:1px; padding-bottom: 0px; background-color: #F2F2F2;" })
+    .Visible(false)
+    .Width(1000)
+    .Modal(true)
+    .Draggable()
+    )
+
+@(Html.Kendo().Window()
+    .Name("dialogEquipment")
+    .Title(Localizer["Equipment"].Value)
+    .HtmlAttributes(new { style = "border:1px; padding-bottom: 0px; background-color: #F2F2F2;" })
+    .Visible(false)
+    .Width(600)
+    .Modal(true)
+    .Draggable()
+    )
+
+
+@(Html.Kendo().Window()
+    .Name("dialogHeatPowerGenerator")
+    .Title(Localizer["Heat power generator"].Value)
+    .HtmlAttributes(new { style = "border:1px; padding-bottom: 0px; background-color: #F2F2F2;" })
+    .Visible(false)
+    .Width(600)
+    .Modal(true)
+    .Draggable()
+    )
+
+@(Html.Kendo().Window()
+    .Name("dialogGeneratorModeEdit")
+    .Title(Localizer["Generator mode edit"].Value)
+    .HtmlAttributes(new { style = "border:1px; padding-bottom: 0px; background-color: #F2F2F2;" })
+    .Visible(false)
+    .Width(600)
+    .Modal(true)
+    .Draggable()
+    )
+@(Html.Kendo().Window()
+    .Name("DialogHjelp")
+    .Title(Localizer["Help"].Value)
+    .Visible(false)
+    .Height(800)
+    .Width(1200)
+    .Modal(true)
+    .Draggable()
+    )
+@(Html.Kendo().Window()
+    .Name("dialogOperationMode")
+    .Title(Localizer["Operation mode"].Value)
+    .HtmlAttributes(new { style = "border:1px;" })
+    .Visible(false)
+    .Width(600)
+    .Modal(true)
+    .Draggable()
+    )
+
+@(Html.Kendo().Dialog()
+    .Name("dialogProfil")
+    .Title("Set active profile")
+    .HtmlAttributes(new { style = "border:1px; margin: 0px; padding: 10px;" })
+    .Content(
+    "<div class='k-space-right search-wrapper'><span class='k-textbox k-input k-input-md k-rounded-md k-input-solid'><input id='idCustmerSearch' type='text' placeholder='Søk etter organisasjon' class='k-input-inner'/><span class='k-input-suffix'><span class='k-input-icon search'></span></span></span></div>" +
+
+        Html.Kendo().ListBox()
+            .Name("listProfil")
+            //.HtmlAttributes(new { style = "height: 100%;" })
+            .DataValueField("ProfilGuid")
+            .DataTextField("Name")
+            .Selectable(ListBoxSelectable.Single)
+            .DataSource(dataSource => dataSource
+                .Ajax()
+                .Read(read => read.Action("GetProfileList", "Ship").Data("filterShip"))
+                )
+            .ToHtmlString()
+            )
+    .Visible(false)
+    .Width(400)
+    .Modal(true)
+    .Actions(actions =>
+        {
+            actions.Add().Text("Cancel");
+            actions.Add().Text("Set Active").Action("onActionOK").Primary(true);
+        })
+    )
+
+@(Html.Kendo().Dialog()
+    .Name("dialogCopyFromProfile")
+    .Title("Copy from Profile")
+    .Content(
+        Html.Kendo().DropDownList()
+        .Name("lstProfiles")
+        .DataTextField("Name")
+        .DataValueField("profilGuid")
+        .OptionLabel("From no profile")
+        .DataSource(dataSource => dataSource
+            .Ajax()
+            .Read(read => read
+            .Action("GetProfileList", "Ship").Data("filterShip")
+            )
+        )
+        .ToHtmlString()
+        )
+        .Width(500)
+        .Modal(false)
+        .Visible(false)
+        .Actions(actions =>
+        {
+            actions.Add().Text("Cancel");
+            actions.Add().Text("Copy").Action("copyFromProfile").Primary(true);
+        })
+    )
+
+@(Html.Kendo().Window()
+        .Name("DialogSupport")
+        .Title(Localizer["Support"].Value)
+        .Visible(false)
+        .Width(1200)
+        .Modal(true)
+        .Draggable()
+        )
+
+<script id="hjelp">
+
+    function showHelp() {
+        $.ajax({
+            url: '@Url.Action("DialogHjelp", "Hjelp")',
+            type: 'GET'
+        }).done(function (result) {
+            $('#DialogHjelp').html(result);
+            var popup = $('#DialogHjelp').data("kendoWindow");
+            popup.center().open();
+        });
+    }
+
+    function addSupport() {
+        $.ajax({
+            url: '@Url.Action("DialogSupport", "HelpDesk")',
+            type: 'GET'
+        }).done(function (result) {
+            $('#DialogSupport').html(result);
+
+            xB = document.getElementById("idBilde");
+
+            document.getElementById("HelpDesk_Modul").value = "PowerProduction";
+            document.getElementById("HelpDesk_Program").value = "2";
+            document.getElementById("HelpDesk_Status").value = "1";
+
+            const screenshotTarget = document.body;
+
+            html2canvas(screenshotTarget).then((canvas) => {
+                const base64image = canvas.toDataURL("image/png");
+                xB.innerHTML = "<img src='" + base64image + "' style='max-height: 260px; max-width: 350px;' alt='Bilde' / >";
+                document.getElementById("HelpDesk_byte64String").value = base64image
+            });
+
+            var popup = $('#DialogSupport').data("kendoWindow");
+            popup.center().open();
+        });
+    }
+
+
+    function hjelpFilter() {
+        return { Modul: 300, Skjerm: "" }
+    }
+
+    // function setItemDoubleClickEvent() {
+    //     // var listBoxA = $("#documents").data("kendoListBox")
+    //     // listBoxA.wrapper.find(".k-list").on("dblclick", ".k-item", function (e) {
+    //     //        alert(e);
+    //     //        //ShowDocument(e);
+    //     //    });
+
+    //     // $(".folder").on("dblclick", function () {
+    //     //     var listView = $("#documents").data("kendoListBox");
+    //     //     var idx = $(this).index();
+    //     //     var item = listView.dataSource.view()[idx];
+    //     //     ShowDocument(item.fileGuid);
+    //     // });
+    // }
+
+
+</script>
+
+<script>
+    function onDocumentSelect(e) {
+        var selected = this.select();
+        var data = this.dataItem(selected);
+        //var lest = data.Id;
+        console.log(data);
+    }
+</script>
+
+
+<script id="shipFunction">
+    var equipmentType = 2;
+    var shipGuid = "";
+    var generatorGuid = "";
+    var ppSavings = 0;
+    var profilGuid = "";
+    var ppRN = 0;
+    var necesseryPP = 0;
+
+    function showDialogProfile() {
+        $('#dialogProfil').data("kendoDialog").open();
+    }
+
+    function onActionOK(e) {
+        var lwFellesraad = $("#listProfil").data("kendoListBox");
+
+        var selectedF = lwFellesraad.select();
+        var selItemF = lwFellesraad.dataItem(selectedF);
+        var profile = "";
+        var name = "";
+
+        if (typeof selItemF != 'undefined') {
+            profile = selItemF.ProfilGuid;
+            name = selItemF.Name;
+        }
+
+        $.ajax({
+            url: '@Url.Action("SetActivProfil", "Ship")',
+            data: { profilGuid: profile, shipGuid: shipGuid },
+            type: "GET"
+        }).always(function (result) {
+            document.getElementById("Ship_ProfilGuid").value = profile;
+            document.getElementById("Ship_ProfilName").value = name;
+            document.getElementById("idProfileName").innerHTML = name;
+            //$("#generatorList").data("kendoGrid").dataSource.read();
+            $("#generatorModeList").data("kendoGrid").dataSource.read();
+            //$("#powerList").data("kendoGrid").dataSource.read();
+            $("#operationSavingList").data("kendoGrid").dataSource.read();
+            ListOfGenerators();
+        });
+    }
+
+
+    function filterShip() {
+        shipGuid = document.getElementById("Ship_ShipGuid").value;
+        profilGuid = document.getElementById("Ship_ProfilGuid").value;
+
+        return { shipGuid: shipGuid, profilGuid: profilGuid }
+        }
+
+    function filterReports() {
+        return { screen: "EnergyOptimizing"}
+    }
+
+    function filterGenerator() {
+        profilGuid = document.getElementById("Ship_ProfilGuid").value;
+        shipGuid = document.getElementById("Ship_ShipGuid").value;
+        return { shipGuid: shipGuid, generatorGuid: generatorGuid, profilGuid: profilGuid }
+        }
+
+    function filterTypes() {
+        shipGuid = document.getElementById("Ship_ShipGuid").value;
+        profilGuid = document.getElementById("Ship_ProfilGuid").value;
+        if (profilGuid != "") {
+            profilGuids = "'" + profilGuid + "'";
+        }
+        else {
+            profilGuids = "";
+        }
+
+        return { shipGuid: shipGuid, equipmentType: equipmentType, profilGuid: profilGuid, profilGuids: profilGuids }
+    }
+
+    function AutoTune() {
+        shipGuid = document.getElementById("Ship_ShipGuid").value;
+
+        necesseryPP = Math.ceil(necesseryPP);
+
+        $.ajax({
+            url: '@Url.Action("AutoTune", "Ship")',
+            type: "GET",
+            data: { shipGuid: shipGuid, OperationModeGuid: operationModeGuid, ProfilGuid: profilGuid, MinNumberGenerator: numberGenerator, NecesseryPP: necesseryPP }
+        }).done(function (result) {
+            ListOfGenerators()
+        });
+    }
+
+    function AutoAdjustment() {
+        shipGuid = document.getElementById("Ship_ShipGuid").value;
+        necesseryPP = Math.ceil(necesseryPP);
+
+        $.ajax({
+            url: '@Url.Action("AutoAdjustment", "Ship")',
+            type: "GET",
+            data: { shipGuid: shipGuid, OperationModeGuid: operationModeGuid, ProfilGuid: profilGuid, MinNumberGenerator: numberGenerator, NecesseryPP: necesseryPP }
+        }).done(function (result) {
+            ListOfGenerators()
+        });
+    }
+
+
+
+    function showDialogOperationModeProfile() {
+        $.ajax({
+            url: '@Url.Action("GetOperationModeProfile", "Ship")',
+            data: { OperationModeProfileGuid: operationModeProfileGuid, OperationModeGuid: operationModeGuid, ProfilGuid: profilGuid },
+            type: "GET"
+            })
+        .done(function (result) {
+            $('#dialogOperationMode').html(result);
+            var popup = $('#dialogOperationMode').data("kendoWindow");
+            popup.center().open();
+            });
+        }
+    
+
+    function onGeneratorChange(e) {
+        var grid = $("#generatorList").data("kendoGrid");
+        var selected = grid.select();
+        var data = grid.dataItem(selected);
+
+        generatorGuid = data.GeneratorGuid;
+
+        $("#generatorModeList").data("kendoGrid").dataSource.read();
+    }
+
+
+    function onGeneratorDataBound() {
+        var grid = $("#generatorModeList").data("kendoGrid");
+        currRowIndex = -1;
+
+        $("#generatorModeList tbody tr").each(function () {
+
+            var currentRowData = grid.dataItem(this);
+
+            if (operationModeGuid == currentRowData.OperationModeGuid) {
+                currRowIndex = this.rowIndex;
+            }
+            if (currentRowData.OperationModeProfileGuid != null) {
+                console.log(currentRowData.OperationModeProfileGuid);
+                $(this).css("color", "Blue");
+            }
+        });
+
+        if (currRowIndex >= 0) {
+            grid.select("tr:eq(" + (currRowIndex) + ")");
+        }
+
+    }
+
+
+    function onOSLBound() {
+        var grid = $("#operationSavingList").data("kendoGrid");
+
+        $.ajax({
+            url: '@Url.Action("GetShipOperationModeDataList", "Ship")',
+            type: "GET",
+            data: { shipGuid: shipGuid }
+        }).done(function (result) {
+            i = 0;
+            for (om of result) {
+                i++;
+                x = $("#operationSavingList thead [data-field=OperationMode" + i + "]");
+                x.html(om.Name);
+            }
+            for (let j = i + 1; j <= 9; j++) {
+                grid.hideColumn(j);
+            }
+
+        });
+    }
+
+    function ListOfGenerators() {
+        var respons = "";
+        $.ajax({
+            url: '@Url.Action("GetListOfGenerators", "Ship")',
+            type: "GET",
+            data: { shipGuid: shipGuid, profilGuid: profilGuid, operationModeGuid: operationModeGuid },
+            dataType: "html"
+        }).done(function (result) {
+            var pureHTML = result
+            //pureHTML = pureHTML.replace('{"EncodedContent":{"Value":"', "").replace('"}}', '');
+            pureHTML = replaceAll(pureHTML, "¤", "\"");
+            $("#idGenerators").html(pureHTML);
+        });
+
+        UpdateInfo();
+    }
+
+    function ListOfDocuments() {
+        var respons = "";
+        $.ajax({
+            url: '@Url.Action("GetReportDocumentListNew", "Report")',
+            type: "GET",
+            data: { screen: "PowerProduction" },
+            dataType: "html"
+            })
+        .done(function (result) {
+            var pureHTML = result
+            pureHTML = replaceAll(pureHTML, "¤", "\"");
+            $("#idDocumentX").html(pureHTML);
+        });
+
+        UpdateInfo();
+    }
+
+    function UpdateInfo() {
+        var respons = "";
+
+        $.ajax({
+            url: '@Url.Action("GetShipGeneratorModesSummaryListe", "Ship")',
+            type: "GET",
+            data: { profilGuid: profilGuid, operationModeGuid: operationModeGuid },
+            dataType: "json"
+        }).done(function (result) {
+            document.getElementById("idmBS").innerHTML = result.EffectBefore.toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 0, });
+            document.getElementById("idmBSC").innerHTML = result.CO2Before.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2, });
+            document.getElementById("idmBSnoX").innerHTML = result.NOxBefore.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2, });
+            document.getElementById("idmBSsoX").innerHTML = result.SOxBefore.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2, });
+
+            document.getElementById("idmAS").innerHTML = result.EffectAfter.toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 0, });
+            document.getElementById("idmASC").innerHTML = result.CO2After.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2, });
+            document.getElementById("idmASnoX").innerHTML = result.NOxAfter.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2, });
+            document.getElementById("idmASsoX").innerHTML = result.SOxAfter.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2, });
+
+            document.getElementById("idmMSAM").innerHTML = result.MaintenanceCost.toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 0, });
+
+            document.getElementById("idmFBS").innerHTML = result.FuelBefore.toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 0, });
+            document.getElementById("idmFAS").innerHTML = result.FuelAfter.toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 0, });
+            document.getElementById("idmFASaving").innerHTML = (result.FuelBefore - result.FuelAfter).toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 0, });
+
+            ppBs = result.EffectBefore;
+
+            $.ajax({
+                url: '@Url.Action("GetFuelOperationSavingsInfoShip", "Ship")',
+                type: "GET",
+                data: { shipGuid: shipGuid, operationModeGuid: operationModeGuid, profilGuid: profilGuid }
+            })
+                .done(function (result) {
+                    console.log(result);
+                    ppSavings = result.Savings;
+                    if (ppBs > 0) {
+                        ppRN = ppBs - ppSavings;
+                        necesseryPP = ppRN;
+                        document.getElementById("idmNPP").innerHTML = ppRN.toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 0, });
+                    }
+                    document.getElementById("idmPR").innerHTML = result.Savings.toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 0, });
+                });
+
+        });
+
+        $.ajax({
+            url: '@Url.Action("GetShipGeneratorModesSummaryListe", "Ship")',
+            type: "GET",
+            data: { profilGuid: profilGuid, shipGuid: shipGuid },
+            dataType: "json"
+        }).done(function (result) {
+            document.getElementById("idBS").innerHTML = result.EffectBefore.toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 0, });
+            document.getElementById("idBSC").innerHTML = result.CO2Before.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2, });
+            document.getElementById("idBSnoX").innerHTML = result.NOxBefore.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2, });
+            document.getElementById("idBSsoX").innerHTML = result.SOxBefore.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2, });
+
+            document.getElementById("idAS").innerHTML = result.EffectAfter.toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 0, });
+            document.getElementById("idASC").innerHTML = result.CO2After.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2, });
+            document.getElementById("idASnoX").innerHTML = result.NOxAfter.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2, });
+            document.getElementById("idASsoX").innerHTML = result.SOxAfter.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2, });
+
+            document.getElementById("idMSAM").innerHTML = result.MaintenanceCost.toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 0, });
+
+            document.getElementById("idFBS").innerHTML = result.FuelBefore.toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 0, });
+            document.getElementById("idFAS").innerHTML = result.FuelAfter.toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 0, });
+            document.getElementById("idFASaving").innerHTML = (result.FuelBefore - result.FuelAfter).toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 0, });
+
+            var ppBs = result.EffectBefore;
+
+            createChart(result.FuelAfter, result.FuelBefore - result.FuelAfter, 0);
+
+
+        });
+
+        $.ajax({
+            url: '@Url.Action("GetFuelOperationSavingsInfoShip", "Ship")',
+            type: "GET",
+            data: { shipGuid: shipGuid, profilGuid: profilGuid }
+        })
+            .done(function (result) {
+                console.log(result);
+                // ppSavings = result.Savings;
+                // if (ppBs > 0) {
+                //     ppRN = ppBs - ppSavings;
+                //     necesseryPP = ppRN;
+                //     document.getElementById("idmNPP").innerHTML = ppRN.toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 0, });
+                // }
+                document.getElementById("idPR").innerHTML = result.Savings.toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 0, });
+            });
+
+        $.ajax({
+            url: '@Url.Action("GetShipGeneratorLoad", "Ship")',
+            type: "GET",
+            data: { profilGuid: profilGuid, operationModeGuid: operationModeGuid },
+            dataType: "json"
+        }).done(function (result) {
+            $("#gauge").data("kendoCircularGauge").value(result.PercentLoad);
+            $("#gauge-value").data("kendoSlider").value(result.PercentLoad);
+            $("#gaugeAfter").data("kendoCircularGauge").value(result.PercentSaving);
+            $("#gauge-value-after").data("kendoSlider").value(result.PercentSaving);
+        });
+    }
+
+
+    function replaceAll(string, search, replace) {
+        return string.split(search).join(replace);
+    }
+
+    function SetGeneratorOnOff(generatorModesGuid, status) {
+        var respons = "";
+        $.ajax({
+            url: '@Url.Action("SetShipGeneratorModesList", "Ship")',
+            type: "GET",
+            data: { updateMode: 1, Active: status, generatorModesGuid: generatorModesGuid, operationModeGuid: operationModeGuid, profilGuid: profilGuid },
+            dataType: "json"
+        }).done(function (result) {
+            ListOfGenerators();
+        });
+    }
+
+
+    function updateValue() {
+        $("#gauge").data("kendoCircularGauge").value($("#gauge-value").val());
+        var pL = $("#gauge-value").val();
+        $.ajax({
+            url: '@Url.Action("SetShipGeneratorModesList", "Ship")',
+            type: "GET",
+            data: { updateMode: 2, percentLoad: pL, operationModeGuid: operationModeGuid, profilGuid: profilGuid },
+            dataType: "json"
+        }).done(function (result) {
+            UpdateInfo();
+        });
+        
+    }
+
+    function updateValueAfter() {
+        $("#gaugeAfter").data("kendoCircularGauge").value($("#gauge-value-after").val());
+        var pL = $("#gauge-value-after").val();
+        $.ajax({
+            url: '@Url.Action("SetShipGeneratorModesList", "Ship")',
+            type: "GET",
+            data: { updateMode: 3, percentLoad: pL, operationModeGuid: operationModeGuid, profilGuid: profilGuid },
+            dataType: "json"
+        }).done(function (result) {
+            UpdateInfo();
+        });
+    }
+
+    $(document).ready(function () {
+        $.ajax({
+            url: '@Url.Action("getCurrency", "Account")',
+            type: "GET"
+        })
+            .done(function (result) {
+                var currency = result;
+                document.getElementById("currencyCode").innerHTML = currency;
+            });
+
+        shipGuid = document.getElementById("Ship_ShipGuid").value;
+        document.getElementById("idName").innerHTML = document.getElementById("Ship_Name").value;
+        document.getElementById("idProfileName").innerHTML = document.getElementById("Ship_ProfilName").value;
+
+        profilGuid = document.getElementById("Ship_ProfilGuid").value;
+
+        $.ajax({
+            url: '@Url.Action("SetActiveProfile", "Ship")',
+            type: "PUSH",
+            data: { profilGuid: profilGuid, linkGuid: shipGuid },
+            dataType: "json"
+        });
+
+
+        getFSPowerReduction();
+
+        ListOfGenerators();
+
+        ListOfDocuments();
+    });
+
+    function getFSPowerReduction(e) {
+
+        $.ajax({
+            url: '@Url.Action("GetShipFuleSavingsInfo", "Ship")',
+            type: "GET",
+            data: { shipGuid: shipGuid }
+        })
+            .done(function (result) {
+                ppSavings = result.Savings;
+                if (e > 0) {
+                    ppRN = e - ppSavings;
+                    document.getElementById("idNPP").innerHTML = (e - ppSavings).toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 0, });
+                }
+                document.getElementById("idPR").innerHTML = result.Savings.toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 0, });
+            });
+    }
+
+
+</script>
+
+@(Html.Kendo().Window()
+        .Name("dialogReports")
+        .Title("Reports")
+        .Visible(false)
+        .Width(1200)
+        .Modal(true)
+        .Draggable()
+        )
+
+
+
+
+@(Html.Kendo().Window()
+    .Name("dialogVisPDFRapport")
+    .Position(p => p.Top(60).Left(300))
+    .Title(Localizer["Dokument"].Value)
+    .HtmlAttributes(new { style = "border:1px; padding: 0px;" })
+    .Visible(false)
+    .Content("Loading ...")
+    .Modal(true)
+    .Draggable()
+    )
+
+
+<script id="reports">
+    var firstRender = true;
+    var skjerm = "PowerProduction";
+    var vis = "Alle";
+    var stringfilter = "";
+    var RapId = "";
+
+    function skjermFilter() {
+        return { skjerm: skjerm, RapType: 5 }
+    }
+
+    function showDialogRapporter() {
+        $.ajax({
+            url: "/|/DialogReportList",
+            method: 'GET',
+            success: function (result) {
+                $('#dialogReports').html(result);
+                var popup = $('#dialogReports').data("kendoWindow");
+                popup.center().open();
+            }
+        });
+    }
+
+
+    function ShowReport() {
+        var lvDocument = $("#lvRapporter").data("kendoListView");
+        xIW = document.getElementById("importerer");
+        xIR = document.getElementById("infoRapport");
+
+        var selF = lvDocument.select();
+        var selIF = lvDocument.dataItem(selF);
+        var RapId = "";
+        var base64string = "";
+        firstRender = true;
+
+        if (typeof selIF != 'undefined') {
+            RapId = selIF.RapId;
+            x = document.getElementById("ReportVerdier_RapId");
+            xRT = document.getElementById("ReportVerdier_RapType");
+            x.value = RapId;
+            xRT.value = selIF.RapType;
+        }
+
+        var $this = $('#rapportForm').serialize();
+
+        xIW.style.display = "";
+        xIR.style.display = "none";
+
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("ShowTelerikReport", "Report")',
+            data: $this
+        }).done(function (result) {
+            xIW.style.display = "none";
+            xIR.style.display = "";
+            RapId = "X";
+            if (result.ErrorCode > 0) {
+                alert(result.ErrorTekst);
+            }
+            else {
+                var popup = $('#dialogVisPDFRapport').data("kendoWindow");
+                popup.open();
+
+                var pdfViewer = $("#pdfViewerRapport").data("kendoPDFViewer");
+                var pdfHandlerUrl = "/Report/VisRapport?rapId=" + RapId;
+
+                pdfViewer.fromFile(pdfHandlerUrl);
+                pdfViewer.loadPage(1);
+            }
+        });
+    }
+
+
+
+    function onRender(e) {
+        if (firstRender) {
+            e.sender.toolbar.zoom.combobox.value("fitToWidth");
+            e.sender.toolbar.zoom.combobox.trigger("change");
+            firstRender = false;
+        }
+    }
+
+
+</script>
+
+<script>
+    var firstRender = true;
+
+    function ShowDocument(e) {
+       firstRender = true;
+
+       $.ajax({
+           type: "GET",
+           url: '@Url.Action("DialogVisPDF", "Report")',
+           })
+       .done(function (result) {
+            $('#dialogVisPDFRapport').html(result);
+            $('#dialogVisPDFRapport').data("kendoWindow").open();
+
+            $.ajax({
+                type: "GET",
+                url: '@Url.Action("GetReportDocument", "Report")',
+                data: { reportFilesGuid: e }
+                })
+            .done(function (result) {
+
+                var pdfViewer = $("#pdfViewerRapport").data("kendoPDFViewer");
+                pdfViewer.fromFile({data: result});
+
+                pdfViewer.loadPage(1);
+                });
+            });
+        }
+
+    function onRender(e) {
+        if (firstRender) {
+            e.sender.toolbar.zoom.combobox.value("fitToWidth");
+            e.sender.toolbar.zoom.combobox.trigger("change");
+            firstRender = false;
+        }
+    }
+
+</script>
+
+
+<script id="idMenu">
+
+    function fuelSavings() {
+        shipGuid = document.getElementById("Ship_ShipGuid").value;
+        Name = document.getElementById("Ship_Name").value;
+        ProfilGuid = document.getElementById("Ship_ProfilGuid").value;
+        ProfilName = document.getElementById("Ship_ProfilName").value;
+        window.location = "../Ship/FuelSavings?shipGuid=" + shipGuid + "&Name=" + Name + "&ProfilGuid=" + ProfilGuid + "&ProfilName=" + ProfilName;
+
+    }
+
+    function generators() {
+        shipGuid = document.getElementById("Ship_ShipGuid").value;
+        Name = document.getElementById("Ship_Name").value;
+        ProfilGuid = document.getElementById("Ship_ProfilGuid").value;
+        ProfilName = document.getElementById("Ship_ProfilName").value;
+        window.location = "../Ship/ElProduction?shipGuid=" + shipGuid + "&Name=" + Name + "&ProfilGuid=" + ProfilGuid + "&ProfilName=" + ProfilName;
+    }
+
+    function summary() {
+        shipGuid = document.getElementById("Ship_ShipGuid").value;
+        Name = document.getElementById("Ship_Name").value;
+        ProfilGuid = document.getElementById("Ship_ProfilGuid").value;
+        ProfilName = document.getElementById("Ship_ProfilName").value;
+        window.location = "../Ship/Summary?shipGuid=" + shipGuid + "&Name=" + Name + "&ProfilGuid=" + ProfilGuid + "&ProfilName=" + ProfilName;
+
+    }
+
+    function plan() {
+        shipGuid = document.getElementById("Ship_ShipGuid").value;
+        Name = document.getElementById("Ship_Name").value;
+        ProfilGuid = document.getElementById("Ship_ProfilGuid").value;
+        ProfilName = document.getElementById("Ship_ProfilName").value;
+        window.location = "../Ship/InvestmentPlan?shipGuid=" + shipGuid + "&Name=" + Name + "&ProfilGuid=" + ProfilGuid + "&ProfilName=" + ProfilName;
+    }
+
+</script>
+
+<script id="operataionModeFunction">
+    var updateGrid = false;
+
+    var operationModeGuid = "";
+    var generatorModeGuid = "";
+    var generatorGuid = "";
+    var numberGenerator = 0;
+    var operationModeProfileGuid = "";
+
+    function onGeneratorModeChange(e) {
+        var grid = $("#generatorModeList").data("kendoGrid");
+        var selected = grid.select();
+        var data = grid.dataItem(selected);
+
+        operationModeGuid = data.OperationModeGuid;
+        numberGenerator = data.NumberGenerator;
+        operationModeProfileGuid = data.OperationModeProfileGuid;
+
+        var fabOME = $('#operationModeEdit').getKendoFloatingActionButton();
+        fabOME.show();
+
+        ListOfGenerators();
+    }
+
+    function showDialogGeneratorModeEdit(g, gen) {
+        $.ajax({
+            url: '@Url.Action("DialogGeneratorHoursEdit", "Ship")',
+            data: { generatorModeGuid: g, operationModeGuid: operationModeGuid, generatorGuid: gen, profilGuid: profilGuid },
+            type: "GET"
+        })
+            .done(function (result) {
+                $('#dialogGeneratorModeEdit').html(result);
+                var pl = document.getElementById("ShipGeneratorModes_PercentLoadNew").value;
+                pl = pl.replace(",",".");
+                $("#ShipGeneratorModes_PercentLoad").data("kendoNumericTextBox").value(pl);
+
+                var ps = document.getElementById("ShipGeneratorModes_PercentSavingNew").value;
+                ps = ps.replace(",",".");
+                $("#ShipGeneratorModes_PercentSaving").data("kendoNumericTextBox").value(ps);
+
+
+                var popup = $('#dialogGeneratorModeEdit').data("kendoWindow");
+                popup.center().open();
+            });
+    }
+
+
+    function saveGeneratorModes() {
+        var pl = $("#ShipGeneratorModes_PercentLoad").data("kendoNumericTextBox").value();
+        pl = pl.toString().replace(".",",");
+        document.getElementById("ShipGeneratorModes_PercentLoadNew").value = pl;
+
+        var ps = $("#ShipGeneratorModes_PercentSaving").data("kendoNumericTextBox").value();
+        ps = ps.toString().replace(".",",");
+        document.getElementById("ShipGeneratorModes_PercentSavingNew").value = ps;
+
+        var $this = $('#generatorModesForm').serialize();
+
+        $.ajax({
+            url: '@Url.Action("SetShipGeneratorModes", "Ship")',
+            type: "POST",
+            data: $this,
+            dataType: "json"
+            })
+        .done(function (result) {
+            var popup = $('#dialogGeneratorModeEdit').data("kendoWindow");
+            popup.close();
+            ListOfGenerators();
+            });
+        }
+
+    function saveOperationProfileMode() {
+        var $this = $('#profilForm').serialize();
+
+        $.ajax({
+            url: '@Url.Action("SetOperationModeProfile", "Ship")',
+            type: "POST",
+            data: $this,
+            dataType: "json"
+        })
+            .done(function (result) {
+                operationModeProfileGuid = result.NewId;
+                numberGenerator = $("#OperationModeProfile_NumberGenerator").data("kendoNumericTextBox").value();
+                $('#dialogOperationMode').data("kendoWindow").close();
+                $("#generatorModeList").data("kendoGrid").dataSource.read();
+            });
+    }
+
+    function closeOperationProfileMode() {
+        var popup = $('#dialogOperationMode').data("kendoWindow");
+        popup.close();
+    }
+
+    function saveGeneratorModesLoad(e) {
+
+
+        $.ajax({
+            url: '@Url.Action("SetShipGeneratorModesLoad", "Ship")',
+            type: "POST",
+            data: { operationModeGuid: operationModeGuid, GeneratorList: generatorList, Load: load, typ: typ },
+            dataType: "json"
+        })
+            .done(function (result) {
+                var popup = $('#dialogGeneratorModeEdit').data("kendoWindow");
+                popup.close();
+                $("#generatorModeList").data("kendoGrid").dataSource.read();
+                $("#generatorList").data("kendoGrid").dataSource.read();
+                $("#powerList").data("kendoGrid").dataSource.read();
+            });
+    }
+
+    function copyGeneratorModes() {
+        var numerictextboxHA = $("#ShipGeneratorModes_HoursAfter").data("kendoNumericTextBox");
+        numerictextboxHA.value(document.getElementById("ShipGeneratorModes_HoursBefore").value);
+
+        var numerictextboxLA = $("#ShipGeneratorModes_PercentSaving").data("kendoNumericTextBox");
+        numerictextboxLA.value(document.getElementById("ShipGeneratorModes_PercentLoad").value);
+    }
+
+    function closeGeneratorMode() {
+        var popup = $('#dialogGeneratorModeEdit').data("kendoWindow");
+        popup.close();
+    }
+
+
+    function onOperationModeChange(e) {
+        var grid = $("#shipOperationmodeList").data("kendoGrid");
+        var selected = grid.select();
+        var data = grid.dataItem(selected);
+
+        operationModeGuid = data.OperationModeGuid;
+
+        var fabOME = $('#operationModeEdit').getKendoFloatingActionButton();
+        fabOME.show();
+        var fabOMR = $('#operationModeRemove').getKendoFloatingActionButton();
+        fabOMR.show();
+
+    }
+
+
+    function showDialogEquipment() {
+        $.ajax({
+            url: '@Url.Action("DialogEquipment", "Ship")',
+            data: { shipGuid: shipGuid, equipmentType: equipmentType },
+            type: "GET"
+        })
+            .done(function (result) {
+                $('#dialogEquipment').html(result);
+                var popup = $('#dialogEquipment').data("kendoWindow");
+                popup.center().open();
+            });
+    }
+
+    function showDialogEquipmentEdit() {
+        $.ajax({
+            url: '@Url.Action("DialogEquipmentEdit", "Ship")',
+            data: { operationModeGuid: operationModeGuid },
+            type: "GET"
+        })
+            .done(function (result) {
+                $('#dialogEquipment').html(result);
+                var popup = $('#dialogEquipment').data("kendoWindow");
+                popup.center().open();
+            });
+    }
+
+    function saveEquipment() {
+        var $this = $('#equipmentForm').serialize();
+
+        $.ajax({
+            url: '@Url.Action("SetShipEquipment", "Ship")',
+            type: "PUSH",
+            data: $this,
+            dataType: "json"
+        })
+            .done(function (result) {
+                var popup = $('#dialogEquipment').data("kendoWindow");
+                popup.close();
+                $("#equipmentList").data("kendoGrid").dataSource.read();
+            });
+    }
+
+    function saveGrid() {
+        updateGrid = true;
+        var grid = $("#generatorModeList").data("kendoGrid");
+        grid.saveChanges();
+
+    }
+
+    function saveOperationMode() {
+        var $this = $('#shipForm').serialize();
+
+        $.ajax({
+            url: '@Url.Action("SetShipOperationMode", "Ship")',
+            type: "PUSH",
+            data: $this
+        })
+            .done(function (result) {
+                var popup = $('#dialogOperationMode').data("kendoWindow");
+                popup.close();
+                $("#shipOperationmodeList").data("kendoGrid").dataSource.read();
+            });
+    }
+
+
+    function closeOperationMode() {
+        var popup = $('#dialogOperationMode').data("kendoWindow");
+        popup.close();
+    }
+
+    function createChart(idBS, idAS, idPR) {
+        idPR = idBS + idAS;
+
+            var data = [
+            { "ProjectID": "1. Before measures", "Expense": idPR, "color": "#1a4d5a" },
+            { "ProjectID": "2. After measures", "Expense": idBS, "color": "#5797d1" },
+            { "ProjectID": "3. Savings", "Expense": idAS, "color": "#01a379" }
+            ];
+
+
+        $("#chart").kendoChart({
+            theme: "silver",
+            title: {
+                text: "Diagram"
+            },
+            legend: {
+                visible: false
+            },
+            dataSource: {
+                data: data,
+                group: {
+                    field: "ProjectID"
+                }
+            },
+            transitions: false,
+            series: [{
+                type: "column",
+                field: "Expense"
+            }]
+        });
+    }
+
+</script>
+
+
+<script id="heatGeneratorFunction">
+
+    var HeatUnitGuid = "";
+
+    function onGeneratorHeatListChange(e) {
+        var grid = $("#generatorHeatList").data("kendoGrid");
+        var selected = grid.select();
+        var data = grid.dataItem(selected);
+
+        HeatUnitGuid = data.HeatUnitGuid;
+
+        var fabOME = $('#heatProductionEdit').getKendoFloatingActionButton();
+        fabOME.show();
+        var fabOMR = $('#heatProductionRemove').getKendoFloatingActionButton();
+        fabOMR.show();
+
+    }
+
+
+    function showDialogHeatPowerGenerator() {
+        $.ajax({
+            url: '@Url.Action("DialogHeatPowerGenerator", "Ship")',
+            data: { shipGuid: shipGuid },
+            type: "GET"
+        })
+            .done(function (result) {
+                $('#dialogHeatPowerGenerator').html(result);
+                var popup = $('#dialogHeatPowerGenerator').data("kendoWindow");
+                popup.center().open();
+            });
+    }
+
+    function showDialogHeatPowerGeneratorEdit() {
+        $.ajax({
+            url: '@Url.Action("DialogHeatPowerGeneratorEdit", "Ship")',
+            data: { HeatUnitGuid: HeatUnitGuid },
+            type: "GET"
+        })
+            .done(function (result) {
+                $('#dialogHeatPowerGenerator').html(result);
+                var popup = $('#dialogHeatPowerGenerator').data("kendoWindow");
+                popup.center().open();
+            });
+    }
+
+
+    function saveHeatPowerGenerator() {
+        var $this = $('#heatPowerGeneratorForm').serialize();
+
+        $.ajax({
+            url: '@Url.Action("SetShipGeneratorHeatUnit", "Ship")',
+            type: "PUSH",
+            data: $this,
+            dataType: "json"
+        })
+            .done(function (result) {
+                var popup = $('#dialogHeatPowerGenerator').data("kendoWindow");
+                popup.close();
+                $("#generatorHeatList").data("kendoGrid").dataSource.read();
+            });
+    }
+
+
+    function onGeneratorHeatListBound(e) {
+        var data = this.dataSource.data();
+        $(data).each(function () {
+            //var Effect = this.HoursPrYear * this.kW * this.PercentLoad / 100;
+            //var SavingEffect = this.HoursPrYear * this.kW * this.PercentSaving / 100;
+            //this.set("Effect", Effect);
+            //this.set("SavingEffect", SavingEffect);
+            //this.set("Saving", Effect - SavingEffect);
+
+        });
+    }
+
+    function closeHeatPowerGenerator() {
+        var popup = $('#dialogHeatPowerGenerator').data("kendoWindow");
+        popup.close();
+    }
+
+</script>
+
+@(Html.Kendo().Window()
+    .Name("dialogNewProfile")
+    .Title(Localizer["New profile"].Value)
+    .HtmlAttributes(new { style = "border:1px; padding-bottom: 0px; background-color: #F2F2F2;" })
+    .Visible(false)
+    .Width(500)
+    .Modal(true)
+    .Draggable()
+    )
+
+<script id="idProfile">
+    var profilGuid = "";
+
+
+    function newProfiles() {
+        $.ajax({
+            url: '@Url.Action("NewProfile", "Ship")',
+            type: "GET"
+        })
+            .done(function (result) {
+                $('#dialogNewProfile').html(result);
+                shipGuid = document.getElementById("Ship_ShipGuid").value;
+                document.getElementById("Profile_LinkGuid").value = shipGuid;
+                var popup = $('#dialogNewProfile').data("kendoWindow");
+                popup.center().open();
+            });
+    }
+
+    function createProfiles() {
+        var $this = $('#profile').serialize();
+
+        $.ajax({
+            url: '@Url.Action("SetProfile", "Ship")',
+            type: "PUSH",
+            data: $this,
+            dataType: "json"
+        })
+            .done(function (result) {
+                var popup = $('#dialogNewProfile').data("kendoWindow");
+                popup.close();
+                $("#profiles").data("kendoDropDownList").dataSource.read();
+            });
+    }
+
+
+    function showDialogCopyProfiles() {
+        var popup = $('#dialogCopyFromProfile').data("kendoDialog");
+        popup.open();
+    }
+
+    function copyFromProfile() {
+        var grid = $("#lstProfiles").data("kendoDropDownList");
+        var selected = grid.select();
+        var data = grid.dataItem(selected);
+
+        copyFromprofilGuid = data.ProfilGuid;
+        shipGuid = document.getElementById("Ship_ShipGuid").value;
+
+        $.ajax({
+            url: '@Url.Action("CopyFromProfile", "Ship")',
+            type: "GET",
+            data: { shipGuid: shipGuid, profilGuid: copyFromprofilGuid, linkGuid: profilGuid }
+        }).done(function (result) {
+            $("#generatorModeList").data("kendoGrid").dataSource.read();
+            $("#generatorList").data("kendoGrid").dataSource.read();
+            $("#powerList").data("kendoGrid").dataSource.read();
+        });
+
+    }
+
+
+    function onProfileChange(e) {
+        var grid = $("#profiles").data("kendoDropDownList");
+        var selected = grid.select();
+        var data = grid.dataItem(selected);
+
+        profilGuid = data.ProfilGuid;
+        linkGuid = document.getElementById("Ship_ShipGuid").value;
+
+        if (profilGuid == undefined) { profilGuid = ""; }
+
+        $.ajax({
+            url: '@Url.Action("SetActiveProfile", "Ship")',
+            type: "PUSH",
+            data: { profilGuid: profilGuid, linkGuid: linkGuid },
+            dataType: "json"
+        });
+
+        $("#generatorModeList").data("kendoGrid").dataSource.read();
+        $("#generatorList").data("kendoGrid").dataSource.read();
+        $("#operationSavingList").data("kendoGrid").dataSource.read();
+    }
+
+</script>
+
+<script>
+
+
+    $(document).ready(function () {
+
+        var fbOMA = $("#equipmentAdd").getKendoFloatingActionButton();
+        var fbOMR = $("#equipmentRemove").getKendoFloatingActionButton();
+        var fbOME = $("#equipmentEdit").getKendoFloatingActionButton();
+
+        $("#equipmentAdd").prop("type", "button");
+        $("#equipmentRemove").prop("type", "button");
+        $("#equipmentEdit").prop("type", "button");
+
+        fbOMAText = "Add equipment";
+        fbOMRText = "Remove equipment";
+        fbOMEText = "Edit equipment";
+
+        fbOMRText = "Edit generators needed";
+
+        $("#equipmentAdd").hover(function () {
+            fbOMA.text(fbOMAText);
+            fbOMA.element.find(".k-fab-text")
+                .stop().toggle(200);
+        }, function () {
+            fbOMA.element.find(".k-fab-text")
+                .stop()
+                .toggle(200)
+                .promise().done(function () {
+                    fbOMA.text("");
+                });
+        });
+
+        $("#equipmentRemove").hover(function () {
+            fbOMR.text(fbOMRText);
+            fbOMR.element.find(".k-fab-text")
+                .stop().toggle(200);
+        }, function () {
+            fbOMR.element.find(".k-fab-text")
+                .stop()
+                .toggle(200)
+                .promise().done(function () {
+                    fbOMR.text("");
+                });
+        });
+
+        $("#equipmentEdit").hover(function () {
+            fbOME.text(fbOMEText);
+            fbOME.element.find(".k-fab-text")
+                .stop().toggle(200);
+        }, function () {
+            fbOME.element.find(".k-fab-text")
+                .stop()
+                .toggle(200)
+                .promise().done(function () {
+                    fbOME.text("");
+                });
+        });
+
+        var fbOME = $("#operationModeEdit").getKendoFloatingActionButton();
+        $("#operationModeEdit").prop("type", "button");
+
+        $("#operationModeEdit").hover(function () {
+            fbOME.text(fbOMRText);
+            fbOME.element.find(".k-fab-text")
+                .stop().toggle(200);
+        }, function () {
+            fbOME.element.find(".k-fab-text")
+                .stop()
+                .toggle(200)
+                .promise().done(function () {
+                    fbOME.text("");
+                });
+        });
+
+        $("#generatorList th[data-field=FuelBefore]").html("<span class='k-cell-inner'><span class='k-link'><span class='k-column-title'>Fuel Consumption Before Measures @ViewData["Units"]</span></span></span>");
+        $("#generatorList th[data-field=FuelAfter]").html("<span class='k-cell-inner'><span class='k-link'><span class='k-column-title'>Fuel Consumption After Measures @ViewData["Units"]</span></span></span>");
+
+    });
+
+        $(window).on("resize", function () {
+            $("#chart").data("kendoChart").refresh();
+        });
+
+</script>
+
+

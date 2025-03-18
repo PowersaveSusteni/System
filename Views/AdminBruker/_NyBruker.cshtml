@@ -1,0 +1,52 @@
+﻿@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
+@model Susteni.Models.Admin.AdminModel
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+
+
+<div class="panel panel-default" id="dataenter" style="margin-bottom: 0px;" >
+
+    @(Html.Kendo().Wizard()
+        .Name("wizard")
+        .Events(ev => ev.Done("OpprettNyBruker"))
+        .Tag("form")
+        .HtmlAttributes(new { @novalidate ="", autocomplete = "off",  autofill = "off" })
+        .Steps(s => {
+            s.Add()
+                .Title("Informasjon")
+                .Content(Localizer["Info"].Value)
+                .Buttons(b => b.Next().Text("Start"));
+
+            s.Add<Susteni.Models.Admin.AdminModel>()
+                .Title(Localizer["Bruker"].Value)
+                .Form(f => f
+                .Layout("grid")
+                .Grid(g => g.Cols(2).Gutter(10))
+                .Items(items =>
+                {
+                    items.AddGroup()
+                        .Label(Localizer["For pålogging"].Value)
+                        .Layout("grid")
+                        .Grid(g => g.Cols(2).Gutter(10))
+                        .Items(items =>
+                        {
+                            items.Add().ColSpan(6).Field(p => p.Bruker.BrukerId).Label(l => l.Text(Localizer["Brukernavn"].Value)).InputHtmlAttributes(new { style = "width: 200px" });
+                            items.Add().ColSpan(3).Field(p => p.Bruker.Passord).InputHtmlAttributes(new { @type = "password", @autocomplete = "new-password", @autofill = "Off" }).Label(l => l.Text(Localizer["Passord"].Value));
+                        });
+                    items.AddGroup()
+                        .Label(Localizer["Om bruker/ansatt"].Value)
+                        .Layout("grid")
+                        .Grid(g => g.Cols(2).Gutter(10))
+                        .Items(items =>
+                        {
+                            items.Add().ColSpan(3).Field(p => p.Bruker.Fornavn).Label(l => l.Text(Localizer["Fornavn"].Value)).InputHtmlAttributes(new { @class = "nodvendigFelt" });
+                            items.Add().ColSpan(3).Field(p => p.Bruker.Etternavn).Label(l => l.Text(Localizer["Etternavn"].Value));
+                        });
+                })
+
+            )
+            .Buttons(b => { b.Done().Text(Localizer["Opprett bruker"].Value); });
+        })
+    )
+
+</div>

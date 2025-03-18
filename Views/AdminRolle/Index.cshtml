@@ -1,0 +1,398 @@
+﻿@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
+@model Susteni.Models.Admin.AdminModel
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+
+@{
+    ViewData["Title"] = Localizer["Rolle"];
+    ViewData["LogOnOk"] = "2";
+    ViewData["Menu"] = "Admin";
+}
+
+<form asp-controller="AdminRolle" asp-action="Lagre" id="rollerForm" onsubmit="return false;" method="post" class="mt-3">
+
+    <div class="container-fluid padding-0">
+
+        <div class="form-group row" id="heading" style="height: 70px;">
+
+            <div class="col-2 unselectable">
+                <h3>@Localizer["Rolle"]</h3>
+            </div>
+
+            <div id="funksjonerFinn">
+                <div class="col-8">
+
+                </div>
+                <div class="col-2">
+                    <div id="infoLagring"></div>
+                </div>
+            </div>
+
+        </div>
+
+
+        <div class="row" style="border: 1px solid lightgrey; padding-top: 10px; padding-right: 10px;">
+
+
+            <div class="col-4" id="foresporsler">
+
+                <div class="form-group" style="height: 110px;">
+
+                    <div id="funksjonerFinn" style="margin-bottom: 20px;">
+                        <div>
+                            <button type="button" name="ny" class="commandline" onclick="nyRolle()" id="nyButton">
+                                <img src="~/images/Ny.svg" />
+                                @Localizer["Ny"]
+                            </button>
+                        </div>
+
+                        <div>
+                            <button type="submit" name="lagre" class="commandline" id="lagreButton">
+                                <img src="~/images/Lagre.svg" />
+                                @Localizer["Lagre"]
+                            </button>
+                        </div>
+
+                        <div>
+                            <button type="button" name="slette" class="commandline" onclick="slettListe()" id="slettButton">
+                                <img src="~/images/Slette.svg" />
+                                @Localizer["Slette"]
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="form-group">
+                    <h4 class="unselectable">@Localizer["Liste over roller"]</h4>
+                    @(Html.Kendo().Grid<Susteni.Models.RolleItem>()
+                        .Name("ListeRoller")
+                        .Columns(columns =>
+                        {
+                            columns.Bound(q => q.RolleGuid).Visible(false);
+                            columns.Bound(q => q.RolleNavn).Width(300).Title(Localizer["Navn"].Value);
+                            columns.Bound(q => q.RolleTypeNavn).Width(200).Title(Localizer["Type"].Value);
+                        })
+                        .Sortable()
+                        .Navigatable()
+                        .Pageable()
+                        .Selectable(s => s
+                            .Mode(GridSelectionMode.Single)
+                            .Type(GridSelectionType.Row))
+                        .Events(events => events
+                            .Change("onRolleChange"))
+                        .DataSource(dataSource => dataSource
+                            .Ajax()
+                            .Read(read => read.Action("getRolleListe", "AdminRolle"))
+                            .PageSize(15)
+                        )
+
+                    )
+                </div>
+            </div>
+
+
+            <div class="col-8 padding-R">
+                <partial name="_Rolle" />
+            </div>
+
+
+        </div>
+
+    </div>
+
+</form>
+
+<style>
+
+
+    .btn img {
+        width: 24px;
+        height: 24px;
+    }
+
+    .btn {
+        padding: 5px;
+    }
+
+    data {
+        background-color: aliceblue;
+    }
+
+    .k-list-horizontal .k-radio-item {
+        margin-right: 0px;
+    }
+
+    .k-switch-handle {
+        width: 24px;
+        height: 24px;
+    }
+
+    .k-switch-container {
+        width: 48px;
+    }
+
+    .k-switch-on .k-switch-handle {
+        left: calc(100% - 24px);
+    }
+</style>
+
+
+<script type="text/javascript">
+    var currentTab = "";
+
+
+    function onRolleChange(e) {
+        var selected = this.select();
+        var data = this.dataItem(selected);
+
+        if (data != null) {
+            rolleGuid = data.RolleGuid;
+            rolleType = data.RolleType;
+
+            $.ajax({
+                url: '@Url.Action("GetRolle", "AdminRolle")',
+                data: { RolleGuid: rolleGuid, rolleType: rolleType },
+                type: "GET"
+            }).done(function (result) {
+                $("#rolleData").html(result);
+
+                var rT = $("#Rolle_RolleType").data("kendoRadioGroup");
+
+                var sGK = document.getElementById("tabGravlund");
+                var sKW = document.getElementById("tabkWeb");
+                var sE = document.getElementById("tabEngrafo");
+
+                if (rT.value() == "0") {
+                    sGK.style.display = "block";
+                    sKW.style.display = "none";
+                    sE.style.display = "none";
+                }
+
+                if (rT.value() == "1") {
+                    sGK.style.display = "none";
+                    sKW.style.display = "block";
+                    sE.style.display = "none";
+                }
+
+                if (rT.value() == "2") {
+                    sGK.style.display = "none";
+                    sKW.style.display = "none";
+                    sE.style.display = "block";
+                }
+            });
+        }
+    }
+
+    function onRolleTypeChange(e) {
+
+
+        var sGK = document.getElementById("tabGravlund");
+        var sKW = document.getElementById("tabkWeb");
+        var sE = document.getElementById("tabEngrafo");
+
+        if (e.newValue == "0") {
+            sGK.style.display = "block";
+            sKW.style.display = "none";
+            sE.style.display = "none";
+        }
+
+    if (e.newValue == "1") {
+            sGK.style.display = "none";
+            sKW.style.display = "block";
+            sE.style.display = "none";
+        }
+
+    if (e.newValue == "2") {
+            sGK.style.display = "none";
+            sKW.style.display = "none";
+            sE.style.display = "block";
+        }
+
+
+
+
+
+    }
+
+    function onListeInnholdChange(e) {
+        var selected = this.select();
+        var data = this.dataItem(selected);
+
+        if (data != null) {
+            listeId = data.id;
+
+            $.ajax({
+                url: '@Url.Action("GetListeInnholdItem", "kWebListe")',
+                data: { id: listeId },
+                type: "GET"
+            }).done(function (result) {
+                $("#listeinnholdForm").html(result);
+            });
+        }
+    }
+
+    function nyRolle() {
+        $.ajax({
+            url: '@Url.Action("nyRolle", "AdminRolle")',
+            type: "GET"
+        }).done(function (result) {
+            $("#rolleData").html(result);
+        });;
+    }
+
+    function nyPerson() {
+        var $this = $('#kWeblisteForm').serialize();
+        $.ajax({
+            url: '@Url.Action("newPerson", "kWebListe")',
+            type: "GET"
+
+        }).done(function (result) {
+            $("#listeinnholdForm").html(result);
+        });;
+    }
+
+    function filterTMT() {
+        return { taMedTomme: false }
+    }
+
+    function valgteListe() {
+        var listBoxF = $("#ListeGrid").data("kendoGrid");
+        var selectedF = listBoxF.select();
+        var selItemF = listBoxF.dataItem(selectedF);
+        var Id = 0;
+
+        if (selItemF != null) {
+            Id = selItemF.id;
+        }
+        return { listeId: Id }
+    }
+
+@*Lagre*@
+
+
+    $(document).on('submit', '#rollerForm', function (e)
+        {
+            e.preventDefault();
+            var $this = $(this).serialize();
+
+        var listBoxG = $("#ListeRoller").data("kendoGrid");
+
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("LagreRolle", "AdminRolle")',
+                data: $this,
+                dataType: 'json'
+            }).done(function (result) {
+                if (result == true) {
+                    document.getElementById('infoLagring').innerHTML = "<img src='@Url.Content("~/images/")database-save.png' />@Localizer["Lagret"]";
+                    $('#infoLagring').fadeIn(800).delay(100).fadeOut(800);
+                    listBoxG.dataSource.read();
+                }
+                else {
+                    alert('an Error has occurred, please try again!');
+                }
+
+            }).fail(function (result) {
+                alert('an Error has occurred, please try again');
+            });
+        });
+
+    function lagrePerson() {
+        var listBoxG = $("#ListeInnholdGrid").data("kendoGrid");
+        var $this = $('#kWeblisteForm').serialize();
+
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("lagreListeinnhold", "kWebListe")',
+            data: $this,
+            dataType: 'json'
+        }).done(function (result) {
+            if (result == true) {
+                document.getElementById('infoLagring').innerHTML = "<img src='@Url.Content("~/images/")database-save.png' />@Localizer["Lagret"]";
+                $('#infoLagring').fadeIn(800).delay(100).fadeOut(800);
+                listBoxG.dataSource.read();
+            }
+            else {
+                alert('an Error has occurred, please try again!');
+            }
+
+        }).fail(function (result) {
+            alert('an Error has occurred, please try again');
+        });
+    }
+
+    function slettListe() {
+        var tittel = "SLETTE LISTE";
+        var nei = "Nei";
+        var content = "<div id='warning'>Ønsker du å slette valgte liste?</div>";
+
+            $("#confirm").kendoConfirm({
+                title: tittel,
+                content: content,
+                messages: {
+                    okText: "Ja",
+                    cancel: nei
+                }
+            }).data("kendoConfirm").result.done(function () {
+                $('body').append($('<div id="confirm">'));
+
+                var listBoxF = $("#LinkGrid").data("kendoGrid");
+                var selectedF = listBoxF.select();
+                var selItemF = listBoxF.dataItem(selectedF);
+                var Id = 0;
+
+                if (typeof selItemF != 'undefined') {
+                    Id = selItemF.id;
+                }
+
+                $.ajax({
+                    url: '@Url.Action("removeListe", "kWebListe")',
+                    data: { id: Id },
+                    type: "POST"
+                }).done(function (result) {
+                    listBoxF.dataSource.read();
+                });
+            }).fail(function () {
+                $('body').append($('<div id="confirm">'));
+            });
+
+    }
+
+    function slettPerson() {
+        var tittel = "SLETT PERSON";
+        var nei = "Nei";
+        var content = "<div id='question'>Ønsker du å slette valgte person fra listen?</div>";
+
+        $("#confirm").kendoConfirm({
+            title: tittel,
+            content: content,
+            messages: {
+                okText: "Ja",
+                cancel: nei
+            }
+        }).data("kendoConfirm").result.done(function () {
+            $('body').append($('<div id="confirm">'));
+
+                var listBoxF = $("#ListeInnholdGrid").data("kendoGrid");
+        var selectedF = listBoxF.select();
+        var selItemF = listBoxF.dataItem(selectedF);
+        var Id = 0;
+
+        if (typeof selItemF != 'undefined') {
+            Id = selItemF.id;
+        }
+
+        $.ajax({
+            url: '@Url.Action("removeListeinnhold", "kWebListe")',
+            data: { id: Id },
+            type: "POST"
+        }).done(function (result) {
+            listBoxF.dataSource.read();
+        });
+        }).fail(function () {
+            $('body').append($('<div id="confirm">'));
+        });
+
+    }
+</script>

@@ -1,0 +1,365 @@
+﻿@using Microsoft.AspNetCore.Mvc.Localization
+
+@inject IViewLocalizer Localizer
+@model Susteni.Models.Ship.ShipModel
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+
+@{
+    ViewData["Title"] = Localizer["Fuel savings"];
+    ViewData["LogOnOk"] = "2";
+    ViewData["Menu"] = "Admin";
+}
+
+
+<script>
+
+    var effects = ["25%", "35%", "45%", "55%"];
+
+    $("#chart").kendoChart({
+        //title: { text: "Fuel consumption diagram"},
+        seriesDefaults: { type: "line", style: "smooth" },
+        chartArea: { background: "", height: 370, width: 550 },
+        legend: { visible: false },
+        valueAxis: { min: 0.10 },
+        categoryAxis: { categories: effects, }
+    });
+
+
+    function onFCChange() {
+        var dataItems = this.dataSource.data();
+        var chartSeries = [];
+        var chartData = [];
+        var effects = [];
+
+        dataItems.forEach(function (item) {
+            chartData.push(item.KgDieselkWh)
+            effects.push(item.Effect + "%")
+        })
+
+        chartSeries.push({
+            data: chartData,
+            name: "Effect"
+        })
+
+        var chart = $("#chart").data("kendoChart");
+        var options = chart.options;
+        options.series = chartSeries;
+        options.categoryAxis.categories = effects;
+        chart.setOptions(options);
+    }
+
+</script>
+
+
+<form id="generatorsForm">
+    <input hidden asp-for="ShipGenerator.GeneratorGuid" class="form-control">
+    <input hidden asp-for="ShipGenerator.ShipGuid" class="form-control">
+    <input hidden asp-for="ShipGenerator.EfficientMotorSwitchboard2" class="form-control">
+    <input hidden asp-for="ShipGenerator.KgDieselkWh2" class="form-control">
+    <input hidden asp-for="ShipGenerator.MaintenanceCost2" class="form-control">
+
+    <div class="row">
+
+        <div class="col-12" style="margin-bottom: 0px; margin-top: 0px;">
+            <div class="panel with-nav-tabs panel-default" id="dataenter" style="height: 440px;">
+                <div class="panel-body data padding-0">
+                    <div class="tab-content data">
+                        <div class="panel-heading" id="Tab">
+                            <ul class="nav nav-tabs">
+                                <li class="nav-item"><a class="nav-link active" aria-current="page" href="#tabInfoX" data-bs-toggle="tab">@Localizer["Info"]</a></li>
+                                <li class="nav-item"><a class="nav-link" aria-current="page" href="#tabFuel" data-bs-toggle="tab">@Localizer["Fuel consumption list"]</a></li>
+                            </ul>
+                        </div>
+                        <div class="panel-body">
+                            <div class="tab-content" style="margin-top: 10px;">
+                                <div class="tab-pane fade show active" style="padding: 10px;" role="tabpanel" id="tabInfoX">
+
+                                    <div class="row align-items-center">
+                                        <label class="col-2 col-form-label">Type</label>
+                                        <div class="col-5">
+                                            @(Html.Kendo().DropDownList()
+                                                .Name("ShipGenerator.TypeGuid")
+                                                .DataTextField("Name")
+                                                .DataValueField("TypeGuid")
+                                                .HtmlAttributes(new { @class = "nodvendigFelt" })
+                                                .OptionLabel(Localizer["Choose type from list ..."].Value)
+                                                .OptionLabelTemplate("<span><i>" + Localizer["Choose type from list ..."].Value + "</i></span>")
+                                                .Height(200)
+                                                .Value(Model.ShipGenerator.TypeGuid)
+                                                .DataSource(dataSource => dataSource
+                                                    .Ajax()
+                                                    .Read(read => read.Action("GetPowerProductionTypeList", "Ship"))
+                                                    )
+                                                )
+                                        </div>
+                                    </div>
+
+                                    <div class="row align-items-center">
+                                        <label class="col-2 col-form-label">Name</label>
+                                        <div class="col-7">
+                                            <input asp-for="ShipGenerator.Name" class="form-control k-textbox">
+                                        </div>
+                                    </div>
+
+                                    <div class="row align-items-center">
+                                        <label class="col-2 col-form-label">Fuel type</label>
+                                        <div class="col-7">
+                                            @(Html.Kendo().DropDownList()
+                                                .Name("ShipGenerator.FuelTypeGuid")
+                                                .DataTextField("Name")
+                                                .DataValueField("FuelTypeGuid")
+                                                .HtmlAttributes(new { @class = "nodvendigFelt" })
+                                                .OptionLabel(Localizer["Choose type from list ..."].Value)
+                                                .OptionLabelTemplate("<span><i>" + Localizer["Choose type from list ..."].Value + "</i></span>")
+                                                .Height(200)
+                                                .Value(Model.ShipGenerator.FuelTypeGuid)
+                                                .DataSource(dataSource => dataSource
+                                                    .Ajax()
+                                                    .Read(read => read.Action("GetShipFuelTypeList", "Ship"))
+                                                    )
+                                                )
+                                        </div>
+                                    </div>
+
+                                    <div class="row align-items-center">
+                                        <label class="col-5 col-form-label">kWe</label>
+                                        <div class="col-3">
+                                            @(Html.Kendo().NumericTextBox<double>()
+                                                .Name("ShipGenerator.kW")
+                                                .HtmlAttributes(new { @class = "nodvendigFelt" })
+                                                .Format("###0")
+                                                .Step(10)
+                                                .Value(Model.ShipGenerator.kW)
+                                                )
+                                        </div>
+                                    </div>
+
+                                    <div class="row align-items-center">
+                                        <label class="col-5 col-form-label">Kg fuel/kWh</label>
+                                        <div class="col-3">
+                                            @(Html.Kendo().NumericTextBox<double>()
+                                                .Name("ShipGenerator.KgDieselkWh")
+                                                .HtmlAttributes(new { @class = "nodvendigFelt" })
+                                                .Format("#.00")
+                                                .Value(Model.ShipGenerator.KgDieselkWh)
+                                                )
+                                        </div>
+                                    </div>
+
+                                    <div class="row align-items-center">
+                                        <label class="col-5 col-form-label">Fuel price</label>
+                                        <div class="col-3">
+                                            @(Html.Kendo().NumericTextBox<double>()
+                                                .Name("ShipGenerator.FuelPrice")
+                                                .Format("#")
+                                                .Value(Model.ShipGenerator.FuelPrice)
+                                                )
+                                        </div>
+                                    </div>
+
+                                    <div class="row align-items-center">
+                                        <label class="col-5 col-form-label">Efficient generator to powerplant</label>
+                                        <div class="col-3">
+                                            @(Html.Kendo().NumericTextBox<Single>()
+                                                .Name("ShipGenerator.EfficientMotorSwitchboard")
+                                                .HtmlAttributes(new { @class = "nodvendigFelt" })
+                                                .Format("n2")
+                                                .Value(Model.ShipGenerator.EfficientMotorSwitchboard)
+                                                )
+                                        </div>
+                                    </div>
+
+                                    <div class="row align-items-center">
+                                        <label class="col-5 col-form-label">Maintenance cost per hour</label>
+                                        <div class="col-3">
+                                            @(Html.Kendo().NumericTextBox<Single>()
+                                                .Name("ShipGenerator.MaintenanceCost")
+                                                .HtmlAttributes(new { @class = "nodvendigFelt" })
+                                                .Format("n2")
+                                                .Value(Model.ShipGenerator.MaintenanceCost)
+                                                )
+                                        </div>
+                                    </div>
+
+                                    <div class="row align-items-center">
+                                        <label class="col-5 col-form-label">Order</label>
+                                        <div class="col-2">
+                                            @(Html.Kendo().NumericTextBox<int>()
+                                                .Name("ShipGenerator.Order")
+                                                .Format("n0")
+                                                .Min(0)
+                                                .Value(Model.ShipGenerator.Order)
+                                                )
+                                        </div>
+                                    </div>
+
+                                    <div class="row align-items-center" style="margin-top: 7px;">
+                                        <label class="col-5 col-form-label"></label>
+                                        <div class="col-3">
+                                            @(Html.Kendo().CheckBox().Checked(Model.ShipGenerator.PowerProduction).Name("ShipGenerator.PowerProduction").Label("Power production"))
+                                        </div>
+                                    </div>
+
+                                    <div class="row align-items-center" style="margin-top: 7px;">
+                                        <label class="col-5 col-form-label"></label>
+                                        <div class="col-3">
+                                            @(Html.Kendo().CheckBox().Checked(Model.ShipGenerator.ExcludeAutoTune).Name("ShipGenerator.ExcludeAutoTune").Label("Exclude from autotune"))
+                                        </div>
+                                    </div>
+
+                                </div>
+
+                                <div class="tab-pane" style="padding: 10px;" role="tabpanel" id="tabFuel">
+
+                                    <div class="row">
+                                        <div class="col-4">
+                                            <div style="position: relative">
+                                                @(Html.Kendo().Grid<Susteni.Models.GeneratorFuelComsuptionItem>()
+                                                    .Name("fuelComsumptionList")
+                                                    .Columns(columns =>
+                                                    {
+                                                        columns.Bound(q => q.FuelConsGuid).Visible(false).Title(Localizer["#"].Value);
+                                                        columns.Bound(q => q.Effect).Title(Localizer["Effect"].Value);
+                                                        columns.Bound(q => q.KgDieselkWh).Format("{0: #.000}").Title(Localizer["kg fuel/kWh"].Value);
+                                                    })
+                                                    .Height(380)
+                                                    .Scrollable()
+                                                    .Selectable(s => s
+                                                        .Mode(GridSelectionMode.Multiple)
+                                                        .Type(GridSelectionType.Row))
+                                                    .Events(e => e.DataBound("onFCChange").Change("onFuelConsChange"))
+                                                    .DataSource(dataSource => dataSource
+                                                        .Ajax()
+                                                        .Read(read => read.Action("GetFuelComsuptionGeneratorList", "Ship").Data("filterGenerator"))
+                                                        )
+                                                    )
+
+
+                                                @(Html.Kendo().FloatingActionButton()
+                                                    .Name("fuelComsumptionAdd")
+                                                    .ThemeColor(FloatingActionButtonThemeColor.Success)
+                                                    .Size(FloatingActionButtonSize.Small)
+                                                    .PositionMode(FloatingActionButtonPositionMode.Absolute)
+                                                    .Align(FloatingActionButtonAlign.TopEnd)
+                                                    .AlignOffset(alignOffset => alignOffset.Horizontal(-10).Vertical(10))
+                                                    .Icon("plusIcon")
+                                                    .Events(events => events.Click("showDialogFuelConsumptionEdit"))
+                                                    .Visible(true)
+                                                    )
+
+    
+
+                                                @(Html.Kendo().FloatingActionButton()
+                                                    .Name("fuelComsumptionRemove")
+                                                    .ThemeColor(FloatingActionButtonThemeColor.Error)
+                                                    .Size(FloatingActionButtonSize.Small)
+                                                    .PositionMode(FloatingActionButtonPositionMode.Absolute)
+                                                    .Align(FloatingActionButtonAlign.TopEnd)
+                                                    .AlignOffset(alignOffset => alignOffset.Horizontal(-10).Vertical(50))
+                                                    .Icon("trashIcon")
+                                                    .Events(events => events.Click("removeFuelConsumption"))
+                                                    .Visible(false)
+                                                    )
+
+                                                @(Html.Kendo().FloatingActionButton()
+                                                .Name("fuelConsumptionImport")
+                                                .ThemeColor(FloatingActionButtonThemeColor.Warning)
+                                                .Size(FloatingActionButtonSize.Small)
+                                                .PositionMode(FloatingActionButtonPositionMode.Absolute)
+                                                .Align(FloatingActionButtonAlign.TopEnd)
+                                                .AlignOffset(alignOffset => alignOffset.Horizontal(-10).Vertical(90))
+                                                .Icon("searchIcon")
+                                                .Events(events => events.Click("showDialogFuelConsumptionImport"))
+                                                .Visible(true)
+                                                ) 
+                                            </div>
+                                        </div>
+                                    
+                                        <div class="col-8">
+
+                                            <div id="chart"></div>
+
+                                        </div>
+                                    
+                                    </div>
+                                    
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+   
+   
+    </div>
+
+    <div class="row" style="margin-top: 15px; margin-bottom: 0px !important;">
+        <div class="col-12" style="margin-bottom: 0px;">
+            <button type="button" onclick="closeGenerator()" class="commandModernRed" style="width: 150px; float: right;">Cancel</button>
+            <button type="button" onclick="saveGenerator()" class="commandModernGreen" style="width: 150px; float: right">Save</button>
+        </div>
+
+    </div>
+</form>
+
+<script>
+
+    $(document).ready(function () {
+
+        var fbfCA = $("#fuelComsumptionAdd").getKendoFloatingActionButton();
+        var fbfCR = $("#fuelComsumptionRemove").getKendoFloatingActionButton();
+        var fbfCE = $("#fuelConsumptionImport").getKendoFloatingActionButton();
+
+        $("#fuelComsumptionAdd").prop("type", "button");
+        $("#fuelComsumptionRemove").prop("type", "button");
+        $("#fuelConsumptionImport").prop("type", "button");
+
+        fbfCAText = "Add fuel consumption";
+        fbfCRText = "Remove fuel consumption";
+        fbfCEText = "Import fuel consumption table";
+
+
+        $("#fuelComsumptionAdd").hover(function () {
+            fbfCA.text(fbfCAText);
+            fbfCA.element.find(".k-fab-text")
+                .stop().toggle(200);
+        }, function () {
+            fbGA.element.find(".k-fab-text")
+                .stop()
+                .toggle(200)
+                .promise().done(function () {
+                    fbfCA.text("");
+                });
+        });
+
+        $("#fuelComsumptionRemove").hover(function () {
+            fbfCR.text(fbfCRText);
+            fbfCR.element.find(".k-fab-text")
+                .stop().toggle(200);
+        }, function () {
+            fbGR.element.find(".k-fab-text")
+                .stop()
+                .toggle(200)
+                .promise().done(function () {
+                    fbfCR.text("");
+                });
+        });
+
+        $("#fuelConsumptionImport").hover(function () {
+            fbfCE.text(fbfCEText);
+            fbfCE.element.find(".k-fab-text")
+                .stop().toggle(200);
+        }, function () {
+            fbfCE.element.find(".k-fab-text")
+                .stop()
+                .toggle(200)
+                .promise().done(function () {
+                    fbfCE.text("");
+                });
+        });
+
+
+    });
+
+</script>

@@ -1,0 +1,50 @@
+﻿@using Microsoft.AspNetCore.Mvc.Localization
+
+@inject IViewLocalizer Localizer
+@model Susteni.Models.Ship.ShipModel
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+
+<form id="profile" style="margin-bottom: 10px;">
+
+     <input hidden asp-for="Profile.LinkGuid" class="form-control">
+     <input hidden asp-for="Profile.ProfilGuid" class="form-control">
+
+     <div class="row">
+         <div class="col-12">
+                <button type="button" class="commandModern" onclick="createProfiles()">Save profile</button>
+         </div>
+     </div>
+
+     <div class="row">
+        <div class="col-12" style="margin-bottom: 0px; margin-top: 10px;">
+            <div class="panel panel-default" id="dataenter">
+                <div class="panel-body data padding-0" style="padding: 10px;">
+
+                    <div class="row align-items-center" style="display: flex; flex-direction: row;">
+                        <label class="col-2 col-form-label">Name</label>
+                         <div class="col-md-10">
+                            <input asp-for="Profile.Name" class="form-control k-textbox">
+                        </div> 
+                    </div>
+
+                    <div class="row align-items-center" style="display: flex; flex-direction: row;">
+                        <label class="col-2 col-form-label">User</label>
+                         <div class="col-md-4">
+                            <input asp-for="Profile.CreatedBy" class="form-control k-textbox">
+                        </div> 
+
+                        <Label class="col-2 col-form-label">@Localizer["Date"]</label>
+                         <div class="col-4">
+                        @(Html.Kendo().DatePicker()
+                            .Name("Profile.CreatDate")
+                            .Value(Model.Profile.CreatDate)
+                            .HtmlAttributes(new { style = "width: 100%"})
+                            )
+                        </div> 
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</form>

@@ -1,0 +1,64 @@
+﻿@using Microsoft.AspNetCore.Mvc.Localization
+
+@inject IViewLocalizer Localizer
+@model Susteni.Models.Ship.ShipModel
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+
+
+<form id="operationModeForm">
+    <input hidden asp-for="ShipOperationMode.OperationModeGuid" class="form-control k-textbox">
+    <input hidden asp-for="ShipOperationMode.ShipGuid" class="form-control k-textbox">
+    <input hidden asp-for="ShipOperationMode.ProfilGuid" class="form-control k-textbox">
+
+    <div class="row align-items-center" style="display: flex; flex-direction: row;">
+        <label class="col-3 col-form-label">Name</label>
+        <div class="col-9">
+            <input asp-for="ShipOperationMode.Name" class="form-control k-textbox">
+        </div>
+    </div>
+
+
+
+    <div class="row align-items-center" style="display: flex; flex-direction: row;">
+        <label class="col-3 col-form-label">Hours pr/year</label>
+        <div class="col-3">
+            @(Html.Kendo().NumericTextBox<double>()
+                .Name("ShipOperationMode.HoursPrYear")
+                .Format("#####")
+                .Value(Model.ShipOperationMode.HoursPrYear)
+                )
+        </div>
+    </div>
+
+    <div class="row align-items-center" style="display: flex; flex-direction: row;">
+        <label class="col-3 col-form-label">Minimum</label>
+        <div class="col-2">
+            @(Html.Kendo().NumericTextBox<double>()
+                .Name("ShipOperationMode.NumberGenerator")
+                .Format("##")
+                .Value(Model.ShipOperationMode.NumberGenerator)
+                )
+        </div>
+        generators
+    </div>
+
+    <div class="row align-items-center" style="display: flex; flex-direction: row;">
+        <label class="col-3 col-form-label">Order</label>
+        <div class="col-2">
+            @(Html.Kendo().NumericTextBox<double>()
+                .Name("ShipOperationMode.Order")
+                .Format("##")
+                .Value(Model.ShipOperationMode.Order)
+                )
+        </div>
+    </div>
+
+    <div class="row" style="margin-top: 15px;">
+        <div class="col-12">
+            <button type="button" onclick="closeOperationProfileMode()" class="commandModernRed" style="width: 150px; float: right">Cancel</button>
+            <button type="button" onclick="saveOperationProfileMode()" class="commandModernGreen" style="width: 150px; float: right">Save</button>
+        </div>
+
+    </div>
+
+</form>

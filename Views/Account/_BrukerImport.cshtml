@@ -1,0 +1,181 @@
+﻿@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
+@model Susteni.Models.Account.AccountModel
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+
+@{
+    ViewData["Title"] = Localizer["Kunder"];
+    ViewData["LogOnOk"] = "2";
+    ViewData["Menu"] = "Admin";
+}
+
+
+<style>
+
+    .k-grid td {
+        white-space: nowrap;
+        text-overflow: ellipsis;
+    }
+
+    .k-grid table {
+        table-layout: fixed;
+    }
+
+</style>
+
+<script>
+    var resTypeImport = 0;
+    var FellesraadImport = "";
+
+    function filterKundeImport() {
+        if (resTypeImport == 0) {
+            filterTekst = "Fellesraad Between '0000' AND '6999'"
+        }
+        else {
+            filterTekst = "Fellesraad Between '7000' AND '7999'"
+        }
+        return { filterTekst: filterTekst }
+    }
+
+    function finnKundeImport() {
+        fv = document.getElementById("KundeNavnImport").value;
+        ds = $("#listeKunderImport").data("kendoGrid").dataSource;
+        ds.filter({ field: "Navn", operator: "contains", value: fv });
+    }
+
+    function onListeTypeChangeImport(e) {
+        resTypeImport = e.newValue;
+        var lvBruker = $("#listeKunderImport").data("kendoGrid");
+        lvBruker.dataSource.read();
+    }
+
+    function onKundeChangeImport(e) {
+        var selected = this.select();
+        var data = this.dataItem(selected);
+
+        if (data != null) {
+            FellesraadImport = data.Fellesraad;
+
+            var grid = $("#listeBrukereImport").data("kendoGrid");
+            grid.dataSource.read();
+        }
+    }
+
+    function filterFellesraadImport() {
+        return { fellesraad: FellesraadImport }
+    }
+
+
+</script>
+
+<form controller="Kunder" onsubmit="return false;" method="post" class="mt-0" id="frmKundeForm">
+    <div id="confirm"></div>
+
+    <div class="container-fluid g-0">
+        <div class="row">
+            <div class="col-12">
+                <button type="button" name="Gemeinde" class="command" onclick="opprettBrukere()" style="width: 210px; margin-right: 7px;">
+                    <img src="~/images/execute.svg" />
+                    @Localizer["Importer"]
+                    <p>@Localizer["Importer inn valgte brukere"]</p>
+                </button>
+            </div>
+        </div>
+
+        <div class="row" style="border: 1px solid lightgrey; padding: 10px; margin: 5px;">
+
+            <div class="col-5" id="funksjoner">
+
+                <div class="row">
+                    <div class="col-12">
+                        <div class="row align-items-center">
+                            <label class="col-2 col-form-label">Navn</label>
+                            <div class="col-10" style="display: flex; flex-direction: row;">
+                                <input id="KundeNavnImport" Class="form-control sokeFelt" oninput="finnKundeImport()" style="width: calc(100% - 60px)">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group col-12" style="margin-top: 10px;">
+                    <h4>@Localizer["Liste over kunder"]</h4>
+
+                    @(Html.Kendo().RadioGroup()
+                        .Name("TypeListeImport")
+                        .Layout("horizontal")
+                        .Events(e => e.Change("onListeTypeChangeImport"))
+                        .Items(i =>
+                        {
+                            i.Add().Label(Localizer["Kunder"].Value).Value("0");
+                            i.Add().Label(Localizer["Byrå"].Value).Value("1");
+                        })
+                        .Value("0")
+                        )
+                </div>
+
+                <div class="form-group" style="margin-top: 10px;">
+                    @(Html.Kendo().Grid<Susteni.Models.SystemInfoListeItem>()
+                        .Name("listeKunderImport")
+                        .Columns(columns =>
+                        {
+                            columns.Bound(q => q.Fellesraad).Width(120);
+                            columns.Bound(q => q.Navn);
+                        })
+                        .Height(255)
+                        .Scrollable()
+                        .Selectable(s => s
+                        .Mode(GridSelectionMode.Single)
+                        .Type(GridSelectionType.Row))
+                        .Events(events => events
+                        .Change("onKundeChangeImport"))
+                        .DataSource(dataSource => dataSource
+                        .Ajax()
+                        .Read(read => read.Action("getSystemInfoListe", "Account").Data("filterKundeImport"))
+                        )
+                        )
+                </div>
+
+
+            </div>
+
+            <div class="col-7">
+
+                <div class="col-lg-12"style="margin-top: 10px; margin-bottom: 10px;">
+
+                <div class="form-group" >
+                    <h4>@Localizer["Liste over brukere"]</h4>
+@*
+                    @(Html.Kendo().Grid<Susteni.Models.SystemInfoBrukereItem>()
+                        .Name("listeBrukereImport")
+                        .Columns(columns =>
+                            {
+                                columns.Select().Width(40);
+                                columns.Bound(q => q.Fellesraad).Width(60).Title("#");
+                                columns.Bound(q => q.BrukerId).Width(120);
+                                columns.Bound(q => q.BrukerGuid).Width(120).Visible(false);
+                                columns.Bound(q => q.Fornavn).Width(120);
+                                columns.Bound(q => q.Etternavn).Width(120);
+                                columns.Bound(q => q.Mobil).Width(120);
+                            })
+                        .Height(330)
+                        .Scrollable()
+                        .Sortable(true)
+                        .Selectable(s => s
+                            .Mode(GridSelectionMode.Multiple)
+                            .Type(GridSelectionType.Row))
+                        .DataSource(dataSource => dataSource
+                            .Ajax()
+                            .Read(read => read.Action("getSystemInfoBrukereListe", "Account").Data("filterFellesraadImport"))
+                        )
+                    )*@
+
+                </div>
+            </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</form>

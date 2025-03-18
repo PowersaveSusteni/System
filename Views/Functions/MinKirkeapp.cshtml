@@ -1,0 +1,287 @@
+﻿@using Microsoft.AspNetCore.Mvc.Localization
+
+@inject IViewLocalizer Localizer
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@model Susteni.Models.Ressurs.RessursModel
+
+
+<script id="idRessurser">
+    var deltakerListe = "";
+
+    function onMinKirkeappRessursOk() {
+        treeView = $("#ressurser").data("kendoTreeView");
+        ressursGuid = document.getElementById("MinKirkeApp_RessursGuid").value;
+
+        checkedNodes = getCheckedItems(treeView);
+
+        var IdGuid = "";
+        for (var i = 0; i < checkedNodes.length; i++) {
+            if (IdGuid == "") {
+                IdGuid = checkedNodes[i].id;
+                }
+            else {
+                IdGuid += ":" + checkedNodes[i].id;
+                }
+            }
+
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("setMinKirkeApp", "Funksjoner")',
+            data: { ressursGuid: ressursGuid, IdGuid: IdGuid },
+            })
+        .done(function (result) {
+                $("#Deltakere").data("kendoGrid").dataSource.read();
+            });
+
+        } 
+
+    function filterRessurs() {
+        ressursGuid = document.getElementById("MinKirkeApp_RessursGuid").value;
+
+        return { ressursGuid: ressursGuid }
+    }
+
+    function showDialogRessurs(e) {
+        deltakerListe = e;
+        $("#ressurser").data("kendoTreeView").dataSource.read();
+        var popup = $('#dialogRessursregister').data("kendoDialog");
+        popup.open();
+    }
+
+
+    function slettMinKirkeApp() {
+        ressursGuid = document.getElementById("MinKirkeApp_RessursGuid").value;
+        var grid = $("#Deltakere").data("kendoGrid");
+        var IdGuid = "";
+
+        grid.select().each(function () {
+            var currentRowData = grid.dataItem(this);
+            if (IdGuid == "")
+                IdGuid += currentRowData.RessursGuid;
+            else {
+                IdGuid += ";" + currentRowData.RessursGuid;
+            }
+            i++;
+        });
+
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("exeMinKirkeAppRemove", "Funksjoner")',
+            data: { ressursGuid: ressursGuid, IdGuid: IdGuid },
+        })
+            .done(function (result) {
+                $("#Deltakere").data("kendoGrid").dataSource.read();
+            });
+    }
+
+    function lagreMinKirkeApp() {
+        var $this = $('#minKirkeapp');
+
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("setMinKirkeAppInfo", "Funksjoner")',
+            data: $this.serialize(),
+            dataType: 'json'
+        }).done(function (result) {
+            if (result.Result == true) {
+                alert("lagret");
+            }
+            $('#dialogMinKirkeapp').data("kendoWindow").close();
+
+        }).fail(function (result) {
+            alert(result.ErrorText);
+        });
+    };
+
+</script>
+
+
+<div id="RessurserDialog">
+
+    @(Html.Kendo().Dialog()
+        .Name("dialogRessursregister")
+        .Title("Ressurser")
+        .Content(Html.Kendo().TreeView()
+                    .Name("ressurser")
+                    .DataTextField("Text")
+                    .LoadOnDemand(false)
+                    .HtmlAttributes(new {style = "height: 100%;"})
+                    .Checkboxes(checkboxes => checkboxes
+                        .CheckChildren(true)
+                        )
+                    .DataSource(DataSource => DataSource
+                        .Read(read => read.Action("AktivitetRessurser", "Kalender"))
+                        .Model(model => {
+                            model.Id("id");
+                            model.HasChildren("hasChildren");
+                            })
+                        )                                                
+                    .ToHtmlString()
+            )
+        .Width(500)
+        .Height(600)
+        .Modal(false)
+        .Visible(false)
+        .Actions(actions =>
+        {
+            actions.Add().Text("Avbryt");
+            actions.Add().Text("Velg").Action("onMinKirkeappRessursOk").Primary(true);
+        })
+        .Events(ev => ev.Close("onClose").Open("onOpen"))
+        )
+
+</div>
+
+
+
+<script>
+
+    function filterAnsvarlig() {
+        return { ressursType: "0,1,99" }
+    }
+
+    function filterSted() {
+        return { soknNr: "", typeRom: "Aktivitet" }
+    }
+
+    function changeDate() {
+        currday = this.value();
+
+        var datepicker = $("#Moteplan_StartDato").data("kendoDatePicker");
+        datepicker.value(currday);
+    }
+
+    function onStarttimeChange(e) {
+        var startTime = this.value();
+        endPicker = $("#Moteplan_SluttTid").data("kendoTimePicker");
+
+        if (startTime) {
+            startTime = new Date(startTime);
+
+            endPicker.max(startTime);
+
+            startTime.setMinutes(startTime.getMinutes() + this.options.interval);
+
+            endPicker.min(startTime);
+            endPicker.value(startTime);
+        }
+    }
+</script>
+
+<form asp-action="Lagre" id="minKirkeapp" onsubmit="return false;" method="post" class="mt-0">
+
+    <input hidden asp-for="MinKirkeApp.RessursGuid" />
+
+    <div class="row">
+
+        <div class="col-10" style="display: flex; flex-direction: row;">
+
+            <div>
+                <button type="button" class="command" onclick="lagreMinKirkeApp()" style="width: 200px; margin-right: 7px;">
+                    <img src="~/images/save-filled-close-window.svg" />
+                    @Localizer["Oppdater og lukk"]
+                </button>
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="row">
+
+        <div class="col-6">
+            <div class="row" style="margin-top: 30px;">
+                <div class="col-3"></div>
+                <div class="col-9">
+                    @(Html.Kendo().CheckBox().Name("MinKirkeApp.Aktiv").Checked(Model.MinKirkeApp.Aktiv).Label(Localizer["Aktiv"].Value))
+                </div>
+            </div>
+
+            <div class="row align-items-center" style="margin-top: 10px;">
+                <label class="col-3">Passord</label>
+                <div class="col-9">
+                    <input asp-for="MinKirkeApp.Passord" type="password" id="MinKirkeApp.passord" name="MinKirkeApp.passord" class="form-control k-textbox">
+                </div>
+            </div>
+
+            <div class="row align-items-center" style="margin-top: 10px;">
+                <label class="col-3">For periode</label>
+                <div class="col-9">
+                @(Html.Kendo().DatePicker()
+                    .Name("MinKirkeApp.FraDato")
+                    .Value(Model.MinKirkeApp.FraDato)
+                    .HtmlAttributes(new { style = "width: 120px" })
+                    )
+                @(Html.Kendo().DatePicker()
+                    .Name("MinKirkeApp.TilDato")
+                    .Value(Model.MinKirkeApp.TilDato)
+                    .HtmlAttributes(new { style = "width: 120px" })
+                    )
+                </div>
+            </div>
+
+            <h5 style="margin-top: 20px;">Moduler</h5>
+            <div class="row">
+                <div style="margin-left: 10px;">
+                    @(Html.Kendo().CheckBox().Name("MinKirkeApp.Bygg").Checked(Model.MinKirkeApp.Bygg).Label(Localizer["Bygg"].Value))
+                </div>
+                <div style="margin-left: 10px; margin-top: 5px;">
+                    @(Html.Kendo().CheckBox().Name("MinKirkeApp.Medarbeider").Checked(Model.MinKirkeApp.Medarbeider).Label(Localizer["Medarbeider"].Value))
+                </div>
+                <div style="margin-left: 10px; margin-top: 5px;">
+                    @(Html.Kendo().CheckBox().Name("MinKirkeApp.KirkeligeHandlinger").Checked(Model.MinKirkeApp.KirkeligeHandlinger).Label(Localizer["Kirkelige Handlinger"].Value))
+                </div>
+                <div style="margin-left: 10px; margin-top: 5px;">
+                    @(Html.Kendo().CheckBox().Name("MinKirkeApp.Gravlund").Checked(Model.MinKirkeApp.Gravlund).Label(Localizer["Gravlund"].Value))
+                </div>
+                <div style="margin-left: 10px; margin-top: 5px;">
+                    @(Html.Kendo().CheckBox().Name("MinKirkeApp.Profil").Checked(Model.MinKirkeApp.Profil).Label(Localizer["Profil"].Value))
+                </div>
+                <div style="margin-left: 10px; margin-top: 5px;">
+                    @(Html.Kendo().CheckBox().Name("MinKirkeApp.Delta").Checked(Model.MinKirkeApp.Delta).Label(Localizer["Delta"].Value))
+                </div>
+            </div>
+        </div>
+        <div class="col-6">
+            <div class="row">
+                <div class="d-flex">
+                    <h4 class="me-auto align-self-end unselectable">@Localizer["Kalendere i MinKirkeApp"]</h4>
+
+                    <div class="col-lg-6 text-right">
+                        <div class="align-items-end">
+                            <button class="commandSmal" type="button" onclick="showDialogRessurs('Deltakere')" style="width: 100px;">
+                                <img src="~/images/button-add.svg" style=" width: 24px; height: 24px;" />
+                                @Localizer["Legg til"]
+                            </button>
+                            <button class="commandSmal" type="button" onclick="slettMinKirkeApp()" style="width: 100px;">
+                                <img src="~/images/trash-2.svg" style=" width: 24px; height: 24px;" />
+                                @Localizer["Slett"]
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            @(Html.Kendo().Grid<Susteni.Models.RessursItem>()
+                .Name("Deltakere")
+                .Columns(columns =>
+                {
+                    columns.Bound(p => p.RessursGuid).Visible(false);
+                    columns.Bound(p => p.Navn).Title(Localizer["Navn"].Value);
+                })
+                .Sortable()
+                .Navigatable()
+                .Height(460)
+                .Scrollable()
+                .Selectable(s => s
+                    .Mode(GridSelectionMode.Multiple)
+                    .Type(GridSelectionType.Row))
+                .DataSource(dataSource => dataSource
+                    .Ajax()
+                .Read(read => read.Action("getMinKirkeappListe", "Funksjoner").Data("filterRessurs"))
+                    )
+                )
+        </div>
+    </div>
+</form>

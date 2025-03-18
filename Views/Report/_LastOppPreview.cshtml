@@ -1,0 +1,39 @@
+﻿<div class="form-group row" style="margin-top: 20px;">
+
+    <div class="col-lg-4" style="margin-left: 20px;" id="tips">
+        <p class="unselectable">
+            For å laste opp en fil, trykk på knappen <strong>Velg...</strong>.<br /><br />
+            Du KAN ikke velge mer enn en fil.
+            <br /><br />
+            Kun DOCX filer er tillatt å laste opp.
+        </p>
+    </div>
+
+    <div class="col-lg-1">
+    </div>
+
+    <div class="col-lg-6">
+        <div class="row">
+            <div class="col-lg-12">
+                @(Html.Kendo().Upload()
+                    .Name("Files")
+                    .Multiple(false)
+                    .Validation(v => v.AllowedExtensions(".png"))
+                    .Async(a => a
+                    .Save("Async_SaveRapportPreviewFil", "Upload")
+                    .AutoUpload(true)
+                    )
+                    .Events(e => e
+                    .Upload("onUploadTemplatePreview").Complete("onUploadPreviewSuccess"))
+                    )
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    p {
+        font-size: 14px;
+    }
+</style>
+

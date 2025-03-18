@@ -1,0 +1,225 @@
+﻿@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
+@model Susteni.Models.Account.AccountModel
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@using System.Security.Claims
+@using System.Security.Principal
+
+@{
+    ViewData["Title"] = Localizer["Sign In"];
+}
+
+<div id="logonForm">
+
+    <div class="form-group row">
+        <div class="col-12">
+            <img src="~/images/PowerSave_logo.svg" style="width: 200px; display: block; margin: auto;" alt="mainlogo" />
+            <h2 class="psBlue centerText">Solving the waste of energy</h2>
+        </div>
+    </div>
+
+    <div class="row">
+
+        @if (Model.LoginView.LogOnOk == 0 && Model.LoginView.AutLevel == 0)
+        {
+            
+                <div class="row">
+                    <div class="col-2"></div>
+
+                    <div class="col-4" style="margin-top: 100px;">
+                        @if (User.Identity.IsAuthenticated)
+                        {
+                        <form method="post" action="GetTokenAzure">
+                            <h4 id="userName"></h4>
+                            <p>Du kan nå logge inn med din Microsoft 365 konto.</p>
+                            <br />
+                            <img src="~/images/microsoft_logo.png" alt="Microsoft logo" style="width: 300px; margin-top: 0px;" />
+                            <br />
+                            <button type="submit" class="btn commandModernBlue" style="align-items: flex-end; margin-top: 20px;">@Localizer["Logg på med Microsoft 365"]</button>
+                        </form>
+                    }
+                    else
+                    {
+                        <form method="post" action="GetToken">
+                            <div asp-validation-summary="All" class="text-danger">
+                                <div class="form-group">
+                                    <label asp-for="LoginView.Email" style="font-size: 16px; font-weight: 500;  color: darkslategrey; margin-top:0px; padding-left: 1px; margin-bottom: 0px; vertical-align:text-top;">@Localizer["User Id"]</label>
+                                    <input name="LoginView.Email" class="form-control" autocomplete="off" style="width: 200px;" />
+                                    <span asp-validation-for="LoginView.Email" class="text-danger"></span>
+                                </div>
+
+                                <div class="form-group" style="margin-top: 10px;">
+                                    <label asp-for="LoginView.Password" style="font-size: 16px; font-weight: 500;  color: darkslategrey; margin-top:0px; padding-left: 1px; margin-bottom: 0px; vertical-align:text-top;">@Localizer["Password"]</label>
+                                    <input type="password" name="LoginView.Password" class="form-control" autocomplete="off" style="width: 200px;" />
+                                    <span asp-validation-for="LoginView.Password" class="text-danger"></span>
+                                </div>
+
+                                <button type="submit" class="btn commandModern" style="align-items: flex-end; margin-top: 20px; width: 100px;">@Localizer["Sign in"]</button>
+                            </div>
+                        </form>
+                    }
+                </div>
+                </div>
+            
+        }
+
+        @if (Model.LoginView.LogOnOk == 0 && Model.LoginView.AutLevel == 1)
+        {
+            <div class="col-2"></div>
+            <div class="col-4" style="margin-top: 100px;">
+                <form id="logonForm2" method="post" asp-controller="Home" asp-action="AccountSigIn">
+                    <div asp-validation-summary="All" class="text-danger">
+
+                        <h4>@Localizer["Innlogging"]</h4>
+
+                        <input hidden asp-for="LoginView.Email" autocomplete="off" class="form-control" />
+                        <input hidden asp-for="LoginView.UserId" autocomplete="off" class="form-control" />
+                        <input hidden asp-for="LoginView.Password" autocomplete="off" class="form-control" />
+                        <input hidden asp-for="LoginView.oAuthUrl" autocomplete="off" class="form-control" />
+
+                        <div class="form-group">
+                            <label>@Localizer["Vennligst angi engangskode fra Google/Microsoft Authenticator."]</label>
+                            <input asp-for="LoginView.SecretCode" autocomplete="off" class="form-control" />
+                        </div>
+
+                        <button type="submit" class="btn btn-primary" style="margin-top: 10px;">@Localizer["Verifiser"]</button>
+
+                    </div>
+                </form>
+
+
+            </div>
+
+            <div class="col-1"></div>
+            <div class="col-3" style="margin-top: 100px;">
+
+                <h4>NEW HANDY</h4>
+                <p>Har du fått ny mobiltelefon eller trenger å sette den opp på nytt, trykk på knappen under.</p>
+
+                <button type="button" onclick="newMobile()" class="btn btn-primary">@Localizer["Konfigurer ny mobil"]</button>
+
+            </div>
+        }
+
+        @if (Model.LoginView.LogOnOk == 0 && Model.LoginView.AutLevel == 9)
+        {
+
+            <div class="col-1"></div>
+            <div class="col-4" style="margin-top: 100px;">
+                <h2>@Localizer["Oppsett 2faktor pålogging"]</h2>
+                <p>For å kunne logge på <b>Kirkedata Office</b> må du sette opp 2faktor pålogging. Dette for å ha den ekstra sikkerheten som kreves for å behandle sensitiv informasjon.</p>
+                <p>Kirkedata Office bruker <span style="color: blue"><b>Google Authenticator</b></span> eller <span style="color: blue"><b>Microsoft Authenticator</b></span> for 2faktor pålogging. En av disse bør du nå installere på mobilen din før du fortsetter.</p>
+                <p>For å fortsette oppsettet må du be programet om å sende en kode til mobiltelefon din ved å trykke på knappen <b>Send SMS kode</b> under. Denne brukes for videre authentisering.</p> 
+                <form id="logonForm3" method="post" asp-controller="Home" asp-action="VerifyKode">
+                    <input hidden asp-for="LoginView.Email" autocomplete="off" class="form-control" />
+                    <input hidden asp-for="LoginView.UserId" autocomplete="off" class="form-control" />
+                    <input hidden asp-for="LoginView.Password" autocomplete="off" class="form-control" />
+                    <input hidden asp-for="LoginView.oAuthUrl" autocomplete="off" class="form-control" />
+
+                    <div asp-validation-summary="All" class="text-danger">
+                        <button type="button" class="btn btn-primary" onclick="sendSMS(0)">@Localizer["Send SMS kode til mobil "] @Html.DisplayFor(item => item.LoginView.Mobil)</button>
+
+                        <div id="verifiserKode" class="form-group" style="margin-top: 20px; display: none">
+                            <label>@Localizer["AngiSMSkode"]</label>
+                            <input asp-for="LoginView.SecretCode" autocomplete="off" class="form-control" />
+                            <button type="submit" class="btn btn-primary" style="margin-top: 10px;">@Localizer["Verifiser kode"]</button>
+                        </div>
+
+                    </div>
+                </form>
+            </div>
+
+            <div class="col-1"></div>
+            <div class="col-4" style="margin-top: 100px;">
+                <h2>@Localizer["Installasjon Google/Microsoft Authenticator"]</h2>
+                <h4>Android mobiltelefoner</h4>
+                <p>Start <span style="color: blue"><b>Play Butikk</b></span>. Skriv inn i søkefeltet "<b>Authenticator</b>". Du får nå opp en lang liste med valg. Du skal her velge Google eller Microsoft sin og installere den.</p>
+                <h4>iPhone</h4>
+                <p>Gå inn i <span style="color: blue"><b>App Store</b></span> Butikk. Trykk på søkeknappen for å få søke etter en app. Skriv inn "<b>Authenticator</b>". Du får nå opp en lang liste med valg. Du skal her velge Google eller Microsoft sin og installere den.</p>
+            </div>
+        }
+
+        @if (Model.LoginView.LogOnOk == 0 && Model.LoginView.AutLevel == 10)
+        {
+            <input hidden asp-for="LoginView.oAuthUrl" autocomplete="off" class="form-control" />
+            <div class="col-1"></div>
+            <div class="col-4" style="margin-top: 100px;">
+                <h2>@Localizer["Konfigurere Google eller Microsoft Authenticator"]</h2>
+                <h4>Google Authenticator</h4>
+                <p>I nedre høyre hjørne finner du en knapp med en + i. Trykk på denne.</p>
+                <p>Velg <b>"Skann en QR-kode"</b>. Pek med mobiltelefonen på QR-koden som vises til høyre.</p>
+                <h4>Microsoft Authenticator</h4>
+                <p>Trykk på knappen oppe til høyre med 3 prikker i. Velg her <b>"Legg til konto"</b>. Velg <b>"Jobb- eller skolekonto"</b>, og deretter <b>"Skann en QR-kode"</b>.</p>
+
+                <p style="margin-top: 50px;">Når dette er gjort trykker du på "Logg på" for å legge inn med 2faktor pålogging.</p>
+            </div>
+
+            <div class="col-1"></div>
+            <div class="col-4" style="margin-top: 100px;">
+
+                @(Html.Kendo().QRCode()
+                    .Name("qrGoogle")
+                    .Value(Model.LoginView.oAuthUrl)
+                    .ErrorCorrection(QRErrorCorrectionLevel.Q)
+                    .Size(340)
+                    .Border(border => border.Color("black").Width(1))
+                    )
+
+            </div>
+        }
+
+
+    </div>
+
+    <img src="~/images/logo_susteni.svg" style="position: fixed; bottom: 10px; right: 10px; width: 100px;" alt="mainlogo" />
+
+</div>
+
+<script>
+
+    function sendSMS(fra) {
+        var $this = $('#logonForm3').serialize();
+
+        $.ajax({
+            url: '@Url.Action("SendSMS", "Account")',
+            data: $this,
+            type: "POST"
+        }).done(function (result) {
+            console.log(result);
+            if (result.Status == 1) {
+                if (fra == 0) {
+                    x = document.getElementById("verifiserKode");
+                }
+                else {
+                    x = document.getElementById("verifiserKode2");
+                }
+                x.style.display = "block";
+            }
+        });
+    }
+
+    function newMobile() {
+        var $this = $('#logonForm2');
+
+        $.ajax({
+            url: '@Url.Action("newHandy", "Home")',
+            data: $this.serialize(),
+            type: "POST"
+        }).done(function (result) {
+            $("#logonForm").html(result);
+        });
+    }
+
+
+    $(document).ready(function () {
+
+        // $.ajax({
+        //     url: '@Url.Action("GetUserName", "Home")',
+        //     type: "GET"
+        // }).done(function (result) {            
+        //    document.getElementById("userName").innerHTML="Hei " + result;
+        // });
+
+        });
+
+</script>

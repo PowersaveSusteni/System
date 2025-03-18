@@ -1,0 +1,663 @@
+﻿@using Microsoft.AspNetCore.Mvc.Localization
+
+@inject IViewLocalizer Localizer
+@model Susteni.Models.Ship.ShipModel
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+
+<style>
+
+    .k-fab-text {
+        display: none;
+        }
+
+
+    #editor table, th {
+        margin-left: 0px;
+        margin-top: 0px;
+        }
+
+</style>
+
+
+<div id="shipForm">
+
+    <input hidden asp-for="Ship.ShipGuid" class="form-control">
+    <input type="hidden" asp-for="Ship.CustomerGuid" class="form-control">
+
+    <div class="row">
+        <div class="col-12" style="margin-bottom: 0px; margin-top: 10px;">
+            <div class="panel with-nav-tabs panel-default" id="dataenter" style="height: 370px;" >
+                <div class="panel-body data padding-0">
+                    <div class="tab-content data">
+                        <div class="panel-heading" id="Tab">
+                            <ul class="nav nav-tabs">
+                                <li class="nav-item"><a class="nav-link active" aria-current="page" href="#tabInfo" data-bs-toggle="tab">@Localizer["Info"]</a></li>
+                                <li class="nav-item"><a class="nav-link" aria-current="page" href="#tabText" data-bs-toggle="tab">@Localizer["Text"]</a></li>
+                            </ul>
+                        </div>
+                        <div class="panel-body">
+                            <div class="tab-content" style="margin-top: 10px;">
+
+                                <div class="tab-pane fade show active" style="padding: 10px;" role="tabpanel" id="tabInfo">
+
+                                    <div class="row">
+                                        <div class="col-8">
+
+                                            <div class="row align-items-center" style="display: flex; flex-direction: row;">
+                                                <label class="col-2 col-form-label">Name</label>
+                                                <div class="col-lg-6">
+                                                    @(Html.Kendo().TextBox()
+                                                        .Name("Ship.Name")
+                                                        .HtmlAttributes(new { @class = "nodvendigFelt" })
+                                                        .Value(Model.Ship.Name)
+                                                        )
+                                                </div>
+                                                <label class="col-2 col-form-label">Build year</label>
+                                                <div class="col-lg-2">
+                                                    <div class="col-3">
+                                                        @(Html.Kendo().NumericTextBox<int>()
+                                                            .Name("Ship.YearOfBuilt")
+                                                            .Format("#####")
+                                                            .Value(Model.Ship.YearOfBuilt)
+                                                            .Spinners(false)
+                                                            .HtmlAttributes(new { style = "width: 100px;" })
+                                                            )
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="row align-items-center" style="display: flex; flex-direction: row;">
+                                                <label class="col-2 col-form-label">IMO</label>
+                                                <div class="col-lg-6">
+                                                    @(Html.Kendo().TextBox()
+                                                        .Name("Ship.IMO")
+                                                        .Value(Model.Ship.IMO)
+                                                        )
+                                                </div>
+                                            </div>
+
+
+                                            <div class="row align-items-center" style="display: flex; flex-direction: row;">
+                                                <label class="col-2 col-form-label">Type</label>
+                                                <div class="col-lg-6">
+                                                    @(Html.Kendo().DropDownList()
+                                                        .Name("Ship.ShipTypeGuid")
+                                                        .DataTextField("Name")
+                                                        .DataValueField("ShipTypeGuid")
+                                                        .OptionLabel(Localizer["Choose type from list ..."].Value)
+                                                        .OptionLabelTemplate("<span><i>" + Localizer["Choose type from list ..."].Value + "</i></span>")
+                                                        .Height(200)
+                                                        .Value(Model.Ship.ShipTypeGuid)
+                                                        .DataSource(dataSource => dataSource
+                                                            .Ajax()
+                                                            .Read(read => read.Action("GetShipTypeList", "Ship"))
+                                                            )
+                                                        )
+                                                </div>
+                                            </div>
+
+                                            <div class="row align-items-center" style="display: flex; flex-direction: row;">
+                                                <label class="col-2 col-form-label">Length</label>
+                                                <div class="col-3">
+                                                    @(Html.Kendo().NumericTextBox<int>()
+                                                        .Name("Ship.Length")
+                                                        .Format("#####")
+                                                        .Value(Model.Ship.Length)
+                                                        .Step(10)
+                                                        .HtmlAttributes(new { style = "width: 100%;" })
+                                                        )
+                                                </div>
+                                                <label class="col-1 col-form-label">Width</label>
+                                                <div class="col-3">
+                                                    @(Html.Kendo().NumericTextBox<int>()
+                                                        .Name("Ship.Width")
+                                                        .Format("#####")
+                                                        .Value(Model.Ship.Width)
+                                                        .Step(10)
+                                                        .HtmlAttributes(new { style = "width: 100%;" })
+                                                        )
+                                                </div>
+                                            </div>
+
+
+                                            <div class="row align-items-center" style="display: flex; flex-direction: row;">
+                                                <label class="col-4 col-form-label">Gross tonnage</label>
+                                                <div class="col-2">
+                                                        @(Html.Kendo().NumericTextBox<int>()
+                                                            .Name("Ship.GrossTonnage")
+                                                            .Format("#####")
+                                                            .Value(Model.Ship.GrossTonnage)
+                                                            .Step(10)
+                                                            .HtmlAttributes(new { style = "width: 100%;" })
+                                                            )
+                                                </div>
+                                            </div>
+
+                                            <div class="row align-items-center" style="display: flex; flex-direction: row;">
+                                                <label class="col-4 col-form-label">Number of days</label>
+                                                <div class="col-2">
+                                                    @(Html.Kendo().NumericTextBox<int>()
+                                                        .HtmlAttributes(new { @class = "nodvendigFelt" })
+                                                        .Name("Ship.NumberOfDays")
+                                                        .Format("#####")
+                                                        .Value(Model.Ship.NumberOfDays)
+                                                        )
+                                                </div>
+                                            </div>
+                                            <div class="row align-items-center" style="display: none;">
+                                                <label class="col-4 col-form-label">Fuel consumption pr. year</label>
+                                                <div class="col-3">
+                                                    @(Html.Kendo().NumericTextBox<int>()
+                                                        .Name("Ship.FuelConsPrYear")
+                                                        .Format("#####")
+                                                        .Value(Model.Ship.FuelConsPrYear)
+                                                        .HtmlAttributes(new { style="width: calc(100% - 30px);" })
+                                                        )
+                                                    <span id="fuleType">m³</span>
+                                                </div>                                                
+                                            </div>
+                                            <div class="row align-items-center" style="display: flex; flex-direction: row;">
+                                                <label class="col-4 col-form-label">Unit of measurement</label>
+                                                <div class="col-2">
+                                                @(Html.Kendo().DropDownList()
+                                                    .Name("Ship.UnitOfMeasurement")
+                                                    .DataTextField("Text")
+                                                    .DataValueField("Value")
+                                                    .OptionLabel("Velg fra listen...")
+                                                    .OptionLabelTemplate("<span><i>Velg fra listen...</i></span>")
+                                                    .BindTo(new List<SelectListItem>() {
+                                                        new SelectListItem() {
+                                                        Text = Localizer["m³"].Value , Value = "0"
+                                                        },
+                                                        new SelectListItem() {
+                                                        Text = Localizer["ton"].Value, Value = "1"
+                                                        }
+                                                        })
+                                                    .Value(Model.Ship.UnitOfMeasurement.ToString())
+                                                    .HtmlAttributes(new { style = "width: 100%;" })
+                                                    .Events(e => e.Cascade("onUOMChange"))
+                                                    )
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-4">
+                                            <div id="filPreview">
+                                                @if (Model.Ship.byte64Picture.Length > 0)
+                                                {
+                                                    <img src="data:image/Jpeg;base64,@Model.Ship.byte64Picture" style="max-width: 100%; max-height: 490px;" />
+                                                }
+                                            </div>
+                                        </div>
+
+
+                                    </div>
+                                </div>
+                                
+                                <div class="tab-pane fade" style="padding: 10px;" role="tabpanel" id="tabText">
+
+                                    <div class="row">
+                                        <div class="col-12">
+
+                                            @(Html.Kendo().TextArea()
+                                                .Name("Ship.InfoText")
+                                                .Size(ComponentSize.Medium)
+                                                .Rounded(Rounded.Medium)
+                                                .FillMode(FillMode.Solid)
+                                                .Value(Model.Ship.InfoText)
+                                                .Rows(12)
+                                                .HtmlAttributes(new { style = "width: 100%" })
+                                                )
+
+                                        </div>
+
+
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+
+        <div class="col-6" style="margin-bottom: 0px; margin-top: 10px;">
+            <div class="panel with-nav-tabs panel-default" id="dataenter">
+                <div class="panel-body data padding-0">
+                    <div class="tab-content data">
+                        <div class="panel-heading" id="Tab">
+                            <ul class="nav nav-tabs">
+                                <li class="nav-item"><a class="nav-link active" aria-current="page" href="#tabOM" data-bs-toggle="tab">@Localizer["Operation modes"]</a></li>
+                                <li class="nav-item"><a class="nav-link" aria-current="page" href="#tabProfile" data-bs-toggle="tab">@Localizer["Profiles"]</a></li>
+                            </ul>
+                        </div>
+                        <div class="panel-body">
+                            <div class="tab-content" style="margin-top: 10px;">
+                                <div class="tab-pane fade show active" style="padding: 10px;" role="tabpanel" id="tabOM">
+
+                                    <div class="row">
+                                        <div class="col-lg-12">
+                                            <div style="position: relative">
+                                            @(Html.Kendo().Grid<Susteni.Models.ShipOperationModeItem>()
+                                                .Name("shipOperationmodeList")
+                                                .Columns(columns =>
+                                                {
+                                                    columns.Bound(q => q.OperationModeGuid).Visible(false).Title(Localizer["#"].Value);
+                                                    columns.Bound(q => q.Order).Width(60).Title(Localizer["#"].Value);
+                                                    columns.Bound(q => q.Name).Title(Localizer["Operation mode"].Value);
+                                                    columns.Bound(q => q.NumberGenerator).Width(120).Title(Localizer["# Generators"].Value);
+                                                        columns.Bound(q => q.HoursPrYear).Width(120).Title(Localizer["Hours pr. Year"].Value).ClientFooterTemplate("One year is #=sum# hours");
+                                                })
+                                                .HtmlAttributes(new { style = "height: 300px;" })
+                                                .Scrollable()
+                                                .Selectable(s => s
+                                                .Mode(GridSelectionMode.Multiple)
+                                                .Type(GridSelectionType.Row))
+                                                    .Events(e => e.Change("onOperationModeChange"))
+                                                .DataSource(dataSource => dataSource
+                                                    .Ajax()
+                                                    .Read(read => read.Action("GetShipOperationModeList", "Ship").Data("filterShip"))
+                                                    .Aggregates( agg=> agg.Add(p => p.HoursPrYear).Sum())
+                                                    )
+                                                )
+
+                                                @(Html.Kendo().FloatingActionButton()
+                                                    .Name("operationModeAdd")
+                                                    .ThemeColor(FloatingActionButtonThemeColor.Success)
+                                                    .Size(FloatingActionButtonSize.Small)
+                                                    .PositionMode(FloatingActionButtonPositionMode.Absolute)
+                                                    .Align(FloatingActionButtonAlign.TopEnd)
+                                                    .AlignOffset(alignOffset => alignOffset.Horizontal(0).Vertical(10))
+                                                    .Icon("plusIcon")
+                                                    .Events(events => events.Click("showDialogOperationMode"))
+                                                    .Visible(false)
+                                                    )
+
+                                                @(Html.Kendo().FloatingActionButton()
+                                                    .Name("operationModeEdit")
+                                                    .ThemeColor(FloatingActionButtonThemeColor.Warning)
+                                                    .Size(FloatingActionButtonSize.Small)
+                                                    .PositionMode(FloatingActionButtonPositionMode.Absolute)
+                                                    .Align(FloatingActionButtonAlign.TopEnd)
+                                                    .AlignOffset(alignOffset => alignOffset.Horizontal(0).Vertical(50))
+                                                    .Icon("pencilIcon")
+                                                    .Events(events => events.Click("showDialogOperationModeEdit"))
+                                                    .Visible(false)
+                                                    )
+
+                                                @(Html.Kendo().FloatingActionButton()
+                                                    .Name("operationModeRemove")
+                                                    .ThemeColor(FloatingActionButtonThemeColor.Error)
+                                                    .Size(FloatingActionButtonSize.Small)
+                                                    .PositionMode(FloatingActionButtonPositionMode.Absolute)
+                                                    .Align(FloatingActionButtonAlign.TopEnd)
+                                                    .AlignOffset(alignOffset => alignOffset.Horizontal(0).Vertical(90))
+                                                    .Icon("trashIcon")
+                                                    .Events(events => events.Click("removeOperationMode"))
+                                                    .Visible(false)
+                                                    )
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                                <div class="tab-pane fade" style="padding: 10px;" role="tabpanel" id="tabProfile">
+
+                                    <div class="row">
+                                        <div class="col-lg-12">
+                                            <div style="position: relative">
+                                                @(Html.Kendo().Grid<Susteni.Models.ProfileItem>()
+                                                    .Name("shipProfilesList")
+                                                    .Columns(columns =>
+                                                    {
+                                                        columns.Bound(q => q.ProfilGuid).Visible(false).Title(Localizer["#"].Value);
+                                                        columns.Bound(q => q.Name).Title(Localizer["Profile"].Value);
+                                                    })
+                                                    .HtmlAttributes(new { style = "height: 300px;" })
+                                                    .Scrollable()
+                                                    .Selectable(s => s
+                                                    .Mode(GridSelectionMode.Multiple)
+                                                    .Type(GridSelectionType.Row))
+                                                    .Events(e => e.Change("onProfileChange"))
+                                                    .DataSource(dataSource => dataSource
+                                                        .Ajax()
+                                                        .Read(read => read.Action("GetProfileList", "Ship").Data("filterShip"))
+                                                        )
+                                                    )
+
+                                                @(Html.Kendo().FloatingActionButton()
+                                                    .Name("profileAdd")
+                                                    .ThemeColor(FloatingActionButtonThemeColor.Success)
+                                                    .Size(FloatingActionButtonSize.Small)
+                                                    .PositionMode(FloatingActionButtonPositionMode.Absolute)
+                                                    .Align(FloatingActionButtonAlign.TopEnd)
+                                                    .AlignOffset(alignOffset => alignOffset.Horizontal(0).Vertical(10))
+                                                    .Icon("plusIcon")
+                                                    .Events(events => events.Click("newProfiles"))
+                                                    .Visible(true)
+                                                    )
+
+                                                @(Html.Kendo().FloatingActionButton()
+                                                    .Name("profileEdit")
+                                                    .ThemeColor(FloatingActionButtonThemeColor.Warning)
+                                                    .Size(FloatingActionButtonSize.Small)
+                                                    .PositionMode(FloatingActionButtonPositionMode.Absolute)
+                                                    .Align(FloatingActionButtonAlign.TopEnd)
+                                                    .AlignOffset(alignOffset => alignOffset.Horizontal(0).Vertical(50))
+                                                    .Icon("pencilIcon")
+                                                    .Events(events => events.Click("showDialogProfilEdit"))
+                                                    .Visible(false)
+                                                    )
+
+                                                @(Html.Kendo().FloatingActionButton()
+                                                    .Name("profileRemove")
+                                                    .ThemeColor(FloatingActionButtonThemeColor.Error)
+                                                    .Size(FloatingActionButtonSize.Small)
+                                                    .PositionMode(FloatingActionButtonPositionMode.Absolute)
+                                                    .Align(FloatingActionButtonAlign.TopEnd)
+                                                    .AlignOffset(alignOffset => alignOffset.Horizontal(0).Vertical(90))
+                                                    .Icon("trashIcon")
+                                                    .Events(events => events.Click("removeProfil"))
+                                                    .Visible(false)
+                                                    )
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    
+    
+        <div class="col-6" style="margin-bottom: 0px; margin-top: 10px;">
+            <div class="panel with-nav-tabs panel-default" id="dataenter">
+                <div class="panel-body data padding-0">
+                    <div class="tab-content data">
+                        <div class="panel-heading" id="Tab">
+                            <ul class="nav nav-tabs">
+                                <li class="nav-item"><a class="nav-link active" aria-current="page" href="#tabG" data-bs-toggle="tab">@Localizer["Power production"]</a></li>
+                            </ul>
+                        </div>
+                        <div class="panel-body">
+                            <div class="tab-content" style="margin-top: 10px;">
+                                <div class="tab-pane fade show active" style="padding: 10px;" role="tabpanel" id="tabG">
+
+                                    <div class="row">
+                                        <div class="col-lg-12">
+                                            <div style="position: relative">
+                                                @(Html.Kendo().Grid<Susteni.Models.ShipGeneratorItem>()
+                                                    .Name("shipGeneratorList")
+                                                    .Columns(columns =>
+                                                    {
+                                                        columns.Bound(q => q.GeneratorGuid).Visible(false).Title(Localizer["#"].Value);
+                                                        columns.Bound(q => q.Order).Width(50).Title(Localizer["#"].Value);
+                                                        columns.Bound(q => q.Name).Title(Localizer["Unit"].Value);
+                                                        columns.Bound(q => q.kW).Width(100).Title(Localizer["kW"].Value).HtmlAttributes(new { style = "text-align: right;" });
+                                                        columns.Bound(q => q.KgDieselkWh).Width(110).Title(Localizer["Kg fuel/kWh"].Value).HtmlAttributes(new { style = "text-align: right;" });
+                                                    })
+                                                    .HtmlAttributes(new { style = "height: 300px;" })
+                                                    .Scrollable()
+                                                    .Selectable(s => s
+                                                        .Mode(GridSelectionMode.Multiple)
+                                                        .Type(GridSelectionType.Row))
+                                                    .Events(e => e.Change("onGenerataorChange"))
+                                                    .DataSource(dataSource => dataSource
+                                                        .Ajax()
+                                                        .Read(read => read.Action("GetShipGeneratorList", "Ship").Data("filterShip"))
+                                                        )
+                                                    )
+
+                                                @(Html.Kendo().FloatingActionButton()
+                                                    .Name("generatorsAdd")
+                                                    .ThemeColor(FloatingActionButtonThemeColor.Success)
+                                                    .Size(FloatingActionButtonSize.Small)
+                                                    .PositionMode(FloatingActionButtonPositionMode.Absolute)
+                                                    .Align(FloatingActionButtonAlign.TopEnd)
+                                                    .AlignOffset(alignOffset => alignOffset.Horizontal(-10).Vertical(10))
+                                                    .Icon("plusIcon")
+                                                    .Events(events => events.Click("showDialogGenerators"))
+                                                    .Visible(false)
+                                                    )
+
+
+                                                @(Html.Kendo().FloatingActionButton()
+                                                    .Name("generatorsImport")
+                                                    .ThemeColor(FloatingActionButtonThemeColor.Success)
+                                                    .Size(FloatingActionButtonSize.Small)
+                                                    .PositionMode(FloatingActionButtonPositionMode.Absolute)
+                                                    .Align(FloatingActionButtonAlign.TopEnd)
+                                                    .AlignOffset(alignOffset => alignOffset.Horizontal(-10).Vertical(50))
+                                                    .Icon("searchIcon")
+                                                    .Events(events => events.Click("showDialogGeneratorsImport"))
+                                                    .Visible(false)
+                                                    )
+
+                                                @(Html.Kendo().FloatingActionButton()
+                                                    .Name("generatorsEdit")
+                                                    .ThemeColor(FloatingActionButtonThemeColor.Warning)
+                                                    .Size(FloatingActionButtonSize.Small)
+                                                    .PositionMode(FloatingActionButtonPositionMode.Absolute)
+                                                    .Align(FloatingActionButtonAlign.TopEnd)
+                                                    .AlignOffset(alignOffset => alignOffset.Horizontal(-10).Vertical(90))
+                                                    .Icon("pencilIcon")
+                                                    .Events(events => events.Click("showDialogGeneratorsEdit"))
+                                                    .Visible(false)
+                                                    )
+
+                                                @(Html.Kendo().FloatingActionButton()
+                                                    .Name("generatorsRemove")
+                                                    .ThemeColor(FloatingActionButtonThemeColor.Error)
+                                                    .Size(FloatingActionButtonSize.Small)
+                                                    .PositionMode(FloatingActionButtonPositionMode.Absolute)
+                                                    .Align(FloatingActionButtonAlign.TopEnd)
+                                                    .AlignOffset(alignOffset => alignOffset.Horizontal(-10).Vertical(130))
+                                                    .Icon("trashIcon")
+                                                    .Events(events => events.Click("removeGenerator"))
+                                                    .Visible(false)
+                                                    )
+
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+
+</div>
+
+
+<script>
+
+    $(document).ready(function () {
+
+        var fbOMA = $("#operationModeAdd").getKendoFloatingActionButton();
+        var fbOMR = $("#operationModeRemove").getKendoFloatingActionButton();
+        var fbOME = $("#operationModeEdit").getKendoFloatingActionButton();
+
+        $("#operationModeAdd").prop("type", "button");
+        $("#operationModeRemove").prop("type", "button");
+        $("#operationModeEdit").prop("type", "button");
+
+        fbOMAText = "Add operation mode";
+        fbOMRText = "Remove operation mode";
+        fbOMEText = "Edit operation mode";
+
+        $("#operationModeAdd").hover(function () {
+            fbOMA.text(fbOMAText);
+            fbOMA.element.find(".k-fab-text")
+                    .stop().toggle(200);
+            }, function () {
+            fbOMA.element.find(".k-fab-text")
+                    .stop()
+                    .toggle(200)
+                    .promise().done(function () {
+                    fbOMA.text("");
+                    });
+            });
+
+        $("#operationModeRemove").hover(function () {
+            fbOMR.text(fbOMRText);
+            fbOMR.element.find(".k-fab-text")
+                    .stop().toggle(200);
+            }, function () {
+            fbOMR.element.find(".k-fab-text")
+                    .stop()
+                    .toggle(200)
+                    .promise().done(function () {
+                    fbOMR.text("");
+                    });
+            });
+
+        $("#operationModeEdit").hover(function () {
+            fbOME.text(fbOMEText);
+            fbOME.element.find(".k-fab-text")
+                    .stop().toggle(200);
+            }, function () {
+            fbOME.element.find(".k-fab-text")
+                    .stop()
+                    .toggle(200)
+                    .promise().done(function () {
+                    fbOME.text("");
+                    });
+            });
+
+
+        var fbGA = $("#generatorsAdd").getKendoFloatingActionButton();
+        var fbGI = $("#generatorsImport").getKendoFloatingActionButton();
+        var fbGR = $("#generatorsRemove").getKendoFloatingActionButton();
+        var fbGE = $("#generatorsEdit").getKendoFloatingActionButton();
+
+        $("#generatorsAdd").prop("type", "button");
+        $("#generatorsImport").prop("type", "button");
+        $("#generatorsRemove").prop("type", "button");
+        $("#generatorsEdit").prop("type", "button");
+
+        $("#generatorsAdd").hover(function () {
+            fbGA.text("Add Power Source");
+            fbGA.element.find(".k-fab-text")
+                .stop().toggle(200);
+        }, function () {
+            fbGA.element.find(".k-fab-text")
+                .stop()
+                .toggle(200)
+                .promise().done(function () {
+                    fbGA.text("");
+                });
+            });
+                    
+        $("#generatorsImport").hover(function () {
+            fbGI.text("Import Power Source");
+            fbGI.element.find(".k-fab-text")
+                .stop().toggle(200);
+        }, function () {
+            fbGI.element.find(".k-fab-text")
+                .stop()
+                .toggle(200)
+                .promise().done(function () {
+                    fbGI.text("");
+                });
+            });
+
+        $("#generatorsRemove").hover(function () {
+            fbGR.text("Remove Power Source");
+            fbGR.element.find(".k-fab-text")
+                .stop().toggle(200);
+        }, function () {
+            fbGR.element.find(".k-fab-text")
+                .stop()
+                .toggle(200)
+                .promise().done(function () {
+                    fbGR.text("");
+                });
+            });
+
+        $("#generatorsEdit").hover(function () {
+            fbGE.text("Edit Power Source");
+            fbGE.element.find(".k-fab-text")
+                .stop().toggle(200);
+        }, function () {
+            fbGE.element.find(".k-fab-text")
+                .stop()
+                .toggle(200)
+                .promise().done(function () {
+                    fbGE.text("");
+                });
+            });
+
+        var fbPA = $("#profileAdd").getKendoFloatingActionButton();
+        var fbPR = $("#profileRemove").getKendoFloatingActionButton();
+        var fbPE = $("#profileEdit").getKendoFloatingActionButton();
+
+        $("#profileAdd").prop("type", "button");
+        $("#profileRemove").prop("type", "button");
+        $("#profileEdit").prop("type", "button");
+
+        fbPAText = "Add profile";
+        fbPRText = "Remove profile";
+        fbPEText = "Edit profile";
+
+
+        $("#profileAdd").hover(function () {
+            fbPA.text(fbPAText);
+            fbPA.element.find(".k-fab-text")
+                .stop().toggle(200);
+        }, function () {
+            fbPA.element.find(".k-fab-text")
+                .stop()
+                .toggle(200)
+                .promise().done(function () {
+                    fbPA.text("");
+                });
+        });
+
+        $("#profileRemove").hover(function () {
+            fbPR.text(fbPRText);
+            fbPR.element.find(".k-fab-text")
+                .stop().toggle(200);
+        }, function () {
+            fbPR.element.find(".k-fab-text")
+                .stop()
+                .toggle(200)
+                .promise().done(function () {
+                    fbPR.text("");
+                });
+        });
+
+        $("#profileEdit").hover(function () {
+            fbPE.text(fbPEText);
+            fbPE.element.find(".k-fab-text")
+                .stop().toggle(200);
+        }, function () {
+            fbPE.element.find(".k-fab-text")
+                .stop()
+                .toggle(200)
+                .promise().done(function () {
+                    fbPE.text("");
+                });
+        });
+
+    });
+
+    $("#shipGeneratorList").on("dblclick", "tr.k-selected", function () {
+        showDialogGeneratorsEdit();
+    });
+
+</script>

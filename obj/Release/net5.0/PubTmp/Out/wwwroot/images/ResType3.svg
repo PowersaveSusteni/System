@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="32px" height="32px" viewBox="0 0 32 32" enable-background="new 0 0 32 32" xml:space="preserve">
+  <g id="icon">
+    <g fill="none" stroke="#000000" stroke-width="0.2" stroke-miterlimit="3.8" fill-opacity="1" stroke-opacity="1">
+      <path d="M5.74351,30.0757H27.3599V11.7513c0,0,0,-10.4093,-10.8511,-10.5651C5.74379,1.03168,5.74351,11.7513,5.74351,11.7513Z" fill="none" stroke="#000000" stroke-width="0.2" stroke-miterlimit="3.8" fill-opacity="1" stroke-opacity="1"/>
+      <path d="M16.5156,0.689453C10.9686,0.609807,8.05272,3.40721,6.64648,6.1875,5.24025,8.96779,5.24805,11.752,5.24805,11.752V30.5723H5.74414,27.8555V11.752c0,0,0.0058,-2.71236,-1.41211,-5.45312,-1.41794,-2.74076,-4.34362,-5.5292,-9.92773,-5.60937zm-0.01367,0.992187c5.26701,0.075625,7.76571,2.5714,9.06055,5.07422,1.29484,2.50282,1.30078,4.99609,1.30078,4.99609V29.5801H6.24023V11.752c0,0,0.00587,-2.5763,1.29102,-5.11719,1.28515,-2.54089,3.75281,-5.02804,8.9707,-4.95313z" fill="#000000" stroke="#000000" stroke-width="0.2" stroke-miterlimit="3.8" fill-opacity="1" stroke-opacity="1"/>
+    </g>
+    <rect x="11.873" y="8.50793" width="9.14286" height="1.01587" fill="#000000" stroke="#000000" stroke-width="0.2" stroke-linecap="round" stroke-miterlimit="3.8" stroke-linejoin="round" fill-opacity="1" stroke-opacity="1"/>
+    <rect x="15.8837" y="4.70914" width="1.12141" height="11.9786" fill="#000000" stroke="#000000" stroke-width="0.221447" stroke-linecap="round" stroke-miterlimit="3.8" stroke-linejoin="round" fill-opacity="1" stroke-opacity="1"/>
+    <rect x="7.87302" y="20.3175" width="17.5238" height="0.888889" fill="#000000" stroke="#000000" stroke-width="0.2" stroke-linecap="round" stroke-miterlimit="3.8" stroke-linejoin="round" fill-opacity="1" stroke-opacity="1"/>
+    <rect x="7.80952" y="23.0476" width="17.5238" height="0.888889" fill="#000000" stroke="#000000" stroke-width="0.2" stroke-linecap="round" stroke-miterlimit="3.8" stroke-linejoin="round" fill-opacity="1" stroke-opacity="1"/>
+    <rect x="7.68254" y="25.8413" width="7.04762" height="0.888889" fill="#000000" stroke="#000000" stroke-width="0.2" stroke-linecap="round" stroke-miterlimit="3.8" stroke-linejoin="round" fill-opacity="1" stroke-opacity="1"/>
+    <rect x="18.1905" y="25.8413" width="7.04762" height="0.888889" fill="#000000" stroke="#000000" stroke-width="0.2" stroke-linecap="round" stroke-miterlimit="3.8" stroke-linejoin="round" fill-opacity="1" stroke-opacity="1"/>
+  </g>
+</svg>

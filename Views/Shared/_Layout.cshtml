@@ -1,0 +1,369 @@
+﻿@using Microsoft.AspNetCore.Mvc
+@using Microsoft.Extensions.Localization
+@using Microsoft.AspNetCore.Mvc.Localization
+ 
+@inject IViewLocalizer Localizer
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+
+<script>
+    var timoutWarning = 10800000; // Display warning in 30 Mins.
+    var timoutNow = 120000; // Warning has been shown, give the user 2 minute to interact
+    var secondTick = 0;
+
+    var warningTimer;
+    var timeoutTimer;
+    var showRemaindTimer;
+
+    function stopTimer() {
+        clearTimeout(timeoutTimer);
+        clearTimeout(showRemaindTimer);
+        clearTimeout(warningTimer);
+        }
+
+
+    function myalert(title, content) {
+        $("<div></div>").kendoAlert({
+            title: title,
+            content: content
+        }).data("kendoAlert").open();
+    }
+
+</script>
+
+<!DOCTYPE html>
+<html lang="no">
+<head>
+
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>@ViewData["Title"] - Susteni Office</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@700&family=PT+Sans:wght@700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Berkshire+Swash&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=PT+Sans+Narrow&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Anton&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap" rel="stylesheet">
+
+    @* <link rel="stylesheet" href="/lib/kendo-ui/styles/default-main.css" /> *@
+    <link href="https://kendo.cdn.telerik.com/themes/10.0.1/default/default-ocean-blue.css" rel="stylesheet" type="text/css" />
+    <link rel="stylesheet" href="~/css/editorStyles.css" />
+
+    <!-- CSS only -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+    <link rel="stylesheet" href="~/css/minsitemenu.css" />
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-gtEjrD/SeCtmISkJkNUaaKMoLD0//ElJ19smozuHV6z3Iehds+3Ulb9Bn9Plx0x4" crossorigin="anonymous"></script>
+
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://unpkg.com/jszip/dist/jszip.min.js"></script>
+    @* <script src="~/lib/kendo-ui/js/kendo.all.min.js"></script>
+    <script src="~/lib/kendo-ui/js/kendo.aspnetmvc.min.js"></script>
+ *@
+    <script src="https://cdn.kendostatic.com/2024.3.806/js/kendo.all.min.js"></script>
+    <script src="https://cdn.kendostatic.com/2024.3.806/js/kendo.aspnetmvc.min.js"></script>
+    <script src="~/kendo-ui-license.js"></script>
+
+    <script type="text/javascript" src='~/js/html2canvas.js'></script>
+    <script>kendo.culture("nb-NO");</script>
+
+    <style>
+        /* The Modal (background) */
+        .modal {
+            display: none; /* Hidden by default */
+            position: fixed; /* Stay in place */
+            z-index: 1; /* Sit on top */
+            left: 0;
+            top: 0;
+            padding-top: 300px;
+            width: 100%; /* Full width */
+            height: 100%; /* Full height */
+            overflow: auto; /* Enable scroll if needed */
+            background-color: rgb(0,0,0); /* Fallback color */
+            background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+            }
+
+        /* Modal Content */
+        .modal-content {
+            background-color: #fefefe;
+            margin: auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 600px;
+            height: 200px;
+            }
+
+        /* The Close Button */
+        .close {
+            color: #aaaaaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            }
+
+        .close:hover,
+        .close:focus {
+            color: #000;
+            text-decoration: none;
+            cursor: pointer;
+            }
+
+        .k-drawer {
+            background-color: whitesmoke
+            }
+
+    </style>
+
+</head>
+
+
+
+<body>
+
+    <div id="timeout" class="modal" sty style="z-index: 190000;">
+        <div class="modal-content">
+            <div class="row">
+                <div class="col-2">
+                    <img src="~/images/clock.svg" width="80" height="80"/>
+                </div>
+                <div class="col-10">
+                    <p>Du blir automatisk avlogget om <span id="spanTimeLeft">c</span> sekunder</p>
+                </div>
+            </div>
+            <div class="row justify-content-end" style="margin-top: 0px;">
+                <div class="col-3">
+                    <button class="btn btn-success" onclick="forbliOnline()">Forbli pålogget</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <nav class="navbar fixed-top navbar-expand-lg navbar-dark bg-dark" style="z-index: 20000;" id="menylinje">
+        <div class="container-fluid">
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" style="width: 100%;" id="navbarSupportedContent">
+
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+
+                    <li class="nav-item">
+                        <button type="button" style="background-color:transparent; border-color:transparent;" onclick="toggleDrawer()">
+                            <img src="~/images/logo_susteni.svg" height="33" />
+                        </button>
+                    </li>
+
+                    @if (ViewData["LogOnOk"] != null && ViewData["LogOnOk"].ToString() == "2")
+                    {
+                        <li id="hmHjem" class="nav-item"><a class="nav-link" asp-area="" asp-controller="Home" asp-action="Hjem">@Localizer["Home"]</a></li>
+
+
+                        if (ViewData["SuperBruker"] != null && (int)ViewData["SuperBruker"] > 0)
+                        {
+                            <li id="hmAdministrasjon" class="nav-item"><a class="nav-link" asp-area="" asp-controller="Home" asp-action="Admin">@Localizer["Admin"]</a></li>
+                        }
+
+
+                        <li id="idShowHelp" class="nav-item" onclick="showHelp()"><a class="nav-link"><img src='/images/button-help.svg' width='24' height='24'></a></li>
+
+                        <li id="idAddSupport" class="nav-item" onclick="addSupport()"><a class="nav-link"><img src='/images/support-filled.svg' width='24' height='24'>Support</a></li>
+
+                    }
+
+                </ul>
+                <partial name="_LoginPartial" />
+            </div>
+        </div>
+    </nav>
+
+    <div id="kiparea" style="z-index: 0;">
+
+        <nav class="dashboard-page">
+
+            <div id="drawer"></div>
+
+        </nav>
+
+        <script>
+
+            function onItemClick(e) {
+                window.location = e.item[0].id;
+                }
+
+
+            function toggleDrawer() {
+                var drawerInstance = $("#drawer").data().kendoDrawer;
+                var drawerContainer = drawerInstance.drawerContainer;
+                if (drawerContainer.hasClass("k-drawer-expanded")) {
+                    drawerInstance.hide();
+                } else {
+                    drawerInstance.show();
+                    }
+                }
+
+        </script>
+
+        <style>
+
+            #kiparea li {
+                font-size: 14px;
+                padding-right: 12px;
+                padding-left: 10px;
+                border-width: 1px;
+            }
+
+            #kiparea li:last-child {
+                    border: 0;
+                }
+
+            #drawer {
+                margin-top: 55px;
+            }
+
+            .hidden {
+                display: none;
+            }
+
+            #example .demo-section {
+                max-width: 64px;
+                max-height: 60px;
+            }
+
+            .k-toolbar .k-icon {
+                font-size: 16px;
+            }
+
+            #kiparea {
+                height: 10px;
+                margin-top: 10px;
+            }
+
+        </style>
+
+    </div>
+
+    <partial name="_CookieConsentPartial" />
+
+    <div class="container-fluid">
+        @RenderBody()
+    </div>
+
+    @* @(Html.Kendo().DefaultSettings()) *@
+    @RenderSection("Scripts", required: false)
+</body>
+</html>
+
+<script>
+
+    $(document).ready(function () {
+        StartWarningTimer();
+
+
+        $.ajax({
+            url: '@Url.Action("getMeny", "Functions")'
+            })
+        .done(function (result) {
+            if (result != "") {
+                $("#drawer").kendoDrawer({
+                    template: result,
+                    mode: "Overley",
+                    mini: true,
+                    position: 'left',
+                    minHeight: 0,
+                    width: 220,
+                    swipeToOpen: false,
+                    itemClick: onItemClick
+                    });
+                }
+            });
+        });
+
+
+    $(function () {
+        $("body").on('click keypress', function () {
+            ResetTimeOutTimer();
+        });
+    });
+
+    function StartWarningTimer() {        
+        warningTimer = setTimeout("IdleWarning()", timoutWarning);
+    }
+
+    // Reset timers.
+    function ResetTimeOutTimer() {
+        clearTimeout(warningTimer);
+        clearTimeout(timeoutTimer);
+        clearTimeout(showRemaindTimer);
+        StartWarningTimer();
+        //$("#timeout").dialog('close');
+    }
+
+    function forbliOnline() {
+        ResetTimeOutTimer();
+        var modal = document.getElementById("timeout");
+        modal.style.display = "none";
+    }
+
+
+    // Show idle timeout warning dialog.
+    function IdleWarning() {
+        clearTimeout(warningTimer);
+        timeoutTimer = setTimeout("IdleTimeout()", timoutNow);
+        secondTick = 0;
+        ShowRemainTime();
+        var modal = document.getElementById("timeout");
+        modal.style.display = "block";
+        }
+
+    function ShowRemainTime() {
+        secondTick++;
+        timeLeft = (timoutNow / 1000) - secondTick; // override, we have 30 secs only 
+        $("#spanTimeLeft").html(timeLeft);
+        showRemaindTimer = setTimeout("ShowRemainTime()", 1000);
+        }
+
+
+    // Logout the user.
+    function IdleTimeout() {
+        clearTimeout(showRemaindTimer);
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("Logout", "Home")'
+        })
+        window.location = "/Home/Logout";
+    }
+  
+  
+
+    function isNumeric(n) {
+        return !isNaN(parseFloat(n)) && isFinite(n);
+        }
+
+    function takeScreenshot() {
+        const screenshotTarget = document.body;
+
+        var screenshot = document.documentElement
+            .cloneNode(true);
+        screenshot.style.pointerEvents = 'none';
+        screenshot.style.overflow = 'hidden';
+        screenshot.style.webkitUserSelect = 'none';
+        screenshot.style.mozUserSelect = 'none';
+        screenshot.style.msUserSelect = 'none';
+        screenshot.style.oUserSelect = 'none';
+        screenshot.style.userSelect = 'none';
+        screenshot.dataset.scrollX = window.scrollX;
+        screenshot.dataset.scrollY = window.scrollY;
+        var blob = new Blob([screenshot.outerHTML], {
+            type: 'text/html'
+        });
+        return blob;
+    }
+
+
+</script>

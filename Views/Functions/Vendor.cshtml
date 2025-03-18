@@ -1,0 +1,737 @@
+﻿@using Microsoft.AspNetCore.Mvc.Localization
+
+@inject IViewLocalizer Localizer
+@model Susteni.Models.Funksjoner.FunctionsModel
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+
+@{
+    ViewData["Title"] = Localizer["Vendors"];
+    ViewData["LogOnOk"] = "2";
+    ViewData["Menu"] = "Admin";
+}
+
+<script type="text/x-kendo-template" id="tplStandard">
+    #if(Standard){#
+        <img src="@Url.Content("~/images/")True.svg" alt="Ja" width='24' height='24' />
+    #}else{#
+
+    #}#
+</script>
+
+<form onsubmit="return false;" class="mt-3">
+    <div id="confirm"></div>
+
+    <div class="row" id="heading" style="min-height: 90px;">
+
+        <div class="col-2 unselectable">
+            <h2>@Localizer["Vendors"]</h2>
+        </div>
+
+        <div class="col-2 infoArea" id="info" style="display: none">
+            <p class="unselectable" id="infoTekst">
+            </p>
+        </div>
+
+    </div>
+
+    <div class="row">
+
+        <div class="col-lg-3">
+
+            <div class="row" style="margin-top: 20px;">
+                <div class="col-12">
+                    <label>List of vendors</label>
+                </div>
+                <div class="col-lg-12">
+                    <div style="position: relative">
+                        @(Html.Kendo().Grid<Susteni.Models.GeneratorVendorItem>()
+                            .Name("vendorList")
+                            .Columns(columns =>
+                            {
+                                columns.Bound(q => q.GeneratorVendorGuid).Visible(false);
+                                columns.Bound(q => q.Vendor).Width(400).Title(Localizer["Vendor"].Value);
+                            })
+                            .Scrollable()
+                            .Events(e => e.Change("onVendorChange"))
+                            .Selectable(s => s
+                                .Mode(GridSelectionMode.Multiple)
+                                .Type(GridSelectionType.Row))
+                            .DataSource(dataSource => dataSource
+                                .Ajax()
+                                .Read(read => read.Action("GetGeneratorVendorList", "Functions"))
+                                )
+                            )
+
+                        @(Html.Kendo().FloatingActionButton()
+                            .Name("vendorAdd")
+                            .ThemeColor(FloatingActionButtonThemeColor.Success)
+                            .Size(FloatingActionButtonSize.Small)
+                            .PositionMode(FloatingActionButtonPositionMode.Absolute)
+                            .Align(FloatingActionButtonAlign.TopEnd)
+                            .AlignOffset(alignOffset => alignOffset.Horizontal(0).Vertical(10))
+                            .Icon("plusIcon")
+                            .Events(events => events.Click("addVendor"))
+                            .Visible(true)
+                            )
+
+                        @(Html.Kendo().FloatingActionButton()
+                            .Name("vendorEdit")
+                            .ThemeColor(FloatingActionButtonThemeColor.Warning)
+                            .Size(FloatingActionButtonSize.Small)
+                            .PositionMode(FloatingActionButtonPositionMode.Absolute)
+                            .Align(FloatingActionButtonAlign.TopEnd)
+                            .AlignOffset(alignOffset => alignOffset.Horizontal(0).Vertical(50))
+                            .Icon("pencilIcon")
+                            .Events(events => events.Click("editVendor"))
+                            .Visible(false)
+                            )
+
+                        @(Html.Kendo().FloatingActionButton()
+                            .Name("vendorRemove")
+                            .ThemeColor(FloatingActionButtonThemeColor.Error)
+                            .Size(FloatingActionButtonSize.Small)
+                            .PositionMode(FloatingActionButtonPositionMode.Absolute)
+                            .Align(FloatingActionButtonAlign.TopEnd)
+                            .AlignOffset(alignOffset => alignOffset.Horizontal(0).Vertical(90))
+                            .Icon("trashIcon")
+                            .Events(events => events.Click("removeVendor"))
+                            .Visible(false)
+                            )
+
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="col-lg-9">
+            <div class="row" style="margin-top: 20px;">
+                <div class="col-4">
+                    <h5>Models</h5>
+                    <div style="position: relative">
+                        @(Html.Kendo().Grid<Susteni.Models.GeneratorModelItem>()
+                            .Name("generatorModelList")
+                            .Columns(columns =>
+                            {
+                                columns.Bound(q => q.GeneratorModelGuid).Visible(false);
+                                columns.Bound(q => q.GeneratorVendorGuid).Visible(false);
+                                columns.Bound(q => q.Model).Width(400).Title(Localizer["Model"].Value);
+                            })
+                            .Scrollable()
+                            .Events(e => e.Change("onGenModelChange"))
+                            .Selectable(s => s
+                                .Mode(GridSelectionMode.Multiple)
+                                .Type(GridSelectionType.Row))
+                            .DataSource(dataSource => dataSource
+                                .Ajax()
+                                .Read(read => read.Action("GetGeneratorModelList", "Functions").Data("filterVendor"))
+                                )
+                            )
+
+
+                        @(Html.Kendo().FloatingActionButton()
+                            .Name("genModelAdd")
+                            .ThemeColor(FloatingActionButtonThemeColor.Success)
+                            .Size(FloatingActionButtonSize.Small)
+                            .PositionMode(FloatingActionButtonPositionMode.Absolute)
+                            .Align(FloatingActionButtonAlign.TopEnd)
+                            .AlignOffset(alignOffset => alignOffset.Horizontal(0).Vertical(10))
+                            .Icon("plusIcon")
+                            .Events(events => events.Click("addGenModel"))
+                            .Visible(true)
+                            )
+
+                        @(Html.Kendo().FloatingActionButton()
+                            .Name("genModelEdit")
+                            .ThemeColor(FloatingActionButtonThemeColor.Warning)
+                            .Size(FloatingActionButtonSize.Small)
+                            .PositionMode(FloatingActionButtonPositionMode.Absolute)
+                            .Align(FloatingActionButtonAlign.TopEnd)
+                            .AlignOffset(alignOffset => alignOffset.Horizontal(0).Vertical(50))
+                            .Icon("pencilIcon")
+                            .Events(events => events.Click("editGenModel"))
+                            .Visible(false)
+                            )
+
+                        @(Html.Kendo().FloatingActionButton()
+                            .Name("genModelRemove")
+                            .ThemeColor(FloatingActionButtonThemeColor.Error)
+                            .Size(FloatingActionButtonSize.Small)
+                            .PositionMode(FloatingActionButtonPositionMode.Absolute)
+                            .Align(FloatingActionButtonAlign.TopEnd)
+                            .AlignOffset(alignOffset => alignOffset.Horizontal(0).Vertical(90))
+                            .Icon("trashIcon")
+                            .Events(events => events.Click("removeGenModel"))
+                            .Visible(false)
+                            )
+                    </div>
+                </div>
+                <div class="col-8">
+                    <h5>Fuel consumption</h5>
+                    <div class="row">
+                        <div class="col-4">
+                            <div style="position: relative">
+                                @(Html.Kendo().Grid<Susteni.Models.GeneratorFuelComsuptionItem>()
+                                    .Name("fuelComsumptionList")
+                                    .Columns(columns =>
+                                    {
+                                        columns.Bound(q => q.FuelConsGuid).Visible(false).Title(Localizer["#"].Value);
+                                        columns.Bound(q => q.Effect).Title(Localizer["Effect"].Value);
+                                        columns.Bound(q => q.KgDieselkWh).Format("{0: #.000}").Title(Localizer["kg fuel/kWh"].Value);
+                                    })
+                                    .Height(380)
+                                    .Scrollable()
+                                    .Selectable(s => s
+                                    .Mode(GridSelectionMode.Multiple)
+                                    .Type(GridSelectionType.Row))
+                                    .Events(e => e.DataBound("onFCChange").Change("onFuelConsChange"))
+                                    .DataSource(dataSource => dataSource
+                                    .Ajax()
+                                    .Read(read => read.Action("GetFuelComsuptionGeneratorList", "Ship").Data("filterGenerator"))
+                                    )
+                                    )
+
+
+                                @(Html.Kendo().FloatingActionButton()
+                                    .Name("fuelComsumptionAdd")
+                                    .ThemeColor(FloatingActionButtonThemeColor.Success)
+                                    .Size(FloatingActionButtonSize.Small)
+                                    .PositionMode(FloatingActionButtonPositionMode.Absolute)
+                                    .Align(FloatingActionButtonAlign.TopEnd)
+                                    .AlignOffset(alignOffset => alignOffset.Horizontal(-10).Vertical(10))
+                                    .Icon("plusIcon")
+                                    .Events(events => events.Click("showDialogFuelConsumptionAdd"))
+                                    .Visible(true)
+                                    )
+
+
+                                @(Html.Kendo().FloatingActionButton()
+                                    .Name("fuelComsumptionEdit")
+                                    .ThemeColor(FloatingActionButtonThemeColor.Warning)
+                                    .Size(FloatingActionButtonSize.Small)
+                                    .PositionMode(FloatingActionButtonPositionMode.Absolute)
+                                    .Align(FloatingActionButtonAlign.TopEnd)
+                                    .AlignOffset(alignOffset => alignOffset.Horizontal(-10).Vertical(50))
+                                    .Icon("pencilIcon")
+                                    .Events(events => events.Click("showDialogFuelConsumptionEdit"))
+                                    .Visible(false)
+                                    )
+
+                                @(Html.Kendo().FloatingActionButton()
+                                    .Name("fuelComsumptionRemove")
+                                    .ThemeColor(FloatingActionButtonThemeColor.Error)
+                                    .Size(FloatingActionButtonSize.Small)
+                                    .PositionMode(FloatingActionButtonPositionMode.Absolute)
+                                    .Align(FloatingActionButtonAlign.TopEnd)
+                                    .AlignOffset(alignOffset => alignOffset.Horizontal(-10).Vertical(90))
+                                    .Icon("trashIcon")
+                                    .Events(events => events.Click("removeFuelConsumption"))
+                                    .Visible(false)
+                                    )
+                            </div>
+                        </div>
+
+                        <div class="col-8">
+
+                            <div id="chart"></div>
+
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+
+<script id="successTemplate" type="text/x-kendo-template">
+    <div class="upload-success">
+        <img src="@Url.Content("~/images/emoticon-happy.svg")" style="float:left; height:48px; width:48px; margin-right: 16px;"/>
+        <p>#= message #</p>
+    </div>
+</script>
+
+
+<script id="errorTemplate" type="text/x-kendo-template">
+    <div class="wrong-pass">
+        <img src="@Url.Content("~/images/emoticon-sad.svg")" style="float:left; height:48px; width:48px; margin-right: 16px;"/>
+        <p>#= message #</p>
+    </div>
+</script>
+
+
+@(Html.Kendo().Notification()
+    .Name("notification")
+    .Position(p => p.Pinned(true).Top(30).Right(30))
+    .Stacking(NotificationStackingSettings.Down)
+    .AutoHideAfter(5000)
+    .Templates(t =>
+    {
+        t.Add().Type("success").ClientTemplateID("successTemplate");
+        t.Add().Type("error").ClientTemplateID("errorTemplate");
+    })
+)
+
+@(Html.Kendo().Window()
+        .Name("DialogSupport")
+        .Title(Localizer["Support"].Value)
+        .Visible(false)
+        .Width(1200)
+        .Modal(true)
+        .Draggable()
+        )
+
+@(Html.Kendo().Window()
+    .Name("DialogHjelp")
+    .Title(Localizer["Help"].Value)
+    .Visible(false)
+    .Height(800)
+    .Width(1200)
+    .Modal(true)
+    .Draggable()
+    )
+
+
+@(Html.Kendo().Window()
+    .Name("dialogGenModel")
+    .Title(Localizer["Generator Model"].Value)
+    .Visible(false)
+    .Width(800)
+    .Modal(true)
+    .Draggable()
+    )
+
+
+@(Html.Kendo().Window()
+    .Name("dialogVendor")
+    .Title(Localizer["Vendor"].Value)
+    .Visible(false)
+    .Width(800)
+    .Modal(true)
+    .Draggable()
+    )
+
+
+@(Html.Kendo().Window()
+    .Name("dialogFuelConsumption")
+    .Title(Localizer["Fuel Consumption"].Value)
+    .HtmlAttributes(new { style = "border:1px; margin: 0px; padding-bottom: 0px;" })
+    .Visible(false)
+    .Width(600)
+    .Modal(true)
+    .Draggable()
+    )
+
+
+<script>
+    var generatorVendorGuid = "";
+    var generatorModelGuid = "";
+    var fuelConsGuid = "";
+
+    function filterVendor() {
+        return { GeneratorVendorGuid: generatorVendorGuid }
+    }
+</script>
+
+<script>
+
+    function showHelp() {
+        $.ajax({
+            url: '@Url.Action("DialogHjelp", "Hjelp")',
+            type: 'GET'
+        }).done(function (result) {
+            $('#DialogHjelp').html(result);
+            var popup = $('#DialogHjelp').data("kendoWindow");
+            popup.center().open();
+        });
+    }
+
+    function addSupport() {
+        $.ajax({
+            url: '@Url.Action("DialogSupport", "HelpDesk")',
+            type: 'GET'
+        }).done(function (result) {
+            $('#DialogSupport').html(result);
+
+            xB = document.getElementById("idBilde");
+
+            document.getElementById("HelpDesk_Modul").value = "TypeShip";
+            document.getElementById("HelpDesk_Program").value = "2";
+            document.getElementById("HelpDesk_Status").value = "1";
+
+            const screenshotTarget = document.body;
+
+            html2canvas(screenshotTarget).then((canvas) => {
+                const base64image = canvas.toDataURL("image/png");
+                xB.innerHTML = "<img src='" + base64image + "' style='max-height: 260px; max-width: 350px;' alt='Bilde' / >";
+                document.getElementById("HelpDesk_byte64String").value = base64image
+            });
+
+            var popup = $('#DialogSupport').data("kendoWindow");
+            popup.center().open();
+        });
+    }
+
+
+    function hjelpFilter() {
+        return { Modul: 900, Skjerm: "" }
+    }
+
+</script>
+
+<script>
+
+    function saveOperationMode(e) {
+        var $this = $('#operationModeForm').serialize();
+
+        $.ajax({
+            url: '@Url.Action("SetShipTypeOperationModes", "Functions")',
+            type: "PUSH",
+            data: $this,
+            dataType: 'json'
+        })
+            .done(function (result) {
+                $('#dialogShipTypeOperationMode').data("kendoWindow").close();
+                $("#shipTypeOperationModeList").data("kendoGrid").dataSource.read();
+            });
+    }
+
+    function closeOperationMode() {
+        var popup = $('#dialogShipTypeOperationMode').data("kendoWindow");
+        popup.close();
+    }
+
+</script>
+
+<script>
+
+    function onVendorChange(e) {
+        var grid = $("#vendorList").data("kendoGrid");
+        var selected = grid.select();
+        var data = grid.dataItem(selected);
+
+        generatorVendorGuid = data.GeneratorVendorGuid;
+
+        $('#vendorEdit').getKendoFloatingActionButton().show();
+        $('#vendorRemove').getKendoFloatingActionButton().show();
+
+        $("#generatorModelList").data("kendoGrid").dataSource.read();
+    }
+
+    function addVendor() {
+        $.ajax({
+            url: '@Url.Action("GetGeneratorVendor", "Functions")',
+            data: { GeneratorVendorGuid: "" },
+            type: 'GET'
+        }).done(function (result) {
+            $('#dialogVendor').html(result);
+            var popup = $('#dialogVendor').data("kendoWindow");
+            popup.center().open();
+        });
+    }
+
+    function editVendor() {
+        $.ajax({
+            url: '@Url.Action("GetGeneratorVendor", "Functions")',
+            data: { GeneratorVendorGuid: generatorVendorGuid },
+            type: 'GET'
+        }).done(function (result) {
+            $('#dialogVendor').html(result);
+            var popup = $('#dialogVendor').data("kendoWindow");
+            popup.center().open();
+        });
+    }
+
+    function removeVendor() {
+        var tittel = "DELETE";
+        var nei = "No";
+        var content = "<div id='question'>Do you want to remove this model</div>";
+
+        $("#confirm").kendoConfirm({
+            title: tittel,
+            content: content,
+            messages: {
+                okText: "yes",
+                cancel: nei
+            }
+        }).data("kendoConfirm").result.done(function () {
+            $('body').append($('<div id="confirm">'));
+
+            $.ajax({
+                url: '@Url.Action("RemoveGeneratorVendor", "Functions")',
+                type: "GET",
+                dataType: "json",
+                data: { GeneratorVendorGuid: generatorVendorGuid }
+            }).done(function (result) {
+                $("#fuelComsumptionList").data("kendoGrid").dataSource.read();
+                $("#generatorModelList").data("kendoGrid").dataSource.read();
+                $("#vendorList").data("kendoGrid").dataSource.read();
+            });
+        });
+    }
+
+    function saveVendor(e) {
+        var $this = $('#vendorForm').serialize();
+
+        $.ajax({
+            url: '@Url.Action("SetGeneratorVendor", "Functions")',
+            type: "PUSH",
+            data: $this,
+            dataType: 'json'
+            })
+        .done(function (result) {
+            if (result.Success) {
+                $('#dialogVendor').data("kendoWindow").close();
+                $("#vendorList").data("kendoGrid").dataSource.read();
+                }
+            else {
+                    alert(result.Error[0].Message);
+                }
+            });
+        }
+
+
+    function closeVendor() {
+        $('#vendorList').data("kendoWindow").close();
+    }
+
+
+</script>
+
+<script>
+
+
+    function onGenModelChange(e) {
+        var grid = $("#generatorModelList").data("kendoGrid");
+        var selected = grid.select();
+        var data = grid.dataItem(selected);
+
+        generatorModelGuid = data.GeneratorModelGuid;
+
+        $('#genModelEdit').getKendoFloatingActionButton().show();
+        $('#genModelRemove').getKendoFloatingActionButton().show();
+        $("#fuelComsumptionList").data("kendoGrid").dataSource.read();
+    }
+
+    function addGenModel() {
+        $.ajax({
+            url: '@Url.Action("GetGeneratorModel", "Functions")',
+            data: { GeneratorModelGuid: "", GeneratorVendorGuid: generatorVendorGuid },
+            type: 'GET'
+        }).done(function (result) {
+            $('#dialogGenModel').html(result);
+            var popup = $('#dialogGenModel').data("kendoWindow");
+            popup.center().open();
+        });
+    }
+
+    function editGenModel() {
+        $.ajax({
+            url: '@Url.Action("GetGeneratorModel", "Functions")',
+            data: { GeneratorModelGuid: generatorModelGuid, GeneratorVendorGuid: generatorVendorGuid },
+            type: 'GET'
+            })
+        .done(function (result) {
+                $('#dialogGenModel').html(result);
+                var popup = $('#dialogGenModel').data("kendoWindow");
+            popup.center().open();
+            });
+        }
+
+    function removeGenModel() {
+        var tittel = "DELETE";
+        var nei = "No";
+        var content = "<div id='question'>Do you want to remove this model</div>";
+
+        $("#confirm").kendoConfirm({
+            title: tittel,
+            content: content,
+            messages: {
+                okText: "yes",
+                cancel: nei
+            }
+        }).data("kendoConfirm").result.done(function () {
+            $('body').append($('<div id="confirm">'));
+ 
+            $.ajax({
+                url: '@Url.Action("RemoveGeneratorModel", "Functions")',
+                type: "PUSH",
+                dataType: "json",
+                data: { GeneratorModelGuid: generatorModelGuid }
+            }).done(function (result) {
+                $("#fuelComsumptionList").data("kendoGrid").dataSource.read();
+                $("#generatorModelList").data("kendoGrid").dataSource.read();
+            });
+        });
+    }
+
+
+    function saveGenModel(e) {
+        var $this = $('#genModelForm').serialize();
+
+        $.ajax({
+            url: '@Url.Action("SetGeneratorModel", "Functions")',
+            type: "PUSH",
+            data: $this,
+            dataType: 'json'
+            })
+        .done(function (result) {
+            if (result.Success) {
+                $('#dialogGenModel').data("kendoWindow").close();
+                $("#generatorModelList").data("kendoGrid").dataSource.read();
+                }
+            else {
+                alert(result.Error[0].Message);
+                }
+            });
+        }
+
+    function closeGenModel(e) {
+        $('#dialogGenModel').data("kendoWindow").close();
+        }
+
+</script>
+
+
+<script>
+
+    function filterGenerator() {
+        return { generatorGuid: generatorModelGuid }
+    }
+
+    var effects = ["25%", "35%", "45%", "55%"];
+
+    $("#chart").kendoChart({
+        //title: { text: "Fuel consumption diagram"},
+        seriesDefaults: { type: "line", style: "smooth" },
+        chartArea: { background: "", height: 370, width: 550 },
+        legend: { visible: false },
+        valueAxis: { min: 0.10 },
+        categoryAxis: { categories: effects, }
+    });
+
+
+    function onFCChange() {
+        var dataItems = this.dataSource.data();
+        var chartSeries = [];
+        var chartData = [];
+        var effects = [];
+
+        dataItems.forEach(function (item) {
+            chartData.push(item.KgDieselkWh);
+            effects.push(item.Effect + "%");
+        })
+
+        chartSeries.push({
+            data: chartData,
+            name: "Effect"
+        })
+
+        var chart = $("#chart").data("kendoChart");
+        var options = chart.options;
+        options.series = chartSeries;
+        options.categoryAxis.categories = effects;
+        chart.setOptions(options);
+    }
+
+    function onFuelConsChange(e) {
+        var grid = $("#fuelComsumptionList").data("kendoGrid");
+        var selected = grid.select();
+        var data = grid.dataItem(selected);
+
+        fuelConsGuid = data.FuelConsGuid;
+
+        var fabOMR = $('#fuelComsumptionRemove').getKendoFloatingActionButton();
+        fabOMR.show();
+
+        var fabOME = $('#fuelComsumptionEdit').getKendoFloatingActionButton();
+        fabOME.show();
+        
+    }
+
+    function showDialogFuelConsumptionAdd() {
+        $.ajax({
+            url: '@Url.Action("DialogFuelConsumption", "Ship")',
+            data: { generatorGuid: generatorModelGuid },
+            type: "GET"
+        })
+            .done(function (result) {
+                $('#dialogFuelConsumption').html(result);
+                document.getElementById("GeneratorFuelComsuption_LinkGuid").value = generatorModelGuid;
+                var popup = $('#dialogFuelConsumption').data("kendoWindow");
+                popup.center().open();
+            });
+    }
+
+    function showDialogFuelConsumptionEdit() {
+
+        $.ajax({
+            url: '@Url.Action("DialogFuelConsumption", "Ship")',
+            data: { fuelConsGuid: fuelConsGuid },
+            type: "GET"
+            })
+            .done(function (result) {
+                $('#dialogFuelConsumption').html(result);
+                document.getElementById("GeneratorFuelComsuption_LinkGuid").value = generatorModelGuid;
+                var kgF = document.getElementById("kdDieselkWh").value;
+                kgF = kgF.replace(",",".");
+                $("#GeneratorFuelComsuption_KgDieselkWh").data("kendoNumericTextBox").value(kgF);
+                var popup = $('#dialogFuelConsumption').data("kendoWindow");
+                popup.center().open();
+            });
+    }
+
+
+    function removeFuelConsumption(e) {
+        var tittel = "DELETE";
+        var nei = "No";
+        var content = "<div id='question'>Do you want to remove this fuel consumption from this generator</div>";
+
+        $("#confirm").kendoConfirm({
+            title: tittel,
+            content: content,
+            messages: {
+                okText: "yes",
+                cancel: nei
+            }
+        }).data("kendoConfirm").result.done(function () {
+            $('body').append($('<div id="confirm">'));
+
+            $.ajax({
+                url: '@Url.Action("RemoveGeneratorFuelComsuption", "Ship")',
+                type: "GET",
+                dataType: "json",
+                data: { FuelConsGuid: fuelConsGuid }
+            }).done(function (result) {
+                $("#fuelComsumptionList").data("kendoGrid").dataSource.read();
+            });
+        });
+    }
+
+    function closeFuelConsumption() {
+        var popup = $('#dialogFuelConsumption').data("kendoWindow");
+        popup.close();
+    }
+
+
+    function saveFuelConsumption(e) {
+        var kgF = $("#GeneratorFuelComsuption_KgDieselkWh").data("kendoNumericTextBox").value();
+        kgF = kgF.toString().replace(".",",");
+        document.getElementById("kdDieselkWh").value = kgF;
+
+        var $this = $('#FuelComsuptionForm').serialize();
+
+        $.ajax({
+            url: '@Url.Action("SetGeneratorFuelComsuption", "Ship")',
+            type: "PUSH",
+            data: $this,
+            dataType: 'json'
+        })
+            .done(function (result) {
+                $("#fuelComsumptionList").data("kendoGrid").dataSource.read();
+                var popup = $('#dialogFuelConsumption').data("kendoWindow");
+                popup.close();
+            });
+    }
+</script>

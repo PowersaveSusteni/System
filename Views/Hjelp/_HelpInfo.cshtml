@@ -1,0 +1,98 @@
+﻿@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
+@model Susteni.Models.Help.HjelpModel
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+
+@{
+    ViewData["Title"] = Localizer["Help system"];
+    ViewData["LogOnOk"] = "2";
+    ViewData["Menu"] = "KH";
+}
+
+<div class="container-fluid padding-0"  id="formHelp">
+    <input type = "hidden" asp-for="HelpSystem.HelpGuid" class="form-control">
+
+    <div class="col-12" style="margin-bottom: 0px; margin-top: 10px;">
+        <div class="panel panel-default" id="dataenter">
+
+            <div class="panel-body" style="padding: 10px;">
+
+                <div class="row align-items-center" style="display: flex; flex-direction: row;">
+                    <Label class="col-1 col-form-label">@Localizer["Modul"]</label>
+                    <div class="col-3">
+                        @(Html.Kendo().DropDownList()
+                                .Name("HelpSystem.Modul")
+                                .DataTextField("Text")
+                                .DataValueField("Value")
+                                .OptionLabel("Choose from the list...")
+                                .OptionLabelTemplate("<span><i>Choose from the list...</i></span>")
+                                .BindTo(new List<SelectListItem>() {
+                                        new SelectListItem() {Text = Localizer["Energy optimizing"].Value , Value = "100"},
+                                        new SelectListItem() {Text = Localizer["Power production"].Value , Value = "200"},
+                                        new SelectListItem() {Text = Localizer["Investment plan"].Value , Value = "300"},
+                                        new SelectListItem() {Text = Localizer["Ships info"].Value , Value = "400"}
+                                    })
+                                .Value(Model.HelpSystem.Modul.ToString())
+                                .HtmlAttributes(new { style="width: 100%;" })
+                            )
+                    </div>
+                    
+                    <label class="col-1 col-form-label">Screen</label>
+                    <div class="col-md-2">
+                        <input asp-for="HelpSystem.Screen" class="form-control k-textbox">
+                    </div>
+                    <label class="col-1 col-form-label">Category</label>
+                    <div class="col-md-2">
+                        <input asp-for="HelpSystem.Kategori" class="form-control k-textbox">
+                    </div>
+                </div>
+
+                <div class="row align-items-center" style="display: flex; flex-direction: row;">
+                    <label class="col-1 col-form-label">Title</label>
+                    <div class="col-md-9">
+                        <input asp-for="HelpSystem.Title" class="form-control k-textbox">
+                    </div>
+                    <div  class="col-2">
+                    @(Html.Kendo().CheckBox().Name("HelpSystem.Aktiv").Checked(Model.HelpSystem.Active).Label(Localizer["Active"].Value))                                           
+                    </div>
+                </div>
+
+                <div class="row align-items-center" style="display: flex; flex-direction: row;">
+                                    
+                    <div class="col-md-12 padding-0">
+                                      
+                        @(Html.Kendo().Editor()
+                            .Name("HelpSystem.Info")
+                            .Encoded(false)
+                            .HtmlAttributes(new { style = "margin: 0px; width:calc(100% - 40px); height:620px;", aria_label = "Tekst" })
+                            .Value(Model.HelpSystem.Info)
+                            .StyleSheets(css => css
+                                .Add(Url.Content("~/css/editorStyles.css"))
+                                )
+                            .Tools(tools => tools
+                                .Clear()                                                
+                                .Bold().Italic().Underline()
+                                .JustifyLeft().JustifyCenter().JustifyRight()
+                                .InsertUnorderedList().InsertOrderedList()
+                                .Outdent().Indent()
+                                .CreateLink().Unlink()
+                                .InsertImage()
+                                .TableEditing()
+                                .Formatting()
+                                .FontName()
+                                .FontSize()
+                                .ForeColor().BackColor().ViewHtml()
+                                )
+                            .ImageBrowser(imageBrowser => imageBrowser
+                                    .Image("https://www.kirkedata.no/img/KIP")
+                                )
+                            )
+
+                    </div>
+                </div>
+
+
+            </div>
+        </div>
+    </div>
+</div>

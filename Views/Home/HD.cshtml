@@ -1,0 +1,258 @@
+﻿@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+
+@using Kendo.Mvc.UI
+@model Susteni.Models.Home.HomeModel
+
+
+<div class="form-group row" style="margin-top: 10px;">
+    <div class="col-lg-5">
+        <table style="border-collapse: collapse; border-spacing: 0;">
+            <tr>
+                <td rowspan="2" style="width: 120px;">
+                    <img src="~/images/kirkedata300.png" style="width: 100px" alt="mainlogo" />
+                </td>
+                <td style="font-size: 40px; font-weight: 700;  color: #346D83; margin-top:0px; margin-left: 30px; margin-bottom: 0px; vertical-align:bottom;" class="unselectable">
+                    @Localizer["Kirkedata"]
+                    <span style="font-size: 40px; color: #579DB6; margin-top:0px; margin-left: 5px; vertical-align: bottom;" class="unselectable">
+                        @Localizer["Office"]
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td style="font-size: 20px; font-weight: 700;  color: darkslategrey; margin-top:0px; padding-left: 1px; margin-bottom: 0px; vertical-align:text-top;" class="unselectable">
+                    @Localizer["Helpdesk"]
+                </td>
+            </tr>
+        </table>
+    </div>
+
+</div>
+
+<div class="row">
+
+    <div class="col-lg-5" style="margin-top: 20px;">
+        <h4 id="idTickets">@Localizer["Nye tickets"]</h4>
+
+        @(Html.Kendo().Grid<Susteni.Models.HelpDeskUtvidetListeItem>()
+            .Name("ticketsListe")
+            .Columns(columns =>
+            {
+                columns.Bound(q => q.HelpDeskGuid).Visible(false);
+                columns.Bound(q => q.TiketId).Title("#").Width(60);
+                columns.Bound(q => q.ProgramNavn).Width(150);
+                columns.Bound(q => q.Modul).Width(150);
+                columns.Bound(q => q.Tittel);
+            })
+            .HtmlAttributes(new { style = "height: calc(100vh - 225px);" })
+            .Scrollable()
+            .Resizable(r => r.Columns(true))
+            .Sortable(x => x.SortMode(GridSortMode.MultipleColumn).AllowUnsort(true))
+            .Selectable(s => s
+                .Mode(GridSelectionMode.Single)
+                .Type(GridSelectionType.Row))
+            .Events(events => events
+            .Change("onTicketChange"))
+            .DataSource(dataSource => dataSource
+                .Ajax()
+                .Read(read => read.Action("getHelpDeskUtvidetListeListe", "HelpDesk").Data("filterTickets"))
+                )
+            )
+    </div>
+
+    <div class="col-lg-7" style="margin-top: 20px;">
+        <div class="row">
+            <div class="col-6">
+                <div id="chartSB" style="margin-bottom: 20px;"></div>
+            </div>
+            <div class="col-6">
+                <div id="chartKunde" style="margin-bottom: 20px;"></div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-6">
+                <div id="chartNivaa" style="margin-bottom: 20px;"></div>
+            </div>
+            <div class="col-6">
+                <div id="chartProgram" style="margin-bottom: 20px;"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script>
+
+
+    function filterTickets() {
+        filterTekst = "";
+
+        return { filterTekst: "Program = 0 OR (Prioritet=0 AND Status=1)" }
+    }
+
+    function onTicketChange(e) {
+        var selected = this.select();
+        var data = this.dataItem(selected);
+
+        HelpDeskGuid = data.HelpDeskGuid;
+        fellesraad = data.Fellesraad;
+    }
+
+    function filterGruper() {
+        return { Gruperfelt: "Saksbehandler"}
+    }
+
+</script>
+
+<script>
+
+    function createChartSaksbehandler() {
+
+        $("#chartSB").kendoChart({
+            dataSource: {
+                transport: {
+                    read: {
+                        url: "/HelpDesk/getHelpDeskStatistikk",
+                        data: { Gruperfelt: "Saksbehandler" },
+                        dataType: "json"
+                    }
+                }
+            },
+            title: {
+                text: "Fordeling sakbehandler"
+            },
+            legend: {
+                position: "top"
+            },
+            seriesDefaults: {
+                type: "pie"
+            },
+            series: [{
+                field: "antall",
+                categoryField: "tittel",
+                padding: 0
+            }],
+            tooltip: {
+                visible: true,
+                template: "#= category # - #= kendo.format('{0:P}', percentage)#"
+            }
+        });
+    }
+
+    function createChartKunde() {
+
+        $("#chartKunde").kendoChart({
+            dataSource: {
+                transport: {
+                    read: {
+                        url: "/HelpDesk/getHelpDeskStatistikk",
+                        data: { Gruperfelt: "Kunde" },
+                        dataType: "json"
+                    }
+                }
+            },
+            title: {
+                text: "Fordeling kunde"
+            },
+            legend: {
+                position: "top"
+            },
+            seriesDefaults: {
+                type: "pie"
+            },
+            series: [{
+                field: "antall",
+                categoryField: "tittel",
+                padding: 0
+            }],
+            tooltip: {
+                visible: true,
+                template: "#= category # - #= kendo.format('{0:P}', percentage)#"
+            }
+        });
+    }
+
+    function createChartNivaa() {
+
+        $("#chartNivaa").kendoChart({
+            dataSource: {
+                transport: {
+                    read: {
+                        url: "/HelpDesk/getHelpDeskStatistikk",
+                        data: { Gruperfelt: "StatusNavn" },
+                        dataType: "json"
+                    }
+                }
+            },
+            title: {
+                text: "Fordeling status"
+            },
+            legend: {
+                position: "top"
+            },
+            seriesDefaults: {
+                type: "pie"
+            },
+            series: [{
+                field: "antall",
+                categoryField: "tittel",
+                padding: 0
+            }],
+            tooltip: {
+                visible: true,
+                template: "#= category # - #= kendo.format('{0:P}', percentage)# - #= kendo.format('{0}')#"
+            }
+        });
+    }
+
+    function createChartProgram() {
+
+        $("#chartProgram").kendoChart({
+            dataSource: {
+                transport: {
+                    read: {
+                        url: "/HelpDesk/getHelpDeskStatistikk",
+                        data: { Gruperfelt: "ProgramNavn" },
+                        dataType: "json"
+                    }
+                }
+            },
+            title: {
+                text: "Fordeling produkt"
+            },
+            legend: {
+                position: "top"
+            },
+            seriesDefaults: {
+                type: "pie"
+            },
+            series: [{
+                field: "antall",
+                categoryField: "tittel",
+                padding: 0
+            }],
+            tooltip: {
+                visible: true,
+                template: "#= category # - #= kendo.format('{0:P}', percentage)#"
+            }
+        });
+    }
+
+    $(document).ready(createChartSaksbehandler);
+    $(document).ready(createChartKunde);
+    $(document).ready(createChartNivaa);
+    $(document).ready(createChartProgram);
+
+    $(document).bind("kendo:skinChange", createChartSaksbehandler);
+    $(document).bind("kendo:skinChange", createChartKunde);
+    $(document).bind("kendo:skinChange", createChartNivaa);
+    $(document).bind("kendo:skinChange", createChartProgram);
+
+
+    $(window).on("resize", function () {
+        $("#ticketsListe").data("kendoGrid").refresh();
+    });
+
+
+</script>

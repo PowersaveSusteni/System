@@ -1,0 +1,70 @@
+﻿@using Microsoft.AspNetCore.Mvc.Localization
+
+@inject IViewLocalizer Localizer
+@model Susteni.Models.Funksjoner.FunctionsModel
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+
+
+<h4>Hello</h4>
+
+@* 
+<form id="operationModeForm">
+    <input hidden asp-for="ShipTypeOperationModes.OperationModeGuid" class="form-control k-textbox">
+    <input hidden asp-for="ShipTypeOperationModes.ShipTypeGuid" class="form-control k-textbox">
+
+    <div class="row align-items-center" style="display: flex; flex-direction: row;">
+        <label class="col-3 col-form-label">Name</label>
+        <div class="col-9">
+            <input asp-for="ShipTypeOperationModes.Name" class="form-control k-textbox">
+        </div>
+    </div>
+
+    <div class="row align-items-center" style="display: flex; flex-direction: row;">
+        <label class="col-3 col-form-label">Hours pr/year</label>
+        <div class="col-3">
+            @(Html.Kendo().NumericTextBox<double>()
+                .Name("ShipTypeOperationModes.HoursPrYear")
+                .Format("#####")
+                .Value(Model.ShipTypeOperationModes.HoursPrYear)
+                )
+        </div>
+    </div>
+
+    <div class="row align-items-center" style="display: flex; flex-direction: row;">
+        <label class="col-3 col-form-label">Minimum # of generators</label>
+        <div class="col-2">
+            @(Html.Kendo().NumericTextBox<double>()
+                .Name("ShipTypeOperationModes.NumberGenerators")
+                .Format("##")
+                .Value(Model.ShipTypeOperationModes.NumberGenerators)
+                )
+        </div>
+    </div>
+
+    <div class="row align-items-center" style="display: flex; flex-direction: row;">
+        <label class="col-3 col-form-label">Order</label>
+        <div class="col-2">
+            @(Html.Kendo().NumericTextBox<double>()
+                .Name("ShipTypeOperationModes.Order")
+                .Format("##")
+                .Value(Model.ShipTypeOperationModes.Order)
+                )
+        </div>
+    </div>
+
+    <div class="row align-items-center" style="margin-top: 7px;">
+        <label class="col-3 col-form-label"></label>
+        <div class="col-3">
+            @(Html.Kendo().CheckBox().Checked(Model.ShipTypeOperationModes.Standard).Name("ShipTypeOperationModes.Standard").Label("Standard"))
+        </div>
+    </div>
+
+    <div class="row" style="margin-top: 15px;">
+        <div class="col-12">
+            <button type="button" onclick="closeOperationMode()" class="commandModernRed" style="width: 150px; float: right">Cancel</button>
+            <button type="button" onclick="saveOperationMode()" class="commandModernGreen" style="width: 150px; float: right">Save</button>
+        </div>
+
+    </div>
+
+</form> *@

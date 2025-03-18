@@ -1,0 +1,435 @@
+﻿@using Microsoft.AspNetCore.Mvc.Localization
+
+@inject IViewLocalizer Localizer
+@model Susteni.Models.Customer.CustomerModel
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+
+@{
+    ViewData["Title"] = Localizer["Customer"];
+    ViewData["LogOnOk"] = "2";
+    ViewData["Menu"] = "Admin";
+}
+
+<form id="frmCustomer" onsubmit="return false;" class="mt-3" autocomplete="off">
+    <div id="confirm"></div>
+
+    <div class="row" id="heading" style="min-height: 70px;">
+
+
+        <div class="col-3 unselectable">
+            <img src="~/images/PowerSave_logo.svg" style="width: 70px; float: left; margin-right: 10px;" alt="mainlogo" />
+            <h2>@Localizer["Customer"]</h2>
+        </div>
+
+        <div class="col-8">
+
+            <div style="display: flex; flex-direction: row;">
+
+                <button type="button" id="btnSaveCustomer" class="command" onclick="saveCustomer()" style="width: 130px; margin-right: 7px; display: none;">
+                    <img src="~/images/save-filled.svg" />
+                    @Localizer["Save"]
+                </button>
+
+
+                <button type="button" id="btnSendBekr" class="command" onclick="showDialogLastOppFil()" style="width: 200px; margin-right: 7px;">
+                    <img src="~/images/mail-back-filled-send.svg" />
+                    @Localizer["Upload logo"]
+                </button>
+              
+            </div>
+
+        </div>
+
+        <div class="col-2 infoArea" id="info" style="display: none">
+            <p class="unselectable" id="infoTekst">
+            </p>
+        </div>
+
+    </div>
+
+    <div class="row">
+
+        <div id="SuperAdmin" class="col-lg-4">
+
+
+            <div class="row">
+
+                <div class="col-lg-6" style="display: flex; flex-direction: row;">
+
+                    <div>
+                        <button type="button" name="nyMappe" class="commandline" onclick="newCustomer()">
+                            <img src="~/images/Ny.svg" />
+                            <figcaption>New</figcaption>
+                        </button>
+                    </div>
+
+                    <div>
+                        <button disabled type="button" class="commandline" id="btnSave" onclick="saveCustomer()">
+                            <img src="~/images/Lagre.svg" />
+                            <figcaption>Save</figcaption>
+                        </button>
+                    </div>
+
+                    <div>
+                        <button disabled type="button" class="commandline" id="btnRemove" onclick="removeCustomer()">
+                            <img src="~/images/Slette.svg" />
+                            <figcaption>Remove</figcaption>
+                        </button>
+                    </div>
+
+@*                     <div>
+                        <button type="button" name="utskrift" id="utskrift" onclick="showDialogRapporter()" class="commandline">
+                            <img src="~/images/document-text-graph.svg" />
+                            Reports
+                        </button>
+                    </div> *@
+
+                </div>
+
+                <div class="col-lg-6">
+                    <div class="row align-items-center" style="margin-top: 10px;">
+                        <div class="col-12" style="display: flex; flex-direction: row;">
+                            <input id="KundeNavn" Class="form-control sokeFelt" oninput="findCustomer()" placeholder="customer ..." style="width: calc(100% - 30px)">
+                            <button type="button" class="commandInline" onclick="clearCustomer()">
+                                <img src="~/images/button-remove.svg" />
+                            </button>
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+
+
+            <div class="row">
+                <div class="col-lg-12">
+                    @(Html.Kendo().Grid<Susteni.Models.CustomerItem>()
+                        .Name("customersList")
+                        .Columns(columns =>
+                        {
+                            columns.Bound(q => q.CustomerGuid).Visible(false);
+                            columns.Bound(q => q.CustomerName).Title(Localizer["Customer"].Value);
+                        })
+                        .HtmlAttributes(new { style = "height: calc(100vh - 300px);" })
+                        .Scrollable()
+                        .Selectable(s => s
+                            .Mode(GridSelectionMode.Multiple)
+                            .Type(GridSelectionType.Row))
+                        .Events(e => e.Change("onCustomerChange"))
+                        .DataSource(dataSource => dataSource
+                            .Ajax()
+                                .Read(read => read.Action("getCustomerList", "Customer"))
+                            )
+                        )
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="col-lg-8">
+            <partial name="_CustomerInfo" />
+        </div>
+
+    </div>
+
+</form>
+
+
+<script id="successTemplate" type="text/x-kendo-template">
+    <div class="upload-success">
+        <img src="@Url.Content("~/images/emoticon-happy.svg")" style="float:left; height:48px; width:48px; margin-right: 16px;"/>
+        <p>#= message #</p>
+    </div>
+</script>
+
+
+<script id="errorTemplate" type="text/x-kendo-template">
+    <div class="wrong-pass">
+        <img src="@Url.Content("~/images/emoticon-sad.svg")" style="float:left; height:48px; width:48px; margin-right: 16px;"/>
+        <p>#= message #</p>
+    </div>
+</script>
+
+
+@(Html.Kendo().Notification()
+    .Name("notification")
+    .Position(p => p.Pinned(true).Top(30).Right(30))
+    .Stacking(NotificationStackingSettings.Down)
+    .AutoHideAfter(5000)
+    .Templates(t =>
+    {
+        t.Add().Type("success").ClientTemplateID("successTemplate");
+        t.Add().Type("error").ClientTemplateID("errorTemplate");
+    })
+)
+
+@(Html.Kendo().Window()
+        .Name("DialogSupport")
+        .Title(Localizer["Support"].Value)
+        .Visible(false)
+        .Width(1200)
+        .Modal(true)
+        .Draggable()
+        )
+
+@(Html.Kendo().Window()
+    .Name("dialogLastOppFil")
+    .Title(Localizer["Last opp logo"].Value)
+    .HtmlAttributes("style= border:1px;")
+    .Visible(false)
+    .Width(1000)
+    .Modal(true)
+    .Draggable()
+    )
+
+
+<script>
+    var customerGuid = "";
+
+    function findCustomer() {
+        fv = document.getElementById("KundeNavn").value;
+        ds = $("#customersList").data("kendoGrid").dataSource;
+        ds.filter({ field: "CustomerName", operator: "contains", value: fv });
+    }
+
+    function clearCustomer() {
+        document.getElementById("KundeNavn").value = "";
+        ds = $("#customersList").data("kendoGrid").dataSource;
+        ds.filter([]);
+    }
+
+    function filterCustomer() {
+        return { strFilter: "CustomerGuid='" + customerGuid + "'", sortering: "Lastname"}
+    }
+
+    function newCustomer() {
+        customerGuid = "";
+
+        $.ajax({
+            type: "GET",
+            url: '@Url.Action("NewCustomer", "Customer")'
+            })
+        .done(function (result) {
+                $("#customerForm").html(result);
+            });
+        }
+
+    function saveCustomer() {
+        var $this = $('#frmCustomer').serialize();
+
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("SetCustomer", "Customer")',
+            data: $this,
+            dataType: 'json'
+            })
+        .done(function (result) {
+            if (result.Status >= 0) {
+
+                var notification = $("#notification").data("kendoNotification");
+                notification.show({ title: "Bestilling", message: "Endringene lagret"}, "success");
+
+                if (result.Status >= 1) {
+                        $("#customersList").data("kendoGrid").dataSource.read();
+                    }
+                }
+            else {
+                alert(result.ErrorText);
+                }
+
+            })
+        .fail(function (result) {
+            alert('an Error has occurred, please try again');
+        });
+    }
+
+    function removeCustomer(e) {
+        var tittel = "DELETE";
+        var nei = "No";
+        var content = "<div id='question'>Do you want to remove this customer</div>";
+
+        $("#confirm").kendoConfirm({
+            title: tittel,
+            content: content,
+            messages: {
+                okText: "yes",
+                cancel: nei
+            }
+        }).data("kendoConfirm").result.done(function () {
+            $('body').append($('<div id="confirm">'));
+
+            $.ajax({
+                url: '@Url.Action("RemoveCustomer", "Customer")',
+                type: "GET",
+                dataType: "json",
+                data: { CustomerGuid: customerGuid }
+            }).done(function (result) {
+                $("#customersList").data("kendoGrid").dataSource.read();
+            });
+        });
+    }
+
+    function showDialogLastOppFil() {
+        $.ajax({
+            url: '@Url.Action("DialogLastOppLogo", "Customer")',
+            type: "GET"
+            })
+        .done(function (result) {
+            $('#dialogLastOppFil').html(result);
+            var popup = $('#dialogLastOppFil').data("kendoWindow");
+            popup.center().open();
+            });
+        }
+
+    function onUploadLogo(e) {
+        e.data = {
+            CustomerGuid: customerGuid
+        };
+    }
+
+    function onUploadSuccess() {
+        var popup = $('#dialogLastOppFil').data("kendoWindow");
+        popup.close();
+
+        $.ajax({
+            url: '@Url.Action("GetLogo", "Customer")',
+            type: "GET"
+            })
+        .done(function (result) {
+            var xP = document.getElementById("filPreview");
+            if (result != "") {
+                xP.innerHTML = "<img src='data:image/Jpeg;base64," + result + "'>";
+                }
+            else {
+                xP.innerHTML = "";
+                }
+            });
+        }
+
+    function onCustomerChange(e) {
+        var grid = $("#customersList").data("kendoGrid");
+        var selected = grid.select();
+        var data = grid.dataItem(selected);
+
+        customerGuid = data.CustomerGuid;
+
+        $.ajax({
+            url: '@Url.Action("GetCustomer", "Customer")',
+            data: { customerGuid: customerGuid },
+            type: "GET"
+        }).done(function (result) {
+            $("#customerForm").html(result);
+            getCity();
+            document.getElementById("btnSave").disabled = false;
+            document.getElementById("btnRemove").disabled = false;
+        });
+    }
+
+    function CurrentCustomer(c) {
+        customerGuid = c;
+        $.ajax({
+            url: '@Url.Action("GetCustomer", "Customer")',
+            data: { customerGuid: customerGuid },
+            type: "GET"
+            })
+        .done(function (result) {
+            $("#customerForm").html(result);
+            document.getElementById("btnSave").disabled = false;
+            document.getElementById("btnRemove").disabled = false;
+            $("#userList").data("kendoGrid").dataSource.read();
+            });
+        }
+
+    document.addEventListener('paste', function (evt) {
+        // Get the data of clipboard
+        const clipboardItems = evt.clipboardData.items;
+        const items = [].slice.call(clipboardItems).filter(function (item) {
+            // Filter the image items only
+            return item.type.indexOf('image') !== -1;
+        });
+        if (items.length === 0) {
+            return;
+        }
+
+        const item = items[0];
+        // Get the blob of image
+        const blob = item.getAsFile();
+
+        var reader = new FileReader();
+        reader.readAsDataURL(blob);
+        reader.onloadend = function () {
+            var base64data = reader.result;
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("uploadPicture", "Customer")',
+                data: { customerGuid: customerGuid, base64string: base64data },
+                dataType: 'json'
+            })
+                .done(function (result) {
+                    if (result.Status != 0) {
+                        alert(result.Description)
+                    }
+                });
+        }
+
+    });
+
+    $(document).ready(function () {
+        var SuperAdmin = @ViewData["SuperAdmin"];
+
+        if (!SuperAdmin) {
+            document.getElementById("btnSaveCustomer").style.display = "";
+            document.getElementById("SuperAdmin").style.display = "none";
+            
+        }
+
+        CurrentCustomer('@ViewData["CustomerGuid"]');
+    });
+
+    function getCity() {
+        var x = document.getElementById("Customer_Zip").value;
+        xSted = document.getElementById("Customer_City");
+
+        if (x.length == 4) {
+            $.ajax({
+                url: '@Url.Action("GetCity", "Customer")',
+                data: { zip: x },
+                type: "GET"
+            }).done(function (result) {
+                xSted.value = result.City;
+            });
+        }
+        else {
+            xSted.value = "";
+        };
+    }
+
+    function addSupport() {
+        $.ajax({
+            url: '@Url.Action("DialogSupport", "HelpDesk")',
+            type: 'GET'
+        }).done(function (result) {
+            $('#DialogSupport').html(result);
+
+            xB = document.getElementById("idBilde");
+
+            document.getElementById("HelpDesk_Modul").value = "FuleSavings";
+            document.getElementById("HelpDesk_Program").value = "2";
+            document.getElementById("HelpDesk_Status").value = "1";
+
+            const screenshotTarget = document.body;
+
+            html2canvas(screenshotTarget).then((canvas) => {
+                const base64image = canvas.toDataURL("image/png");
+                xB.innerHTML = "<img src='" + base64image + "' style='max-height: 260px; max-width: 350px;' alt='Bilde' / >";
+                document.getElementById("HelpDesk_byte64String").value = base64image
+            });
+
+            var popup = $('#DialogSupport').data("kendoWindow");
+            popup.center().open();
+        });
+    }
+
+
+</script>

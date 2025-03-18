@@ -1,0 +1,153 @@
+﻿@using Microsoft.AspNetCore.Mvc.Localization
+
+@inject IViewLocalizer Localizer
+@model Susteni.Models.Ship.ShipModel
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+
+@{
+    ViewData["Title"] = Localizer["Fuel savings"];
+    ViewData["LogOnOk"] = "2";
+    ViewData["Menu"] = "Admin";
+}
+
+
+<form id="equipmentForm" class="mt-0" style="margin-bottom: 0px;">
+    <input hidden asp-for="ShipEquipment.EquipmentGuid" class="form-control">
+    <input hidden asp-for="ShipEquipment.EquipmentType" class="form-control">
+    <input hidden asp-for="ShipEquipment.ShipGuid" class="form-control">
+
+    <div class="row">
+        <div class="col-12" style="margin-bottom: 0px; margin-top: 0px;">
+
+
+
+            <div class="row align-items-center" style="display: flex; flex-direction: row;">
+                <label class="col-2 col-form-label">Name</label>
+                <div class="col-4">
+                    <input asp-for="ShipEquipment.Name" class="form-control k-textbox nodvendigFelt">
+                </div>
+                <div class="col-lg-4" style="display:none;">
+                    @(Html.Kendo().DropDownList()
+                        .Name("ShipEquipment.ProfilGuid")
+                        .DataTextField("Name")
+                        .DataValueField("ProfilGuid")
+                        .OptionLabel("Choose profile from list")
+                        .Value(Model.ShipEquipment.ProfilGuid)
+                        .Height(200)
+                        .DataSource(dataSource => dataSource
+                            .Ajax()
+                            .Read(read => read.Action("GetProfileList", "Ship").Data("filterShip"))
+                            )
+                        )
+                </div>
+            </div>
+
+            <div class="row align-items-center" style="display: flex; flex-direction: row;">
+                <label class="col-2 col-form-label">Model</label>
+                <div class="col-4">
+                    <input asp-for="ShipEquipment.Model" class="form-control k-textbox">
+                </div>
+            </div>
+
+            <div class="row align-items-center" style="display: flex; flex-direction: row; margin-top: 3px; margin-bottom: 3px;">
+                <label class="col-2 col-form-label">Description</label>
+                <div class="col-10">
+                    @(Html.Kendo().TextArea()
+                        .Name("ShipEquipment.Description")
+                        .HtmlAttributes(new { @class = "nodvendigFelt" })
+                        .Rows(9)
+                        .Value(Model.ShipEquipment.Description)
+                        )
+                </div>
+            </div>
+
+            <div class="row align-items-center" style="display: flex; flex-direction: row;">
+                <label class="col-2 col-form-label">Max effect</label>
+                <div class="col-3">
+                    @(Html.Kendo().NumericTextBox<double>()
+                        .Name("ShipEquipment.MaxEffect")
+                        .HtmlAttributes(new { @class = "nodvendigFelt", style = "width: 80px;" })
+                        .Format("#####")
+                        .Min(0)
+                        .Step(5)
+                        .Value(Model.ShipEquipment.MaxEffect)
+                        )
+                    kW
+                </div>
+            </div>
+
+            <div class="row align-items-center" style="display: flex; flex-direction: row;">
+                <label class="col-2 col-form-label">Investment cost</label>
+                <div class="col-4" style="display: flex; flex-direction: row;">
+                    @(Html.Kendo().NumericTextBox<double>()
+                        .Name("ShipEquipment.Cost")
+                        .HtmlAttributes(new { style = "width: 130px;"})
+                        .Format("n0")
+                        .Min(0)
+                        .Step(1000000)
+                        .Value(Model.ShipEquipment.Cost)
+                        )
+                    <div id="currencyCode" style="margin-left: 10px; margin-top: 5px;">kr</div>
+                </div>
+            </div>
+
+            <div class="row align-items-center" style="display: flex; flex-direction: row;">
+                <label class="col-2 col-form-label">Financial support</label>
+                <div class="col-3">
+                    @(Html.Kendo().NumericTextBox<int>()
+                        .Name("ShipEquipment.FinancielSupport")
+                        .HtmlAttributes(new { style = "width: 80px;" })                        
+                        .Format("###")
+                        .Min(0)
+                        .Max(100)
+                        .Step(5)
+                        .Value(Model.ShipEquipment.FinancielSupport)
+                        )
+                    %
+                </div>
+            </div>
+
+@*             <div class="row align-items-center" style="display: flex; flex-direction: row;">
+                <label class="col-2 col-form-label">Maintenance cost</label>
+                <div class="col-4">
+                    @(Html.Kendo().NumericTextBox<double>()
+                        .Name("ShipEquipment.MaintenanceCode")
+                        .HtmlAttributes(new { style = "width: 130px;" })
+                        .Format("########")
+                        .Min(0)
+                        .Step(1000000)
+                        .Value(Model.ShipEquipment.MaintenanceCode)
+                        )
+                    kr pr/hour
+                </div>
+            </div> *@
+
+            <div class="row align-items-center" style="display: flex; flex-direction: row;">
+                <label class="col-2 col-form-label">Plan investment</label>
+                <div class="col-3">
+                    @(Html.Kendo().NumericTextBox<int>()
+                        .Name("ShipEquipment.Year")
+                        .HtmlAttributes(new { style = "width: 80px;" })
+                        .Format("####")
+                        .Min(0)
+                        .Max(2050)
+                        .Step(1)
+                        .Value(Model.ShipEquipment.Year)
+                        )
+                    year
+                </div>
+            </div>
+
+
+        </div>
+    </div>
+
+
+    <div class="row" style="margin-top: 15px; margin-bottom: 0px;">
+        <div class="col-12" style="margin-bottom: 0px;">
+            <button type="button" onclick="closeEquipment()" class="commandModernRed" style="width: 150px; float: right">Cancel</button>
+            <button type="button" onclick="saveEquipment()" class="commandModernGreen" style="width: 150px; float: right">Save</button>
+        </div>
+
+    </div>
+</form>

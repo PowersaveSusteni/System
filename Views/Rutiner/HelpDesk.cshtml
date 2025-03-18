@@ -1,0 +1,433 @@
+﻿@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+
+@using Kendo.Mvc.UI
+@model Susteni.Models.HelpDesk.HelpDeskModel
+
+@{
+    ViewData["Title"] = Localizer["HelpDesk"];
+    ViewData["LogOnOk"] = "2";
+    ViewData["Menu"] = "Rutiner";
+}
+
+<style>
+
+    .commandModern {
+        background-color: #FFC0C7;
+        border: none;
+        padding: 8px 16px;
+        border-radius: 20px;
+        margin-left: 10px;
+        margin-bottom: 10px;
+    }
+
+    .helpdesk {
+        position: relative;
+        margin: 0 15px;
+        padding: 0;
+    }
+
+        .helpdesk img {
+            width: 48px;
+            height: 48px;
+            vertical-align: top;
+            margin: auto;
+        }
+
+        .helpdesk h3 {
+            margin: 0px;
+            padding: 5px 0px 5px 0px;
+            overflow: hidden;
+            line-height: 1.1em;
+            font-size: 16px;
+            font-weight: normal;
+            text-transform: uppercase;
+            color: black;
+        }
+
+        .helpdesk button img {
+            width: 24px;
+            height: 24px;
+            margin-right: 5px;
+        }
+
+    .Losning {
+        font-weight: bold;
+        border-top: solid transparent 10px;
+        border-bottom: solid transparent 10px;
+    }
+
+    .cards-container {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+
+    .k-card {
+        width: 285px;
+        margin: 5%;
+    }
+
+    .k-card-footer {
+        text-align: center;
+    }
+
+    .k-card-image {
+        width: 100%;
+    }
+
+    #Helpdesk h5 {
+        font-size: 20px;
+        font-weight: bold;
+        margin-bottom: 10px;
+    }
+
+    #Helpdesk .hdBilde img {
+        width: 100%;
+        margin-top: 5px;
+        margin-bottom: 5px;
+    }
+
+    #Helpdesk .hdBildeTekst {
+        margin-bottom: 10px;
+    }
+     
+</style>
+
+<script type="text/x-kendo-tmpl" id="template">
+    <div class="helpdesk">
+        <table width='98%'>
+            <tr>
+                <td rowspan='4' width='60px;'>
+                    <img src="@Url.Content("~/images/")#:data.ikon#.svg" alt="ikon" />
+                </td>
+                <td>
+                    <h3>#:Tittel# - #:BrukerNavn#</h3><p style='color: darkred; font-weight: 500;'>#:FerdigDatoTekst#</p>
+                </td>
+            </tr>
+             <tr>
+                 <td>
+                    #=Beskrivelse#
+                </td>
+            </tr>
+             <tr class='Losning'>
+                 <td>
+                    #=Losning#
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <button type='button' class='commandSmal' style='width: 100px;' onclick="visHelpdeskLogg('#=HelpDeskGuid#')"><img src="@Url.Content("~/images/")script-filled.svg" width="24" height="24" alt="ikon" />Logg</button>
+                    #if(Status > 7) {#
+                        <button type='button' class='commandSmal' style='width: 120px;' onclick="visHelpdeskFerdig('#=HelpDeskGuid#')"><img src="@Url.Content("~/images/")True.svg" width="24" height="24" alt="ikon" />Godkjenn</button>
+                        <button type='button' class='commandSmal' style='width: 140px;' onclick="visHelpdeskLosning('#=HelpDeskGuid#')"><img src="@Url.Content("~/images/")True.svg" width="24" height="24" alt="ikon" />Se løsningen</button>
+                    #}#
+                </td>
+
+            </tr>
+        </table>
+    </div>
+</script>
+
+<div class="form-group row" style="margin-top: 10px;">
+
+    <div class="col-lg-5">
+                
+    <div>
+    </div>
+
+    </div>
+
+    <div class="col-lg-4">
+        <h3 class="unselectable" id="fellesraadNavn" style="margin-top: 25px;"></h3>
+    </div>
+
+
+</div>
+
+<div class="row" style="margin-top: 20px;">
+    <div class="col-5">
+        <h3>Servicedesk</h3>
+
+        @(Html.Kendo().ListView<Susteni.Models.HelpDeskItem>()
+            .Name("listViewHelpdesk")
+            .TagName("div")
+            .ClientTemplateId("template")
+            .HtmlAttributes(new { style = "height: calc(100vh - 300px);" })
+            .Selectable()
+            .Scrollable()
+            .DataSource(dataSource => dataSource
+                .Ajax()
+                .Read(read => read.Action("getHelpDeskFellesraadListe", "HelpDesk"))
+                )
+            )
+    </div>
+</div>
+
+<img src="~/images/Landskap.png" style="position: fixed; bottom: 0px; right: 0px; width: 20%;" alt="mainlogo" />
+
+<div id="dialogNyhetWindow">
+    @(Html.Kendo().Window()
+        .Name("dialogNyhet")
+        .Title("Nyhet")
+        .HtmlAttributes("style= border:1px;")
+        .Visible(false)
+        .Height(600)
+        .Width(800)
+        .Modal(true)
+        .Draggable()
+        .Actions(actions => actions
+        .Close()
+        )
+        )
+
+    @(Html.Kendo().Window()
+        .Name("dialogHDLogg")
+        .Title("Logg")
+        .HtmlAttributes("style= border:1px;")
+        .Visible(false)
+        .Width(800)
+        .Modal(true)
+        .Draggable()
+        .Actions(actions => actions
+        .Close()
+        )
+        )
+
+    @(Html.Kendo().Window()
+        .Name("dialogHDFerdig")
+        .Title("Løsning")
+        .HtmlAttributes("style= border:1px;")
+        .Visible(false)
+        .Width(800)
+        .Height("85vh")
+        .Modal(true)
+        .Draggable()
+        .Actions(actions => actions
+        .Close()
+        )
+        )
+</div>
+
+<div id="dialogFellesraadWindow">
+    @(Html.Kendo().Dialog()
+        .Name("dialogFellesraad")
+        .Title("Sett aktivt fellesråd")
+        .Content(
+        Html.Kendo().ListBox()
+        .Name("listFellesraad")
+        .DataValueField("Fellesraad")
+        .DataTextField("Navn")
+        .HtmlAttributes("style='height: 100%;'")
+        .Selectable(ListBoxSelectable.Single)
+        .DataSource(dataSource => dataSource
+        .Ajax()
+        .Read(read => read.Action("getAccounts", "Account"))
+        )
+        .ToHtmlString()
+        )
+        .Visible(false)
+        .Height(600)
+        .Width(400)
+        .Modal(true)
+        .Actions(actions =>
+        {
+            actions.Add().Text("Avbryt");
+            actions.Add().Text("Aktiver").Action("onActionOK").Primary(true);
+        })
+        .Events(ev => ev.Close("onClose").Open("onOpen"))
+        )
+</div>
+
+<style>
+    .k-listbox {
+        height: 100%;
+    }
+</style>
+
+<script>
+    var TicketGuid = "";
+
+    $(document).ready(function () {
+
+        var meny = document.getElementById("hmRutiner");
+        meny.classList.add("menyAktiv");
+
+        $.ajax({
+            url: '@Url.Action("GetAktivRessurs", "AdminBruker")',
+            type: "GET"
+        }).done(function (result) {
+            $("#brukerRessursData").html(result);
+
+        });
+
+        visNyheterliste();
+
+    });
+
+    function visHuskeliste() {
+        var respons = "";
+
+        $.ajax({
+            url: '@Url.Action("GetHomeHuskeliste", "Home")',
+            type: "GET",
+            dataType: "html"
+        }).done(function (result) {
+            var pureHTML = result
+            pureHTML = pureHTML.replace('{"EncodedContent":{"Value":"', "").replace('"}}', '');
+            $("#huskeliste").html(pureHTML);
+        });
+    }
+
+    function visNyheterliste() {
+        var respons = "";
+        $.ajax({
+            url: '@Url.Action("GetHomeNyhetsliste", "Home")',
+            type: "GET",
+            dataType: "html"
+        }).done(function (result) {
+            var pureHTML = result
+            pureHTML = pureHTML.replace('{"EncodedContent":{"Value":"', "").replace('"}}', '');
+
+            pureHTML = replaceAll(pureHTML, "¤", "\"");
+            $("#nyheter").html(pureHTML);
+        });;
+    }
+
+    function replaceAll(string, search, replace) {
+        return string.split(search).join(replace);
+    }
+
+
+    function filterHelpdesk() {
+        return { HelpDeskGuid: TicketGuid }
+    }
+
+    function visHelpdeskLogg(ticketGuid) {
+        TicketGuid = ticketGuid;
+
+        $.ajax({
+            url: '@Url.Action("DialogHDLogg", "HelpDesk")',
+            type: "GET",
+            data: { ticketGuid: ticketGuid },
+        })
+            .done(function (result) {
+                $("#dialogHDLogg").html(result);
+                var popup = $('#dialogHDLogg').data("kendoWindow");
+                popup.center().open();
+            });
+    }
+
+    function visHelpdeskFerdig(ticketGuid) {
+        TicketGuid = ticketGuid;
+
+        $.ajax({
+            url: '@Url.Action("DialogHDFerdig", "HelpDesk")',
+            type: "GET",
+            data: { ticketGuid: ticketGuid },
+            })
+        .done(function (result) {
+            $("#dialogHDFerdig").html(result);
+
+            var popup = $('#dialogHDFerdig').data("kendoWindow");
+            popup.center().open();
+            });
+    }
+
+    function visHelpdeskLosning(ticketGuid) {
+        TicketGuid = ticketGuid;
+
+        $.ajax({
+            url: '@Url.Action("DialogHDLosning", "HelpDesk")',
+            type: "GET",
+            data: { ticketGuid: ticketGuid },
+            })
+        .done(function (result) {
+            var pureHTML = result.EncodedContent.Value;
+            
+            //pureHTML = pureHTML.replace('{"EncodedContent":{"Value":"', "").replace('"}}','');
+            $("#dialogHDFerdig").html(pureHTML);
+
+            var popup = $('#dialogHDFerdig').data("kendoWindow");
+            popup.center().open();
+            });
+        }
+
+    function LagreTickets() {
+        var $this = $('#Helpdesk');
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("LagreHelpDesk", "HelpDesk")',
+            data: $this.serialize(),
+            dataType: 'json'
+        }).done(function (result) {
+            if (result.Result == true) {
+                currHelpdeskGuid = result.NewGuid;
+                document.getElementById('infoLagring').innerHTML = "<img src='@Url.Content("~/images/")database-save.png' />@Localizer["Lagret"]";
+                $('#infoLagring').fadeIn(800).delay(100).fadeOut(800);
+                var grdTickets = $("#ticketsListe").data("kendoGrid");
+                grdTickets.dataSource.read();
+
+            }
+            else {
+                alert(result.ErrorText);
+            }
+
+        }).fail(function (result) {
+            alert('an Error has occurred, please try again');
+        });
+    }
+
+
+    function lagrehelpdeskNotat() {
+        var $this = $('#helpdeskNotat');
+
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("LagreHelpDeskLogg", "HelpDesk")',
+            data: $this.serialize(),
+            dataType: 'json'
+        }).done(function (result) {
+            if (result == true) {
+                var grd = $("#grdLogg").data("kendoGrid");
+                grd.dataSource.read();
+            }
+        });
+    }
+
+    function showDialogFellesraad() {
+        $('#dialogFellesraad').data("kendoDialog").open();
+    }
+
+    function onOpen() {
+        $("#showDialogBtn").fadeOut();
+    }
+
+    function onClose() {
+        $("#showDialogBtn").fadeIn();
+    }
+
+    function onActionOK(e) {
+        var lwFellesraad = $("#listFellesraad").data("kendoListBox");
+
+        var selectedF = lwFellesraad.select();
+        var selItemF = lwFellesraad.dataItem(selectedF);
+        var fellesraad = "";
+        var navn = "";
+
+        if (typeof selItemF != 'undefined') {
+            fellesraad = selItemF.Fellesraad;
+            navn = selItemF.Navn;
+        }
+
+        $.ajax({
+            url: '@Url.Action("setAktivFellesraad", "Account")',
+            data: { fellesraad: fellesraad, navn: navn },
+            type: "GET"
+        }).always(function (result) {
+            document.getElementById("fellesraadNavn").innerHTML = navn;
+        });
+    }
+
+</script>

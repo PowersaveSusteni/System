@@ -1,0 +1,274 @@
+﻿@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+
+@using Kendo.Mvc.UI
+@model Susteni.Models.Home.HomeModel
+
+<div class="form-group row" style="margin-top: 10px;">
+    <div class="col-lg-5 padding-0">
+        <table style="border-collapse: collapse; border-spacing: 0;">
+            <tr>
+                <td rowspan="2" style="width: 120px;">
+                    <img src="~/images/kirkedata300.png" style="width: 100px" alt="mainlogo" />
+                </td>
+                <td style="font-size: 40px; font-weight: 700;  color: #346D83; margin-top:0px; margin-left: 30px; margin-bottom: 0px; vertical-align:bottom;" class="unselectable">
+                    @Localizer["Kirkedata"]
+                    <span style="font-size: 40px; color: #579DB6; margin-top:0px; margin-left: 5px; vertical-align: bottom;" class="unselectable">
+                        @Localizer["Office"]
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td style="font-size: 20px; font-weight: 700;  color: darkslategrey; margin-top:0px; padding-left: 1px; margin-bottom: 0px; vertical-align:text-top;" class="unselectable">
+                    @Localizer["Engrafo"]
+                </td>
+            </tr>
+        </table>
+    </div>
+    <div class="col-lg-4">
+        <h4 style="margin-top: 25px; color: darkslategrey;">Aktiv arkivdel</h4>
+        <h3 class="unselectable" id="arkivNavn" style="margin-top: 5px;"></h3>
+    </div>
+
+    <div class="col-lg-3 padding-0">
+        <button class="commandline" style="margin-top: 25px; height: 130px; max-width: 200px; width: 200px;" onclick="showDialogArkivdel()"><img src="~/images/archive.svg" />Bytt aktiv arkivdel</button>
+    </div>
+
+</div>
+
+<div class="form-group row">
+    <div class="col-lg-5 padding-0">
+
+    </div>
+    <div class="col-lg-5" style="margin-top: 20px;">
+        <div id="news"></div>
+    </div>
+</div>
+
+<img src="~/images/Landskap.png" style="position: fixed; bottom: 0px; right: 0px; width: 20%;" alt="mainlogo" />
+
+
+<div id="dialogFellesraadWindow">
+    @(Html.Kendo().Dialog()
+        .Name("dialogArkivdel")
+        .Title("Sett aktiv arkivdel")
+        .Content(
+                Html.Kendo().ListBox()
+                    .Name("listArkivdel")
+                    .DataValueField("ArkivDel_GUID")
+                    .DataTextField("Tittel")
+                    .Selectable(ListBoxSelectable.Single)
+                    .DataSource(dataSource => dataSource
+                        .Ajax()
+                        .Read(read => read.Action("GetEngrafoArkivdelListeMine", "Engrafo"))
+                        )
+                    .ToHtmlString()
+                )
+        .Visible(false)
+        .Height(300)
+        .Width(400)
+        .Modal(true)
+        .Actions(actions => {
+            actions.Add().Text("Avbryt");
+            actions.Add().Text("Aktiver").Action("onActionOK").Primary(true);
+        })
+        .Events(ev => ev.Close("onClose").Open("onOpen"))
+    )
+</div>
+
+
+<div id="dialogNyhetWindow">
+    @(Html.Kendo().Window()
+        .Name("dialogNyhet")
+        .Title("Nyhet")
+        .HtmlAttributes("style= border:1px;")
+        .Visible(false)
+        .Height(600)
+        .Width(800)
+        .Modal(true)
+        .Draggable()
+        .Actions(actions => actions
+            .Close()
+        )
+    )
+
+
+    @(Html.Kendo().Window()
+        .Name("DialogSupport")
+        .Title(Localizer["Support"].Value)
+        .Visible(false)
+        .Width(1200)
+        .Modal(true)
+        .Draggable()
+        )
+</div>
+
+<style>
+    .k-listbox {
+        height: 100%;
+    }
+</style>
+
+<script type="text/javascript">
+
+    function showDialogArkivdel() {
+        $('#dialogArkivdel').data("kendoDialog").open();
+    }
+
+
+    window.onload = function () {
+        visMinKirkeside();
+        visNyheterliste();
+
+        $.ajax({
+            url: '@Url.Action("getFellesraadNavn", "kWebSys")',
+            type: "GET"
+        }).done(function (result) {
+            document.getElementById('fellesraadNavn').innerHTML = result;
+        });
+
+        $.ajax({
+            url: '@Url.Action("GetArkivdelNavn", "Engrafo")',
+            type: "GET"
+        }).done(function (result) {
+            document.getElementById('arkivNavn').innerHTML = result;
+        });
+    };
+
+
+    $(document).ready(function () {
+
+        var meny = document.getElementById("hmEngrafo");
+        meny.classList.add("menyAktiv");
+
+    });
+
+
+    function visMinKirkeside() {
+        var respons = "";
+
+        $.ajax({
+           url: '@Url.Action("GetMinKirkesideStatus", "Home")',
+            type: "GET",
+            dataType: "html"
+        }).done(function (result) {
+            var pureHTML = result
+            pureHTML = pureHTML.replace('{"EncodedContent":{"Value":"', "").replace('"}}','');
+            $("#minkirkeside").html(pureHTML);
+       });;
+    }
+
+    function visHuskeliste() {
+        var respons = "";
+
+        $.ajax({
+           url: '@Url.Action("GetHomeHuskeliste", "Home")',
+            type: "GET",
+            dataType: "html"
+        }).done(function (result) {
+            var pureHTML = result
+            pureHTML = pureHTML.replace('{"EncodedContent":{"Value":"', "").replace('"}}','');
+            $("#huskeliste").html(pureHTML);
+       });;
+    }
+
+    function visNyheterliste() {
+        var respons = "";
+        $.ajax({
+           url: '@Url.Action("GetHomeNyhetsliste", "Home")',
+            type: "GET",
+            dataType: "html"
+        }).done(function (result) {
+            var pureHTML = result
+            pureHTML = pureHTML.replace('{"EncodedContent":{"Value":"', "").replace('"}}', '');
+
+            pureHTML = replaceAll(pureHTML, "¤","\"");
+            $("#nyheter").html(pureHTML);
+       });;
+    }
+
+    function replaceAll(string, search, replace) {
+        return string.split(search).join(replace);
+    }
+
+    function visNyhet(nyhetGuid) {
+        $.ajax({
+            url: '@Url.Action("GetHomeNyhet", "Home")',
+            type: "GET",
+            data: { nyhetGuid: nyhetGuid },
+            dataType: "html"
+        }).done(function (result) {
+            var pureHTML = result
+            pureHTML = pureHTML.replace('{"EncodedContent":{"Value":"', "").replace('"}}','');
+            $("#dialogNyhet").html(pureHTML);
+        });;
+
+        var popup = $('#dialogNyhet').data("kendoWindow");
+        popup.center().open();
+    }
+
+    function showDialogFellesraad() {
+        $('#dialogFellesraad').data("kendoDialog").open();
+    }
+
+    function onOpen() {
+        $("#showDialogBtn").fadeOut();
+    }
+
+    function onClose() {
+        $("#showDialogBtn").fadeIn();
+    }
+
+    function onActionOK(e) {
+        var lwFellesraad = $("#listArkivdel").data("kendoListBox");
+
+        var selectedF = lwFellesraad.select();
+        var selItemF = lwFellesraad.dataItem(selectedF);
+        var fellesraad = "";
+        var navn = "";
+
+        if (typeof selItemF != 'undefined') {
+            ArkivDel_GUID = selItemF.ArkivDel_GUID;
+            navn = selItemF.Tittel;
+        }
+
+        $.ajax({
+            url: '@Url.Action("SetEngrafoAktivArkivdel", "Engrafo")',
+            data: { ArkivdelGuid: ArkivDel_GUID, Navn: navn },
+            type: "GET"
+        }).always(function (result) {
+            document.getElementById("arkivNavn").innerHTML = navn;
+            });
+    }
+
+
+
+    function addSupport() {
+        $.ajax({
+            url: '@Url.Action("DialogSupport", "HelpDesk")',
+            type: 'GET'
+        }).done(function (result) {
+            $('#DialogSupport').html(result);
+
+            xB = document.getElementById("idBilde");
+
+            document.getElementById("HelpDesk_Modul").value = "Engrafo";
+            document.getElementById("HelpDesk_Program").value = "1";
+            document.getElementById("HelpDesk_Status").value = "1";
+
+            const screenshotTarget = document.body;
+
+            html2canvas(screenshotTarget).then((canvas) => {
+                const base64image = canvas.toDataURL("image/png");
+                xB.innerHTML = "<img src='" + base64image + "' style='max-height: 260px; max-width: 350px;' alt='Bilde' / >";
+                document.getElementById("HelpDesk_byte64String").value = base64image
+            });
+
+            var popup = $('#DialogSupport').data("kendoWindow");
+            popup.center().open();
+        });
+    }
+
+
+</script>

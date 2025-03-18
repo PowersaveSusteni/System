@@ -1,0 +1,228 @@
+﻿@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
+@model Susteni.Models.Funksjoner.FunctionsModel
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+
+<script>
+
+    var Nasjon = "NO";
+
+    function filterPoststed() {
+        
+
+        if (Nasjon == "X") {
+            stringFilter = "POSTSTED.Landskode NOT IN ('NO','DK','SE','DE','BE','FR','GB','US')";
+        }
+        else if (Nasjon != "") { stringFilter = "POSTSTED.Landskode='" + Nasjon + "'"; }
+        else { stringFilter = ""; }
+
+
+        return { Sted: stringFilter }
+    }
+
+    function setNasjon(e) {
+        Nasjon = e;
+        xINFO = document.getElementById("poststedFra");
+        if (Nasjon == "NO") {
+            xINFO.innerHTML = "Vis poststed fra Norge";
+        }
+        else if (Nasjon == "DK") {
+            xINFO.innerHTML = "Vis poststed fra Danmark";
+        }
+        else if (Nasjon == "SE") {
+            xINFO.innerHTML = "Vis poststed fra Sverige";
+        }
+        else if (Nasjon == "DE") {
+            xINFO.innerHTML = "Vis poststed fra Tyskland";
+        }
+        else if (Nasjon == "BE") {
+            xINFO.innerHTML = "Vis poststed fra Belgia";
+        }
+        else if (Nasjon == "FR") {
+            xINFO.innerHTML = "Vis poststed fra Frankrike";
+        }
+
+        xLK = $("#Poststed_Landskode").data("kendoDropDownList");
+        xLK.value(Nasjon);
+        $("#listePoststed").data("kendoGrid").dataSource.read();
+    }
+
+    function visPoststed() {
+        fvp = document.getElementById("idPostnr").value;
+        fvs = document.getElementById("idSted").value;
+        fvk = document.getElementById("idKommune").value;
+
+        fv = "";
+        ff = "Sted";
+
+        if (fvp != null && fvp != "") {
+            ff = "PostNr";
+            fv = fvp;
+        }
+        else if (fvk != null && fvk != "") {
+            ff = "KommuneNavn";
+            fv = fvk;
+        }
+        else {
+            fv = fvs;
+        }
+
+        ds = $("#listePoststed").data("kendoGrid").dataSource;
+        ds.filter({ logic: "or", filters: [{ field: ff, operator: "contains", value: fv }] });
+    }
+
+    function lagrePoststed() {
+
+        var $this = $('#postSted');
+
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("LagrePoststed", "Funksjoner")',
+            data: $this.serialize(),
+            dataType: 'json'
+            })
+        .done(function (result) {
+            if (result.Result == true) {
+                $("#listePoststed").data("kendoGrid").dataSource.read();            
+            }
+            else {
+                alert(result.ErrorTekst)
+            }
+        });
+
+    }
+
+
+    $("#listePoststed").on("dblclick", "tr.k-selected", function () {
+        popupFP = $('#dialogFinnPoststed').data("kendoWindow");
+        popupFP.close();
+        });
+
+</script>
+
+<form id="postSted">
+    <div class="col-12" style="margin-bottom: 0px; margin-top: 10px;">
+        <div class="panel with-nav-tabs panel-default" id="dataenter">
+            <div class="panel-body data padding-0">
+                <div class="tab-content data">
+                    <div class="panel-heading" id="Tab">
+                        <ul class="nav nav-tabs">
+                            <li class="nav-item"><a class="nav-link active" aria-current="page" href="#tabInfo" data-bs-toggle="tab">@Localizer["Poststed"]</a></li>
+                        </ul>
+                    </div>
+                    <div class="panel-body">
+                        <div class="tab-content" style="margin-top: 10px;">
+                            <div class="tab-pane fade show active" style="padding: 10px;" role="tabpanel" id="tabInfo">
+
+                                <div class="row align-items-center">
+
+                                    <div class="col-md-4" style="display: flex; flex-direction: row;">
+                                        <label class="col-form-label">PostNr</label>
+                                        <input asp-for="Poststed.PostNr" id="idPostnr" oninput="visPoststed()"  class="form-control k-textbox" style="width: 100px;">
+                                        <input asp-for="Poststed.Sted" id="idSted" oninput="visPoststed()" class="form-control k-textbox" style="width: 200px; margin-left: 7px;">
+                                    </div>
+
+                                    <div class="col-md-4" style="display: flex; flex-direction: row;">
+                                        <label class="col-form-label">Kommune</label>
+                                        <input asp-for="Poststed.KommuneNr" class="form-control k-textbox">
+                                        <input asp-for="Poststed.KommuneNavn" id="idKommune" oninput="visPoststed()" class="form-control k-textbox" style="width: 200px; margin-left: 7px;">
+                                    </div>
+
+                                    <div class="col-md-3" style="display: flex; flex-direction: row;">
+                                        <label class="col-form-label">Landskode</label>
+                                        @(Html.Kendo().DropDownList()
+                                            .Name("Poststed.Landskode")
+                                            .DataTextField("NavnNorsk")
+                                            .DataValueField("Landskode")
+                                            .OptionLabel(Localizer["Liste over land"].Value)
+                                            .OptionLabelTemplate("<span><i>" + Localizer["Liste over land"].Value + "</i></span>")
+                                            .HtmlAttributes(new { style = "width: calc(100%)" })
+                                            .Value("NO")
+                                            .Height(310)
+                                            .DataSource(source => source
+                                                .Ajax()
+                                                .Read(read => read.Action("GetLandListe", "Funksjoner"))
+                                                )
+                                            )
+                                    </div>
+
+                                    <div class="col-md-1">
+                                        <button type="button" class="commandInline" onclick="lagrePoststed()">
+                                            <img src="~/images/button-add.svg" />
+                                        </button>
+                                    </div>
+
+                                </div>
+
+                                <div class="row align-items-center" style="margin-top: 10px;">
+                                    <div class="col-2" id="poststedFra">
+                                        Vis poststed fra
+                                    </div>
+                                    <div class="col-md-6">
+                                        <button type="button" class="commandInline" onclick="setNasjon('NO')">
+                                            <img src="~/images/flag-norway.svg" />
+                                        </button>
+                                        <button type="button" class="commandInline" onclick="setNasjon('DK')">
+                                            <img src="~/images/flag-denmark.svg" />
+                                        </button>
+                                        <button type="button" class="commandInline" onclick="setNasjon('SE')">
+                                            <img src="~/images/flag-sweden.svg" />
+                                        </button>
+                                        <button type="button" class="commandInline" onclick="setNasjon('DE')">
+                                            <img src="~/images/flag-germany.svg" />
+                                        </button>
+                                        <button type="button" class="commandInline" onclick="setNasjon('BE')">
+                                            <img src="~/images/flag-belgium.svg" />
+                                        </button>
+                                        <button type="button" class="commandInline" onclick="setNasjon('FR')">
+                                            <img src="~/images/flag-france.svg" />
+                                        </button>
+                                        <button type="button" class="commandInline" onclick="setNasjon('GB')">
+                                            <img src="~/images/flag-united-kingdom.svg" />
+                                        </button>
+                                        <button type="button" class="commandInline" onclick="setNasjon('US')">
+                                            <img src="~/images/flag-united-states.svg" />
+                                        </button>
+
+                                        <button type="button" class="commandInline" onclick="setNasjon('X')" style="margin-left: 20px; width: 150px;">
+                                            <img src="~/images/button-remove.svg" />
+                                            Andre land
+                                        </button>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row" style="margin-top: 20px;">
+        <div class="col-12">
+            @(Html.Kendo().Grid<Susteni.Models.PoststedItem>()
+                .Name("listePoststed")
+                .Columns(columns =>
+                {
+                    columns.Bound(q => q.PostNr).Width(120).Title("Postnr");
+                    columns.Bound(q => q.Sted).Title(Localizer["Sted"].Value);
+                    columns.Bound(q => q.KommuneNr).Width(90).Title(Localizer["Kommunenr."].Value);
+                    columns.Bound(q => q.KommuneNavn).Width(300).Title("Kommune");
+                    columns.Bound(q => q.Landskode).Width(90).Title("Landskode");
+                    columns.Bound(q => q.Land).Width(200);
+                })
+                .Height(400)
+                .Scrollable()
+                .Selectable(s => s
+                    .Mode(GridSelectionMode.Single)
+                    .Type(GridSelectionType.Row))
+                //.Events(events => events
+                    //.Change("onBestillingChange").DataBound("onDataBound"))
+                .DataSource(dataSource => dataSource
+                    .Ajax()
+                    .Read(read => read.Action("getPoststedListe", "Funksjoner").Data("filterPoststed"))
+                    )
+                )
+        </div>
+    </div>
+</form>

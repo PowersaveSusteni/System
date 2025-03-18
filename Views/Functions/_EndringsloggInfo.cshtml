@@ -1,0 +1,30 @@
+﻿
+    <div class="row">
+
+        <div class="col-12">
+
+            @(Html.Kendo().Grid<Susteni.Models.EndrlingsloggInfoItem>()
+                .Name("endringsloggListeInnhold")
+                .Columns(columns =>
+                {
+                    columns.Bound(q => q.LoggInfo_GUID).Visible(false);
+                    columns.Bound(q => q.Felt).Visible(false);
+                    columns.Bound(q => q.Beskrivelse);
+                    columns.Bound(q => q.GammelVerdi);
+                    columns.Bound(q => q.NyVerdi);
+                })
+                .Selectable(s => s
+                .Mode(GridSelectionMode.Single)
+                .Type(GridSelectionType.Row)
+                )
+                .Scrollable()
+                .Height(300)
+                .DataSource(dataSource => dataSource
+                    .Ajax()
+                    .Read(read => read.Action("getEndrlingsloggInfoListe", "Funksjoner").Data("filterEndring"))
+                    )
+                )
+        </div>
+
+    </div>
+

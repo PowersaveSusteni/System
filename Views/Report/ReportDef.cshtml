@@ -1,0 +1,764 @@
+﻿@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
+@model Susteni.Models.ReportModel
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@using TXTextControl.Web.MVC
+@using TXTextControl.Web
+
+@{
+    ViewData["Title"] = Localizer["Report definition"];
+    ViewData["LogOnOk"] = "2";
+    ViewData["Menu"] = "Admin";
+}
+
+<style>
+     
+    div.k-treeview {
+        height:  calc(100vh - 400px);
+        max-height: 100%;
+    }
+
+    .k-form-footer {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .k-form-footer .k-button {
+        margin-top: 20px;
+        width: 80px;
+        margin-left: auto;
+    }
+
+    .k-form-footer .k-counter-container {
+        color: #9C9C9C;
+        font-size: 13px;
+        margin-top: 5px;
+        margin-left: auto;
+    }
+
+</style>
+
+<form action="Lagre" id="formRapport" onsubmit="return false;" method="post" class="mt-3">
+    <div id="confirm"></div>
+
+    <div class="container-fluid padding-0">
+
+        <div class="row" id="heading" style="min-height: 70px;">
+
+            <div class="col-md-3">
+                <h3>@Localizer["Report definition"]</h3>
+            </div>
+
+            <div class="col-md-7" style="display: flex; flex-direction: row;">
+                <div id="topmeny">
+
+@*                     <button type="button" style="width: 160px; margin-right: 7px;" id="idSkrivBrev" class="btn command" onclick="">
+                        <img src="~/images/document-text-graph-new.svg" />
+                        @Localizer["Vis brevmal"]                        
+                    </button> *@
+
+                    <button type="button" style="width: 200px; margin-right: 7px;" id="lastOpp" class="btn command" onclick="showDialogLastOppFil()">
+                        <img src="~/images/document-text-graph-download-filled.svg" />
+                        @Localizer["Upload report file"]
+                    </button>
+  
+                    <button type="button" style="width: 200px; margin-right: 7px;" id="lastOpp" class="btn command" onclick="">
+                        <img src="~/images/document-upload.svg" />
+                        @Localizer["Download file"]
+                    </button>
+
+                    <button type="button" style="width: 200px; margin-right: 7px;" id="lastOpp" class="btn command" onclick="removeFile()">
+                        <img src="~/images/document-text-graph-remove-filled.svg" />
+                        @Localizer["Remove selected file"]
+                    </button>
+
+                </div>
+            </div>
+
+            <div class="col-md-2">
+                <div id="infoLagring"></div>
+            </div>
+
+        </div>
+
+        <div class="row" style="border: 1px solid lightgrey; margin: 5px; padding-top: 10px; padding-right: 10px; padding-bottom: 10px; min-height: calc(100vh - 150px)">
+
+            <div class="col-3">
+                <div class="row">
+                    <div class="col-lg-7" style="display: flex; flex-direction: row;">
+
+                        <div>
+                            <button type="button" class="commandline" onclick="nyRapport()">
+                                <img src="~/images/Ny.svg" />
+                                <figcaption>New</figcaption>
+                            </button>
+                        </div>
+
+                        <div>
+                            <button type="button" class="commandline" id="idLagreRapport" onclick="lagreRapport()">
+                                <img src="~/images/Lagre.svg" />
+                                <figcaption>Save</figcaption>
+                            </button>
+                        </div>
+
+                        <div>
+                            <button type="button" disabled id="idSletteRapport" class="commandline" onclick="slettRapport()">
+                                <img src="~/images/Slette.svg" />
+                                Remove
+                            </button>
+                        </div>
+
+                    </div>
+                </div>
+
+
+                <div class="form-group" style="margin-top: 10px;">                                                
+                    <div class="form-group" id="ressurser" style="margin-top: 10px;">
+                        <h5>Maler</h5>
+@*                         @(Html.Kendo().TreeView()
+                        .Name("Rapporter")
+                        .DataTextField("Name")
+                        .Template("<span style='color: #= item.FargeNavn #'>#= item.Name#</span>")
+                        .HtmlAttributes(new { style="background-color: white;" })
+                        .LoadOnDemand(false)
+                        .Events(events => events
+                            .Change("onRapportSelect")
+                            )
+                        .DataSource(DataSource => DataSource
+                            .Custom()
+                            .Transport(t => t.Read("readHandler"))
+                            .Schema(s => s.Model ( m => m.Children("items")))
+                            )
+                        ) *@
+                        @(Html.Kendo().TreeView()
+                            .Name("Rapporter2")
+                            .DataTextField("Name")
+                            .Template("<span style='color: #= item.FargeNavn #'>#= item.Text#</span>")
+                            .HtmlAttributes(new { style = "background-color: white;" })
+                            .LoadOnDemand(false)
+                            .Events(events => events
+                            .Change("onRapportSelect")
+                            )
+                            .DataSource(DataSource => DataSource
+                            .Read(read => read.Action("RapporterTree2", "Report"))
+                            .Model(model =>
+                            {
+                                model.Id("id");
+                                model.HasChildren("hasChildren");
+                            })
+                            )
+                            )
+                    </div>
+
+                </div>
+            
+            </div>
+
+            <div class="col-9">
+
+                <partial name="_ReportDefInfo" />
+
+            </div>
+
+        </div>
+
+    </div>
+
+</form>
+
+<script id="successTemplate" type="text/x-kendo-template">
+    <div class="upload-success">
+        <img src="@Url.Content("~/images/emoticon-happy.svg")" style="float:left; height:48px; width:48px; margin-right: 16px;"/>
+        <p>#= message #</p>
+    </div>
+</script>
+
+
+<script id="errorTemplate" type="text/x-kendo-template">
+    <div class="wrong-pass">
+        <img src="@Url.Content("~/images/emoticon-sad.svg")" style="float:left; height:48px; width:48px; margin-right: 16px;"/>
+        <p>#= message #</p>
+    </div>
+</script>
+
+
+@(Html.Kendo().Notification()
+    .Name("notification")
+    .Position(p => p.Pinned(true).Top(30).Right(30))
+    .Stacking(NotificationStackingSettings.Down)
+    .AutoHideAfter(5000)
+    .Templates(t =>
+    {
+        t.Add().Type("success").ClientTemplateID("successTemplate");
+        t.Add().Type("error").ClientTemplateID("errorTemplate");
+    })
+)
+
+
+    @(Html.Kendo().Window()
+        .Name("dialogLastOppFil")
+        .Title(Localizer["Last opp fil"].Value)
+        .HtmlAttributes("style= border:1px;")
+        .Visible(false)
+        .Width(1000)
+        .Modal(true)
+        .Draggable()
+        )
+
+<script id="UploadFiles">
+    var RapportFilerGuid = "";
+
+    function showDialogLastOppFil() {
+        $.ajax({
+            url: '@Url.Action("DialogLastOppFil", "Report")',
+            type: "GET"
+            }).done(function (result) {
+                $('#dialogLastOppFil').html(result);
+                var popup = $('#dialogLastOppFil').data("kendoWindow");
+                popup.center().open();
+            });  
+        }
+
+    function onUploadTemplate(e) {
+        var rapId = document.getElementById("Report_RapId").value;
+        var erstattSiste = $('#erstattSiste').is(':checked');
+
+        e.data = {
+            rapId: rapId,
+            erstattSiste: erstattSiste
+            };
+        }
+
+    function onUploadSuccess(e) {
+        var popup = $('#dialogLastOppFil').data("kendoWindow");
+        popup.close();
+
+        var listBox = $("#Filer").data("kendoGrid");
+        listBox.dataSource.read();
+        }
+
+    function onUploadPreviewSuccess(e) {
+        var popup = $('#dialogLastOppFil').data("kendoWindow");
+        popup.close();
+        $.ajax({
+            url: '@Url.Action("GetRapportFilPreview", "Rapport")',
+            data: { RapportFilerGuid: RapportFilerGuid },
+            type: "GET"
+            })
+        .done(function (result) {
+            var xP = document.getElementById("filPreview");
+            if (result.Preview != "") {
+                xP.innerHTML = "<img src='data:image/Jpeg;base64," + result.Preview + "'>";
+                }
+            else {
+                xP.innerHTML = "";
+                }
+            });
+        }
+
+    function showDialogLastOppPreview() {
+        $.ajax({
+            url: '@Url.Action("DialogLastOppPreview", "Report")',
+            type: "GET"
+        }).done(function (result) {
+            $('#dialogLastOppFil').html(result);
+            var popup = $('#dialogLastOppFil').data("kendoWindow");
+            popup.center().open();
+        });
+    }
+
+    function onUploadTemplatePreview(e) {
+        e.data = {
+            RapportFilerGuid: RapportFilerGuid
+            };
+        }
+</script>
+
+<script id="rapport">
+
+    function filterReport() {
+        return { RapId: RapId}
+    }
+
+    function slettRapport() {
+        xR = document.getElementById("Rapport_RapId");
+        if (xR.value != "") {
+            $("#confirm").kendoConfirm({
+                title: "Slett",
+                content: "Ønsker du å slette valgte rapport?",
+                messages: {
+                    okText: "Ja",
+                    cancel: "Nei"
+                    }
+                }).data("kendoConfirm").result.done(function () {
+
+                        $('body').append($('<div id="confirm">'));
+
+                        $.ajax({
+                            url: '@Url.Action("removeRapport", "Rapport")',
+                            data: { RapId: xR.value },
+                            type: "POST"
+                        }).done(function (result) {
+                            var treeview = $("#Rapporter").data("kendoTreeView");
+                            var select = treeview.select();
+                            treeview.remove(select);
+                        });                                       
+                    });
+                }
+            }
+
+            
+    function removeFile() {
+        var grdFiler = $("#Filer").data("kendoGrid");
+        var selected = grdFiler.select();
+
+        if (selected != -1) {
+            var selItemF = grdFiler.dataItem(selected);
+            RapportFilerGuid = selItemF.RapportFiler_GUID
+
+            $("#confirm").kendoConfirm({
+                title: "Slett",
+                content: "Ønsker du å slette valgte fil?",
+                messages: {
+                    okText: "Ja",
+                    cancel: "Nei"
+                    }
+                }).data("kendoConfirm").result.done(function () {
+
+                    $('body').append($('<div id="confirm">'));
+
+                    $.ajax({
+                        url: '@Url.Action("removeRapportFiler", "Rapport")',
+                        data: { RapportFilerGuid: RapportFilerGuid },
+                        type: "POST"
+                    }).done(function (result) {
+                        grdFiler.dataSource.read();
+                    });                                       
+                });
+            }        
+        }
+
+</script>
+
+<script id="events">
+    var modul = 0;
+    var programModul = "5";
+    var programId = 3;
+    var RapId = "";
+
+    function filterRapport() {
+        return {RapId: RapId, programId: programId, hentVerdier: false}
+        }
+
+    function readHandler(options) {
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("RapporterTree", "Report")'
+            }).done(function(result) {
+                options.success([result]);
+            });        
+        }
+
+    function readHandlerSQL(options) {
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("ReportSQLTree", "Report")',
+            data: {RapId: RapId}
+            }).done(function(result) {
+                options.success([result]);
+            });        
+        }
+
+    function onArkivTypeChange() {
+        var selected = this.select();
+        var data = this.dataItem(selected);
+        programModul = data.Value;
+        programId = data.Value;
+
+        var grid = $("#Rapporter").data("kendoTreeView");
+        grid.dataSource.read();
+        }
+
+    function onRapportSelect() {
+        var selected = this.select();
+        var data = this.dataItem(selected);
+
+        if (data != null) {
+            RapId = data.id;
+            $.ajax({
+                url: '@Url.Action("GetReportItem", "Report")',
+                data: { RapId: RapId },
+                type: "GET"
+            }).done(function (result) {
+                $("#ReportDefForm").html(result);
+                var xDoc = document.getElementById("idGenerell");
+                xDoc.innerHTML = "Generell [" + RapId + "]";
+                xsR = document.getElementById("idSletteRapport");
+                xsR.disabled = false;
+                xR = document.getElementById("ReportSQL_RapId");
+                xR.value = RapId;
+                });
+            }
+        }
+
+    function onSQLMalSelect() {
+        var selected = this.select();
+        var data = this.dataItem(selected);
+
+        if (data != null) {
+            RapSQLGuid = data.id;
+            $.ajax({
+                url: '@Url.Action("GetRapportSQL", "Report")',
+                data: { RapSQLGuid: RapSQLGuid },
+                type: "GET"
+            }).done(function (result) {
+                $("#sqlForm").html(result);
+                });
+            }
+        }
+
+    function onSporsmalSelect() {
+        var selected = this.select();
+        var data = this.dataItem(selected);
+
+        if (data != null) {
+            RapSQLGuid = data.ReportSporsmalGuid;
+            $.ajax({
+                url: '@Url.Action("GetRapportSporsmal", "Report")',
+                data: { RapportSporsmalGuid: RapSQLGuid },
+                type: "GET"
+            }).done(function (result) {
+                $("#sporsmalForm").html(result);
+                });
+            }
+        }
+
+    function onFormelSelect() {
+        var selected = this.select();
+        var data = this.dataItem(selected);
+
+        if (data != null) {
+            RapSQLGuid = data.RapportFormelGuid;
+            $.ajax({
+                url: '@Url.Action("GetRapportFormel", "Report")',
+                data: { RapId: RapSQLGuid },
+                type: "GET"
+            }).done(function (result) {
+                $("#formelForm").html(result);
+                });
+            }
+        }
+
+    function onFilerChange() {
+        var selected = this.select();
+        var data = this.dataItem(selected);
+
+        if (data != null) {
+            RapportFilerGuid = data.ReportFilesGuid;
+            $.ajax({
+                url: '@Url.Action("GetReportFileImagePreview", "Report")',
+                data: { RapportFilerGuid: RapportFilerGuid },
+                type: "GET"
+                })
+            .done(function (result) {
+                var xP = document.getElementById("filPreview");
+                var xPC = document.getElementById("PreviewUpload");
+                xPC.disabled = false;
+                    if (result != "") {
+                        xP.innerHTML = "<img src='data:image/Jpeg;base64," + result + "'>";
+                }
+                else {
+                    xP.innerHTML="";
+                }
+                });
+            }
+        }
+
+</script>
+
+<script id="sporsmaal">
+
+    function sporsmaalNytt() {
+        $.ajax({
+            url: '@Url.Action("NewReportQuestion", "Report")',
+            type: "GET"
+        }).always(function (result) {
+            $("#sporsmalForm").html(result);
+            x = document.getElementById("RapportSporsmal_Program");
+            x.value = programId;
+            xR = document.getElementById("RapportSporsmal_RapId");
+            xR.value = RapId;
+            });
+        }
+
+    function sporsmaalLagre() {
+        var $this = $('#formRapport');
+
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("SetReportQuestion", "Report")',
+            data: $this.serialize(),
+            dataType: 'json'
+        }).done(function (result) {
+            if (result.Success == true) {
+                var notification = $("#notification").data("kendoNotification");
+                notification.show({ title: "Question", message: "Question information is updated" }, "success");
+
+                if (result.Refresh == true || result.NewRecord == true) {
+                    RapId = result.NewGuid;
+                    var grid = $("#Sporsmal").data("kendoGrid");
+                    grid.dataSource.read();
+                    }
+                }
+            else {
+                alert(result.Error[0].Message);
+                }
+            });
+        };
+
+    function sporsmaalSlett() {
+        var xS = document.getElementById("RapportSporsmal_RapportSporsmalGuid");
+
+        $.ajax({
+            url: '@Url.Action("SlettRapportSporsmal", "Report")',
+            type: "GET",
+            data: {RapportSporsmalGuid: xS.value }
+        }).always(function (result) {
+            var grid = $("#Sporsmal").data("kendoGrid");
+            grid.dataSource.read();
+            $.ajax({
+                url: '@Url.Action("NyttSporsmal", "Report")',
+                type: "GET"
+            }).always(function (result) {
+                $("#sporsmalForm").html(result);
+            });
+
+            });
+        }
+
+</script>
+
+<script id="Formler">
+
+    function formelNytt() {
+        $.ajax({
+            url: '@Url.Action("NyFormel", "Report")',
+            type: "GET"
+        }).always(function (result) {
+            $("#formelForm").html(result);
+            x = document.getElementById("RapportFormel_Program");
+            x.value = programId;
+            xR = document.getElementById("RapportFormel_RapId");
+            xR.value = RapId;
+            });
+        }
+
+    function formelLagre() {
+        var $this = $('#formRapport');
+
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("LagreRapportFormel", "Report")',
+            data: $this.serialize(),
+            dataType: 'json'
+        }).done(function (result) {
+            if (result.Result == true) {
+                document.getElementById('infoLagring').innerHTML = "<img src='@Url.Content("~/images/")database-save.png' />@Localizer["Lagret"]";
+                $('#infoLagring').fadeIn(800).delay(100).fadeOut(800);
+
+                if (result.Refresh == true || result.NewRecord == true) {
+                    var grid = $("#Formler").data("kendoGrid");
+                    grid.dataSource.read();
+                    }
+                }
+            else {
+                alert(result.ErrorText);
+                }
+            });
+        };
+
+    function formelSlett() {
+        var xS = document.getElementById("RapportFormel_RapportFormelGuid");
+
+        $.ajax({
+            url: '@Url.Action("SlettRapportFormel", "Report")',
+            type: "GET",
+            data: {RapportFormelGuid: xS.value }
+        }).always(function (result) {
+            var grid = $("#Formler").data("kendoGrid");
+            grid.dataSource.read();
+            $.ajax({
+                url: '@Url.Action("NyFormel", "Report")',
+                type: "GET"
+            }).always(function (result) {
+                $("#formelForm").html(result);
+            });
+
+            });
+        }
+
+</script>
+
+<script id="SQL">
+
+    function NewSQL() {
+        $.ajax({
+            url: '@Url.Action("NewSQL", "Report")',
+            type: "GET"
+        }).always(function (result) {
+            $("#sqlForm").html(result);
+            xR = document.getElementById("ReportSQL_RapId");
+            xR.value = RapId;
+            });
+        }
+
+    function SetReportSQL() {
+        var $this = $('#formRapport');
+
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("SetReportSQL", "Report")',
+            data: $this.serialize(),
+            dataType: 'json'
+        }).done(function (result) {
+            if (result.Success == true) {
+                var notification = $("#notification").data("kendoNotification");
+                notification.show({ title: "SQL", message: "SQL information is updated" }, "success");
+
+                if (result.Refresh == true || result.NewRecord == true) {
+                    var grid = $("#RapporterSQL").data("kendoTreeView");
+                    grid.dataSource.read();
+                    }
+                }
+            else {
+                alert(result.Error[0].Message);
+                }
+            });
+        };
+
+    function sqlSlett() {
+        var xS = document.getElementById("RapportSQL_RapSQL_GUID");
+
+        $.ajax({
+            url: '@Url.Action("SlettRapportSQL", "Report")',
+            type: "GET",
+            data: {RapportSQLGuid: xS.value }
+        }).always(function (result) {
+            var grid = $("#RapporterSQL").data("kendoTreeView");
+            grid.dataSource.read();
+            $.ajax({
+                url: '@Url.Action("NySQL", "Report")',
+                type: "GET"
+            }).always(function (result) {
+                $("#sqlForm").html(result);
+            });
+
+            });
+        }
+</script>
+
+<script type="text/javascript">  
+
+    function onError(e) {
+        this.cancelChanges();
+
+        var errorMessage = "";
+        if (e.errors) {
+            for (var error in e.errors) {
+                errorMessage += e.errors[error].errors[0] + " ";
+            }
+        }
+        //alert(errorMessage);
+    }
+
+    function getCheckedItems(treeview) {
+        var nodes = treeview.dataSource.view();
+        return getCheckedNodes(nodes);
+    }
+
+</script>
+
+<script id="treeview" type="text/kendo-ui-template">
+
+    # if (!item.items && item.spriteCssClass) { #
+    #: item.text #
+    <span class='k-icon k-i-close kendo-icon'></span>
+    # } else if(!item.items && !item.spriteCssClass) { #
+    <span class="k-sprite pdf"></span>
+    #: item.text #
+    <span class='k-icon k-i-close telerik-icon'></span>
+    # } else if (item.items && item.spriteCssClass){ #
+    #: item.text #
+    # } else { #
+    <span class="k-sprite folder"></span>
+    #: item.text #
+    # } #
+
+</script>
+
+<script id="Lagre">
+
+    function nyRapport() {
+        $.ajax({
+            url: '@Url.Action("NyRapport", "Report")',
+            type: "GET"
+        }).always(function (result) {
+            $("#ReportDefForm").html(result);
+            });
+        }
+
+    function lagreRapport() {
+
+        var xS = document.getElementById("Report_Skjerm");
+
+        if (xS.value == "X") {
+            alert("Du må angi både skjerm og kategori");
+        }
+        else {
+            var $this = $('#formRapport');
+
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("SetReport", "Report")',
+                data: $this.serialize(),
+                dataType: 'json'
+            }).done(function (result) {
+                if (result.Success == true) {
+                    var notification = $("#notification").data("kendoNotification");
+                    notification.show({ title: "Report", message: "The report is updated" }, "success");
+
+
+                    if (result.Refresh == true) {
+                        var grid = $("#Rapporter").data("kendoTreeView");
+                        grid.dataSource.read();
+                        }                
+                    }
+                else {
+                    message = "";
+                    for (var i = 0; i < result.Error.length; i++) {
+                        message += result.Error[i].Message;
+                    }
+                    alert(message);
+                }
+                });
+            }
+        }
+
+    function onRapportLoaded(e) {
+        var grid = $("#Rapporter").data("kendoTreeView");
+        var dataSource = grid.dataSource;
+        if (RapId != "") {
+            var dataItem = dataSource.get(RapId); 
+            var node = grid.findByUid(dataItem.uid);
+            }
+         }
+   
+</script>
+
+<script>
+    $(document).ready(function() {
+        $("#Rapport_Beskrivelse").on('input', function (e) {
+            $('.k-counter-container .k-counter-value').html($(e.target).val().length);
+            });
+        });
+</script>

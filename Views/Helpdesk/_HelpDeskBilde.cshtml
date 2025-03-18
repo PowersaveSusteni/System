@@ -1,0 +1,13 @@
+﻿@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
+@model Susteni.Models.HelpDesk.HelpDeskModel
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+
+
+<div class="container-fluid padding-0" id="helpdeskbildeForm">
+    
+    @if(Model.HelpDeskBilde.Bilde != "" && Model.HelpDeskBilde.Bilde != null)
+        {
+        <img src="data:image/png;base64,@Model.HelpDeskBilde.Bilde" style="max-height: 600px; max-width: 100%;" alt="Bilde" />
+    }
+</div>

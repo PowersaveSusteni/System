@@ -1,0 +1,147 @@
+﻿@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
+@model Susteni.Models.ReportModel
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+
+<div class="container-fluid padding-0" id="sqlForm">
+
+    <input type = "hidden" asp-for="ReportSQL.SlettetDato" class="form-control">
+    <input type = "hidden" asp-for="ReportSQL.RapId" class="form-control">
+    <input type = "hidden" asp-for="ReportSQL.ReportSQLGuid" class="form-control">
+    <input type = "hidden" asp-for="ReportSQL.OpprettetAv" class="form-control">
+    <input type = "hidden" asp-for="ReportSQL.OpprettetDate" class="form-control">
+    <input type = "hidden" asp-for="ReportSQL.EndretAv" class="form-control">
+    <input type = "hidden" asp-for="ReportSQL.EndretDato" class="form-control">
+    <input type = "hidden" asp-for="ReportSQL.SlettetAv" class="form-control">
+    <input type = "hidden" asp-for="ReportSQL.SlettetDato" class="form-control">
+    <input type = "hidden" asp-for="ReportSQL.IsNotNullField" class="form-control">
+
+    <div class="row">
+        <button type="button" name="Gemeinde" class="commandSmal" onclick="NewSQL()" style="width: 100px; margin-left: 10px">
+            @Localizer["New"]
+            <img src="~/images/Ny.svg" style="width: 24px; height: 24px;" />
+        </button>
+
+        <button type="button" name="Gemeinde" class="commandSmal" onclick="SetReportSQL()" style="width: 100px; margin-left: 20px">
+            @Localizer["Save"]
+            <img src="~/images/Lagre.svg" style="width: 24px; height: 24px;" />
+        </button>
+
+        <button type="button" name="Gemeinde" class="commandSmal" onclick="sqlSlett()" style="width: 120px; margin-left: 20px">
+            @Localizer["Remove"]
+            <img src="~/images/Slette.svg" style="width: 24px; height: 24px;" />
+        </button>
+    </div>
+
+    <div class="col-12" style="margin-bottom: 0px;">
+        <div class="panel with-nav-tabs panel-default" id="dataenter">
+            <div class="panel-body data padding-0">
+                <div class="tab-content data" style="padding: 10px;">
+
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="row align-items-center" style="display: flex; flex-direction: row;">
+                                <Label class="col-2 col-form-label">@Localizer["Typ"]</label>
+                                <div class="col-lg-4">
+                                    @(Html.Kendo().DropDownList()
+                                        .Name("ReportSQL.Type")
+                                        .DataTextField("Text")
+                                        .DataValueField("Value")
+                                        .OptionLabel("Choose from list...")
+                                        .OptionLabelTemplate("<span><i>Choose from list...</i></span>")
+                                        .BindTo(new List<SelectListItem>() {
+                                            new SelectListItem() {
+                                            Text = Localizer["SQL Selection"].Value, Value = "2"
+                                            },
+                                            new SelectListItem() {
+                                            Text = Localizer["SQL Block <Table>"].Value, Value = "3"
+                                            },
+                                            new SelectListItem() {
+                                            Text = Localizer["SQL Block <List>"].Value, Value = "5"
+                                            },
+                                            new SelectListItem() {
+                                            Text = Localizer["SQL Block <List a,b,c... >"].Value, Value = "6"
+                                            },
+                                            new SelectListItem() {
+                                            Text = Localizer["SQL Block <List 1,2,3...>"].Value, Value = "7"
+                                            },
+                                            new SelectListItem() {
+                                            Text = Localizer["SQL Block with Header"].Value, Value = "9"
+                                            },
+                                            new SelectListItem() {
+                                            Text = Localizer["SQL Block with Image"].Value, Value = "10"
+                                            },
+                                            new SelectListItem() {
+                                            Text = Localizer["SQL Execution"].Value, Value = "4"
+                                            }
+                                        })
+                                        .Value(Model.ReportSQL.Type.ToString())
+                                        .HtmlAttributes(new { style="width: 100%;" })
+                                    )
+                                </div>
+
+                                <Label class="col-1 col-form-label">@Localizer["Stadie"]</label>
+                                <div class="col-lg-5">
+                                    @(Html.Kendo().RadioGroup()
+                                        .Name("ReportSQL.Stadie")
+                                        .Layout(RadioGroupLayout.Horizontal)
+                                        .Items(i =>
+                                            {
+                                            i.Add().Label("Pre").Value("0");
+                                            i.Add().Label("Main").Value("1");
+                                            i.Add().Label("Braid").Value("2");
+                                            i.Add().Label("Block").Value("3");
+                                            i.Add().Label("Post").Value("4");
+                                            })
+                                        .Value(Model.ReportSQL.Stadie.ToString())
+                                        )
+                                </div>
+                            </div>
+
+                            <div class="row align-items-center" style="display: flex; flex-direction: row;">
+                                <label class="col-2 col-form-label">Code</label>
+                                <div class="col-md-4">
+                                    <input asp-for="ReportSQL.Kode" class="form-control k-textbox">
+                                </div>
+                            </div>
+
+                            <div class="row align-items-center" style="display: flex; flex-direction: row;">
+                                <Label class="col-2 col-form-label">@Localizer["Order"]</label>
+                                <div class="col-lg-2">
+                                    @(Html.Kendo().NumericTextBox<decimal>()
+                                        .Name("ReportSQL.Rekkefolge")
+                                        .Format("n0")
+                                        .Min(0)
+                                        .Max(100)
+                                        .Value(Model.ReportSQL.Rekkefolge)
+                                        .HtmlAttributes(new { style = "width: 100%"})
+                                    )
+                                </div>
+                            </div>
+
+                            <div class="row align-items-center" style="display: flex; flex-direction: row;">
+                                <label class="col-2 col-form-label">Format</label>
+                                <div class="col-md-10">
+                                    <input asp-for="ReportSQL.Format" class="form-control k-textbox">
+                                </div>
+                            </div>
+
+
+                        </div>
+
+                        <div class="col-12" style="margin-top: 10px;">
+                            <h4>SQL</h4>
+                            <div class="row" style="display: flex; flex-direction: row;">                                
+                                <div class="col-md-12">
+                                    <textarea asp-for="ReportSQL.SQL" class="form-control k-textbox" style="height: calc(100vh - 565px);"></textarea>
+                                    </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>

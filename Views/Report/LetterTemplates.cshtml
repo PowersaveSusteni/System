@@ -1,0 +1,421 @@
+﻿@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
+@model Susteni.Models.ReportModel
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+
+@{
+    ViewData["Title"] = Localizer["Gravarkiv"];
+    ViewData["LogOnOk"] = "2";
+    ViewData["Menu"] = "GP";
+}
+
+<script type="text/x-kendo-tmpl" id="templateBM">
+    <div class="rapport">
+        <img src="data:image/png;base64, #:Preview#" alt="Rapport" />
+        <h3>#:Tittel#</h3>
+    </div>
+</script>
+
+
+<style>
+
+    .commandMenuSmal {
+        width: 100%;
+        text-align: left;
+        border: 0px solid;
+        background-color: white;
+    }
+
+    .commandMenuSmal:hover {
+        color: darkred;
+    }
+
+    #lvBrevmaler {
+        height: 435px;
+        background-color: whitesmoke;
+        /* Avoid cutout if font or line is bigger */
+        font: inherit;
+    }
+
+    #lvBrevmaler .rapport {
+        float: left;
+        position: relative;
+        width: 161px;
+        height: 260px;
+        margin: 10px 5px 5px 5px;
+        padding: 0;
+    }
+
+    #lvBrevmaler .rapport img {
+        float: left;
+        max-width: 148px;
+        max-height: 230px;
+        margin-top: 5px;
+        margin-left: 5px;
+        margin-bottom: 5px;
+        margin-right: 10px;
+    }
+
+    #lvBrevmaler .rapport h3 {
+        margin-top: 0px;
+        margin-left: 10px;
+        text-align: left;
+        max-width: 141px;
+        line-height: 1.1em;
+        font-family: 'Roboto', sans-serif;
+        font-size: 14px;
+        font-weight: normal;
+        text-transform: uppercase;
+        color: black;
+    }
+
+    #lvBrevmaler .rapport p {
+        margin-top: 10px;
+        font-size: 14px;
+            color: #999;
+        }
+
+    #lvBrevmaler .rapport:hover h3 {
+        color: darkred;
+    }
+
+    #lvBrevmaler .rapport:hover p {
+        color: black;
+    }
+
+    .k-listview .k-state-selected {
+        border: 1px dashed;
+        border-color: blue;
+        border-top-left-radius: 8px;
+        border-top-right-radius: 8px;
+        background-color: white;
+        color: black;
+    }
+
+    .k-listview .k-state-selected h3 {
+        color: black;
+    }
+
+    .fixed {
+        position: absolute;
+        border: 0px solid lightgray;
+    }
+
+    #sporsmal .k-liste {
+        color: rgb(66, 66, 66);
+        border: 1px solid lightgray;
+    }
+
+    #sporsmal .k-liste:focus {
+        color: rgb(66, 66, 66);
+        border: 1px solid lightgray;
+    }
+
+    #sporsmal .k-input {
+        height: 30px;
+    }
+
+    .commandSmal img {
+        width: 24px;
+        height: 24px;
+    }
+
+    .k-fab-text {
+        display: none;
+    }
+
+</style>
+
+<script>
+
+    function skjermFilter() {
+        return { skjerm: skjerm, kategor: kategori, preview: true }
+        }
+
+</script>
+
+<script id="Rapport">
+    var rolle = "";
+
+    function LagreDocumentPDF(f) {
+        var filnavn = document.getElementById("idFilnavn").value;
+        if (filnavn == null || filnavn == "") {
+            filnavn = f;
+        }
+
+        if (filnavn == null || filnavn == "") {
+            filnavn = "dokument";
+        }
+
+        TXTextControl.saveDocument(TXTextControl.StreamType.AdobePDF, function (e) {
+            var base64string = e.data;
+
+            var a = document.createElement("a"); //Create <a>
+            a.href = "data:application/octet-stream;base64," + base64string; //Image Base64 Goes here
+            a.download = filnavn + ".pdf"; //File name Here
+            a.click();
+        });
+    }
+
+    function createDocument() {
+        var lvDocument = $("#lvBrevmaler").data("kendoListView");
+        var selF = lvDocument.select();
+        var selIF = lvDocument.dataItem(selF);
+        var base64string = "";
+        var dokumentGuid = "";
+        var recNo = 0;
+        var tittel = "";
+
+        if (typeof TXTextControl !== 'undefined')
+            TXTextControl.removeFromDom();
+
+        var $this = $('#brevmalerForm').serialize();
+
+        document.getElementById("loaderSkrivBrev").style.display = "";
+
+        $.ajax({
+            type: "POST",
+            timeout: 0,
+            url: '@Url.Action("CreateDocument", "Report")',
+            data: $this
+        }).done(function (result) {
+            console.log(result);
+            document.getElementById("loaderSkrivBrev").style.display = "none";
+
+            if (result.ErrorCode > 0) {
+                myalert("Melding", result.ErrorTekst);
+            }
+            else {
+                dokumentGuid = result.NewGuid;
+                tittel = result.InfoText;
+                registreringGuid = result.Invoice;
+
+                $.ajax({
+                    type: "GET",
+                    url: '@Url.Action("DialogEditor", "Report")',
+                    })
+                .done(function (result) {
+                    $('#dialogWriter2').html(result);
+                    var xD = document.getElementById("dokumentGuid");
+                    xD.value = dokumentGuid;
+                    var xR = document.getElementById("registreringGuid");
+                    xR.value = registreringGuid;
+                    var xT = document.getElementById("tittel");
+                    xT.value = tittel;
+                    var popup = $('#dialogWriter2').data("kendoWindow");
+                    popup.center().open();
+                    var popup = $('#dialogSkrivbrev').data("kendoWindow");
+                    popup.close();
+                    // var listBox = $("#dokumentListe").data("kendoGrid");
+                    // listBox.dataSource.read();
+                    });
+                }
+            });
+        }
+
+    function createTestDocument() {
+        var lvDocument = $("#lvBrevmaler").data("kendoListView");
+        var selF = lvDocument.select();
+        var selIF = lvDocument.dataItem(selF);
+        var base64string = "";
+        var dokumentGuid = "";
+        var recNo = 0;
+        var tittel = "";
+
+        if (typeof TXTextControl !== 'undefined')
+            TXTextControl.removeFromDom();
+
+        var $this = $('#brevmalerForm').serialize();
+
+        $.ajax({
+            type: "POST",
+            timeout: 0,
+            url: '@Url.Action("CreateTestDocumentRegistration", "Engrafo")',
+            data: $this
+        }).done(function (result) {
+            if (result.ErrorCode > 0) {
+                myalert("Melding", result.ErrorTekst);
+            }
+            else {
+                dokumentGuid = result.NewGuid;
+                tittel = result.InfoText;
+                registreringGuid = result.Invoice;
+
+                $.ajax({
+                    type: "GET",
+                    url: '@Url.Action("DialogEditor", "Engrafo")',
+                }).done(function (result) {
+                    $('#dialogWriter2').html(result);
+                    var xD = document.getElementById("dokumentGuid");
+                    xD.value = dokumentGuid;
+                    var xR = document.getElementById("registreringGuid");
+                    xR.value = registreringGuid;
+                    var xT = document.getElementById("tittel");
+                    xT.value = tittel;
+
+                    document.getElementById("idLagre").style.display="none";
+                    document.getElementById("idEkspeder").style.display = "none";
+
+                    var popup = $('#dialogWriter2').data("kendoWindow");
+                    popup.center().open();
+                    var popup = $('#dialogSkrivbrev').data("kendoWindow");
+                    popup.close();
+                });
+            }
+        });
+    }
+
+    function createDocumentNy() {
+        var lvDocument = $("#lvBrevmaler").data("kendoListView");
+        var selF = lvDocument.select();
+        var selIF = lvDocument.dataItem(selF);
+        var base64string = "";
+        var dokumentGuid = "";
+        var recNo = 0;
+        var tittel = "";
+
+        if (typeof TXTextControl !== 'undefined')
+            TXTextControl.removeFromDom();
+
+        var $this = $('#brevmalerForm').serialize();
+
+        $.ajax({
+            type: "POST",
+            timeout: 0,
+            url: '@Url.Action("CreateDocumentRegistration", "Engrafo")',
+            data: $this
+            })
+        .done(function (result) {
+            if (result.ErrorCode > 0) {
+                myalert("Melding", result.ErrorTekst);
+                }
+            else {
+                document.getElementById("EngrafoDokument_dokumentNummer").value = result.NewGuid;
+                tittel = result.InfoText;
+                registreringGuid = result.Invoice;
+
+                var $this = $('#brevmalerForm').serialize();
+
+                $.ajax({
+                    type: "POST",
+                    timeout: 0,
+                    url: '@Url.Action("CreateDocumentFile", "Engrafo")',
+                    data: $this
+                    })
+                .done(function (result) {
+
+                    $.ajax({
+                        type: "GET",
+                        url: '@Url.Action("DialogEditor", "Engrafo")',
+                        })
+                    .done(function (result) {
+                        $('#dialogWriter2').html(result);
+                        var xD = document.getElementById("dokumentGuid");
+                        xD.value = dokumentGuid;
+                        var xR = document.getElementById("registreringGuid");
+                        xR.value = registreringGuid;
+                        var xT = document.getElementById("tittel");
+                        xT.value = tittel;
+                        var popup = $('#dialogWriter2').data("kendoWindow");
+                        popup.center().open();
+                        var popup = $('#dialogSkrivbrev').data("kendoWindow");
+                        popup.close();
+                        var listBox = $("#dokumentListe").data("kendoGrid");
+                        listBox.dataSource.read();
+                        });
+                    });
+                }
+            });
+        }
+
+
+    function onMalChange(e) {
+        var selected = this.select();
+        var data = this.dataItem(selected);
+        xRapId = document.getElementById("Document_RapId");
+        xTittel = document.getElementById("Document_Tittel");
+        xRapId.value = data.RapId;
+        xTittel.value = data.Tittel;
+        }
+
+ 
+</script>
+
+
+<form id="brevmalerForm" mt-0 >
+    
+    <div id="hidden">
+        <input hidden asp-for="Document.RapId" class="form-control k-textbox nodvendigFelt" style="width: 100%;">
+        <input hidden asp-for="Document.MasterNavn" class="form-control k-textbox nodvendigFelt" style="width: 100%;">
+        <input hidden asp-for="Document.MasterVerdier" class="form-control k-textbox nodvendigFelt" style="width: 100%;">
+    </div>
+
+        <div class="row" id="heading">
+            <div class="col-md-6">
+                <div style="display: flex; flex-direction: row;">
+
+                    <button type="button" onclick="createDocument()" class="command" style="width: 200px; margin-right: 7px;">
+                        <img src="~/images/print-preview.svg" />
+                        @Localizer["Create document"]
+                        @(Html.Kendo().Loader()
+                            .HtmlAttributes(new { style = "display:none;" })
+                            .Name("loaderSkrivBrev")
+                            .Size(LoaderSize.Medium)
+                            )
+                    </button>
+
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+
+            <div class="col-6" style="margin-bottom: 10px;">
+                <div class="form-group row">
+
+                    <h5 class="col-3">@Localizer["Title"]</h5>
+                    <div class="col-12" style="display: flex; flex-direction: row;">
+                    <input asp-for="Document.Tittel" class="form-control k-textbox nodvendigFelt" style="width: 100%;">
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+
+        <div class="row">
+
+            <div class="col-6">
+                @(Html.Kendo().ListView<Susteni.Models.ReportListeItem>()
+                .Name("lvBrevmaler")
+                .TagName("div")
+                .ClientTemplateId("templateBM")
+                .Scrollable(ListViewScrollableMode.Endless)
+                .Selectable(ListViewSelectionMode.Single)
+                .Events(e => e.Change("onMalChange"))
+                .DataSource(dataSource => dataSource
+                    .Ajax()
+                    .Read(read => read.Action("GetTemplateList", "Report").Data("skjermFilter"))
+                    )
+                )               
+            </div>
+
+        </div> 
+
+</form>
+
+
+<div id="dialogWriterWindow2">
+    @(Html.Kendo().Window()
+        .Name("dialogWriter2")
+        .HtmlAttributes(new {style = "border:1px; padding: 0px;"})
+        .Title("Utskrift")
+        .Visible(false)
+        .Height("90vh")
+        .Width("90vw")
+        .Modal(true)
+        .Draggable()
+        )
+</div>
+
+

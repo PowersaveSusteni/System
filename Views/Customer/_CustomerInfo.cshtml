@@ -1,0 +1,135 @@
+﻿@using Microsoft.AspNetCore.Mvc.Localization
+
+@inject IViewLocalizer Localizer
+@model Susteni.Models.Customer.CustomerModel
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+
+
+<div id="customerForm">
+
+    <input type="hidden" asp-for="Customer.CustomerGuid" class="form-control">
+    <input type="hidden" asp-for="Customer.Logo" class="form-control">
+
+    <div class="col-12" style="margin-bottom: 0px; margin-top: 10px;">
+        <div class="panel with-nav-tabs panel-default" id="dataenter">
+            <div class="panel-body data padding-0">
+                <div class="tab-content data">
+                    <div class="panel-heading" id="Tab">
+                        <ul class="nav nav-tabs">
+                            <li class="nav-item"><a class="nav-link active" aria-current="page" href="#tabInfo" data-bs-toggle="tab">@Localizer["Info"]</a></li>
+                        </ul>
+                    </div>
+                    <div class="panel-body">
+                        <div class="tab-content" style="margin-top: 10px;">
+                            <div class="tab-pane fade show active" style="padding: 10px;" role="tabpanel" id="tabInfo">
+
+                                <div class="row">
+                                    <div class="col-8">
+                                        <div class="row align-items-center" style="display: flex; flex-direction: row;">
+                                            <label class="col-2 col-form-label">Name</label>
+                                            <div class="col-lg-10">
+                                                <input asp-for="Customer.CustomerName" class="form-control k-textbox">
+                                            </div>
+                                        </div>
+
+                                        <div class="row align-items-center" style="display: flex; flex-direction: row;">
+                                            <label class="col-2 col-form-label">Adresse</label>
+                                            <div class="col-lg-10">
+                                                <input asp-for="Customer.Adresse" class="form-control k-textbox">
+                                            </div>
+                                        </div>
+
+                                        <div class="row align-items-center" style="display: flex; flex-direction: row;">
+                                            <label class="col-2 col-form-label">Zip</label>
+                                            <div class="col-md-2">
+                                                <input asp-for="Customer.Zip" class="form-control k-textbox" onKeyUp="getCity();">
+                                            </div>
+
+                                            <label class="col-1 col-form-label">City</label>
+                                            <div class="col-md-4">
+                                                <input asp-for="Customer.City" class="form-control k-textbox">
+                                            </div>
+                                        </div>
+
+                                        <div class="row align-items-center" style="display: flex; flex-direction: row;">
+                                            <label class="col-2 col-form-label">Phone</label>
+                                            <div class="col-lg-3">
+                                                <input asp-for="Customer.Phone" class="form-control k-textbox">
+                                            </div>
+                                        </div>
+
+
+                                        <div class="row align-items-center" style="display: flex; flex-direction: row;">
+                                            <label class="col-2 col-form-label">EMail</label>
+                                            <div class="col-md-5">
+                                                <input asp-for="Customer.EPost" class="form-control k-textbox">
+                                            </div>
+                                        </div>
+
+                                        <div class="row align-items-center" style="display: flex; flex-direction: row;">
+                                            <label class="col-2 col-form-label">OrgNr</label>
+                                            <div class="col-lg-3">
+                                                <input asp-for="Customer.OrgNr" class="form-control k-textbox">
+                                            </div>
+                                        </div>
+
+                                        <div class="row align-items-center" style="display: flex; flex-direction: row;">
+                                            <label class="col-2 col-form-label">Fuel price</label>
+                                            <div class="col-lg-2">
+                                                <input asp-for="Customer.OilPrice" class="form-control k-textbox">
+                                            </div>
+
+                                            <label class="col-2 col-form-label">Currency</label>
+                                            <div class="col-lg-2">
+                                                <input asp-for="Customer.CurrencyCode" class="form-control k-textbox">
+                                            </div>
+
+
+                                            <label class="col-2 col-form-label">Number of License</label>
+                                            <div class="col-lg-2">
+                                                <input asp-for="Customer.NumberLicense" class="form-control k-textbox">
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-4" >
+                                        <div id="filPreview">
+                                            @if (Model.Customer.Byte64Picture.Length > 0)
+                                            {
+                                                <img src="data:image/Jpeg;base64,@Model.Customer.Byte64Picture" style="max-width: 100%; max-height: 220px;" />
+                                            }
+                                        </div>
+                                    </div>
+
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-6" style="margin-top: 10px;">
+        <h4>List of users</h4>
+        @(Html.Kendo().Grid<Susteni.Models.CustomerUserItem>()
+            .Name("userList")
+            .Columns(columns =>
+            {
+                columns.Bound(q => q.UserId).Width(120);
+                columns.Bound(q => q.UserName);
+            })
+            .Height(290)
+            .Scrollable()
+            .Selectable(s => s
+            .Mode(GridSelectionMode.Multiple)
+            .Type(GridSelectionType.Row))
+            .DataSource(dataSource => dataSource
+                .Ajax()
+            .Read(read => read.Action("GetUserCustomerList", "Account").Data("filterCustomer"))
+                )
+            )
+
+    </div>
+</div>

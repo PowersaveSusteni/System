@@ -1,0 +1,258 @@
+﻿@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
+@model Susteni.Models.Help.HjelpModel
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+
+@{
+    ViewData["Title"] = Localizer["Help system"];
+    ViewData["LogOnOk"] = "2";
+    ViewData["Menu"] = "Admin";
+}
+
+<form asp-controller="formHjelpesystem" asp-action="Lagre" id="formHjelpesystem" onsubmit="return false;" method="post" class="mt-3" autocomplete="off">
+    <div id="confirm"></div>
+
+    <div class="container-fluid">
+
+        <div class="row" style="min-height: 70px;">
+
+
+            <div class="col-2 unselectable">
+                <h3>Help system</h3>
+            </div>
+
+            <div class="col-8" style="display: flex; flex-direction: row;">
+                <div>
+                </div>
+            </div>
+
+            <div class="col-2">
+                <div id="infoLagring"></div>
+            </div>
+
+        </div>
+
+        <div class="row">
+            
+            <div class="col-lg-4" style="height: 465px;" id="idDaapsListe">
+            
+                <div class="col-12" style="display: flex; flex-direction: row;">
+
+                    <div>
+                        <button type="button" name="ny" class="commandline" onclick="nyHjelp()">
+                            <img src="~/images/Ny.svg" />
+                            @Localizer["New"]
+                        </button>
+                    </div>
+
+                    <div>
+                        <button type="submit" name="lagre" class="commandline">
+                            <img src="~/images/Lagre.svg" />
+                            @Localizer["Save"]
+                        </button>
+                    </div>
+
+                    <div>
+                        <button type="button" name="slette" class="commandline" onclick="slettHjelp()">
+                            <img src="~/images/Slette.svg" />
+                            @Localizer["Delete"]
+                        </button>
+                    </div>
+                </div>
+
+                <div class="col-lg-12" style="margin-top: 10px;">
+                    <h5>Choose from the list to make a filter on module</h5>
+                    @(Html.Kendo().DropDownList()
+                        .Name("Modul")
+                        .DataTextField("Text")
+                        .DataValueField("Value")
+                        .Events(e => e.Select("onModulChange"))
+                        .OptionLabel("Choose from the list...")
+                        .OptionLabelTemplate("<span><i>Choose from the list...</i></span>")
+                        .BindTo(new List<SelectListItem>() {
+                            new SelectListItem() {Text = Localizer["Energy optimizing"].Value , Value = "100"},
+                            new SelectListItem() {Text = Localizer["Power production"].Value , Value = "200"},
+                            new SelectListItem() {Text = Localizer["Investment plan"].Value , Value = "300"},
+                            new SelectListItem() {Text = Localizer["Ships info"].Value , Value = "400"}
+                            })
+                        .Value(Model.HelpSystem.Modul.ToString())
+                        .HtmlAttributes(new { style="width: 100%;" })
+                        )
+
+                    @(Html.Kendo().Grid<Susteni.Models.HelpSystemItem>()
+                        .Name("lstHjelp")
+                        .Columns(columns =>
+                        {
+                            columns.Bound(q => q.HelpGuid).Visible(false);
+                            columns.Bound(q => q.ModulName).Width(200);
+                            columns.Bound(q => q.Title);
+                        })
+                        .Sortable()
+                        .Navigatable()
+                        .HtmlAttributes(new { style = "height: calc(100vh - 350px);"})
+                        .Scrollable()
+                        .Selectable(s => s
+                            .Mode(GridSelectionMode.Single)
+                            .Type(GridSelectionType.Row))
+                        .Events(events => events
+                            .Change("onChange").DataBound("onDataBound"))
+                        .DataSource(dataSource => dataSource
+                            .Ajax()
+                            .Read(read => read.Action("getHelpSystemListe", "Hjelp").Data("hjelpFilter"))
+                            )
+                        )
+                
+                </div>
+            </div>
+
+            <div class="col-8">
+                <partial name="_HelpInfo" />
+            </div>
+
+        </div>
+
+    </div>
+</form>
+
+
+<script id="successTemplate" type="text/x-kendo-template">
+    <div class="upload-success">
+        <img src="@Url.Content("~/images/emoticon-happy.svg")" style="float:left; height:48px; width:48px; margin-right: 16px;"/>
+        <p>#= message #</p>
+    </div>
+</script>
+
+
+<script id="errorTemplate" type="text/x-kendo-template">
+    <div class="wrong-pass">
+        <img src="@Url.Content("~/images/emoticon-sad.svg")" style="float:left; height:48px; width:48px; margin-right: 16px;"/>
+        <p>#= message #</p>
+    </div>
+</script>
+
+
+@(Html.Kendo().Notification()
+    .Name("notification")
+    .Position(p => p.Pinned(true).Top(30).Right(30))
+    .Stacking(NotificationStackingSettings.Down)
+    .AutoHideAfter(5000)
+    .Templates(t =>
+    {
+        t.Add().Type("success").ClientTemplateID("successTemplate");
+        t.Add().Type("error").ClientTemplateID("errorTemplate");
+    })
+)
+
+
+<script>
+    var HelpGuid = "";
+    var Modul = 0;
+
+    function hjelpFilter() {
+        return {Modul: Modul, Skjerm: "", visAlle: true}
+        }
+
+    function onModulChange(e) {
+        var dataItem = this.dataItem(e.item);
+        Modul = dataItem.Value;
+        var grid = $("#lstHjelp").data("kendoGrid");
+        grid.dataSource.read();
+    }
+
+    function onChange(e) {
+        var selected = this.select();
+        var data = this.dataItem(selected);
+
+        if (data != null) {
+            HelpGuid = data.HelpGuid;
+
+            $.ajax({
+                url: '@Url.Action("GetHelpSystem", "Hjelp")',
+                data: { HelpGuid: HelpGuid },
+                type: "GET"
+            }).done(function (result) {
+                $("#formHelp").html(result);
+             
+            });
+        }
+    }
+
+
+    function onDataBound(e) {
+        var grid = $("#lstHjelp").data("kendoGrid");
+
+        $("#lstHjelp tbody tr").each(function () {
+            var currentRowData = grid.dataItem(this);
+
+            if (!currentRowData.Aktiv) {
+                $(this).css("color", "gray");
+            }
+        });
+    }
+
+    function nyHjelp() {
+        $.ajax({
+            url: '@Url.Action("NyHjelp", "Hjelp")',
+            type: "GET"
+        }).always(function (result) {
+            $("#formHelp").html(result);        
+        });
+    }
+
+    function slettHjelp() {
+        var tittel = "SLETTE";
+        var nei = "Nei";
+        var content = "<div id='question'>Er du sikker på at du vil slette denne hjelpen</div>";
+
+        $("#confirm").kendoConfirm({
+            title: tittel,
+            content: content,
+            messages: {
+                okText: "Ja",
+                cancel: nei
+            }
+        }).data("kendoConfirm").result.done(function () {
+            $('body').append($('<div id="confirm">'));
+
+             $.ajax({
+                url: '@Url.Action("RemoveHelpSystem", "Hjelp")',
+                type: "GET",
+                data: {HelpGuid: HelpGuid}
+            }).always(function (result) {
+                $("#lstHjelp").data("kendoGrid").dataSource.read();
+                nyHjelp();
+            });
+
+           
+        }).fail(function () {
+            $('body').append($('<div id="confirm">'));
+        }); 
+    }
+
+    $(document).on('submit', '#formHjelpesystem', function (e) {
+        e.preventDefault();
+
+        var $this = $(this);
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("SetHelpSystem", "Hjelp")',
+            data: $this.serialize(),
+            dataType: 'json'
+            })
+        .done(function (result) {
+            if (result.Status == 0) {
+                var notification = $("#notification").data("kendoNotification");
+                notification.show({ title: "Help system", message: "Help info saved" }, "success");
+
+                var grid = $("#lstHjelp").data("kendoGrid");
+                grid.dataSource.read();
+            }
+            else {
+                alert(result.ErrorText);
+            }
+
+        }).fail(function (result) {
+            alert('an Error has occurred, please try again');
+        });
+    });
+</script>

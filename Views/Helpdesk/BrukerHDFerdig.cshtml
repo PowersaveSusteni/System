@@ -1,0 +1,58 @@
+﻿@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
+@model Susteni.Models.HelpDesk.HelpDeskModel
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+
+<form id="Helpdesk">
+    <input hidden asp-for="HelpDesk.HelpDeskGuid" class="form-control k-textbox">
+    <input hidden asp-for="HelpDesk.TiketId" class="form-control k-textbox">
+    <input hidden asp-for="HelpDesk.Program" class="form-control k-textbox">
+    <input hidden asp-for="HelpDesk.Modul" class="form-control k-textbox">
+    <input hidden asp-for="HelpDesk.Skjermbilde" class="form-control k-textbox">
+    <input hidden asp-for="HelpDesk.OpprettetDato" class="form-control k-textbox">
+    <input hidden asp-for="HelpDesk.OpprettetAv" class="form-control k-textbox">
+    <input hidden asp-for="HelpDesk.Prioritet" class="form-control k-textbox">
+    <input readonly asp-for="HelpDesk.Tittel" class="form-control k-textbox">
+    <input hidden asp-for="HelpDesk.Beskrivelse" class="form-control k-textbox">
+    <input hidden asp-for="HelpDesk.Losning" class="form-control k-textbox">
+    <input hidden asp-for="HelpDesk.BrukerId" class="form-control k-textbox">
+    <input hidden asp-for="HelpDesk.Fellesraad" class="form-control k-textbox">
+    <input hidden asp-for="HelpDesk.StartDato" class="form-control k-textbox">
+    <input hidden asp-for="HelpDesk.Ferdig" class="form-control k-textbox">
+    <input hidden asp-for="HelpDesk.Aksept" class="form-control k-textbox">
+    <input hidden asp-for="HelpDesk.Status" class="form-control k-textbox">
+    <input hidden asp-for="HelpDesk.TypeId" class="form-control k-textbox">
+    <input hidden asp-for="HelpDesk.Program_GUID" class="form-control k-textbox">
+    <input hidden asp-for="HelpDesk.Saksbehandler" class="form-control k-textbox">
+    <input hidden asp-for="HelpDesk.ePostAdresse" class="form-control k-textbox">
+    <input hidden asp-for="HelpDesk.Fremdrift" class="form-control k-textbox">
+
+    <div class="col-12" style="margin-bottom: 0px; margin-top: 10px;">
+        <div class="panel with-nav-tabs panel-default" id="dataenter" style="padding: 10px;">
+
+            <div class="row align-items-center" style="display: flex; flex-direction: row;">
+                <label class="col-12 col-form-label">Kommentar til løsning</label>
+                <div class="col-12">
+                    @(Html.Kendo().TextArea()
+                        .Name("HelpDesk.KommentarKunde")
+                        .Rows(10)
+                        .MaxLength(200)
+                        )
+                </div>
+            </div>
+
+            <div class="row align-items-center" style="display: flex; flex-direction: row;">
+                <label class="col-12 col-form-label">Dersom du ønsker det, så kan du angi hvor mange stjerne du vil gi oss for hvordan vi løste denne saken.</label>
+                @(Html.Kendo().Rating()
+                    .Name("HelpDesk.Stjerner")
+                    .Min(1)
+                    .Max(6)
+                    )
+            </div>
+
+            <div class="row">
+                <button type="button" onclick="LagreTickets()" class="commandSmal" style="width: 170px; margin-left: 580px; background-color: lightgreen">Løsningen er akseptert</button>
+            </div>
+        </div>
+    </div>
+</form>

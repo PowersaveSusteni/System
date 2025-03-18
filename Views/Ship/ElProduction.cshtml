@@ -1,0 +1,1371 @@
+﻿@using Microsoft.AspNetCore.Mvc.Localization
+
+@inject IViewLocalizer Localizer
+@model Susteni.Models.Ship.ShipModel
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+
+@{
+    ViewData["Title"] = Localizer["El production"];
+    ViewData["LogOnOk"] = "2";
+    ViewData["Menu"] = "Admin";
+}
+
+<style>
+
+    table {
+        font-family: arial, sans-serif;
+        border-collapse: collapse;
+        width: 80%;
+        }
+
+    td, th {
+        border: 1px solid #dddddd;
+        text-align: left;
+        padding: 8px;
+        background-color: lightsteelblue;
+        }
+
+    .k-grid table tbody tr td {
+        border-bottom: 1px solid #dddddd !important;
+        }
+
+    tr:nth-child(even) {
+        background-color: rgba(0,0,0,0.04);
+        }
+
+</style>
+
+
+<style>
+
+    #dialogVisPDFRapport {
+        height: 85vh;
+        width: 90vw;
+        max-width: 1200px;
+    }
+
+    #pdfViewerRapport {
+        width: 100% !important;
+        height: 100% !important;
+    }
+
+    #dialogVisPDF {
+        height: 85vh;
+        width: 90vw;
+        max-width: 1200px;
+    }
+
+    #pdfViewer {
+        width: 100% !important;
+        height: 100% !important;
+    }
+</style>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.2.2/pdf.js"></script>
+<script>
+    window.pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.2.2/pdf.worker.js';
+</script>
+
+
+<form onsubmit="return false;" class="mt-3">
+
+    <input hidden asp-for="Ship.ShipGuid" />
+    <input hidden asp-for="Ship.Name" />
+    <input hidden asp-for="Ship.ProfilGuid" />
+    <input hidden asp-for="Ship.ProfilName" />
+
+    <div class="row" id="heading" style="min-height: 90px;">
+
+        <div class="col-xxl-3 col-xl-4 unselectable">
+            <img src="~/images/PowerSave_logo.svg" style="width: 70px; float: left; margin-right: 10px;" alt="mainlogo" />
+
+            <h2>@Localizer["Power production"]</h2>
+            <h3 id="idName"></h3>
+        </div>
+
+        <div class="col-xxl-5 col-xl-3">
+            <div style="display: flex; flex-direction: row;">
+                <button type="button" class="commandModern" onclick="fuelSavings()"><img src="~/images/court-filled.svg" style="width: 24px; height: 24px; margin-right: 5px;" />Energy optimizing</button>
+                <button type="button" class="commandModern" onclick="plan()"><img src="~/images/money-coins-filled.svg" style="width: 24px; height: 24px; margin-right: 5px;" />Investment plan</button>
+                <button type="button" class="commandModern" onclick="showDialogRapporter()"><img src="~/images/Laser.svg" style="width: 24px; height: 24px; margin-right: 5px;" />Reports</button>
+            </div>
+        </div>
+
+        <div class="col-xxl-4" style="display: flex; flex-direction: row; margin-top: 10px;">
+@*             <div>
+                @(Html.Kendo().DropDownList()
+                    .Name("profiles")
+                    .DataTextField("Name")
+                    .DataValueField("profilGuid")
+                    .OptionLabel("Choose measures group from list")
+                    .OptionLabelTemplate("<span><i>Choose measures group from list...</i></span>")
+                    .Height(200)
+                    .HtmlAttributes(new { style = "width: 300px;"})
+                    .Events(e => e.Change("onProfileChange"))
+                    .DataSource(dataSource => dataSource
+                        .Ajax()
+                    .Read(read => read.Action("GetProfileList", "Ship").Data("filterShip"))
+                        )
+                    )
+            </div> *@
+            <p style ="margin-top: 5px;"><b>Profile: </b></p>
+            <span style="color: darkred; margin-top: 5px;"><p id="idProfileName"></p></span>
+            <button type="button" class="commandModern" onclick="showDialogProfile()" style="height: 28px; padding-top:2px; width: 200px; margin-left: 20px;">Set active profile</button>
+            <button type="button" class="commandModern" onclick="newProfiles()" style="height: 28px; padding-top:2px;">New</button>
+            <button type="button" class="commandModern" onclick="showDialogCopyProfiles()" style="height: 28px; padding-top:2px;">Copy</button>
+        </div>
+
+
+    </div>
+
+    <div class="row">
+
+        <div class="col-xxl-7 col-xl-12">
+
+            <div class="row" style="margin-top: 35px;">
+
+                <div class="col-12">
+                    <h4 class="unselectable">List of power production unit</h4>
+                </div>
+                <div class="col-lg-12">
+                    <div style="position: relative">
+                        @(Html.Kendo().Grid<Susteni.Models.ShipGeneratorItem>()
+                            .Name("generatorList")
+                            .Columns(columns =>
+                            {
+                                columns.Bound(q => q.GeneratorGuid).Visible(false);
+                                columns.Bound(q => q.Name).Width(150).Title(Localizer["Name"].Value);
+                                columns.Bound(q => q.kW).Title(Localizer["kWe"].Value).HtmlAttributes(new { style = "text-align: right;" });
+                                columns.Bound(q => q.EffectBefore).Format("{0:n0}").Title(Localizer["Power Production Before Measures kWh"].Value).HtmlAttributes(new { style = "text-align: right;" });
+                                columns.Bound(q => q.FuelBefore).Format("{0:n2}").ClientFooterTemplate("#=sum#").Title("Fuel Consumption Before Measures m3").HtmlAttributes(new { style = "text-align: right;" }).ClientFooterTemplate("<div style='float: right'>#= kendo.format('{0:N2}', sum)#</div>");
+                                columns.Bound(q => q.CO2Before).Visible(false).Format("{0:n0}").Title(Localizer["CO₂ Before Measures"].Value).HtmlAttributes(new { style = "text-align: right;" });
+                                columns.Bound(q => q.NOxBefore).Visible(false).Format("{0:n0}").Title(Localizer["NOx Before Measures"].Value).HtmlAttributes(new { style = "text-align: right;" });
+                                columns.Bound(q => q.SOxBefore).Visible(false).Format("{0:n0}").Title(Localizer["SOx Before Measures"].Value).HtmlAttributes(new { style = "text-align: right;" });
+                                columns.Bound(q => q.EffectAfter).Format("{0:n0}").Title(Localizer["Power Production After measures kWh"].Value).HtmlAttributes(new { style = "text-align: right;" });
+                                columns.Bound(q => q.FuelAfter).Format("{0:n2}").ClientFooterTemplate("#=sum#").Title(Localizer["Fuel Consumption After Measures m3"].Value).HtmlAttributes(new { style = "text-align: right;" }).ClientFooterTemplate("<div style='float: right'>#= kendo.format('{0:N2}', sum)#</div>");
+                                columns.Bound(q => q.CO2After).Visible(false).Format("{0:n0}").Title(Localizer["CO₂ After Measures"].Value).HtmlAttributes(new { style = "text-align: right;" });
+                                columns.Bound(q => q.NOxAfter).Visible(false).Format("{0:n0}").Title(Localizer["NOx After Measures"].Value).HtmlAttributes(new { style = "text-align: right;" });
+                                columns.Bound(q => q.SOxAfter).Visible(false).Format("{0:n0}").Title(Localizer["SOx After Measures"].Value).HtmlAttributes(new { style = "text-align: right;" });
+                                columns.Bound(q => q.MaintenanceCost).Format("{0:n0}").Title(Localizer["Maintenance cost Savings"].Value).HtmlAttributes(new { style = "text-align: right;" });
+                            })
+                            .Height(290)
+                            .Scrollable()
+                            .Selectable(s => s
+                                .Mode(GridSelectionMode.Multiple)
+                                .Type(GridSelectionType.Row))
+                            .Events(e => e.Change("onGeneratorChange").DataBound("onGeneratorDataBound"))
+                            .DataSource(dataSource => dataSource
+                                .Ajax()
+                                .Read(read => read.Action("GetShipGeneratorList", "Ship").Data("filterShip"))
+                            .Aggregates(agg => agg.Add(p => p.FuelBefore).Sum())
+                            .Aggregates(agg => agg.Add(p => p.FuelAfter).Sum())
+                                )
+                            )
+                    </div>
+                </div>
+
+                <div class="col-12">
+                    <partial name="_ElProductionInfo" />
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="col-xxl-5 col-xl-12">
+            <div class="row" style="margin-top: 20px;">
+                <div class="col-12">
+                <div class="panel with-nav-tabs panel-default" id="dataenter" style="height: 370px;">
+                    <div class="panel-body data padding-0">
+                        <div class="tab-content data">
+                            <div class="panel-heading" id="Tab">
+                                <ul class="nav nav-tabs">
+                                    <li class="nav-item"><a class="nav-link active" aria-current="page" href="#tabPPkWh" data-bs-toggle="tab">@Localizer["Power production in kWh"]</a></li>
+                                    <li class="nav-item"><a class="nav-link" aria-current="page" href="#tabSummary" data-bs-toggle="tab">@Localizer["Summary"]</a></li>
+                                    <li class="nav-item"><a class="nav-link" aria-current="page" href="#tabSavings" data-bs-toggle="tab">@Localizer["Savings pro Equipment types"]</a></li>
+                                </ul>
+                            </div>
+                            <div class="panel-body">
+                                <div class="tab-content" style="margin-top: 0px;">
+                                    <div class="tab-pane fade show active" style="padding: 0px;" role="tabpanel" id="tabPPkWh">
+
+                                        @(Html.Kendo().Grid<Susteni.Models.ShipOperationPowerItem>()
+                                            .Name("powerList")
+                                            .Columns(columns =>
+                                            {
+                                                columns.Bound(q => q.Name).Title(Localizer["Operation mode"].Value);
+                                                columns.Bound(q => q.HoursPrYear).Title(Localizer["Hours pr. year"].Value);
+                                                columns.Bound(q => q.PowerPre).Title(Localizer["Before measures"].Value).Format("{0:n0}").ClientFooterTemplate("#=sum#").HtmlAttributes(new { style = "text-align: right;" }).ClientFooterTemplate("<div style='float: right'>#= kendo.format('{0:N0}', sum)#</div>");
+                                                columns.Bound(q => q.PowerPast).Title(Localizer["After measures"].Value).Format("{0:n0}").ClientFooterTemplate("#=sum#").HtmlAttributes(new { style = "text-align: right;" }).ClientFooterTemplate("<div style='float: right'>#= kendo.format('{0:N0}', sum)#</div>");
+                                            })
+                                            .Height(290)
+                                            .Scrollable()
+                                            .Selectable(s => s
+                                            .Mode(GridSelectionMode.Multiple)
+                                            .Type(GridSelectionType.Row))
+                                            .DataSource(dataSource => dataSource
+                                            .Ajax()
+                                            .Read(read => read.Action("GetShipOperationPowerList", "Ship").Data("filterShip"))
+                                            .Aggregates(agg => agg.Add(p => p.PowerPre).Sum())
+                                            .Aggregates(agg => agg.Add(p => p.PowerPast).Sum())
+                                            )
+                                            )
+
+                                    </div>
+
+                                    <div class="tab-pane fade" style="padding: 0px;" role="tabpanel" id="tabSummary">
+
+                                        <table style="width: 100%; margin:0px; padding:0px;">
+                                            <tr>
+                                                <th>Info</th>
+                                                <th>Power kWh</th>
+                                                <th>CO₂ (ton)</th>
+                                                <th>NOx (ton)</th>
+                                                <th>SOx (ton)</th>
+                                            </tr>
+                                                <tr><td>Power production before measures</td><td style="text-align: right;" id="idBS"></td><td style="text-align: right;" id="idBSC"></td><td  style="text-align: right;" id="idBSnoX"></td><td style="text-align: right;"  id="idBSsoX"></td></tr>
+                                                <tr><td>Fuel saving power reduction</td><td style="text-align: right;" id="idPR"></td><td style="text-align: right;"></td><td style="text-align: right;"></td><td style="text-align: right;"></td></tr>
+                                                <tr><td>New necessary power production</td><td style="text-align: right;" id="idNPP"></td><td style="text-align: right;"></td><td style="text-align: right;"></td><td style="text-align: right;"></td></tr>
+
+                                                <tr><td>Power production after measures</td><td style="text-align: right;" id="idAS"></td><td style="text-align: right;" id="idASC"></td><td style="text-align: right;" id="idASnoX"></td><td style="text-align: right;" id="idASsoX"></td></tr>
+
+                                                <tr><td>Maintenance saving after measures</td><td style="text-align: right;" id="idMSAM"></td><td id="currencyCode">NOK</td><td style="text-align: right;"></td><td style="text-align: right;"></td></tr>
+                                        </table>
+
+                                            <table style="width: 100%; margin:0px; padding:0px;">
+                                            <tr>
+                                                <th>Info</th>
+                                                    <th>Fuel @ViewData["Units"]</th>
+                                            </tr>
+                                            <tr><td>Fuel using before measures</td><td style="text-align: right;" id="idFBS"></td></tr>
+                                            <tr><td>Fuel using after measures</td><td style="text-align: right;" id="idFAS"></td></tr>
+                                            <tr><td>Saving</td><td style="text-align: right;" id="idFASaving"></td></tr>
+                                        </table>
+
+                                    </div>
+
+                                        <div class="tab-pane fade" style="padding: 0px;" role="tabpanel" id="tabSavings">
+                                            @(Html.Kendo().Grid<Susteni.Models.ShipOperationSavingPowerItem>()
+                                                .Name("operationSavingList")
+                                                .Columns(columns =>
+                                                {
+                                                    columns.Bound(q => q.EquipmentTypeName).Title(Localizer["Name"].Value);
+                                                    columns.Bound(q => q.OperationMode1).Title(Localizer["OperationMode1"].Value).Format("{0:n0}").ClientFooterTemplate("#=sum#").HtmlAttributes(new { style = "text-align: right;" }).ClientFooterTemplate("<div style='float: right'>#= kendo.format('{0:N0}', sum)#</div>");
+                                                    columns.Bound(q => q.OperationMode2).Title(Localizer["OperationMode2"].Value).Format("{0:n0}").ClientFooterTemplate("#=sum#").HtmlAttributes(new { style = "text-align: right;" }).ClientFooterTemplate("<div style='float: right'>#= kendo.format('{0:N0}', sum)#</div>");
+                                                    columns.Bound(q => q.OperationMode3).Title(Localizer["OperationMode3"].Value).Format("{0:n0}").ClientFooterTemplate("#=sum#").HtmlAttributes(new { style = "text-align: right;" }).ClientFooterTemplate("<div style='float: right'>#= kendo.format('{0:N0}', sum)#</div>");
+                                                    columns.Bound(q => q.OperationMode4).Title(Localizer["OperationMode4"].Value).Format("{0:n0}").ClientFooterTemplate("#=sum#").HtmlAttributes(new { style = "text-align: right;" }).ClientFooterTemplate("<div style='float: right'>#= kendo.format('{0:N0}', sum)#</div>");
+                                                    columns.Bound(q => q.OperationMode5).Title(Localizer["OperationMode5"].Value).Format("{0:n0}").ClientFooterTemplate("#=sum#").HtmlAttributes(new { style = "text-align: right;" }).ClientFooterTemplate("<div style='float: right'>#= kendo.format('{0:N0}', sum)#</div>");
+                                                    columns.Bound(q => q.OperationMode6).Title(Localizer["OperationMode6"].Value).Format("{0:n0}").ClientFooterTemplate("#=sum#").HtmlAttributes(new { style = "text-align: right;" }).ClientFooterTemplate("<div style='float: right'>#= kendo.format('{0:N0}', sum)#</div>");
+                                                    columns.Bound(q => q.OperationMode7).Title(Localizer["OperationMode7"].Value).Format("{0:n0}").ClientFooterTemplate("#=sum#").HtmlAttributes(new { style = "text-align: right;" }).ClientFooterTemplate("<div style='float: right'>#= kendo.format('{0:N0}', sum)#</div>");
+                                                    columns.Bound(q => q.OperationMode8).Title(Localizer["OperationMode8"].Value).Format("{0:n0}").ClientFooterTemplate("#=sum#").HtmlAttributes(new { style = "text-align: right;" }).ClientFooterTemplate("<div style='float: right'>#= kendo.format('{0:N0}', sum)#</div>");
+                                                    columns.Bound(q => q.OperationMode9).Title(Localizer["OperationMode9"].Value).Format("{0:n0}").ClientFooterTemplate("#=sum#").HtmlAttributes(new { style = "text-align: right;" }).ClientFooterTemplate("<div style='float: right'>#= kendo.format('{0:N0}', sum)#</div>");
+                                                })
+                                                .Height(290)
+                                                .Scrollable()
+                                                .Selectable(s => s
+                                                .Mode(GridSelectionMode.Multiple)
+                                                .Type(GridSelectionType.Row))
+                                                .Events(e => e.DataBound("onOSLBound"))
+
+                                                .DataSource(dataSource => dataSource
+                                                    .Ajax()
+                                                    .Read(read => read.Action("GetSavingPrModeList", "Ship").Data("filterTypes"))
+                                                    .Aggregates(agg => agg.Add(p => p.OperationMode1).Sum())
+                                                    .Aggregates(agg => agg.Add(p => p.OperationMode2).Sum())
+                                                    .Aggregates(agg => agg.Add(p => p.OperationMode3).Sum())
+                                                    .Aggregates(agg => agg.Add(p => p.OperationMode4).Sum())
+                                                    .Aggregates(agg => agg.Add(p => p.OperationMode5).Sum())
+                                                    .Aggregates(agg => agg.Add(p => p.OperationMode6).Sum())
+                                                    .Aggregates(agg => agg.Add(p => p.OperationMode7).Sum())
+                                                    .Aggregates(agg => agg.Add(p => p.OperationMode8).Sum())
+                                                    .Aggregates(agg => agg.Add(p => p.OperationMode9).Sum())
+                                                    )
+                                                )
+                                        </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                </div>
+                <div class="col-12">
+                    <div id="chart"></div>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+
+
+
+</form>
+
+
+<script id="successTemplate" type="text/x-kendo-template">
+    <div class="upload-success">
+        <img src="@Url.Content("~/images/emoticon-happy.svg")" style="float:left; height:48px; width:48px; margin-right: 16px;"/>
+        <p>#= message #</p>
+    </div>
+</script>
+
+
+<script id="errorTemplate" type="text/x-kendo-template">
+    <div class="wrong-pass">
+        <img src="@Url.Content("~/images/emoticon-sad.svg")" style="float:left; height:48px; width:48px; margin-right: 16px;"/>
+        <p>#= message #</p>
+    </div>
+</script>
+
+
+@(Html.Kendo().Notification()
+    .Name("notification")
+    .Position(p => p.Pinned(true).Top(30).Right(30))
+    .Stacking(NotificationStackingSettings.Down)
+    .AutoHideAfter(5000)
+    .Templates(t =>
+    {
+        t.Add().Type("success").ClientTemplateID("successTemplate");
+        t.Add().Type("error").ClientTemplateID("errorTemplate");
+    })
+)
+
+@(Html.Kendo().Window()
+        .Name("DialogSupport")
+        .Title(Localizer["Support"].Value)
+        .Visible(false)
+        .Width(1200)
+        .Modal(true)
+        .Draggable()
+        )
+
+
+@(Html.Kendo().Window()
+    .Name("dialogLastOppBilde")
+    .Title(Localizer["Last opp bilde"].Value)
+    .HtmlAttributes(new { style = "border:1px; padding-bottom: 0px; background-color: #F2F2F2;" })
+    .Visible(false)
+    .Width(1000)
+    .Modal(true)
+    .Draggable()
+    )
+
+@(Html.Kendo().Window()
+    .Name("dialogEquipment")
+    .Title(Localizer["Equipment"].Value)
+    .HtmlAttributes(new { style = "border:1px; padding-bottom: 0px; background-color: #F2F2F2;" })
+    .Visible(false)
+    .Width(600)
+    .Modal(true)
+    .Draggable()
+    )
+   
+
+@(Html.Kendo().Window()
+    .Name("dialogHeatPowerGenerator")
+    .Title(Localizer["Heat power generator"].Value)
+    .HtmlAttributes(new { style = "border:1px; padding-bottom: 0px; background-color: #F2F2F2;" })
+    .Visible(false)
+    .Width(600)
+    .Modal(true)
+    .Draggable()
+    )
+
+@(Html.Kendo().Window()
+    .Name("dialogGeneratorModeEdit")
+    .Title(Localizer["Generator mode edit"].Value)
+    .HtmlAttributes(new { style = "border:1px; padding-bottom: 0px; background-color: #F2F2F2;" })
+    .Visible(false)
+    .Width(600)
+    .Modal(true)
+    .Draggable()
+    )
+@(Html.Kendo().Window()
+    .Name("DialogHjelp")
+    .Title(Localizer["Help"].Value)
+    .Visible(false)
+    .Height(800)
+    .Width(1200)
+    .Modal(true)
+    .Draggable()
+    )
+
+@(Html.Kendo().Dialog()
+        .Name("dialogProfil")
+        .Title("Set active profile")
+        .HtmlAttributes(new { style = "border:1px; margin: 0px; padding: 10px;" })
+        .Content(
+        "<div class='k-space-right search-wrapper'><span class='k-textbox k-input k-input-md k-rounded-md k-input-solid'><input id='idCustmerSearch' type='text' placeholder='Søk etter organisasjon' class='k-input-inner'/><span class='k-input-suffix'><span class='k-input-icon search'></span></span></span></div>" +
+
+            Html.Kendo().ListBox()
+                .Name("listProfil")
+                //.HtmlAttributes(new { style = "height: 100%;" })
+                .DataValueField("ProfilGuid")
+                .DataTextField("Name")
+                .Selectable(ListBoxSelectable.Single)
+                .DataSource(dataSource => dataSource
+                    .Ajax()
+                    .Read(read => read.Action("GetProfileList", "Ship").Data("filterShip"))
+                    )
+                .ToHtmlString()
+                )
+        .Visible(false)
+        .Width(400)
+        .Modal(true)
+        .Actions(actions =>
+        {
+            actions.Add().Text("Cancel");
+            actions.Add().Text("Set Active").Action("onActionOK").Primary(true);
+        })
+    )
+
+@(Html.Kendo().Dialog()
+    .Name("dialogCopyFromProfile")
+    .Title("Copy from Profile")
+    .Content(
+        Html.Kendo().DropDownList()
+        .Name("lstProfiles")
+        .DataTextField("Name")
+        .DataValueField("profilGuid")
+        .OptionLabel("From no profile")
+        .DataSource(dataSource => dataSource
+            .Ajax()
+            .Read(read => read
+            .Action("GetProfileList", "Ship").Data("filterShip")
+            )
+        )
+        .ToHtmlString()
+        )
+        .Width(500)
+        .Modal(false)
+        .Visible(false)
+        .Actions(actions =>
+        {
+            actions.Add().Text("Cancel");
+            actions.Add().Text("Copy").Action("copyFromProfile").Primary(true);
+        })
+    )
+
+<script id="shipFunction">
+    var equipmentType = 2;
+    var shipGuid = "";
+    var generatorGuid = "";
+    var ppSavings = 0;
+    var profilGuid = "";
+    var ppRN = 0;
+
+    function showDialogProfile() {
+        $('#dialogProfil').data("kendoDialog").open();
+    }
+
+    function onActionOK(e) {
+        var lwFellesraad = $("#listProfil").data("kendoListBox");
+
+        var selectedF = lwFellesraad.select();
+        var selItemF = lwFellesraad.dataItem(selectedF);
+        var profile = "";
+        var name = "";
+
+        if (typeof selItemF != 'undefined') {
+            profile = selItemF.ProfilGuid;
+            name = selItemF.Name;
+        }
+
+        $.ajax({
+            url: '@Url.Action("SetActivProfil", "Ship")',
+            data: { profilGuid: profile, shipGuid: shipGuid},
+            type: "GET"
+        }).always(function (result) {
+            document.getElementById("Ship_ProfilGuid").value = profile;
+            document.getElementById("Ship_ProfilName").value = name;
+            document.getElementById("idProfileName").innerHTML = name;
+            $("#generatorList").data("kendoGrid").dataSource.read();
+            $("#generatorModeList").data("kendoGrid").dataSource.read();
+            $("#powerList").data("kendoGrid").dataSource.read();
+            $("#operationSavingList").data("kendoGrid").dataSource.read();
+
+        });
+    }
+
+
+    function filterShip() {
+        shipGuid = document.getElementById("Ship_ShipGuid").value;
+        profilGuid = document.getElementById("Ship_ProfilGuid").value;
+
+        return { shipGuid: shipGuid, profilGuid: profilGuid }
+    }
+
+    function filterGenerator() {
+        profilGuid = document.getElementById("Ship_ProfilGuid").value;
+        return { generatorGuid: generatorGuid, profilGuid: profilGuid }
+    }
+
+    function filterTypes() {
+        shipGuid = document.getElementById("Ship_ShipGuid").value;
+        profilGuid = document.getElementById("Ship_ProfilGuid").value;
+        if (profilGuid != "") {
+            profilGuids = "'" + profilGuid + "'";
+        }
+        else {
+            profilGuids = "";
+        }
+
+        return { shipGuid: shipGuid, equipmentType: equipmentType, profilGuid: profilGuid, profilGuids: profilGuids }
+    }
+
+
+    function onGeneratorChange(e) {
+        var grid = $("#generatorList").data("kendoGrid");
+        var selected = grid.select();
+        var data = grid.dataItem(selected);
+
+        generatorGuid = data.GeneratorGuid;
+
+        $("#generatorModeList").data("kendoGrid").dataSource.read();
+    }
+
+    function onOSLBound() {
+        var grid = $("#operationSavingList").data("kendoGrid");
+
+        $.ajax({
+            url: '@Url.Action("GetShipOperationModeDataList", "Ship")',
+            type: "GET",
+            data: { shipGuid: shipGuid }
+        }).done(function (result) {
+            i = 0;
+            for (om of result) {
+                i++;
+                x = $("#operationSavingList thead [data-field=OperationMode" + i + "]");
+                x.html(om.Name);
+            }
+            for (let j = i + 1; j <= 9; j++) {
+                grid.hideColumn(j);
+            }
+
+        });
+    }
+
+    $(document).ready(function () {
+        $.ajax({
+            url: '@Url.Action("getCurrency", "Account")',
+            type: "GET"
+            })
+        .done(function (result) {
+            var currency = result;
+            document.getElementById("currencyCode").innerHTML = currency;
+            });
+
+        shipGuid = document.getElementById("Ship_ShipGuid").value;
+        document.getElementById("idName").innerHTML = document.getElementById("Ship_Name").value;
+        document.getElementById("idProfileName").innerHTML = document.getElementById("Ship_ProfilName").value;
+
+        profilGuid = document.getElementById("Ship_ProfilGuid").value;
+
+        $.ajax({
+            url: '@Url.Action("SetActiveProfile", "Ship")',
+            type: "PUSH",
+            data: { profilGuid: profilGuid, linkGuid: shipGuid },
+            dataType: "json"
+        });
+
+        getFSPowerReduction();
+    });
+
+
+    function onGeneratorDataBound() {
+        var ppBs = 0;
+        var ppAs = 0;
+        
+        var ppFBs = 0; 
+        var ppFAs = 0;
+
+        var ppBsc = 0;
+        var ppAsc = 0;
+        var ppFAsc = 0;
+        var ppMsc = 0;
+        var noxBsc = 0;
+        var noxAsc = 0;
+        var soxBsc = 0;
+        var soxAsc = 0;
+
+        var data = this.dataSource.data();
+        $(data).each(function () {
+            ppBs += this.EffectBefore;
+            ppAs += this.EffectAfter;
+
+            ppFBs += this.FuelBefore;
+            ppFAs += this.FuelAfter;
+
+            ppBsc += this.CO2Before;
+            ppAsc += this.CO2After;
+
+            noxBsc += this.NOxBefore;
+            noxAsc += this.NOxAfter;
+            
+            soxBsc += this.SOxBefore;
+            soxAsc += this.SOxAfter;
+
+            ppMsc += this.MaintenanceCost;
+        });
+
+        var ppFSs = ppFBs - ppFAs;
+
+        document.getElementById("idBS").innerHTML = ppBs.toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 0, });
+        document.getElementById("idAS").innerHTML = ppAs.toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 0, });
+
+        document.getElementById("idBSnoX").innerHTML = noxBsc.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2, });
+        document.getElementById("idASnoX").innerHTML = noxAsc.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2, });
+
+        document.getElementById("idBSsoX").innerHTML = soxBsc.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2, });
+        document.getElementById("idASsoX").innerHTML = soxAsc.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2, });
+
+        document.getElementById("idBSC").innerHTML = ppBsc.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2, });
+        document.getElementById("idASC").innerHTML = ppAsc.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2, });
+
+
+        document.getElementById("idFBS").innerHTML = ppFBs.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2, });
+        document.getElementById("idFAS").innerHTML = ppFAs.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2, });
+
+        document.getElementById("idFASaving").innerHTML = ppFSs.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2, });
+        document.getElementById("idMSAM").innerHTML = ppMsc.toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 0, });
+
+        $.ajax({
+            url: '@Url.Action("GetShipFuleSavingsInfo", "Ship")',
+            type: "GET",
+            data: { shipGuid: shipGuid, profilGuid: profilGuid }
+            })
+        .done(function (result) {
+            ppSavings = result.Savings;
+            if (ppBs > 0) {
+                ppRN = ppBs - ppSavings;
+                document.getElementById("idNPP").innerHTML = ppRN.toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 0, });
+                }
+            document.getElementById("idPR").innerHTML = result.Savings.toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 0, });
+            createChart(ppBs, ppAs, ppRN);
+            });
+
+        var grid = $("#generatorList").data("kendoGrid");
+        currRowIndex = -1;
+
+        $("#generatorList tbody tr").each(function () {
+
+            var currentRowData = grid.dataItem(this);
+
+            if (generatorGuid == currentRowData.GeneratorGuid) {
+                currRowIndex = this.rowIndex;
+            }
+        });
+
+        if (currRowIndex >= 0) {
+            grid.select("tr:eq(" + (currRowIndex) + ")");
+        }
+
+    }
+
+    function getFSPowerReduction(e) {
+
+        $.ajax({
+            url: '@Url.Action("GetShipFuleSavingsInfo", "Ship")',
+            type: "GET",
+            data: { shipGuid: shipGuid }
+            })
+        .done(function (result) {
+            ppSavings = result.Savings;
+            if (e > 0) {
+                ppRN = e - ppSavings;
+                document.getElementById("idNPP").innerHTML = (e - ppSavings).toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 0, });
+            }
+            document.getElementById("idPR").innerHTML = result.Savings.toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 0, });
+        });
+    }
+
+
+</script>
+
+@(Html.Kendo().Window()
+        .Name("dialogReports")
+        .Title("Reports")
+        .Visible(false)
+        .Width(1200)
+        .Modal(true)
+        .Draggable()
+        )
+
+
+
+
+@(Html.Kendo().Window()
+    .Name("dialogVisPDFRapport")
+    .Position(p => p.Top(60).Left(300))
+    .Title(Localizer["Dokument"].Value)
+    .HtmlAttributes(new { style = "border:1px; padding: 0px;" })
+    .Visible(false)
+    .Content(
+        @Html.Kendo().PDFViewer()
+            .Name("pdfViewerRapport")
+            //.Events(ev => ev.Render("onRender"))
+            .HtmlAttributes(new { style = "padding: 0px; margin: 0px;" })
+            .ToHtmlString()
+    )
+    .Modal(true)
+    .Draggable()
+    )
+
+
+<script id="reports">
+    var firstRender = true;
+    var skjerm = "PowerProduction";
+    var vis = "Alle";
+    var stringfilter = "";
+    var RapId = "";
+
+    function skjermFilter() {
+        return { skjerm: skjerm, RapType: 5 }
+    }
+
+    function showDialogRapporter() {
+        $.ajax({
+            url: "/|/DialogReportList",
+            method: 'GET',
+            success: function (result) {
+                $('#dialogReports').html(result);
+                var popup = $('#dialogReports').data("kendoWindow");
+                popup.center().open();
+            }
+        });
+    }
+
+
+    function ShowReport() {
+        var lvDocument = $("#lvRapporter").data("kendoListView");
+        xIW = document.getElementById("importerer");
+        xIR = document.getElementById("infoRapport");
+
+        var selF = lvDocument.select();
+        var selIF = lvDocument.dataItem(selF);
+        var RapId = "";
+        var base64string = "";
+        firstRender = true;
+
+        if (typeof selIF != 'undefined') {
+            RapId = selIF.RapId;
+            x = document.getElementById("ReportVerdier_RapId");
+            xRT = document.getElementById("ReportVerdier_RapType");
+            x.value = RapId;
+            xRT.value = selIF.RapType;
+        }
+
+        var $this = $('#rapportForm').serialize();
+
+        xIW.style.display = "";
+        xIR.style.display = "none";
+
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("ShowTelerikReport", "Report")',
+            data: $this
+        }).done(function (result) {
+            xIW.style.display = "none";
+            xIR.style.display = "";
+            RapId = "X";
+            if (result.ErrorCode > 0) {
+                alert(result.ErrorTekst);
+            }
+            else {
+                var popup = $('#dialogVisPDFRapport').data("kendoWindow");
+                popup.open();
+
+                var pdfViewer = $("#pdfViewerRapport").data("kendoPDFViewer");
+                var pdfHandlerUrl = "/Report/VisRapport?rapId=" + RapId;
+
+                pdfViewer.fromFile(pdfHandlerUrl);
+                pdfViewer.loadPage(1);
+            }
+        });
+    }
+
+    function onRender(e) {
+        if (firstRender) {
+            e.sender.toolbar.zoom.combobox.value("fitToWidth");
+            e.sender.toolbar.zoom.combobox.trigger("change");
+            firstRender = false;
+        }
+    }
+
+
+</script>
+
+
+<script id="idMenu">
+
+    function fuelSavings() {
+        shipGuid = document.getElementById("Ship_ShipGuid").value;
+        Name = document.getElementById("Ship_Name").value;
+        ProfilGuid = document.getElementById("Ship_ProfilGuid").value;
+        ProfilName = document.getElementById("Ship_ProfilName").value;
+        window.location = "../Ship/FuelSavings?shipGuid=" + shipGuid + "&Name=" + Name + "&ProfilGuid=" + ProfilGuid + "&ProfilName=" + ProfilName;
+
+    }
+
+    function generators() {
+        shipGuid = document.getElementById("Ship_ShipGuid").value;
+        Name = document.getElementById("Ship_Name").value;
+        ProfilGuid = document.getElementById("Ship_ProfilGuid").value;
+        ProfilName = document.getElementById("Ship_ProfilName").value;
+        window.location = "../Ship/ElProduction?shipGuid=" + shipGuid + "&Name=" + Name + "&ProfilGuid=" + ProfilGuid + "&ProfilName=" + ProfilName;
+    }
+
+    function summary() {
+        shipGuid = document.getElementById("Ship_ShipGuid").value;
+        Name = document.getElementById("Ship_Name").value;
+        ProfilGuid = document.getElementById("Ship_ProfilGuid").value;
+        ProfilName = document.getElementById("Ship_ProfilName").value;
+        window.location = "../Ship/Summary?shipGuid=" + shipGuid + "&Name=" + Name + "&ProfilGuid=" + ProfilGuid + "&ProfilName=" + ProfilName;
+
+    }
+
+    function plan() {
+        shipGuid = document.getElementById("Ship_ShipGuid").value;
+        Name = document.getElementById("Ship_Name").value;
+        ProfilGuid = document.getElementById("Ship_ProfilGuid").value;
+        ProfilName = document.getElementById("Ship_ProfilName").value;
+        window.location = "../Ship/InvestmentPlan?shipGuid=" + shipGuid + "&Name=" + Name + "&ProfilGuid=" + ProfilGuid + "&ProfilName=" + ProfilName;
+    }
+
+</script>
+
+<script id="operataionModeFunction">
+    var updateGrid = false;
+
+    var operationModeGuid = "";
+    var generatorModeGuid = "";
+    var generatorGuid = "";
+
+    function onGeneratorModeChange(e) {
+        var grid = $("#generatorModeList").data("kendoGrid");
+        var selected = grid.select();
+        var data = grid.dataItem(selected);
+
+        generatorModeGuid = data.GeneratorModesGuid;
+        operationModeGuid = data.OperationModeGuid;
+        generatorGuid = data.GeneratorGuid;
+
+        var fabOME = $('#generatorModeEdit').getKendoFloatingActionButton();
+        fabOME.show();
+        }
+
+    function showDialogGeneratorModeEdit() {
+        $.ajax({
+            url: '@Url.Action("DialogGeneratorModeEdit", "Ship")',
+            data: { generatorModeGuid: generatorModeGuid, operationModeGuid: operationModeGuid, generatorGuid: generatorGuid, profilGuid: profilGuid },
+            type: "GET"
+            })
+        .done(function (result) {
+            $('#dialogGeneratorModeEdit').html(result);
+            var popup = $('#dialogGeneratorModeEdit').data("kendoWindow");
+            popup.center().open();
+            });
+        }
+
+
+    function saveGeneratorModes() {
+        var $this = $('#generatorModesForm').serialize();
+
+        $.ajax({
+            url: '@Url.Action("SetShipGeneratorModes", "Ship")',
+            type: "POST",
+            data: $this,
+            dataType: "json"
+            })
+        .done(function (result) {
+            var popup = $('#dialogGeneratorModeEdit').data("kendoWindow");
+            popup.close();
+            $("#generatorModeList").data("kendoGrid").dataSource.read();
+            $("#generatorList").data("kendoGrid").dataSource.read();
+            $("#powerList").data("kendoGrid").dataSource.read();
+            });
+    }
+
+    function copyGeneratorModes() {
+        var numerictextboxHA = $("#ShipGeneratorModes_HoursAfter").data("kendoNumericTextBox");
+        numerictextboxHA.value(document.getElementById("ShipGeneratorModes_HoursBefore").value);
+
+        var numerictextboxLA = $("#ShipGeneratorModes_PercentSaving").data("kendoNumericTextBox");
+        numerictextboxLA.value(document.getElementById("ShipGeneratorModes_PercentLoad").value);
+    }
+
+    function closeGeneratorMode() {
+        var popup = $('#dialogGeneratorModeEdit').data("kendoWindow");
+        popup.close();
+    }
+
+
+    function onOperationModeChange(e) {
+        var grid = $("#shipOperationmodeList").data("kendoGrid");
+        var selected = grid.select();
+        var data = grid.dataItem(selected);
+
+        operationModeGuid = data.OperationModeGuid;
+
+        var fabOME = $('#operationModeEdit').getKendoFloatingActionButton();
+        fabOME.show();
+        var fabOMR = $('#operationModeRemove').getKendoFloatingActionButton();
+        fabOMR.show();
+
+    }
+
+
+    function showDialogEquipment() {
+        $.ajax({
+            url: '@Url.Action("DialogEquipment", "Ship")',
+            data: { shipGuid: shipGuid, equipmentType: equipmentType },
+            type: "GET"
+        })
+            .done(function (result) {
+                $('#dialogEquipment').html(result);
+                var popup = $('#dialogEquipment').data("kendoWindow");
+                popup.center().open();
+            });
+    }
+
+    function showDialogEquipmentEdit() {
+        $.ajax({
+            url: '@Url.Action("DialogEquipmentEdit", "Ship")',
+            data: { operationModeGuid: operationModeGuid },
+            type: "GET"
+        })
+            .done(function (result) {
+                $('#dialogEquipment').html(result);
+                var popup = $('#dialogEquipment').data("kendoWindow");
+                popup.center().open();
+            });
+    }
+
+    function saveEquipment() {
+        var $this = $('#equipmentForm').serialize();
+
+        $.ajax({
+            url: '@Url.Action("SetShipEquipment", "Ship")',
+            type: "PUSH",
+            data: $this,
+            dataType: "json"
+        })
+            .done(function (result) {
+                var popup = $('#dialogEquipment').data("kendoWindow");
+                popup.close();
+                $("#equipmentList").data("kendoGrid").dataSource.read();
+            });
+    }
+
+    function saveGrid() {
+        updateGrid = true;
+        var grid = $("#generatorModeList").data("kendoGrid");
+        grid.saveChanges();
+        
+    }
+
+    function onGeneratorListBound(e) {
+        $("#powerList").data("kendoGrid").dataSource.read();
+
+        if (updateGrid) {
+            updateGrid = false;
+            $("#generatorList").data("kendoGrid").dataSource.read();
+        }
+
+        currRowIndex = -1;
+
+        var grid = $("#generatorModeList").data("kendoGrid");
+        var data = this.dataSource.data();
+        $(data).each(function () {
+            var Effect = this.HoursPrYear * this.kW * this.PercentLoad / 100;
+            var SavingEffect = this.HoursPrYear * this.kW * this.PercentSaving / 100;
+            this.set("Effect", Effect);
+            this.set("SavingEffect", SavingEffect);
+            this.set("Saving", Effect - SavingEffect);
+            });
+
+        $("#generatorModeList tbody tr").each(function () {
+                        var currentRowData = grid.dataItem(this);
+            if (generatorModeGuid == currentRowData.GeneratorModesGuid) {
+                currRowIndex = this.rowIndex;
+            }
+        });
+
+        if (currRowIndex >= 0) {
+            grid.select("tr:eq(" + (currRowIndex) + ")");
+        }
+
+        
+    }
+
+    function onGeneratorSaved(e) {
+        //$("#generatorModeList").data("kendoGrid").dataSource.read();
+        var data = this.dataSource.data();
+        $(data).each(function () {
+            var Effect = this.HoursPrYear * this.kW * this.PercentLoad / 100;
+            var SavingEffect = this.HoursPrYear * this.kW * this.PercentSaving / 100;
+            this.set("Effect", Effect);
+            this.set("SavingEffect", SavingEffect);
+            this.set("Saving", Effect - SavingEffect);
+
+        });
+    }
+
+    function saveOperationMode() {
+        var $this = $('#shipForm').serialize();
+
+        $.ajax({
+            url: '@Url.Action("SetShipOperationMode", "Ship")',
+            type: "PUSH",
+            data: $this
+            })
+        .done(function (result) {
+            var popup = $('#dialogOperationMode').data("kendoWindow");
+            popup.close();
+            $("#shipOperationmodeList").data("kendoGrid").dataSource.read();
+            });
+        }
+
+
+    function closeOperationMode() {
+        var popup = $('#dialogOperationMode').data("kendoWindow");
+        popup.close();
+    }
+
+    function createChart(idBS, idAS, idPR) {
+        // idBS = document.getElementById("idBS").innerHTML;
+        // idAS = document.getElementById("idAS").innerHTML;
+        // idPR = document.getElementById("idPR").innerHTML;
+
+        // idBS = idBS.replaceAll("&nbsp;", "");
+        // idAS = idAS.replaceAll("&nbsp;", "")
+        // idPR = idPR.replaceAll("&nbsp;", "")
+
+        $("#chart").kendoChart({
+            dataSource: {
+                transport: {
+                    read: {
+                        url: "/Ship/getChart",
+                        dataType: "json",
+                        data: { idBs: idBS, idAs: idAS, idPR: idPR }
+                    }
+                }
+            },
+            legend: {
+                position: "top"
+            },
+            seriesDefaults: {
+                type: "column"
+            },
+            series: [{
+                field: "sum",
+                categoryField: "periode",
+                name: "sum"
+            }],
+            categoryAxis: {
+                labels: {
+                    rotation: -90
+                },
+                crosshair: {
+                    visible: true
+                }
+            },
+            valueAxis: { min: 0, labels: {format: "N0"} },
+            tooltip: {
+                visible: true,
+                shared: true,
+                format: "N0"
+            }
+        });
+    }
+
+</script>
+
+
+<script id="heatGeneratorFunction">
+
+    var HeatUnitGuid = "";
+
+    function onGeneratorHeatListChange(e) {
+        var grid = $("#generatorHeatList").data("kendoGrid");
+        var selected = grid.select();
+        var data = grid.dataItem(selected);
+
+        HeatUnitGuid = data.HeatUnitGuid;
+
+        var fabOME = $('#heatProductionEdit').getKendoFloatingActionButton();
+        fabOME.show();
+        var fabOMR = $('#heatProductionRemove').getKendoFloatingActionButton();
+        fabOMR.show();
+
+    }
+
+
+    function showDialogHeatPowerGenerator() {
+        $.ajax({
+            url: '@Url.Action("DialogHeatPowerGenerator", "Ship")',
+            data: { shipGuid: shipGuid },
+            type: "GET"
+            })
+        .done(function (result) {
+            $('#dialogHeatPowerGenerator').html(result);
+            var popup = $('#dialogHeatPowerGenerator').data("kendoWindow");
+            popup.center().open();
+            });
+    }
+
+    function showDialogHeatPowerGeneratorEdit() {
+        $.ajax({
+            url: '@Url.Action("DialogHeatPowerGeneratorEdit", "Ship")',
+            data: { HeatUnitGuid: HeatUnitGuid },
+            type: "GET"
+        })
+            .done(function (result) {
+                $('#dialogHeatPowerGenerator').html(result);
+                var popup = $('#dialogHeatPowerGenerator').data("kendoWindow");
+                popup.center().open();
+            });
+    }
+
+
+    function saveHeatPowerGenerator() {
+        var $this = $('#heatPowerGeneratorForm').serialize();
+
+        $.ajax({
+            url: '@Url.Action("SetShipGeneratorHeatUnit", "Ship")',
+            type: "PUSH",
+            data: $this,
+            dataType: "json"
+        })
+            .done(function (result) {
+                var popup = $('#dialogHeatPowerGenerator').data("kendoWindow");
+                popup.close();
+                $("#generatorHeatList").data("kendoGrid").dataSource.read();
+            });
+    }
+
+
+    function onGeneratorHeatListBound(e) {
+        var data = this.dataSource.data();
+        $(data).each(function () {
+            //var Effect = this.HoursPrYear * this.kW * this.PercentLoad / 100;
+            //var SavingEffect = this.HoursPrYear * this.kW * this.PercentSaving / 100;
+            //this.set("Effect", Effect);
+            //this.set("SavingEffect", SavingEffect);
+            //this.set("Saving", Effect - SavingEffect);
+
+        });
+    }
+
+    function closeHeatPowerGenerator() {
+        var popup = $('#dialogHeatPowerGenerator').data("kendoWindow");
+        popup.close();
+    }
+
+</script>
+
+@(Html.Kendo().Window()
+    .Name("dialogNewProfile")
+    .Title(Localizer["New profile"].Value)
+    .HtmlAttributes(new { style = "border:1px; padding-bottom: 0px; background-color: #F2F2F2;" })
+    .Visible(false)
+    .Width(500)
+    .Modal(true)
+    .Draggable()
+    )
+
+<script id = "idProfile">
+    var profilGuid = "";
+
+
+    function newProfiles() {
+        $.ajax({
+            url: '@Url.Action("NewProfile", "Ship")',
+            type: "GET"
+            })
+        .done(function (result) {
+            $('#dialogNewProfile').html(result);
+            shipGuid = document.getElementById("Ship_ShipGuid").value;
+            document.getElementById("Profile_LinkGuid").value = shipGuid;
+            var popup = $('#dialogNewProfile').data("kendoWindow");
+            popup.center().open();
+            });
+        }
+
+    function createProfiles() {
+        var $this = $('#profile').serialize();
+
+        $.ajax({
+            url: '@Url.Action("SetProfile", "Ship")',
+            type: "PUSH",
+            data: $this,
+            dataType: "json"
+        })
+            .done(function (result) {
+                var popup = $('#dialogNewProfile').data("kendoWindow");
+                popup.close();
+                $("#profiles").data("kendoDropDownList").dataSource.read();
+            });
+    }
+
+
+    function showDialogCopyProfiles() {
+        var popup = $('#dialogCopyFromProfile').data("kendoDialog");
+        popup.open();
+    }
+
+    function copyFromProfile() {
+        var grid = $("#lstProfiles").data("kendoDropDownList");
+        var selected = grid.select();
+        var data = grid.dataItem(selected);
+
+        copyFromprofilGuid = data.ProfilGuid;
+        shipGuid = document.getElementById("Ship_ShipGuid").value;
+
+        $.ajax({
+            url: '@Url.Action("CopyFromProfile", "Ship")',
+            type: "GET",
+            data: { shipGuid: shipGuid, profilGuid: copyFromprofilGuid, linkGuid: profilGuid }
+        }).done(function (result) {
+            $("#generatorModeList").data("kendoGrid").dataSource.read();
+            $("#generatorList").data("kendoGrid").dataSource.read();
+            $("#powerList").data("kendoGrid").dataSource.read();
+        });
+
+    }
+
+
+    function onProfileChange(e) {
+        var grid = $("#profiles").data("kendoDropDownList");
+        var selected = grid.select();
+        var data = grid.dataItem(selected);
+
+        profilGuid = data.ProfilGuid;
+        linkGuid = document.getElementById("Ship_ShipGuid").value;
+
+        if (profilGuid == undefined) { profilGuid = ""; }
+
+        $.ajax({
+            url: '@Url.Action("SetActiveProfile", "Ship")',
+            type: "PUSH",
+            data: { profilGuid: profilGuid, linkGuid: linkGuid },
+            dataType: "json"
+        });
+
+        $("#generatorModeList").data("kendoGrid").dataSource.read();
+        $("#generatorList").data("kendoGrid").dataSource.read();
+        $("#operationSavingList").data("kendoGrid").dataSource.read();
+    }
+
+</script>
+
+<script>
+
+
+    $(document).ready(function () {
+
+        var fbOMA = $("#equipmentAdd").getKendoFloatingActionButton();
+        var fbOMR = $("#equipmentRemove").getKendoFloatingActionButton();
+        var fbOME = $("#equipmentEdit").getKendoFloatingActionButton();
+
+        $("#equipmentAdd").prop("type", "button");
+        $("#equipmentRemove").prop("type", "button");
+        $("#equipmentEdit").prop("type", "button");
+
+        fbOMAText = "Add equipment";
+        fbOMRText = "Remove equipment";
+        fbOMEText = "Edit equipment";
+
+
+        $("#equipmentAdd").hover(function () {
+            fbOMA.text(fbOMAText);
+            fbOMA.element.find(".k-fab-text")
+                .stop().toggle(200);
+        }, function () {
+            fbOMA.element.find(".k-fab-text")
+                .stop()
+                .toggle(200)
+                .promise().done(function () {
+                    fbOMA.text("");
+                });
+        });
+
+        $("#equipmentRemove").hover(function () {
+            fbOMR.text(fbOMRText);
+            fbOMR.element.find(".k-fab-text")
+                .stop().toggle(200);
+        }, function () {
+            fbOMR.element.find(".k-fab-text")
+                .stop()
+                .toggle(200)
+                .promise().done(function () {
+                    fbOMR.text("");
+                });
+        });
+
+        $("#equipmentEdit").hover(function () {
+            fbOME.text(fbOMEText);
+            fbOME.element.find(".k-fab-text")
+                .stop().toggle(200);
+        }, function () {
+            fbOME.element.find(".k-fab-text")
+                .stop()
+                .toggle(200)
+                .promise().done(function () {
+                    fbOME.text("");
+                });
+        });
+
+        $("#generatorList th[data-field=FuelBefore]").html("<span class='k-cell-inner'><span class='k-link'><span class='k-column-title'>Fuel Consumption Before Measures @ViewData["Units"]</span></span></span>");
+        $("#generatorList th[data-field=FuelAfter]").html("<span class='k-cell-inner'><span class='k-link'><span class='k-column-title'>Fuel Consumption After Measures @ViewData["Units"]</span></span></span>");
+
+    });
+
+</script>
+
+
+<script id="hjelp">
+
+    function showHelp() {
+        $.ajax({
+            url: '@Url.Action("DialogHjelp", "Hjelp")',
+            type: 'GET'
+        }).done(function (result) {
+            $('#DialogHjelp').html(result);
+            var popup = $('#DialogHjelp').data("kendoWindow");
+            popup.center().open();
+        });
+    }
+
+    function addSupport() {
+        $.ajax({
+            url: '@Url.Action("DialogSupport", "HelpDesk")',
+            type: 'GET'
+        }).done(function (result) {
+            $('#DialogSupport').html(result);
+
+            xB = document.getElementById("idBilde");
+
+            document.getElementById("HelpDesk_Modul").value = "ElProduction";
+            document.getElementById("HelpDesk_Program").value = "2";
+            document.getElementById("HelpDesk_Status").value = "1";
+
+            const screenshotTarget = document.body;
+
+            html2canvas(screenshotTarget).then((canvas) => {
+                const base64image = canvas.toDataURL("image/png");
+                xB.innerHTML = "<img src='" + base64image + "' style='max-height: 260px; max-width: 350px;' alt='Bilde' / >";
+                document.getElementById("HelpDesk_byte64String").value = base64image
+            });
+
+            var popup = $('#DialogSupport').data("kendoWindow");
+            popup.center().open();
+        });
+    }
+
+
+    function hjelpFilter() {
+        return { Modul: 200, Skjerm: "" }
+    }
+
+</script>

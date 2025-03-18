@@ -1,0 +1,67 @@
+﻿@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
+@using TXTextControl.Web.MVC
+@using TXTextControl.Web
+
+
+ <style>
+
+     #ribbonbar {
+         background-color: whitesmoke;
+     }
+     
+
+     #writer .k-window-content:last-child {
+         padding: 0px;
+     }
+
+     #writer {
+         border: 1px solid darkgray;
+     }
+     #tabReports {
+         display: none !important;
+     }
+
+     #tabPermissions {
+         display: none !important;
+     }
+
+     #tabFormFields {
+         display: none !important;
+     }
+
+    div.txui-dialog {
+        z-index: 19000;
+    }
+
+ </style>
+
+<div id="writer">
+
+    <div class="tx-container" style="height: calc(100vh - 220px);">
+
+        @Html.TXTextControl().TextControl(settings =>
+        {
+            settings.ContextMenusEnabled=true;
+            settings.TableGridLines=false;
+            settings.Dock = DockStyle.Fill;
+            settings.BackColor=System.Drawing.Color.WhiteSmoke;
+        }).Render()
+
+    </div>
+
+    
+
+</div>
+
+<script type="text/javascript">
+    //TXTextControl.addEventListener("ribbonTabsLoaded", ribbonTabsIsLoaded());
+
+    function ribbonTabsIsLoaded() {
+        alert("Ok");
+    }
+    
+
+
+
+</script>

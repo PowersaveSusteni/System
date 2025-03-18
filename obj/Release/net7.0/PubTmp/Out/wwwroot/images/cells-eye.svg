@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="32px" height="32px" viewBox="0 0 32 32" enable-background="new 0 0 32 32" xml:space="preserve">
+  <g id="main">
+    <g id="icon">
+      <path d="M0.5,27.5L12.02,27.5L11.99,27.46L11.16,26.5L10.11,25.23L11.16,23.95L11.78,23.22L12.64,22.27L13.72,21.21L15.03,20.13L15.76,19.61L16.53,19.12L17.36,18.68L18.24,18.28L19.16,17.96L20.12,17.71L21.12,17.55L22.17,17.5L22.97,17.54L23.76,17.66L24.53,17.86L25.28,18.11L26,18.43L26.7,18.79L28.02,19.63L29.22,20.57L29.5,20.82L29.5,3.5L0.5,3.5zz" fill="#FFFFFF"/>
+      <path d="M0,3.5L0,27.5L0,28L0.5,28L12.49,28L11.99,27.46L11.59,27L1,27L1,4L29,4L29,20.39L29.22,20.57L30,21.28L30,3.5L30,3L29.5,3L0.5,3L0,3zz" fill="#383838"/>
+      <path d="M7,9L1,9L1,10L7,10L7,15L1,15L1,16L7,16L7,21L1,21L1,22L7,22L7,27L8,27L8,22L12.91,22L13.72,21.21L13.97,21L8,21L8,16L15,16L15,20.15L15.03,20.13L15.76,19.61L16,19.46L16,16L22,16L22,17.51L22.17,17.5L22.97,17.54L23,17.55L23,16L29,16L29,15L23,15L23,10L29,10L29,9L23,9L23,4L22,4L22,9L16,9L16,4L15,4L15,9L8,9L8,4L7,4zM15,10L15,15L8,15L8,10zM22,10L22,15L16,15L16,10zz" fill="#787979" opacity="0.6"/>
+    </g>
+    <g id="overlay">
+      <path d="M31.415,25.829C30.36,27.132,26.526,30.9,22.169,30.9s-7.692,-3.524,-9.469,-5.675c1.776,-2.151,5.111,-5.725,9.469,-5.725S30.36,24.526,31.415,25.829z" fill="#FFFFFF" stroke="#383838" stroke-width="1" stroke-miterlimit="10"/>
+      <ellipse cx="22.01" cy="25.202" rx="3.8" ry="3.798" fill="#92CBEE" stroke="#0964B0" stroke-width="1" stroke-linecap="round" stroke-miterlimit="10"/>
+      <ellipse cx="22.01" cy="25.2" rx="1.606" ry="1.658" fill="#383838" opacity="0.8"/>
+      <ellipse cx="23.214" cy="23.956" rx="0.803" ry="0.829" fill="#FFFFFF"/>
+    </g>
+  </g>
+</svg>

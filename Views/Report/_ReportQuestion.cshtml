@@ -1,0 +1,235 @@
+﻿@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
+@model Susteni.Models.ReportModel
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+
+<div class="container-fluid padding-0" id="sporsmalForm">
+
+    <input type = "hidden" asp-for="ReportQuestion.RapId" class="form-control">
+    <input type = "hidden" asp-for="ReportQuestion.SlettetDato" class="form-control">
+    <input type = "hidden" asp-for="ReportQuestion.OpprettetDate" class="form-control">
+    <input type = "hidden" asp-for="ReportQuestion.EndretAv" class="form-control">
+    <input type = "hidden" asp-for="ReportQuestion.EndretDato" class="form-control">
+    <input type = "hidden" asp-for="ReportQuestion.SlettetAv" class="form-control">
+    <input type = "hidden" asp-for="ReportQuestion.SlettetDato" class="form-control">
+    <input type = "hidden" asp-for="ReportQuestion.ReportSporsmalGuid" class="form-control">
+
+    <div class="row">
+        <button type="button" name="Gemeinde" class="commandSmal" onclick="sporsmaalNytt()" style="width: 160px; margin-left: 10px">
+            @Localizer["Nytt spørsmål"]
+            <img src="~/images/Ny.svg" style="width: 24px; height: 24px;" />
+        </button>
+
+        <button type="button" name="Gemeinde" class="commandSmal" onclick="sporsmaalLagre()" style="width: 100px; margin-left: 20px">
+            @Localizer["Lagre"]
+            <img src="~/images/Lagre.svg" style="width: 24px; height: 24px;" />
+        </button>
+
+        <button type="button" name="Gemeinde" class="commandSmal" onclick="sporsmaalSlett()" style="width: 100px; margin-left: 20px">
+            @Localizer["Slette"]
+            <img src="~/images/Slette.svg" style="width: 24px; height: 24px;" />
+        </button>
+    </div>
+
+    <div class="col-12">
+        <div class="panel with-nav-tabs panel-default" id="dataenter" style="padding: 10px;">
+            <div class="panel-body data padding-0">
+                <div class="tab-content data">
+
+                    <div class="row">
+
+                        <div class="col-6">
+
+                            <div class="row align-items-center" style="display: flex; flex-direction: row;">
+                                <Label class="col-2 col-form-label">@Localizer["Typ"]</label>
+                                <div class="col-lg-6">
+                                    @(Html.Kendo().DropDownList()
+                                        .Name("ReportQuestion.Type")
+                                        .DataTextField("Text")
+                                        .DataValueField("Value")
+                                        .OptionLabel("Choose from list...")
+                                        .OptionLabelTemplate("<span><i>Choose from list...</i></span>")
+                                        .BindTo(new List<SelectListItem>() {
+                                            new SelectListItem() {
+                                            Text = Localizer["Label"].Value , Value = "0"
+                                            },
+                                            new SelectListItem() {
+                                            Text = Localizer["Text"].Value, Value = "1"
+                                            },
+                                            new SelectListItem() {
+                                            Text = Localizer["Number"].Value, Value = "2"
+                                            },
+                                            new SelectListItem() {
+                                            Text = Localizer["Number with/spinnbuttom"].Value, Value = "3"
+                                            },
+                                            new SelectListItem() {
+                                            Text = Localizer["Float number"].Value, Value = "4"
+                                            },
+                                            new SelectListItem() {
+                                            Text = Localizer["Date"].Value, Value = "5"
+                                            },
+                                            new SelectListItem() {
+                                            Text = Localizer["Yes/No"].Value, Value = "6"
+                                            },
+                                            new SelectListItem() {
+                                            Text = Localizer["Choose box"].Value, Value = "7"
+                                            },
+                                            new SelectListItem() {
+                                            Text = Localizer["List"].Value, Value = "8"
+                                            },
+                                            new SelectListItem() {
+                                            Text = Localizer["Checklist"].Value, Value = "9"
+                                            }
+                                        })
+                                        .Value(Model.ReportQuestion.Type.ToString())
+                                        .HtmlAttributes(new { style="width: 100%;" })
+                                    )
+                                </div>
+                            </div>
+
+                            <div class="row align-items-center" style="display: flex; flex-direction: row;">
+                                <label class="col-2 col-form-label">Code</label>
+                                <div class="col-md-4">
+                                    <input asp-for="ReportQuestion.Kode" class="form-control k-textbox">
+                                </div>
+                            </div>
+
+                            <div class="row align-items-center" style="display: flex; flex-direction: row;">
+                                <label class="col-2 col-form-label">Text</label>
+                                <div class="col-md-7">
+                                    <input asp-for="ReportQuestion.Tekst" class="form-control k-textbox">
+                                </div>
+                            </div>
+
+                            <div class="row align-items-center" style="display: flex; flex-direction: row;">
+                                <Label class="col-2 col-form-label">@Localizer["X"]</label>
+                                <div class="col-lg-3">
+                                    @(Html.Kendo().NumericTextBox<decimal>()
+                                        .Name("ReportQuestion.PosX")
+                                        .Format("n0")
+                                        .Min(0)
+                                        .Max(1000)
+                                        .Value(Model.ReportQuestion.PosX)
+                                        .HtmlAttributes(new { style = "width: 100%"})
+                                    )
+                                </div>
+
+                                <Label class="col-2 col-form-label">@Localizer["Y"]</label>
+                                <div class="col-lg-3">
+                                    @(Html.Kendo().NumericTextBox<decimal>()
+                                        .Name("ReportQuestion.PosY")
+                                        .Format("n0")
+                                        .Min(0)
+                                        .Max(1000)
+                                        .Value(Model.ReportQuestion.PosY)
+                                        .HtmlAttributes(new { style = "width: 100%"})
+                                    )
+                                </div>
+                            </div>
+
+                            <div class="row align-items-center" style="display: flex; flex-direction: row;">
+                                <Label class="col-2 col-form-label">@Localizer["Width"]</label>
+                                <div class="col-lg-3">
+                                    @(Html.Kendo().NumericTextBox<decimal>()
+                                        .Name("ReportQuestion.Vidde")
+                                        .Format("n0")
+                                        .Min(0)
+                                        .Max(1000)
+                                        .Value(Model.ReportQuestion.Vidde)
+                                        .HtmlAttributes(new { style = "width: 100%"})
+                                    )
+                                </div>
+
+                                <Label class="col-2 col-form-label">@Localizer["Height"]</label>
+                                <div class="col-lg-3">
+                                    @(Html.Kendo().NumericTextBox<decimal>()
+                                        .Name("ReportQuestion.Hoyde")
+                                        .Format("n0")
+                                        .Min(0)
+                                        .Max(1000)
+                                        .Value(Model.ReportQuestion.Hoyde)
+                                        .HtmlAttributes(new { style = "width: 100%"})
+                                    )
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-6">
+
+                            <div class="row align-items-center" style="display: flex; flex-direction: row;">
+                                <label class="col-2 col-form-label">Font</label>
+                                <div class="col-md-6">
+                                    <input asp-for="ReportQuestion.Font" class="form-control k-textbox">
+                                </div>
+                                <div class="col-lg-4">
+                                    @(Html.Kendo().CheckBox().Name("ReportQuestion.Uthevet").Checked(Model.ReportQuestion.Uthevet).Label(Localizer["Bold"].Value))
+                                </div>
+                            </div>
+
+                            <div class="row align-items-center" style="display: flex; flex-direction: row;">
+                                <Label class="col-2 col-form-label">@Localizer["Size"]</label>
+                                <div class="col-lg-3">
+                                    @(Html.Kendo().NumericTextBox<decimal>()
+                                        .Name("ReportQuestion.Storrelse")
+                                        .Format("n0")
+                                        .Min(0)
+                                        .Max(100)
+                                        .Value(Model.ReportQuestion.Storrelse)
+                                        .HtmlAttributes(new { style = "width: 100%"})
+                                    )
+                                </div>
+                            </div>
+
+                            <div class="row align-items-center" style="display: flex; flex-direction: row;">
+                                <label class="col-lg-2 col-form-label">Color</label>
+                                <div class="col-lg-3">
+                                    <input asp-for="ReportQuestion.Farge" class="form-control k-textbox">
+                                </div>
+                            </div>
+
+                            <div class="row align-items-center" style="display: flex; flex-direction: row;">
+                                <Label class="col-2 col-form-label">@Localizer["Return value"]</label>
+                                <div class="col-lg-8">
+                                    @(Html.Kendo().RadioGroup()
+                                        .Name("ReportQuestion.ReturVerdi")
+                                        .Layout(RadioGroupLayout.Horizontal)
+                                        .Items(i =>
+                                            {
+                                            i.Add().Label("Text").Value("0");
+                                            i.Add().Label("Number").Value("1");
+                                            i.Add().Label("Date").Value("2");
+                                            })
+                                        .Value(Model.ReportQuestion.ReturVerdi.ToString())
+                                        )
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <div class="col-12">
+                            <h4>SQL</h4>
+                            <div class="row" style="display: flex; flex-direction: row;">
+                                <label class="col-1 col-form-label">SQL</label>
+                                <div class="col-md-11">
+                                    <textarea asp-for="ReportQuestion.SQL" class="form-control k-textbox" style="height: 200px;"></textarea>
+                                </div>
+                            </div>
+
+                            <div class="row align-items-center" style="display: flex; flex-direction: row; margin-top: 7px;">
+                                <label class="col-2 col-form-label">Standard value</label>
+                                <div class="col-md-8">
+                                    <input asp-for="ReportQuestion.StandardVerdi" class="form-control k-textbox">
+                                </div>
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+</div>

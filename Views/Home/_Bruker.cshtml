@@ -1,0 +1,465 @@
+﻿@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
+@model Susteni.Models.Admin.AdminModel
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+
+<div class="container-fluid padding-0" id="brukerRolleData">
+    
+
+    <div class="col-12 padding-0" style="margin-top: 120px;">
+
+        <div class="panel with-nav-tabs panel-default" id="dataenter">
+
+            <div id="hidden">
+                <input type="hidden" asp-For="Bruker.OpprettetAv" class="form-control">
+                <input type="hidden" asp-For="Bruker.OpprettetDate" class="form-control">
+                <input type="hidden" asp-For="Bruker.EndretAv" class="form-control">
+                <input type="hidden" asp-For="Bruker.EndretDato" class="form-control">
+                <input type="hidden" asp-For="Bruker.SlettetAv" class="form-control">
+                <input type="hidden" asp-For="Bruker.SlettetDato" class="form-control">
+                <input type="hidden" asp-For="Bruker.Kontakt_GUID" class="form-control">
+                <input type="hidden" asp-For="Bruker.SoknId" class="form-control">
+                <input type="hidden" asp-For="Bruker.BestilingVarsler" class="form-control">
+                <input type="hidden" asp-For="Bruker.AutoUpdate" class="form-control">
+                <input type="hidden" asp-For="Bruker.SuperBruker" class="form-control">
+                <input type="hidden" asp-For="Bruker.Alfa" class="form-control">
+                <input type="hidden" asp-For="Bruker.Beta" class="form-control">
+                <input type="hidden" asp-For="Bruker.Fellesraad" class="form-control">
+                <input type="hidden" asp-For="Bruker.BrukerGuid" class="form-control">
+                <input type="hidden" asp-For="Bruker.AktivFellesraad" class="form-control">
+                <input type="hidden" asp-For="Bruker.AktivKonfirmantKull" class="form-control">
+                <input type="hidden" asp-For="Bruker.SkjulInfo" class="form-control">
+                <input type="hidden" asp-For="Bruker.EWSKalender" class="form-control">
+            </div>
+
+            <div class="row">
+                <div class="col-12 align-items-center" style="display: flex; flex-direction: row;">
+                    <label class="col-form-label" style="margin-left: 10px;">@Localizer["BrukerId"]</label>
+                    <input asp-for="Bruker.BrukerId" class="form-control k-textbox" style="width: 30%;" readonly>
+                    <label class="col-form-label" style="margin-left: 10px;">@Localizer["Navn"]</label>
+                    <input asp-for="Bruker.Fornavn" class="form-control k-textbox" style="width: calc(35%-50px); margin-right: 10px;">
+                    <input asp-for="Bruker.Etternavn" class="form-control k-textbox" style="width: calc(35%-50px); margin-right: 10px;">
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="col-12" style="margin-bottom: 0px; margin-top: 10px;">
+
+        <div class="panel with-nav-tabs panel-default" id="dataenter">
+
+            <div class="panel-body data padding-0">
+
+                <div class="tab-content data">
+
+                    <div class="panel-heading padding-0">
+                        <ul class="nav nav-tabs padding-0" id="myTab">
+                            <li class="nav-item"><a class="@(Model.Bruker.aktivTab == "tabGenerell" ? "nav-link active" : "nav-link")" aria-current="page" href="#tabGenerell" data-bs-toggle="tab">@Localizer["Generell"]</a></li>
+                            <li class="nav-item"><a class="@(Model.Bruker.aktivTab == "tabTilgang" ? "nav-link active" : "nav-link")" href="#tabTilgang" data-bs-toggle="tab">@Localizer["Tilgang"]</a></li>
+                            <li class="nav-item"><a class="@(Model.Bruker.aktivTab == "tabAnsatt" ? "nav-link active" : "nav-link")" href="#tabAnsatt" data-bs-toggle="tab">@Localizer["Ansatt info"]</a></li>
+                            <li class="nav-item"><a class="@(Model.Bruker.aktivTab == "tabAnsattFungeresom" ? "nav-link active" : "nav-link")" href="#tabAnsattFungeresom" data-bs-toggle="tab">@Localizer["Kan fungere som"]</a></li>
+                            <li class="nav-item"><a class="@(Model.Bruker.aktivTab == "tabAnsattFungereI" ? "nav-link active" : "nav-link")" href="#tabAnsattFungereI" data-bs-toggle="tab">@Localizer["Kan fungere i"]</a></li>
+                            <li class="nav-item"><a class="@(Model.Bruker.aktivTab == "tabTilgangEngrafo" ? "nav-link active" : "nav-link")" href="#tabTilgangEngrafo" data-bs-toggle="tab">@Localizer["Engrafo arkiv"]</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="panel-body padding-0" style="margin-top: 10px;">
+
+                        <div class="tab-content">
+
+                            <div class="@(Model.Bruker.aktivTab == "tabGenerell" ? "tab-pane fade show active" : "tab-pane fade")" role="tabpanel" id="tabGenerell">
+
+                                <div class="row" style="padding: 10px;">
+
+                                    <div class="col-3">
+                                        <h4>@Localizer["Moduler"]</h4>
+                                        <div class="panel panel-default" style="padding-left: 30px; padding-top: 10px; background-color: transparent;">
+
+                                            <div class="form-group row">
+                                                <div>
+                                                    @(Html.Kendo().CheckBox().Name("Bruker.ModulMedarbeider").Checked(Model.Bruker.ModulMedarbeider).Label(Localizer["Medarbeider"].Value))
+                                                </div>
+                                            </div>
+
+                                            <div class="form-group row">
+                                                <div>
+                                                    @(Html.Kendo().CheckBox().Name("Bruker.ModulKH").Checked(Model.Bruker.ModulKH).Label(Localizer["Kirkelige handlinger"].Value))
+                                                </div>
+                                            </div>
+
+                                            <div class="form-group row">
+                                                <div>
+                                                    @(Html.Kendo().CheckBox().Name("Bruker.ModulByra").Checked(Model.Bruker.ModulByra).Label(Localizer["Byrå"].Value))
+                                                </div>
+                                            </div>
+
+                                            <div class="form-group row">
+                                                <div>
+                                                    @(Html.Kendo().CheckBox().Name("Bruker.ModulGravplass").Checked(Model.Bruker.ModulGravplass).Label(Localizer["Gravplass"].Value))
+                                                </div>
+                                            </div>
+
+                                            <div class="form-group row">
+                                                <div>
+                                                    @(Html.Kendo().CheckBox().Name("Bruker.ModulEngrafo").Checked(Model.Bruker.ModulEngrafo).Label(Localizer["Engrafo"].Value))
+                                                </div>
+                                            </div>
+
+                                            <div class="form-group row">
+                                                <div>
+                                                    @(Html.Kendo().CheckBox().Name("Bruker.ModulOkonomi").Checked(Model.Bruker.ModulOkonomi).Label(Localizer["Økonomi"].Value))
+                                                </div>
+                                            </div>
+
+                                            <div class="form-group row">
+                                                <div>
+                                                    @(Html.Kendo().CheckBox().Name("Bruker.ModulkWeb").Checked(Model.Bruker.ModulkWeb).Label(Localizer["kWeb"].Value))
+                                                </div>
+                                            </div>
+
+                                            <div class="form-group row">
+                                                <div>
+                                                    @(Html.Kendo().CheckBox().Name("Bruker.ModulAdmin").Checked(Model.Bruker.ModulAdmin).Label(Localizer["Administrasjon"].Value))
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    </div>
+
+                                    <div class="col-3">
+                                        <h4>@Localizer["Nyheter"]</h4>
+
+                                        <div class="panel panel-default" style="padding-left: 30px; padding-top: 10px; background-color: transparent;">
+                                            <div class="form-group row">
+                                                <div>
+                                                    @(Html.Kendo().CheckBox().Name("Bruker.NhGtj").Checked(Model.Bruker.NhGtj).Label(Localizer["Gudstjeneste"].Value))
+                                                </div>
+                                            </div>
+
+                                            <div class="form-group row">
+                                                <div>
+                                                    @(Html.Kendo().CheckBox().Name("Bruker.NhDåp").Checked(Model.Bruker.NhDåp).Label(Localizer["Dåp"].Value))
+                                                </div>
+                                            </div>
+
+                                            <div class="form-group row">
+                                                <div>
+                                                    @(Html.Kendo().CheckBox().Name("Bruker.NhKon").Checked(Model.Bruker.NhKon).Label(Localizer["Konfirmasjon"].Value))
+                                                </div>
+                                            </div>
+
+                                            <div class="form-group row">
+                                                <div>
+                                                    @(Html.Kendo().CheckBox().Name("Bruker.NhVie").Checked(Model.Bruker.NhVie).Label(Localizer["Vielse"].Value))
+                                                </div>
+                                            </div>
+
+                                            <div class="form-group row">
+                                                <div>
+                                                    @(Html.Kendo().CheckBox().Name("Bruker.NhGrf").Checked(Model.Bruker.NhGrf).Label(Localizer["Gravferd"].Value))
+                                                </div>
+                                            </div>
+
+                                            <div class="form-group row">
+                                                <div>
+                                                    @(Html.Kendo().CheckBox().Name("Bruker.NhAkt").Checked(Model.Bruker.NhAkt).Label(Localizer["Aktivitet"].Value))
+                                                </div>
+                                            </div>
+
+                                            <div class="form-group row">
+                                                <div>
+                                                    @(Html.Kendo().CheckBox().Name("Bruker.NhFri").Checked(Model.Bruker.NhFri).Label(Localizer["Frivillige"].Value))
+                                                </div>
+                                            </div>
+
+                                            <div class="form-group row">
+                                                <div>
+                                                    @(Html.Kendo().CheckBox().Name("Bruker.NhKal").Checked(Model.Bruker.NhKal).Label(Localizer["Kalender"].Value))
+                                                </div>
+                                            </div>
+
+                                            <div class="form-group row">
+                                                <div>
+                                                    @(Html.Kendo().CheckBox().Name("Bruker.NhGGen").Checked(Model.Bruker.NhGGen).Label(Localizer["Generellt"].Value))
+                                                </div>
+                                            </div>
+
+                                        </div>
+
+                                    </div>
+
+                                    <div class="col-5">
+                                        <h4>Admin</h4>
+
+                                        <div class="panel panel-default" style="padding-left: 20px; padding-top: 10px; background-color: transparent;">
+
+                                            <div class="form-group row">
+                                                <Label class="col-3 col-form-label">@Localizer["AutNiva"]</Label>
+                                                <div class="col-3">
+                                                    @(Html.Kendo().NumericTextBox<decimal>()
+                                                    .Name("Bruker.AutNiva")
+                                                    .Format("n0")
+                                                    .Min(0)
+                                                    .Max(100)
+                                                    .Value(Model.Bruker.AutNiva)
+                                                    .HtmlAttributes(new { style = "width: 100%"})
+                                                )
+                                                </div>
+                                            </div>
+
+                                            <div class="col-3"></div>
+                                            <div class="form-group row">
+                                                <div class="col-8 padding-0" style="margin-left: 10px;">
+                                                    @(Html.Kendo().CheckBox().Name("Bruker.HarEpost").Checked(Model.Bruker.HarEpost).Label(Localizer["Har E-post"].Value))
+                                                </div>
+                                            </div>
+
+                                            <div class="form-group row">
+                                                <label class="col-3 col-form-label">@Localizer["E-post"]</label>
+                                                <div class="col-md-8">
+                                                    <input asp-for="Bruker.EWSepost" class="form-control k-textbox">
+                                                </div>
+                                            </div>
+
+                                            <input type="hidden" asp-For="Bruker.AktivFakturaNrSerie" class="form-control">
+                                            <div class="form-group row">
+                                                <label class="col-3 col-form-label">@Localizer["BrukerId"]</label>
+                                                <div class="col-md-8">
+                                                    <input asp-for="Bruker.DomainUser" class="form-control k-textbox">
+                                                </div>
+                                            </div>
+
+                                            <div class="form-group row">
+                                                <label class="col-3 col-form-label">@Localizer["Passord"]</label>
+                                                <div class="col-md-8">
+                                                    <input type="password" asp-for="Bruker.DomainPassword" class="form-control k-textbox">
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                            <div class="@(Model.Bruker.aktivTab == "tabTilgang" ? "tab-pane fade show active" : "tab-pane fade")" role="tabpanel" id="tabTilgang">
+
+                                <div class="row" style="padding: 10px;">
+
+                                    <div class="col-4" style="margin-bottom: 12px;">
+
+                                        <button type="button" name="Gemeinde" class="commandSmal" onclick="showBrukerSoknDialog()" style="width: 130px;">
+                                            @Localizer["Sokn"]
+                                            <img src="~/images/Gemeinde.png" style="width: 24px; height: 24px;" />
+                                        </button>
+
+                                        @(Html.Kendo().ListBox()
+                                        .Name("brukerSokn")
+                                        .DataTextField("SoknNavn")
+                                        .DataValueField("SoknId")
+                                        .Selectable(ListBoxSelectable.Single)
+                                        .Events(events => events
+                                            .Change("onSoknChange"))
+                                        .DataSource(dataSource => dataSource
+                                            .Ajax()
+                                            .Read(read => read.Action("GetBrukerSokn", "AdminBruker").Data("filterBruker"))
+                                            )
+                                        //.AutoBind(false)
+                                        )
+                                    </div>
+
+                                    <div class="col-6">
+
+                                        <button type="button" disabled name="Gemeinde" class="commandSmal" id="btnRolle" onclick="showBrukerRollerDialog()" style="width: 100px;">
+                                            @Localizer["Roller"]
+                                            <img src="~/images/Gemeinde.png" style="width: 24px; height: 24px;" />
+                                        </button>
+
+                                        @(Html.Kendo().Grid<Susteni.Models.BrukerRolleItem>()
+                                        .Name("brukerRoller")
+                                        .Selectable()
+                                        .Columns(columns =>
+                                        {
+                                            columns.Bound(q => q.RolleGuid).Visible(false);
+                                            columns.Bound(q => q.RolleNavn).Title(Localizer["Rolle"].Value).Width(200);
+                                            columns.Bound(q => q.RolleTypeNavn).Title(Localizer["Type rolle"].Value).Width(200);
+                                            columns.Bound(q => q.FraDato).Format("{0: dd.MM.yyyy}").Title(Localizer["Fra"].Value).Width(120);
+                                            columns.Bound(q => q.TilDato).Format("{0: dd.MM.yyyy}").Title(Localizer["Til"].Value).Width(120);
+                                        })
+                                        .DataSource(dataSource => dataSource
+                                            .Ajax()
+                                            .Read(read => read.Action("GetBrukerRolleListe", "AdminBruker").Data("filterBrukerSokn"))
+                                            )
+                                        //.AutoBind(false)
+                                        )
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                            <div class="@(Model.Bruker.aktivTab == "tabTilgangEngrafo" ? "tab-pane fade show active" : "tab-pane fade")" role="tabpanel" id="tabTilgangEngrafo">
+
+                                <div class="row" style="padding: 10px;">
+
+                                    <div class="col-4" style="margin-bottom: 12px;">
+
+                                        <div>
+                                            <h4>@Localizer["Administrativ enhet"]</h4>
+                                            <div class="form-group" id="ressurser" style="margin-top: 10px;">
+                                                @(Html.Kendo().TreeView()
+                                                    .Name("Arkiv")
+                                                    .DataTextField("Name")
+                                                    .LoadOnDemand(false)
+                                                    .Events(events => events .Select("onArkivSelect"))
+                                                    .DataSource(DataSource => DataSource
+                                                        .Read(read => read.Action("ArkivTree", "Engrafo")))
+                                                    )
+                                            </div>
+                                        </div>
+
+                                    </div>
+
+                                    <div class="col-8">
+
+                                        <div class="form-group">
+                                            <div class="row" style="display: flex; flex-direction: row;">
+                                                <h4 class="unselectable" style="margin-bottom: 10px;">@Localizer["Liste over roller"]</h4>
+
+                                            </div>
+
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+
+
+
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    
+    </div>
+
+</div>
+
+<style>
+    #NyhetBilde img {
+        margin-top: 10px;
+        margin-left: 0px;
+        max-height: 200px;
+        height: auto;
+        width: 100%;
+        align-content: center;
+    }
+
+    table, th {
+        margin-left: 0px;
+        margin-top: 0px;
+    }
+</style>
+
+<style>
+    html body #pdfviewer {
+        width: 100% !important;
+    }
+</style>
+
+<script>
+
+    $('#myTab a').click(function (e) {
+        e.preventDefault();
+        $(this).tab('show');
+    });
+
+    // store the currently selected tab in the hash value
+    $("ul.nav-tabs > li > a").on("shown.bs.tab", function (e) {
+        var id = $(e.target).attr("href").substr(1);
+        window.location.hash = id;
+    });
+
+    $("ul.nav-tabs > li > a").on("shown.bs.tab", function (e) {
+        var id = $(e.target).attr("href").substr(1);
+        $.ajax({
+            url: '@Url.Action("SetTab", "AdminBruker")',
+            data: { tab: id },
+            type: "GET"
+        });
+    });
+</script>
+
+
+<script type="text/javascript">
+
+
+    $(document).ready(function () {
+        var fabAR = $("#fabAktiverRolle").getKendoFloatingActionButton();
+        var fabSR = $("#fabAvsluttRolle").getKendoFloatingActionButton();
+        var fabRR = $("#fabRedigerRolle").getKendoFloatingActionButton();
+        var fabS = $("#fabSkjerming").getKendoFloatingActionButton();
+
+        fabARText = "Aktiver rollen";
+        fabSRText = "Avslutt rollen";
+        fabRRText = "Rediger rollen";
+        fabSText = "Angi skjerming";
+
+
+        $("#fabAktiverRolle").hover(function () {
+            fabAR.text(fabARText);
+            fabAR.element.find(".k-fab-text")
+                .stop().toggle(200);
+        }, function () {
+                fabAR.element.find(".k-fab-text")
+                .stop()
+                .toggle(200)
+                .promise().done(function () {
+                    fabAR.text("");
+                });
+        });
+
+        $("#fabAvsluttRolle").hover(function () {
+            fabSR.text(fabSRText);
+            fabSR.element.find(".k-fab-text")
+                .stop().toggle(200);
+        }, function () {
+                fabSR.element.find(".k-fab-text")
+                .stop()
+                .toggle(200)
+                .promise().done(function () {
+                    fabSR.text("");
+                });
+        });
+
+        $("#fabRedigerRolle").hover(function () {
+            fabRR.text(fabRRText);
+            fabRR.element.find(".k-fab-text")
+                .stop().toggle(200);
+        }, function () {
+                fabRR.element.find(".k-fab-text")
+                .stop()
+                .toggle(200)
+                .promise().done(function () {
+                    fabRR.text("");
+                });
+        });
+
+        $("#fabSkjerming").hover(function () {
+            fabS.text(fabSText);
+            fabS.element.find(".k-fab-text")
+                .stop().toggle(200);
+        }, function () {
+            fabS.element.find(".k-fab-text")
+                .stop()
+                .toggle(200)
+                .promise().done(function () {
+                    fabS.text("");
+                });
+        });
+    });
+</script>

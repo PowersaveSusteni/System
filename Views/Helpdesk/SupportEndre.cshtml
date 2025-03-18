@@ -1,0 +1,247 @@
+﻿@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
+@model Susteni.Models.HelpDesk.HelpDeskModel
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+
+<script type="text/x-kendo-tmpl" id="templateBMV">
+    <div class="rapport">
+        <img src="data:image/png;base64, #:Bilde#" alt="Rapport" />
+        <p>#:Kommentar#</p>
+    </div>
+</script>
+
+<style>
+
+    table, th {
+        margin-left: 5px;
+        margin-top: 0px;
+    }
+
+    .btn img {
+        width: 24px;
+        height: 24px;
+    }
+
+    .btn {
+        padding: 5px;
+        background-color: aliceblue;
+        border-color: lightgray;
+    }
+
+    .rapport {
+        float: left;
+        position: relative;
+        width: 180px;
+        max-height: 200px;
+        margin: 10px 5px 5px 5px;
+        padding: 0;
+    }
+
+        .rapport img {
+            float: left;
+            width: 150px;
+            max-height: 150px;
+            margin-left: 10px;
+            margin-bottom: 5px;
+            margin-right: 10px;
+        }
+
+        .rapport:hover h3 {
+            color: darkred;
+        }
+
+        .rapport:hover p {
+            color: black;
+        }
+
+</style>
+
+<script>
+
+   
+
+</script>
+
+<form id="Helpdesk">
+    <div class="container-fluid padding-0" >
+
+        <input type = "hidden" asp-for="HelpDesk.HelpDeskGuid" class="form-control">
+        <input type = "hidden" asp-for="HelpDesk.TiketId" class="form-control">
+        <input type = "hidden" asp-for="HelpDesk.Program" class="form-control">
+        <input type = "hidden" asp-for="HelpDesk.Modul" class="form-control">
+        <input type = "hidden" asp-for="HelpDesk.Skjermbilde" class="form-control">
+        <input type = "hidden" asp-for="HelpDesk.OpprettetDato" class="form-control">
+        <input type = "hidden" asp-for="HelpDesk.OpprettetAv" class="form-control">
+        <input type = "hidden" asp-for="HelpDesk.Prioritet" class="form-control">
+        <input type = "hidden" asp-for="HelpDesk.Losning" class="form-control">
+        <input type = "hidden" asp-for="HelpDesk.BrukerId" class="form-control">
+        <input type = "hidden" asp-for="HelpDesk.Fellesraad" class="form-control">
+        <input type = "hidden" asp-for="HelpDesk.StartDato" class="form-control">
+        <input type = "hidden" asp-for="HelpDesk.Ferdig" class="form-control">
+        <input type = "hidden" asp-for="HelpDesk.Aksept" class="form-control">
+        <input type = "hidden" asp-for="HelpDesk.Status" class="form-control">
+        <input type = "hidden" asp-for="HelpDesk.TypeId" class="form-control">
+        <input type = "hidden" asp-for="HelpDesk.Program_GUID" class="form-control">
+        <input type = "hidden" asp-for="HelpDesk.Saksbehandler" class="form-control">
+        <input type = "hidden" asp-for="HelpDesk.ePostAdresse" class="form-control">
+        <input type = "hidden" asp-for="HelpDesk.KommentarKunde" class="form-control">
+        <input type = "hidden" asp-for="HelpDesk.Stjerner" class="form-control">
+        <input type = "hidden" asp-for="HelpDesk.Fremdrift" class="form-control">
+        <input type = "hidden" asp-for="HelpDesk.LinkGuid" class="form-control">
+        <input type = "hidden" asp-for="HelpDesk.Tabell" class="form-control">
+
+    <div class="row">
+        <div class="col-12">
+            <button type="button" class="command" style="width: 180px; height: 40px; margin-right: 7px;" onclick="LagreTickets()">
+                <img src="~/images/lagre.svg" />
+                Lagre
+            </button>
+            </div>
+    </div>
+
+    <div class="col-12" style="margin-bottom: 0px; margin-top: 10px;">
+            <div class="panel with-nav-tabs panel-default" id="dataenter" style="height: calc(100vh - 400px);">
+            <div class="panel-body data padding-0">
+                <div class="tab-content data">
+                    <div class="panel-heading" id="Tab">
+                        <ul class="nav nav-tabs">
+                            <li class="nav-item"><a class="@(Model.HelpDesk.aktivTab == "tabGenerell" ? "nav-link active" : "nav-link")" aria-current="page" href="#tabGenerell" data-bs-toggle="tab">@Localizer["Ticket"]</a></li>
+                            <li class="nav-item"><a class="@(Model.HelpDesk.aktivTab == "tabBilde" ? "nav-link active" : "nav-link")" href="#tabBilde" data-bs-toggle="tab">@Localizer["Bilde"]</a></li>
+                        </ul>
+                    </div>
+                    <div class="panel-body">
+                        
+                        <div class="tab-content" style="margin-top: 10px;">
+
+                            <div class="@(Model.HelpDesk.aktivTab == "tabGenerell" ? "tab-pane fade show active" : "tab-pane fade")" style="padding: 10px;" role="tabpanel" id="tabGenerell">
+
+                                <div class="row align-items-center" style="display: flex; flex-direction: row;">
+                                    <label class="col-1 col-form-label">Tittel</label>
+                                    <div class="col-10">
+                                        <input asp-for="HelpDesk.Tittel" class="form-control k-textbox">
+                                    </div>
+                                </div>
+
+                                <div class="panel with-nav-tabs panel-default" id="dataenter" style="margin-top: 10px; margin-bottom: 10px;">
+                                    <div class="panel-body data padding-0">
+                                        <div class="tab-content data">
+                                
+                                            <div class="panel-heading" id="Tab">
+                                                <ul class="nav nav-tabs">
+                                                    <li class="nav-item"><a class="@(Model.HelpDesk.bunnTab == "tabBeskrivelse" ? "nav-link active" : "nav-link")" aria-current="page" href="#tabBeskrivelse" data-bs-toggle="tab">@Localizer["Beskrivelse"]</a></li>
+                                                </ul>
+                                            </div>
+                                
+
+                                            <div class="tab-content" style="margin-top: 10px;">
+
+                                                <div class="@(Model.HelpDesk.bunnTab == "tabBeskrivelse" ? "tab-pane fade show active" : "tab-pane fade")" style="padding: 10px;" role="tabpanel" id="tabBeskrivelse">
+
+                                                    <div class="row bg_warning" >
+                                                        <div class="col-12 g-0" style="padding: 0px;">
+                                                            @(Html.Kendo().Editor()
+                                                                .Name("HelpDesk.Beskrivelse")
+                                                                .Encoded(false)
+                                                                .HtmlAttributes(new { style = "margin: 0px; padding: 0px; width:calc(100% - 10px); height:300px;", aria_label = "Tekst" })
+                                                                .Value(Model.HelpDesk.Beskrivelse)
+                                                                .StyleSheets(css => css
+                                                                    .Add(Url.Content("~/css/editorStyles.css"))
+                                                                    )
+                                                                .Tools(tools => tools
+                                                                    .Clear()                                                
+                                                                    .Bold().Italic().Underline()
+                                                                    .JustifyLeft().JustifyCenter().JustifyRight()
+                                                                    .TableEditing()
+                                                                    .Formatting()
+                                                                    .ForeColor().BackColor()
+                                                                    )
+                                                                )
+                                                        </div>
+                                                    </div>
+                                
+                                                </div>
+
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+
+                            <div class="@(Model.HelpDesk.aktivTab == "tabBilde" ? "tab-pane fade show active" : "tab-pane fade")" style="padding: 10px;" role="tabpanel" id="tabBilde">
+                                <div class="row">
+                                    
+
+                                    <div class="col-lg-3">
+
+                                    <div class="row">
+                                        <span style="color: darkred; font-size: 16px;"><p>Du kan må legge til flere bilde ved å kopiere disse ut på utklipstavlen og lime de inn her ved å trykke CTRL+V</p></span>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="d-flex">
+                                            <h4 class="me-auto align-self-end unselectable">@Localizer["Liste over bilder"]</h4>
+                                            <div class="align-items-end">
+                                                <div class="dropdown">
+                                                    <button class="btn dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+                                                        <img src="~/images/menu.svg" />
+                                                    </button>
+                                                    <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                                                        <li><button class="dropdown-item" type="button" onclick="slettBilde()">@Localizer["Slett"]</button></li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+
+ 
+                                        </div>
+                                    </div>
+
+                                            @(Html.Kendo().ListView<Susteni.Models.HelpDeskBildeItem>()
+                                            .Name("lvBilder")
+                                            .TagName("div")
+                                            .ClientTemplateId("templateBMV")
+                                            .Scrollable(ListViewScrollableMode.Endless)
+                                            .Selectable(ListViewSelectionMode.Single)
+                                            .Events(e => e.Change("onBildeChange"))
+                                            .HtmlAttributes(new { style = "height: calc(100vh - 560px);"})
+                                            .DataSource(dataSource => dataSource
+                                                .Ajax()
+                                                .Read(read => read.Action("getHelpDeskBildeListe", "HelpDesk").Data("filterHelpdesk"))
+                                                )
+                                            )         
+                                    </div>
+                                    <div class="col-lg-9">
+                                        <partial name="_HelpDeskBilde" />
+                                    </div>
+                                </div>
+                            </div>
+                           
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+</form>
+
+<script>
+
+
+    $("ul.nav-tabs > li > a").on("shown.bs.tab", function (e) {
+        var id = $(e.target).attr("href").substr(1);
+
+        if (id == "tabGenerell" || id == "tabBilde") {
+            $.ajax({
+                url: '@Url.Action("SetTab", "HelpDesk")',
+                data: { tab: id },
+                type: "GET"
+            });
+        }
+    });
+
+</script>

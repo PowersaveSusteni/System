@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="32px" height="32px" viewBox="0 0 32 32" enable-background="new 0 0 32 32" xml:space="preserve">
+  <g id="main">
+    <g id="icon">
+      <path d="M3.5,29.5L18.5,29.5L18.5,21.5L17.5,21.5L17.5,17.5L21.59,17.5L21.74,17.08L21.95,16.7L22.21,16.36L22.53,16.07L22.9,15.83L23.3,15.65L23.73,15.54L24.18,15.5L26.5,15.5L26.5,8.5L18.5,0.5L3.5,0.5zz" fill="#FFFFFF"/>
+      <path d="M3,30L18.5,30L18.5,29L4,29L4,1L18,1L18,9L26,9L26,15.5L26.82,15.5L27,15.52L27,8.293L18.71,0L3,0zM25.29,8L19,8L19,1.707zz" fill="#383838"/>
+      <path d="M6.5,5L16,5L16,4L6.5,4zM6.5,8L16,8L16,7L6.5,7zM6.5,11L16,11L16,10L6.5,10zM6.5,14L23.5,14L23.5,13L6.5,13zM6.5,17L21.78,17L21.95,16.7L22.21,16.36L22.53,16.07L22.64,16L6.5,16zz" fill="#78797A" opacity="0.5"/>
+      <path d="M6.5,26.5L8.5,26.5L8.5,22.5L6.5,22.5zz" fill="#92CBEE"/>
+      <path d="M6,22.5L6,26.5L6,27L6.5,27L8.5,27L9,27L9,26.5L9,22.5L9,22L8.5,22L6.5,22L6,22zM8,23L8,26L7,26L7,23zz" fill="#0964B0"/>
+      <path d="M10.5,26.5L12.5,26.5L12.5,20.5L10.5,20.5zz" fill="#92CBEE"/>
+      <path d="M10,20.5L10,26.5L10,27L10.5,27L12.5,27L13,27L13,26.5L13,20.5L13,20L12.5,20L10.5,20L10,20zM12,21L12,26L11,26L11,21zz" fill="#0964B0"/>
+      <path d="M14.5,26.5L16.5,26.5L16.5,18.5L14.5,18.5zz" fill="#92CBEE"/>
+      <path d="M14,18.5L14,26.5L14,27L14.5,27L16.5,27L17,27L17,26.5L17,18.5L17,18L16.5,18L14.5,18L14,18zM16,19L16,26L15,26L15,19zz" fill="#0964B0"/>
+    </g>
+    <g id="overlay">
+      <path d="M29.135,31.5h-7.269c-0.751,0,-1.365,-0.614,-1.365,-1.365V19.5h10v10.635C30.5,30.886,29.886,31.5,29.135,31.5zM32,19.5H19M25.5,29v-7M27.5,29v-7M23.5,29v-7" fill="#FFFFFF" stroke="#541B23" stroke-width="1" stroke-miterlimit="10"/>
+      <path d="M23.5,19.5v-1.317c0,-0.377,0.306,-0.683,0.683,-0.683h2.635c0.377,0,0.683,0.306,0.683,0.683V19.5" fill="none" stroke="#541B23" stroke-width="1" stroke-miterlimit="10"/>
+    </g>
+  </g>
+</svg>

@@ -1,0 +1,282 @@
+﻿@using Microsoft.AspNetCore.Mvc.Localization
+
+@inject IViewLocalizer Localizer
+@model Susteni.Models.Funksjoner.FunctionsModel
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+
+@{
+    ViewData["Title"] = Localizer["Fuel savings"];
+    ViewData["LogOnOk"] = "2";
+    ViewData["Menu"] = "Admin";
+}
+
+<form onsubmit="return false;" class="mt-3">
+    <div id="confirm"></div>
+
+    <div class="row" id="heading" style="min-height: 90px;">
+
+        <div class="col-2 unselectable">
+            <h2>@Localizer["Equipment types"]</h2>
+        </div>
+
+        <div class="col-2 infoArea" id="info" style="display: none">
+            <p class="unselectable" id="infoTekst">
+            </p>
+        </div>
+
+    </div>
+
+    <div class="row">
+
+        <div class="col-lg-6">
+
+            <div class="row" style="margin-top: 20px;">
+                <div class="col-12">
+                    <label>List of equipment types</label>
+                </div>
+                <div class="col-lg-12">
+                    <div style="position: relative">
+                        @(Html.Kendo().Grid<Susteni.Models.TypeEquipmentItem>()
+                            .Name("euipmentTypeList")
+                            .Columns(columns =>
+                            {
+                                columns.Bound(q => q.EquipmentTypesGuid).Visible(false);
+                                columns.Bound(q => q.Type).Width(50).Visible(true);
+                                columns.Bound(q => q.Name).Width(400).Title(Localizer["Name"].Value);
+                            })
+                            .Scrollable()
+                            .Events(e => e.Change("onEuipmentTypeChange"))
+                            .Selectable(s => s
+                                .Mode(GridSelectionMode.Multiple)
+                                .Type(GridSelectionType.Row))
+                            .DataSource(dataSource => dataSource
+                                .Ajax()
+                                .Read(read => read.Action("GetTypeEquipmentList", "Functions"))
+                                )
+                            )
+
+                        @(Html.Kendo().FloatingActionButton()
+                            .Name("euipmentTypeAdd")
+                            .ThemeColor(FloatingActionButtonThemeColor.Success)
+                            .Size(FloatingActionButtonSize.Small)
+                            .PositionMode(FloatingActionButtonPositionMode.Absolute)
+                            .Align(FloatingActionButtonAlign.TopEnd)
+                            .AlignOffset(alignOffset => alignOffset.Horizontal(0).Vertical(10))
+                            .Icon("plusIcon")
+                            .Events(events => events.Click("addEquipmentType"))
+                            .Visible(true)
+                            )
+
+                        @(Html.Kendo().FloatingActionButton()
+                            .Name("euipmentTypeEdit")
+                            .ThemeColor(FloatingActionButtonThemeColor.Warning)
+                            .Size(FloatingActionButtonSize.Small)
+                            .PositionMode(FloatingActionButtonPositionMode.Absolute)
+                            .Align(FloatingActionButtonAlign.TopEnd)
+                            .AlignOffset(alignOffset => alignOffset.Horizontal(0).Vertical(50))
+                            .Icon("pencilIcon")
+                            .Events(events => events.Click("editEquipmentType"))
+                            .Visible(false)
+                            )
+
+                        @(Html.Kendo().FloatingActionButton()
+                            .Name("euipmentTypeRemove")
+                            .ThemeColor(FloatingActionButtonThemeColor.Error)
+                            .Size(FloatingActionButtonSize.Small)
+                            .PositionMode(FloatingActionButtonPositionMode.Absolute)
+                            .Align(FloatingActionButtonAlign.TopEnd)
+                            .AlignOffset(alignOffset => alignOffset.Horizontal(0).Vertical(90))
+                            .Icon("trashIcon")
+                            .Events(events => events.Click("removeEquipmentType"))
+                            .Visible(false)
+                            )
+
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+</form>
+
+
+<script id="successTemplate" type="text/x-kendo-template">
+    <div class="upload-success">
+        <img src="@Url.Content("~/images/emoticon-happy.svg")" style="float:left; height:48px; width:48px; margin-right: 16px;"/>
+        <p>#= message #</p>
+    </div>
+</script>
+
+
+<script id="errorTemplate" type="text/x-kendo-template">
+    <div class="wrong-pass">
+        <img src="@Url.Content("~/images/emoticon-sad.svg")" style="float:left; height:48px; width:48px; margin-right: 16px;"/>
+        <p>#= message #</p>
+    </div>
+</script>
+
+
+@(Html.Kendo().Notification()
+    .Name("notification")
+    .Position(p => p.Pinned(true).Top(30).Right(30))
+    .Stacking(NotificationStackingSettings.Down)
+    .AutoHideAfter(5000)
+    .Templates(t =>
+    {
+        t.Add().Type("success").ClientTemplateID("successTemplate");
+        t.Add().Type("error").ClientTemplateID("errorTemplate");
+    })
+)
+
+@(Html.Kendo().Window()
+        .Name("DialogSupport")
+        .Title(Localizer["Support"].Value)
+        .Visible(false)
+        .Width(1200)
+        .Modal(true)
+        .Draggable()
+        )
+
+
+
+@(Html.Kendo().Window()
+    .Name("DialogHjelp")
+    .Title(Localizer["Help"].Value)
+    .Visible(false)
+    .Height(800)
+    .Width(1200)
+    .Modal(true)
+    .Draggable()
+    )
+
+
+@(Html.Kendo().Window()
+    .Name("dialogEuipmentType")
+    .Title(Localizer["Euipmenttype"].Value)
+    .Visible(false)
+    .Width(800)
+    .Modal(true)
+    .Draggable()
+    )
+
+
+
+<script id="hjelp">
+
+    function showHelp() {
+        $.ajax({
+            url: '@Url.Action("DialogHjelp", "Hjelp")',
+            type: 'GET'
+        }).done(function (result) {
+            $('#DialogHjelp').html(result);
+            var popup = $('#DialogHjelp').data("kendoWindow");
+            popup.center().open();
+        });
+    }
+
+    function addSupport() {
+        $.ajax({
+            url: '@Url.Action("DialogSupport", "HelpDesk")',
+            type: 'GET'
+        }).done(function (result) {
+            $('#DialogSupport').html(result);
+
+            xB = document.getElementById("idBilde");
+
+            document.getElementById("HelpDesk_Modul").value = "Equipment types";
+            document.getElementById("HelpDesk_Program").value = "2";
+            document.getElementById("HelpDesk_Status").value = "1";
+
+            const screenshotTarget = document.body;
+
+            html2canvas(screenshotTarget).then((canvas) => {
+                const base64image = canvas.toDataURL("image/png");
+                xB.innerHTML = "<img src='" + base64image + "' style='max-height: 260px; max-width: 350px;' alt='Bilde' / >";
+                document.getElementById("HelpDesk_byte64String").value = base64image
+            });
+
+            var popup = $('#DialogSupport').data("kendoWindow");
+            popup.center().open();
+        });
+    }
+
+
+    function hjelpFilter() {
+        return { Modul: 900, Skjerm: "" }
+    }
+
+</script>
+
+
+
+<script>
+    var equipmentTypesGuid = "";
+
+    function onEuipmentTypeChange(e) {
+        var grid = $("#euipmentTypeList").data("kendoGrid");
+        var selected = grid.select();
+        var data = grid.dataItem(selected);
+
+        equipmentTypesGuid = data.EquipmentTypesGuid;
+
+        var fabSTE = $('#euipmentTypeEdit').getKendoFloatingActionButton();
+        fabSTE.show();
+
+        var fabSTR = $('#euipmentTypeRemove').getKendoFloatingActionButton();
+        fabSTR.show();
+    }
+
+    function editEquipmentType() {
+        $.ajax({
+            url: '@Url.Action("GetEquipmentType", "Functions")',
+            data: { EquipmentTypesGuid: equipmentTypesGuid },
+            type: 'GET'
+        }).done(function (result) {
+            $('#dialogEuipmentType').html(result);
+            var popup = $('#dialogEuipmentType').data("kendoWindow");
+            popup.center().open();
+        });
+    }
+
+    function addEquipmentType() {
+        $.ajax({
+            url: '@Url.Action("GetEquipmentType", "Functions")',
+            data: { EquipmentTypesGuid: "" },
+            type: 'GET'
+        }).done(function (result) {
+            $('#dialogEuipmentType').html(result);
+            var popup = $('#dialogEuipmentType').data("kendoWindow");
+            popup.center().open();
+        });
+    }
+
+    function removeEquipmentType(e) {
+        var tittel = "DELETE";
+        var nei = "No";
+        var content = "<div id='question'>Do you want to remove this equipment type</div>";
+
+        $("#confirm").kendoConfirm({
+            title: tittel,
+            content: content,
+            messages: {
+                okText: "yes",
+                cancel: nei
+            }
+        })
+            .data("kendoConfirm").result.done(function () {
+                $('body').append($('<div id="confirm">'));
+
+                $.ajax({
+                    url: '@Url.Action("RemoveTypeEquipment", "Functions")',
+                    type: "GET",
+                    dataType: "json",
+                    data: { equipmentTypesGuid: equipmentTypesGuid }
+                })
+                    .done(function (result) {
+                        $("#euipmentTypeList").data("kendoGrid").dataSource.read();
+                    });
+            });
+    }
+
+</script>

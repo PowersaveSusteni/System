@@ -1,0 +1,94 @@
+﻿@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+
+@model Susteni.Models.HelpDesk.HelpDeskModel
+
+<script>
+    function onNotatChange(e) {
+        var lvLogg = $("#grdLogg").data("kendoGrid");
+        var selF = lvLogg.select();
+        var selIF = lvLogg.dataItem(selF);
+        var valgtNotat = "";
+
+        if (typeof selIF != 'undefined') {
+            valgtNotat = selIF.Kommentar;
+            var notat = $("#NotatTekst").data('kendoTextArea');
+            notat.value(valgtNotat);
+        }
+    }
+
+</script>
+
+<form id="helpdeskNotat" onsubmit="return false;" method="post" class="mt-0">
+    <input type = "hidden" asp-for="HelpDeskLogg.HelpDeskLoggGuid" class="form-control">
+    <input type = "hidden" asp-for="HelpDeskLogg.HelpDeskGuid" class="form-control">
+    <input type = "hidden" asp-for="HelpDeskLogg.Tidspunkt" class="form-control">
+    <input type = "hidden" asp-for="HelpDeskLogg.BrukerId" class="form-control">
+    <input type = "hidden" asp-for="HelpDeskLogg.Type" class="form-control">
+    <input type = "hidden" asp-for="HelpDeskLogg.Publiser" class="form-control">
+
+    <div class="row" style="margin-top: 10px;">
+        <div class="col-12">
+            @(Html.Kendo().Grid<Susteni.Models.HelpDeskLoggItem>()
+                .Name("grdLogg")
+                .Columns(columns =>
+                {
+                    columns.Bound(q => q.HelpDeskLoggGuid).Visible(false);
+                    columns.Bound(q => q.Tidspunkt).Format("{0: dd.MM.yyyy HH:mm}").Width(120).Title("Opprettet");
+                    columns.Bound(q => q.BrukerId).Width(100).Title("Av");
+                    columns.Bound(q => q.Kommentar).Title("Notat");
+                })
+                .Sortable()
+                .Scrollable()
+                .Height(210)
+                .Resizable(r => r.Columns(true))
+                .Selectable(s => s
+                    .Mode(GridSelectionMode.Single)
+                    .Type(GridSelectionType.Row))
+                .Events(events => events
+                .Change("onNotatChange"))
+                .DataSource(dataSource => dataSource
+                    .Ajax()
+                    .Read(read => read.Action("GetHelpDeskKundeLoggListe", "HelpDesk").Data("filterHelpdesk"))
+                    )
+                )
+        </div>
+    </div>
+
+    <div class="row" style="margin-top: 20px;">
+        <div class="col-md-12">
+            @(Html.Kendo().TextArea()
+                .Name("NotatTekst")
+                .Rows(5)
+                .MaxLength(100)
+                .Enable(false)
+                .HtmlAttributes(new { style = "width: 100%"})
+                )
+        </div>
+    </div>
+
+
+    <div class="row" style="margin-top: 20px;">
+        <div class="col-md-12">
+            <h4 id="ListeTittel" class="unselectable">Nytt notat</h4>
+        </div>
+
+        <div class="row">
+            <div class="col-md-12">
+                @(Html.Kendo().TextArea()
+                    .Name("HelpDeskLogg.Kommentar")
+                    .Value(Model.HelpDeskLogg.Kommentar)
+                    .Rows(5)
+                    .MaxLength(4000)
+                    .HtmlAttributes(new { style = "width: 100%", required = true, data_required_msg = "Skriv ditt notat.", data_max_msg = "Maksimum lengde er 4000 tegn" })
+                    )
+            </div>
+        </div>
+
+        <div class="col-lg-3 text-right">
+            <button class="commandSmal" style="width: 140px;" onclick="lagrehelpdeskNotat()"><img src="@Url.Content("~/images/")lagre.svg" style="width: 24px; height: 24px;" alt="ikon" />Legg til notat</button>
+        </div>
+    </div>
+
+</form>

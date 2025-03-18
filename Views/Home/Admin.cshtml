@@ -1,0 +1,196 @@
+﻿@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+
+@using Kendo.Mvc.UI
+@model Susteni.Models.Home.HomeModel
+
+<div class="row" style="margin-top: 10px;">
+    <div class="col-5 padding-0">
+        <table style="border-collapse: collapse; border-spacing: 0;">
+            <tr>
+                <td rowspan="2" style="width: 120px;">
+                    <img src="~/images/logo_susteni.svg" style="width: 100px" alt="mainlogo" />
+                </td>
+                <td style="margin-top:0px; margin-left: 30px; margin-bottom: 0px; vertical-align:bottom;" class="unselectable logoFont">
+                    @Localizer["Powersave"]
+                </td>
+            </tr>
+            <tr>
+                <td style="font-size: 20px; font-weight: 700;  color: darkslategrey; margin-top:0px; padding-left: 1px; margin-bottom: 0px; vertical-align:text-top;" class="unselectable">
+                    Solving the waste of energy
+                </td>
+            </tr>
+        </table>
+    </div>
+    <div class="col-4">
+        <h3 class="unselectable" id="fellesraadNavn" style="margin-top: 25px;"></h3>
+    </div>
+        @if (ViewData["ByttFellesraad"] != null && ViewData["ByttFellesraad"].ToString() == "1")
+        {
+            <div class="col-2">
+                <button class="commandline" style="margin-top: 25px; max-width: 200px; width: 200px;" onclick="showDialogFellesraad()"><img src="~/images/Gemeinde.svg" />Bytt aktivt fellesråd</button>
+            </div>
+        }
+    </div>
+
+<div class="row">
+
+    <div class="col-5 padding-0">
+        
+    </div>
+
+    <div class="col-5" style="margin-top: 20px;">
+        <div id="nyheter"></div>
+    </div>
+</div>
+
+
+<div id="dialogNyhetWindow">
+    @(Html.Kendo().Window()
+        .Name("dialogNyhet")
+        .Title("Nyhet")
+        .HtmlAttributes("style= border:1px;")
+        .Visible(false)
+        .Height(600)
+        .Width(800)
+        .Modal(true)
+        .Draggable()
+        .Actions(actions => actions
+            .Close()
+        )
+    )
+</div>
+
+<div id="dialogFellesraadWindow">
+    @(Html.Kendo().Dialog()
+        .Name("dialogFellesraad")
+        .Title("Sett aktivt fellesråd")
+        .Content(
+                Html.Kendo().ListBox()
+                    .Name("listFellesraad")
+                    .DataValueField("Fellesraad")
+                    .DataTextField("Navn")
+                    .HtmlAttributes("style='height: 100%;'")
+                    .Selectable(ListBoxSelectable.Single)
+                    .DataSource(dataSource => dataSource
+                        .Ajax()
+                        .Read(read => read.Action("getAccounts", "Account"))
+                        )
+                    .ToHtmlString()
+                )
+        .Visible(false)
+        .Height(600)
+        .Width(400)
+        .Modal(true)
+        .Actions(actions => {
+            actions.Add().Text("Avbryt");
+            actions.Add().Text("Aktiver").Action("onActionOK").Primary(true);
+        })
+        .Events(ev => ev.Close("onClose").Open("onOpen"))
+    )
+</div>
+
+<style>
+    .k-listbox {
+        height: 100%;
+    }
+</style>
+
+<script>
+
+    window.onload = function () {
+        // visHuskeliste();
+        // visNyheterliste();
+    };
+
+    $(document).ready(function () {
+
+        var meny = document.getElementById("hmAdministrasjon");
+        meny.classList.add("menyAktiv");
+
+    });
+
+    function visHuskeliste() {
+        var respons = "";
+
+        $.ajax({
+           url: '@Url.Action("GetHomeHuskeliste", "Home")',
+            type: "GET",
+            dataType: "html"
+        }).done(function (result) {
+            var pureHTML = result
+            pureHTML = pureHTML.replace('{"EncodedContent":{"Value":"', "").replace('"}}','');
+            $("#huskeliste").html(pureHTML);
+       });;
+    }
+
+    function visNyheterliste() {
+        var respons = "";
+        $.ajax({
+           url: '@Url.Action("GetHomeNyhetsliste", "Home")',
+            type: "GET",
+            dataType: "html"
+        }).done(function (result) {
+            var pureHTML = result
+            pureHTML = pureHTML.replace('{"EncodedContent":{"Value":"', "").replace('"}}', '');
+
+            pureHTML = replaceAll(pureHTML, "¤","\"");
+            $("#nyheter").html(pureHTML);
+       });;
+    }
+
+    function replaceAll(string, search, replace) {
+        return string.split(search).join(replace);
+    }
+
+    function visNyhet(nyhetGuid) {
+        $.ajax({
+            url: '@Url.Action("GetHomeNyhet", "Home")',
+            type: "GET",
+            data: { nyhetGuid: nyhetGuid },
+            dataType: "html"
+        }).done(function (result) {
+            var pureHTML = result
+            pureHTML = pureHTML.replace('{"EncodedContent":{"Value":"', "").replace('"}}','');
+            $("#dialogNyhet").html(pureHTML);
+        });;
+
+        var popup = $('#dialogNyhet').data("kendoWindow");
+        popup.center().open();
+    }
+
+    function showDialogFellesraad() {
+        $('#dialogFellesraad').data("kendoDialog").open();
+    }
+
+    function onOpen() {
+        $("#showDialogBtn").fadeOut();
+    }
+
+    function onClose() {
+        $("#showDialogBtn").fadeIn();
+    }
+
+    function onActionOK(e) {
+        var lwFellesraad = $("#listFellesraad").data("kendoListBox");
+
+        var selectedF = lwFellesraad.select();
+        var selItemF = lwFellesraad.dataItem(selectedF);
+        var fellesraad = "";
+        var navn = "";
+
+        if (typeof selItemF != 'undefined') {
+            fellesraad = selItemF.Fellesraad;
+            navn = selItemF.Navn;
+        }
+
+        $.ajax({
+            url: '@Url.Action("setAktivFellesraad", "Account")',
+            data: { fellesraad: fellesraad, navn: navn },
+            type: "GET"
+        }).always(function (result) {
+            document.getElementById("fellesraadNavn").innerHTML = navn;
+            });
+    }
+</script>

@@ -1,0 +1,470 @@
+﻿@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+
+@using Kendo.Mvc.UI
+@model Susteni.Models.Admin.AdminModel
+
+@{
+    ViewData["Title"] = Localizer["Brukere"];
+    ViewData["LogOnOk"] = "2";
+    ViewData["Menu"] = "Hjem";
+}
+
+<form action="Lagre" id="fromProfil" onsubmit="return false;" method="post" class="mt-3">
+    <div id="confirm"></div>
+
+    <div class="container-fluid">
+
+        <div class="row" style="height: 70px;">
+
+            <div class="col-md-2 unselectable">
+                <h3>@Localizer["Profil"]</h3>
+            </div>
+
+            <div class="col-md-8"></div>
+
+            <div class="col-md-2">
+                <div id="infoLagring"></div>
+            </div>
+
+        </div>
+
+        <div class="row" style="border: 1px solid lightgrey; padding-top: 10px; padding-bottom: 10px; margin: 0px;">
+
+            <div class="col-md-12" id="foresporsler">
+
+                <div class="form-group">
+
+                    <div id="funksjonerFinn" style="margin-bottom: 10px;">
+
+                        <div>
+                            <button type="button" name="lagre" class="commandline" onclick="lagreBruker()" id="lagreButton">
+                                <img src="~/images/Lagre.svg" />
+                                @Localizer["Lagre"]
+                            </button>
+                        </div>
+
+                        <div>
+                            <button type="button" name="slette" class="commandline" onclick="showDialogByttPassord()">
+                                <img src="~/images/password-filled-edit-filled.svg" />
+                                @Localizer["Endre passord"]
+                            </button>
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <partial name="_BrukerInfo" />
+  
+            </div>
+
+        </div>
+
+    </div>
+
+</form>
+
+
+<script id="successTemplate" type="text/x-kendo-template">
+    <div class="upload-success">
+        <img src="@Url.Content("~/images/True.svg")" style="float:left; height:48px; width:48px; margin-right: 16px;"/>
+        <p>#= message #</p>
+    </div>
+</script>
+
+
+<script id="errorTemplate" type="text/x-kendo-template">
+    <div class="wrong-pass">
+        <img src="@Url.Content("~/images/warning-sign-filled.svg")" style="float:left; height:48px; width:48px; margin-right: 16px;"/>
+        <p>#= message #</p>
+    </div>
+</script>
+
+@(Html.Kendo().Notification()
+    .Name("notification")
+    .Position(p => p.Pinned(true).Top(30).Right(30))
+    .Stacking(NotificationStackingSettings.Down)
+    .AutoHideAfter(5000)
+    .Templates(t =>
+    {
+        t.Add().Type("success").ClientTemplateID("successTemplate");
+        t.Add().Type("error").ClientTemplateID("errorTemplate");
+    })
+)
+
+
+<div id="dialogFakturaWindow">
+    @(Html.Kendo().Window()
+        .Name("dialogPassord")
+        .Title("Bytt passord")
+        .HtmlAttributes("style= border:1px;")
+        .Visible(false)
+        .Width(400)
+        .Modal(true)
+        .Draggable()
+        )
+</div>
+
+<div id="person">
+
+    @(Html.Kendo().Dialog()
+        .Name("dialogBrukere")
+        .Title(Localizer["Brukere"].Value)
+        .Content(
+        Html.Kendo().Grid<Susteni.Models.RessursItem>()
+            .Name("grdBrukere")
+            .Columns(columns =>
+            {
+                columns.Select().Width(65);
+                columns.Bound(e => e.RessursGuid).Visible(false);
+                columns.Bound(e => e.Navn).Title(Localizer["Navn"].Value);
+            })
+            .Height(450)
+            .DataSource(dataSource => dataSource
+            .Ajax()
+            .Read(read => read
+                .Action("getRessursListe", "Ressurs").Data("filterType"))
+                )
+            .Scrollable()
+            .ToHtmlString()
+            )
+        .Width(500)
+        .Modal(false)
+        .Visible(false)
+        .Actions(actions =>
+        {
+        actions.Add().Text(Localizer["Avbryt"].Value);
+        actions.Add().Text(Localizer["Legg til"].Value).Action("onTjenesteActionOK").Primary(true);
+        })
+        .Events(ev => ev.Close("onClose").Open("onOpen"))
+    )
+
+</div>
+
+<div id="person">
+
+    @(Html.Kendo().Dialog()
+        .Name("dialogTilgang")
+        .Title(Localizer["Tilgang"].Value)
+        .Content(
+        Html.Kendo().Grid<Susteni.Models.KalenderTilgangTypeItem>()
+            .Name("grdTilgang")
+            .Columns(columns => {
+                columns.Bound(e => e.Tilgang).Visible(false);
+                columns.Bound(e => e.Navn).Title(Localizer["Name"].Value);
+            })
+            .Height(220)
+            .Selectable(s => s
+                .Mode(GridSelectionMode.Single)
+                .Type(GridSelectionType.Row)
+                )
+            .DataSource(dataSource => dataSource
+                .Ajax()
+                .Read(read => read
+                    .Action("GetKalenderTilgangTypeListe", "AdminBruker")
+                    )
+                )
+            .Scrollable()
+            //.Events(ev => ev.DataBound("treeViewDataBound").Check("treeViewCheck"))
+            .ToHtmlString()
+            )
+        .Width(300)
+        .Modal(false)
+        .Visible(false)
+        .Actions(actions =>
+        {
+        actions.Add().Text(Localizer["Avbryt"].Value);
+        actions.Add().Text(Localizer["Velg"].Value).Action("onTilgangActionOK").Primary(true);
+        })
+        .Events(ev => ev.Close("onClose").Open("onOpen"))
+    )
+
+</div>
+
+<script id="filter">
+
+    function showDialogByttPassord() {
+
+            $.ajax({
+            url: "/AdminBruker/DialogNyttPassord",
+                method: 'GET',
+                success: function (result) {
+                $('#dialogPassord').html(result);
+                    var popup = $('#dialogPassord').data("kendoWindow");
+                    popup.center().open(); 
+                    }
+                });
+
+    }
+
+    $("#endrePassord").on("click", function () {
+        window.myprompt("Angi nytt passord:", "").then(function (data) {
+            if (data != "") {
+                brukerId = document.getElementById("Bruker_BrukerId").value;
+
+                $.ajax({
+                    url: '@Url.Action("ByttPassord", "AdminBruker")',
+                    data: { brukerId: brukerId, passord: data },
+                    type: "POST"
+                }).done(function (result) {
+                });
+            }
+        }, function () {
+            window.myalert("Cancel entering value.");
+        })
+    });
+
+    function myprompt(content, defaultValue) {
+        return $("<div></div>").kendoPrompt({
+            title: "Passord",
+            value: defaultValue,
+            content: content
+        }).data("kendoPrompt").open().result;
+    }
+
+    var resType = 0;
+
+    function filterType() {
+        return { ressursType: resType }
+    }
+
+    function showDialogRessurser() {
+        var grid = $("#grdBrukere").data("kendoGrid");
+        grid.dataSource.read();
+        var popup = $('#dialogBrukere').data("kendoDialog");
+        popup.open();
+    }
+
+    function showDialogTilgang() {
+        var popup = $('#dialogTilgang').data("kendoDialog");
+        popup.open();
+    }
+
+    function onTjenesteActionOK(e) {
+        var grid = $("#grdBrukere").data("kendoGrid");
+        var selected = [];
+
+        //get all selected rows (those which have the checkbox checked)
+        grid.select().each(function () {
+            selected.push(grid.dataItem(this));
+        });
+
+        var nodes = "";
+        for (var i = 0; i < selected.length; i++) {
+            nodes += selected[i].RessursGuid + ";";
+        }
+
+        $.ajax({
+            type: "GET",
+            url: '@Url.Action("SetKalenderTilgang", "AdminBruker")',
+            data: { ressursGUID: nodes, Tilgang: 2 }
+        }).done(function (result) {
+            var grdBrukere = $("#lstBrukere").data("kendoGrid");
+            grdBrukere.dataSource.read();
+            var fab = $("#fabRedigerRolle").data("kendoFloatingActionButton");
+            fab.hide();
+
+            var fab2 = $("#fabAvsluttRolle").data("kendoFloatingActionButton");
+            fab2.hide();
+        });
+    }
+
+    function onTilgangActionOK(e) {
+        var grdB = $("#lstBrukere").data("kendoGrid");
+        var selectedB = grdB.select();
+        var selItemB = grdB.dataItem(selectedB);
+        var ressursGuid = "";
+
+        if (selectedB.length > 0) {
+            ressursGuid = selItemB.RessursGuid;
+        }
+
+
+        var grdT = $("#grdTilgang").data("kendoGrid");
+        var selectedT = grdT.select();
+        var selItemT = grdT.dataItem(selectedT);
+
+        if (selectedB.length > 0 && selectedT.length > 0) {
+            var tilgang = selItemT.Tilgang;
+
+            $.ajax({
+                type: "GET",
+                url: '@Url.Action("UpdateKalenderTilgang", "AdminBruker")',
+                data: { ressursGUID: ressursGuid, Tilgang: tilgang }
+            }).done(function (result) {
+                var grdBrukere = $("#lstBrukere").data("kendoGrid");
+                grdBrukere.dataSource.read();
+                var fab = $("#fabRedigerRolle").data("kendoFloatingActionButton");
+                fab.hide();
+
+                var fab2 = $("#fabAvsluttRolle").data("kendoFloatingActionButton");
+                fab2.hide();
+            });
+        }
+    }
+
+    function fjernTilgang() {
+        var tittel = "Slett";
+        var nei = "Nei";
+        var content = "Vil du slette denne brukeren sin tilgang til din kalender?";
+
+
+        $("#confirm").kendoConfirm({
+            title: tittel,
+            content: content,
+            messages: {
+                okText: "Ja",
+                cancel: nei
+            }
+        }).data("kendoConfirm").result.done(function () {
+            $('body').append($('<div id="confirm">'));
+
+            var grdB = $("#lstBrukere").data("kendoGrid");
+            var selectedB = grdB.select();
+            var selItemB = grdB.dataItem(selectedB);
+            var ressursGuid = "";
+
+            if (selectedB.length > 0) {
+                ressursGuid = selItemB.RessursGuid;
+
+                $.ajax({
+                    type: "GET",
+                    url: '@Url.Action("FjernKalenderTilgang", "AdminBruker")',
+                    data: { ressursGUID: ressursGuid}
+                }).done(function (result) {
+                    var grdBrukere = $("#lstBrukere").data("kendoGrid");
+                    grdBrukere.dataSource.read();
+                    var fab = $("#fabRedigerRolle").data("kendoFloatingActionButton");
+                    fab.hide();
+
+                    var fab2 = $("#fabAvsluttRolle").data("kendoFloatingActionButton");
+                    fab2.hide();
+                });
+            }
+
+        }).fail(function () {
+            $('body').append($('<div id="confirm">'));
+        });
+
+
+
+    }
+
+</script>
+
+<style>
+    .k-listbox {
+        height: 100%;
+    }
+
+    .k-fab-text {
+        display: none;
+    }
+
+</style>
+
+<script>
+
+    function lagreBruker() {
+        var $this = $('form').serialize();
+
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("LagreProfilBruker", "AdminBruker")',
+            data: $this,
+            dataType: 'json'
+            })
+        .done(function (result) {
+            if (result.Result == true) {
+                    var notification = $("#notification").data("kendoNotification");
+                notification.show({ title: "Rutenettmal", message: "Profilen er lagret" }, "success");
+                }
+            else {
+                alert(result.ErrorText);
+                }
+            })
+        .fail(function (result) {
+            alert('an Error has occurred, please try again');
+            });
+        }
+
+    $(document).ready(function () {
+        $.ajax({
+            url: '@Url.Action("GetAktivRessurs", "AdminBruker")',
+            type: "GET"
+        }).done(function (result) {
+            $("#profilData").html(result);
+
+            x = document.getElementById("Ressurs_LukketKalender");
+            if (x.value == "True") {
+                xat = document.getElementById("idAktiverTilgang");
+                xat.style.display = "none";
+                xdt = document.getElementById("idDeaktiverTilgang");
+                xdt.style.display = "flex";
+                xtl = document.getElementById("tilgangListe");
+                xtl.style.display = "flex";
+            }
+            else {
+                xat = document.getElementById("idAktiverTilgang");
+                xat.style.display = "flex";
+                xdt = document.getElementById("idDeaktiverTilgang");
+                xdt.style.display = "none";
+                xtl = document.getElementById("tilgangListe");
+                xtl.style.display = "none";
+            }
+
+            $("#fabAktiverRolle").prop("type","button");
+            $("#fabRedigerRolle").prop("type","button");
+            $("#fabAvsluttRolle").prop("type","button");
+        });
+    });
+
+    function aktiverTilgang() {
+        $.ajax({
+           url: '@Url.Action("SetKalenderTilgangKontroll", "AdminBruker")',
+            data: { lukket: true },
+            type: "GET"
+        }).done(function (result) {
+            xat = document.getElementById("idAktiverTilgang");
+            xat.style.display = "none";
+            xdt = document.getElementById("idDeaktiverTilgang");
+            xdt.style.display = "flex";
+            xtl = document.getElementById("tilgangListe");
+            xtl.style.display = "flex";
+       });
+    }
+
+    function deaktiverTilgang() {
+        $.ajax({
+           url: '@Url.Action("SetKalenderTilgangKontroll", "AdminBruker")',
+            data: { lukket: false },
+            type: "GET"
+        }).done(function (result) {
+            xat = document.getElementById("idAktiverTilgang");
+            xat.style.display = "flex";
+            xdt = document.getElementById("idDeaktiverTilgang");
+            xdt.style.display = "none";
+            xtl = document.getElementById("tilgangListe");
+            xtl.style.display = "none";
+        });
+    }
+
+    function onBrukerChange() {
+        var fab = $("#fabRedigerRolle").data("kendoFloatingActionButton");
+        fab.show();
+
+        var fab2 = $("#fabAvsluttRolle").data("kendoFloatingActionButton");
+        fab2.show();
+    }
+
+    function onOpen() {
+        $("#showDialogBtn").fadeOut();
+    }
+
+    function onClose() {
+        $("#showDialogBtn").fadeIn();
+    }
+
+</script>

@@ -1,0 +1,549 @@
+﻿@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
+@model Susteni.Models.Account.AccountModel
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+
+@{
+    ViewData["Title"] = Localizer["Kunder"];
+    ViewData["LogOnOk"] = "2";
+    ViewData["Menu"] = "Admin";
+}
+
+
+<style>
+
+    .k-grid td {
+        white-space: nowrap;
+        text-overflow: ellipsis;
+    }
+
+    .k-grid table {
+        table-layout: fixed;
+    }
+
+</style>
+
+<form controller="Kunder" onsubmit="return false;" method="post" class="mt-3" id="frmKundeForm">
+    <div id="confirm"></div>
+
+    <div class="container-fluid padding-0">
+
+        <div class="form-group row" id="heading" style="min-height: 70px;">
+            <div class="col-2 unselectable">
+                <h3>@Localizer["Kunder"]</h3>
+            </div>
+
+            <div class="col-8">
+                <div style="display: flex; flex-direction: row;">
+                    <div>
+                        <button disabled type="button" id="idFiksBruker" class="commandline" onclick="fiksBruker()">
+                            <img src="~/images/tools-filled-magic-wand.svg" />
+                            @Localizer["Fiks bruker"]
+                        </button>
+                    </div>
+
+                    <div>
+                        <button type="button" name="lagre" class="commandline" onclick="opprettMeg()" id="lagreButton">
+                            <img src="~/images/people-man-6-filled-add-filled.svg" />
+                            @Localizer["Legg til meg"]
+                        </button>
+                    </div>
+
+                    <div>
+                        <button type="button" name="slette" class="commandline" id="endrePassord" disabled>
+                            <img src="~/images/password-filled-edit-filled.svg" />
+                            @Localizer["Endre passord"]
+                        </button>
+                    </div>
+
+
+
+                    <div>
+                        <button type="button" name="slette" class="commandline" id="oppsettOAuth" disabled onclick="showDialogOAuth()">
+                            <img src="~/images/cloud-filled-gear-filled.svg" />
+                            @Localizer["oAuth oppsett"]
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-2">
+                <div id="infoLagring"></div>
+            </div>
+
+        </div>
+
+        <div class="row" style="min-height: 720px; border: 1px solid lightgrey; padding-top: 10px; padding-right: 10px; margin: 5px;">
+
+            <div class="col-5" id="funksjoner">
+
+                <div class="row">
+                    <div class="col-6">
+                        <button type="button" name="ny" class="commandline" onclick="showDialogNyKunde()">
+                            <img src="~/images/Ny.svg" />
+                            @Localizer["Ny"]
+                        </button>
+
+                        <button type="button" name="lagre" class="commandline" onclick="lagreEier()">
+                            <img src="~/images/Lagre.svg" />
+                            @Localizer["Lagre"]
+                        </button>
+
+                        <button type="button" name="slette" class="commandline" onclick="">
+                            <img src="~/images/Slette.svg" />
+                            @Localizer["Slette"]
+                        </button>
+
+                    </div>
+                    <div class="col-6">
+                        <div class="row align-items-center">
+                            <label class="col-2 col-form-label">Navn</label>
+                            <div class="col-10" style="display: flex; flex-direction: row;">
+                                <input id="KundeNavn" Class="form-control sokeFelt" oninput="finnKunde()" style="width: calc(100% - 60px)">
+                                <button type="button" class="commandInline" onclick="finnKunde()">
+                                    <img src="~/images/find.svg" />
+                                </button>
+                                <button type="button" class="commandInline" onclick="clearKunde()">
+                                    <img src="~/images/button-remove.svg" />
+                                </button>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="form-group" style="margin-top: 10px;">
+                    <h4>@Localizer["Liste over kunder"]</h4>
+
+                    @(Html.Kendo().RadioGroup()
+                        .Name("TypeListe")
+                        .Layout("horizontal")
+                        .Events(e => e.Change("onListeTypeChange"))
+                        .Items(i =>
+                        {
+                            i.Add().Label(Localizer["Kunder"].Value).Value("0");
+                            i.Add().Label(Localizer["Byrå"].Value).Value("1");
+                        })                       
+                        .Value("0")
+                    )
+
+                    @(Html.Kendo().Grid<Susteni.Models.SystemInfoListeItem>()
+                        .Name("listeKunder")
+                        .Columns(columns =>
+                            {
+                                columns.Bound(q => q.Fellesraad).Width(120);
+                                columns.Bound(q => q.Navn);
+                            })
+                        .Height(555)
+                        .Scrollable()
+                        .Selectable(s => s
+                            .Mode(GridSelectionMode.Single)
+                            .Type(GridSelectionType.Row))
+                        .Events(events => events
+                            .Change("onKundeChange"))
+                        .DataSource(dataSource => dataSource
+                            .Ajax()
+                            .Read(read => read.Action("getSystemInfoListe", "Account").Data("filterKunde"))
+                        )
+                    )
+                </div>
+                    
+                        
+                    </div>
+
+            <div class="col-7">
+
+                <partial name="_KundeInfo" />
+
+            </div>
+
+        </div>
+
+    </div>
+
+</form>
+
+
+
+<script id="successTemplate" type="text/x-kendo-template">
+    <div class="upload-success">
+        <img src="@Url.Content("~/images/emoticon-happy.svg")" style="float:left; height:48px; width:48px; margin-right: 16px;"/>
+        <p>#= message #</p>
+    </div>
+</script>
+
+
+<script id="errorTemplate" type="text/x-kendo-template">
+    <div class="wrong-pass">
+        <img src="@Url.Content("~/images/emoticon-sad.svg")" style="float:left; height:48px; width:48px; margin-right: 16px;"/>
+        <p>#= message #</p>
+    </div>
+</script>
+
+
+@(Html.Kendo().Notification()
+    .Name("notification")
+    .Position(p => p.Pinned(true).Top(30).Right(30))
+    .Stacking(NotificationStackingSettings.Down)
+    .AutoHideAfter(5000)
+    .Templates(t =>
+    {
+        t.Add().Type("success").ClientTemplateID("successTemplate");
+        t.Add().Type("error").ClientTemplateID("errorTemplate");
+    })
+)
+
+
+    @(Html.Kendo().Window()
+        .Name("dialogOAuth")
+        .Title(Localizer["OAuth oppsett"].Value)
+        .HtmlAttributes("style= border:1px;")
+        .Visible(false)
+        .Width(1200)
+        .Modal(true)
+        .Draggable()
+        )
+
+@(Html.Kendo().Window()
+        .Name("dialogFiksBruker")
+        .Title(Localizer["Velg ressurs"].Value)
+        .HtmlAttributes("style= border:1px;")
+        .Visible(false)
+        .Width(1200)
+        .Modal(true)
+        .Draggable()
+        )
+
+    @(Html.Kendo().Window()
+        .Name("DialogNyKunde")
+        .Title(Localizer["Ny kunde"].Value)
+        .Visible(false)
+        .Width(850)
+        .Modal(true)
+        .Draggable()
+        )
+
+@(Html.Kendo().Window()
+        .Name("DialogNyeBrukere")
+        .Title(Localizer["Finn brukere"].Value)
+        .Visible(false)
+        .Width(1250)
+        .Modal(true)
+        .Draggable()
+        )
+
+<script id="funksjoner" type="text/javascript">
+    var Fellesraad = "";
+    var BrukerId = "";
+    var BrukerGuid = "";
+    var Navn = "";
+    var resType = 0;
+
+    function showDialogNyKunde() {
+        $.ajax({
+            url: '@Url.Action("DialogKundeNy", "Account")',
+            type: 'GET'
+            }).done(function (result) {
+                $('#DialogNyKunde').html(result);
+            var popup = $('#DialogNyKunde').data("kendoWindow");
+                popup.center().open();
+            });
+        }
+
+    function showDialogNyeBrukere() {
+        $.ajax({
+            url: '@Url.Action("DialogBrukerImport", "Account")',
+            type: 'GET'
+        }).done(function (result) {
+            $('#DialogNyeBrukere').html(result);
+            var popup = $('#DialogNyeBrukere').data("kendoWindow");
+            popup.center().open();
+        });
+    }
+    
+    function OpprettNyKunde() {
+        var $this = $('#wizard').serialize();
+        var listBoxG = $("#listeKunder").data("kendoGrid");
+
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("OpprettNyKunde", "Account")',
+            data: $this,
+            dataType: 'json'
+        }).done(function (result) {
+            if (result.Result == "True") {
+                document.getElementById('infoLagring').innerHTML = "<img src='@Url.Content("~/images/")database-save.png' />@Localizer["Lagret"]";
+                $('#infoLagring').fadeIn(800).delay(100).fadeOut(800);
+                listBoxG.dataSource.read();
+            }
+            else {
+                alert(result.ErrorText);
+            }
+
+        }).fail(function (result) {
+            alert('an Error has occurred, please try again');
+        });
+    }
+
+    function filterKunde() {
+        if (resType == 0) {
+            filterTekst ="Fellesraad Between '0000' AND '6999'"
+        }
+        else {
+            filterTekst = "Fellesraad Between '7000' AND '7999'"
+        }
+        return {filterTekst: filterTekst}
+    }
+
+    function onListeTypeChange(e) {
+        resType = e.newValue;
+        var lvBruker = $("#listeKunder").data("kendoGrid");
+        lvBruker.dataSource.read();
+        }
+
+    function finnKunde() {
+        fv = document.getElementById("KundeNavn").value;
+        ds = $("#listeKunder").data("kendoGrid").dataSource;
+        ds.filter({ field: "Navn", operator: "contains", value: fv });
+        }
+
+    function finnAnsatt() {
+        fv = document.getElementById("sokEtter").value;
+        ds = $("#listeBrukere").data("kendoGrid").dataSource;
+        ds.filter({ field: "Fornavn", operator: "contains", value: fv });
+    }
+
+    function clearKunde() {
+        document.getElementById("KundeNavn").value = "";
+        ds = $("#listeKunder").data("kendoGrid").dataSource;
+        ds.filter({});
+        }
+
+    function sendNyttPassord(e) {
+        var listBoxF = $("#listeBrukere").data("kendoGrid");
+        var selectedF = listBoxF.select();
+        var selItemF = listBoxF.dataItem(selectedF);
+        var BrukerId = "";
+        var EPost = "";
+
+        if (selItemF != null && typeof selItemF != 'undefined') {
+            BrukerId = selItemF.BrukerId;
+            EPost = selItemF.EPost;
+        }
+
+        if (EPost != "" && BrukerId != "") {
+
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("OpprettNyttPassord", "AdminBruker")'
+            })
+                .done(function (passord) {
+
+                    $.ajax({
+                        url: '@Url.Action("ByttPassord", "AdminBruker")',
+                        data: { brukerId: BrukerId, passord: passord },
+                        type: "POST"
+                    })
+                        .done(function (result) {
+
+                            $.ajax({
+                                type: "POST",
+                                url: '@Url.Action("SendNyttPassord", "AdminBruker")',
+                                data: { ePostAdresse: EPost, Brukerid: BrukerId, password: passord }
+                            })
+                                .done(function (result) {
+                                    var notification = $("#notification").data("kendoNotification");
+                                    notification.show({ title: "Bestilling", message: "Nytt passord sendt til " + BrukerId }, "success");
+                                });
+
+                        });
+
+                });
+        }
+    }
+
+    function showDialogOAuth() {
+        xF = document.getElementById("SystemInfo_Fellesraad");
+        $.ajax({
+            url: '@Url.Action("GetoAuthInfo", "Account")',
+            type: 'GET',
+            data: {fellesraad: xF.value}
+        }).done(function (result) {
+            $('#dialogOAuth').html(result);
+            xOF = document.getElementById("oAuthInfo_Fellesraad");
+            xOF.value = xF.value;
+            var popup = $('#dialogOAuth').data("kendoWindow");
+            popup.center().open();
+        });
+    }
+
+    function filterFellesraad() {
+        return {fellesraad: Fellesraad}
+    }
+
+    function onKundeChange(e) {
+        var selected = this.select();
+        var data = this.dataItem(selected);
+
+        if (data != null) {
+            Fellesraad = data.Fellesraad;
+
+            $.ajax({
+                url: '@Url.Action("GetSystemInfo", "Account")',
+                data: { fellesraad: Fellesraad },
+                type: "GET"
+            }).done(function (result) {
+                $("#kundeForm").html(result);
+                xOA = document.getElementById("oppsettOAuth");
+                xOA.disabled = false;
+                var grid = $("#listeBrukere").data("kendoGrid");
+                grid.dataSource.read();
+            });
+        }
+    }
+
+    function opprettMeg() {
+
+        $.ajax({
+            url: '@Url.Action("OpprettMeg", "AdminBruker")',
+            data: { Fellesraad: Fellesraad },
+            type: "GET"
+        }).done(function (result) {
+            var grid = $("#listeBrukere").data("kendoGrid");
+            grid.dataSource.read();
+        });
+
+    }
+
+    function opprettBrukere() {
+        var grid = $("#listeBrukereImport").data("kendoGrid")
+        var selected = [];
+
+        grid.select().each(function () {
+            selected.push(grid.dataItem(this));
+            });
+
+        if (selected.length > 0) {
+            totalNumber = selected.length;
+            var brukerGuidListe = "";
+
+            for (var i = 0; i < selected.length; i++) {
+                if (brukerGuidListe == "") {
+                    brukerGuidListe = selected[i].BrukerGuid;
+                }
+                else {
+                    brukerGuidListe += ":" + selected[i].BrukerGuid;
+                }
+            }
+
+            $.ajax({
+                url: '@Url.Action("LeggTilBruker", "AdminBruker")',
+                data: { Fellesraad: Fellesraad, brukerGuid: brukerGuidListe },
+                type: "GET"
+            }).done(function (result) {
+                var grid = $("#listeBrukere").data("kendoGrid");
+                grid.dataSource.read();
+
+                var popup = $('#DialogNyeBrukere').data("kendoWindow");
+                popup.close();
+            });
+
+        }
+    }
+
+
+
+    function fjernBruker() {
+        $("#confirm").kendoConfirm({
+            title: "Slett",
+            content: "Ønsker du å fjerne denne brukeren fra denne kunden?",
+            messages: {
+                okText: "Ja",
+                cancel: "Nei"
+                }
+            })
+        .data("kendoConfirm").result.done(function () {
+            $('body').append($('<div id="confirm">'));
+
+            $.ajax({
+                url: '@Url.Action("FjernBruker", "AdminBruker")',
+                data: { BrukerId: BrukerId, Fellesraad: Fellesraad },
+                type: "GET"
+                })
+            .done(function (result) {
+                var grid = $("#listeBrukere").data("kendoGrid");
+                grid.dataSource.read();
+                });
+             })
+        .fail(function () {
+            $('body').append($('<div id="confirm">'));
+            });
+        }
+
+    function onDataBound(e) {
+        var grid = $("#listeBrukere").data("kendoGrid");
+
+        $("#listeBrukere tbody tr").each(function () {
+            var currentRowData = grid.dataItem(this);
+            //Read field contains data if this email is readed
+            $(this).css("color", currentRowData.Farge)
+        });
+    }
+  
+    function lagreEier() {
+
+        var $this = $('#frmKundeForm');
+
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("LagreSystemInfo", "Account")',
+            data: $this.serialize(),
+            dataType: 'json'
+        }).done(function (result) {
+            if (result.Result == true) {
+                document.getElementById('infoLagring').innerHTML = "<img src='@Url.Content("~/images/")database-save.png' />@Localizer["Lagret"]";
+                $('#infoLagring').fadeIn(800).delay(100).fadeOut(800);
+            }
+        }).fail(function (result) {
+            alert('an Error has occurred, please try again');
+        });
+     };
+
+    function onBrukerChange(e) {
+        var selected = this.select();
+        var data = this.dataItem(selected);
+
+        if (data != null) {
+            BrukerId = data.BrukerId;
+            BrukerGuid = data.BrukerGuid;
+            Navn = data.Fornavn;
+            xFB = document.getElementById("idFiksBruker");
+            xFB.disabled = false;
+        }
+    }
+
+    function fiksBruker() {
+        xF = document.getElementById("SystemInfo_Fellesraad");
+
+        $.ajax({
+            url: '@Url.Action("DialogFiksRessurs", "Account")',
+            type: 'GET',
+        }).done(function (result) {
+            $('#dialogFiksBruker').html(result);
+            sF = document.getElementById("idFellesraad");
+            sN = document.getElementById("idNavn");
+            sB = document.getElementById("idBrukerId");
+            sBG = document.getElementById("idBrukerGuid");
+            sF.value = xF.value;
+            sB.value = BrukerId;
+            sN.value = Navn;
+            sBG.value = BrukerGuid;
+            $('#ressursListe').data("kendoGrid").dataSource.read();
+            var popup = $('#dialogFiksBruker').data("kendoWindow");
+            popup.center().open();
+        });
+
+        }
+</script>
+
+

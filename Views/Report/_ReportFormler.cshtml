@@ -1,0 +1,121 @@
+﻿@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
+@model Susteni.Models.ReportModel
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+
+<div class="container-fluid padding-0" id="formelForm">
+
+    <input type = "hidden" asp-for="ReportFormel.RapId" class="form-control">
+    <input type = "hidden" asp-for="ReportFormel.SlettetDato" class="form-control">
+    <input type = "hidden" asp-for="ReportFormel.OpprettetDate" class="form-control">
+    <input type = "hidden" asp-for="ReportFormel.EndretAv" class="form-control">
+    <input type = "hidden" asp-for="ReportFormel.EndretDato" class="form-control">
+    <input type = "hidden" asp-for="ReportFormel.SlettetAv" class="form-control">
+    <input type = "hidden" asp-for="ReportFormel.SlettetDato" class="form-control">
+    <input type = "hidden" asp-for="ReportFormel.ReportFormelGuid" class="form-control">
+
+    <div class="row">
+        <button type="button" name="Gemeinde" class="commandSmal" onclick="formelNytt()" style="width: 160px; margin-left: 10px">
+            @Localizer["New question"]
+            <img src="~/images/Ny.svg" style="width: 24px; height: 24px;" />
+        </button>
+
+        <button type="button" name="Gemeinde" class="commandSmal" onclick="formelLagre()" style="width: 100px; margin-left: 20px">
+            @Localizer["Save"]
+            <img src="~/images/Lagre.svg" style="width: 24px; height: 24px;" />
+        </button>
+
+        <button type="button" name="Gemeinde" class="commandSmal" onclick="formelSlett()" style="width: 100px; margin-left: 20px">
+            @Localizer["Remove"]
+            <img src="~/images/Slette.svg" style="width: 24px; height: 24px;" />
+        </button>
+    </div>
+
+    <div class="col-12">
+        <div class="panel with-nav-tabs panel-default" id="dataenter" style="padding: 10px;">
+            <div class="panel-body data padding-0">
+                <div class="tab-content data">
+
+                    <div class="row align-items-center" style="display: flex; flex-direction: row;">
+                        <Label class="col-2 col-form-label">@Localizer["Typ"]</label>
+                        <div class="col-lg-8">
+                            @(Html.Kendo().DropDownList()
+                                .Name("ReportFormel.FormelType")
+                                .DataTextField("Text")
+                                .DataValueField("Value")
+                                .OptionLabel("Velg fra listen...")
+                                .OptionLabelTemplate("<span><i>Velg fra listen...</i></span>")
+                                .BindTo(new List<SelectListItem>() {
+                                    new SelectListItem() {
+                                    Text = Localizer["Standard"].Value , Value = "0"
+                                    },
+                                    new SelectListItem() {
+                                    Text = Localizer["SQL"].Value, Value = "1"
+                                    },
+                                    new SelectListItem() {
+                                    Text = Localizer["SQL Code"].Value, Value = "2"
+                                    },
+                                    new SelectListItem() {
+                                    Text = Localizer["SQL Code (1, 2 and 3)"].Value, Value = "3"
+                                    },
+                                    new SelectListItem() {
+                                    Text = Localizer["SQL Code 2 - two"].Value, Value = "4"
+                                    },
+                                    new SelectListItem() {
+                                    Text = Localizer["SQL Code x ..."].Value, Value = "5"
+                                    }
+                                })
+                                .Value(Model.ReportFormel.FormelType.ToString())
+                                .HtmlAttributes(new { style="width: 100%;" })
+                            )
+                        </div>
+                    </div>
+
+                    <div class="row align-items-center" style="display: flex; flex-direction: row;">
+                        <label class="col-2 col-form-label">Name</label>
+                        <div class="col-md-3">
+                            <input asp-for="ReportFormel.FormelNavn" class="form-control k-textbox">
+                        </div>
+                        <Label class="col-1 col-form-label">@Localizer["Number"]</label>
+                        <div class="col-md-3">
+                            @(Html.Kendo().NumericTextBox<decimal>()
+                                .Name("ReportFormel.Antall")
+                                .Format("n0")
+                                .Min(0)
+                                .Max(100)
+                                .Value(Model.ReportFormel.Antall)
+                                .HtmlAttributes(new { style = "width: 100%"})
+                            )
+                        </div>
+                    </div>
+
+                    <div class="row align-items-center" style="display: flex; flex-direction: row;">
+                        <Label class="col-2 col-form-label">@Localizer["Type verdi"]</label>
+                        <div class="col-lg-8">
+                            @(Html.Kendo().RadioGroup()
+                                .Name("ReportFormel.FormelVerdiType")
+                                .Layout(RadioGroupLayout.Horizontal)
+                                .Items(i =>
+                                    {
+                                    i.Add().Label("Text").Value("0");
+                                    i.Add().Label("Number").Value("1");
+                                    i.Add().Label("Date").Value("2");
+                                    i.Add().Label("Yes/No").Value("3");                                            
+                                    })
+                                .Value(Model.ReportFormel.FormelVerdiType.ToString())
+                                )
+                        </div>
+                    </div>
+
+                    <div class="row" style="display: flex; flex-direction: row;">
+                        <label class="col-2 col-form-label">SQL/Variables</label>
+                        <div class="col-md-10">
+                            <textarea asp-for="ReportFormel.FormelTekst" class="form-control k-textbox" style="height: 200px;"></textarea>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

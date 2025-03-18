@@ -1,0 +1,47 @@
+﻿@using Microsoft.AspNetCore.Mvc.Localization
+
+@inject IViewLocalizer Localizer
+@model Susteni.Models.Ship.ShipModel
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+
+
+<form id="FuelComsuptionForm" style="margin-bottom: 0px;">
+    <input hidden asp-for="GeneratorFuelComsuption.FuelConsGuid" class="form-control k-textbox">
+    <input hidden asp-for="GeneratorFuelComsuption.LinkGuid" class="form-control k-textbox">
+    <input hidden id="kdDieselkWh" asp-for="GeneratorFuelComsuption.kdDieselkWh2" class="form-control k-textbox">
+
+    <div class="row align-items-center" style="display: flex; flex-direction: row;">
+        <label class="col-3 col-form-label">Effect</label>
+        <div class="col-3">
+            @(Html.Kendo().NumericTextBox<double>()
+                .Name("GeneratorFuelComsuption.Effect")
+                .HtmlAttributes(new { style = "width: 100px;" })
+                .Format("##")
+                .Min(0)
+                .Max(120)
+                .Step(5)
+                .Value(Model.GeneratorFuelComsuption.Effect)
+                )
+                %
+        </div>
+        <label class="col-3 col-form-label">KgDieselkWh</label>
+        <div class="col-3">
+            @(Html.Kendo().NumericTextBox<double>()
+                .Name("GeneratorFuelComsuption.KgDieselkWh")
+                .HtmlAttributes(new { style = "width: 100px;" })
+                .Format("#.000")
+                .Decimals(3)
+                .Value(Model.GeneratorFuelComsuption.KgDieselkWh)
+                )
+        </div>
+    </div>
+
+    <div class="row" style="margin-top: 15px;">
+        <div class="col-12">
+            <button type="button" onclick="closeFuelConsumption()" class="commandModernRed" style="width: 120px; float: right">Cancel</button>
+            <button type="button" onclick="saveFuelConsumption()" class="commandModernGreen" style="width: 120px; float: right">Save</button>
+        </div>
+
+    </div>
+
+</form>

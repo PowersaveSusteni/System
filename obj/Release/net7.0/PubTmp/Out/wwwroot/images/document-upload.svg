@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="32px" height="32px" viewBox="0 0 32 32" enable-background="new 0 0 32 32" xml:space="preserve">
+  <g id="main">
+    <clipPath id="clip_mask">
+      <path d="M19.531,32H0V0h32v19.531C30.386,17.103,27.627,15.5,24.5,15.5c-4.963,0,-9,4.037,-9,9C15.5,27.627,17.103,30.386,19.531,32z"/>
+    </clipPath>
+    <g id="icon" clip-path="url(#clip_mask)">
+      <g id="transformed_icon" transform="translate(-1 -1)">
+        <polygon points="27.5,30.5 4.5,30.5 4.5,1.5 19.5,1.5 27.5,9.5" fill="#FFFFFF" stroke-linejoin="miter"/>
+        <path d="M19.707,1H4v30h24V9.293L19.707,1zM20,2.707L26.293,9H20V2.707zM5,30V2h14v8h8v20H5z" fill="#383838"/>
+        <path d="M24.5,27h-4.5v-1h4.5V27zM24.5,24h-4.5v-1h4.5V24zM24.5,21h-4.5v-1h4.5V21zM24.5,18H7.5v-1h17V18zM24.5,15H7.5v-1h17V15zM17,12H7.5v-1h9.5V12zM17,9H7.5V8h9.5V9zM17,6H7.5V5h9.5V6z" fill="#78797A" opacity="0.5"/>
+        <rect x="7.5" y="23.5" width="2" height="4" fill="#92CBEE" stroke="#0964B0" stroke-width="1" stroke-linecap="round" stroke-miterlimit="1"/>
+        <rect x="11.5" y="21.5" width="2" height="6" fill="#92CBEE" stroke="#0964B0" stroke-width="1" stroke-linecap="round" stroke-miterlimit="1"/>
+        <rect x="15.5" y="19.5" width="2" height="8" fill="#92CBEE" stroke="#0964B0" stroke-width="1" stroke-linecap="round" stroke-miterlimit="1"/>
+      </g>
+    </g>
+    <g id="overlay">
+      <path d="M24.5,17.5c-3.866,0,-7,3.134,-7,7c0,3.866,3.134,7,7,7s7,-3.134,7,-7C31.5,20.634,28.366,17.5,24.5,17.5zM27.845,26.034L25,23.225V29.5h-1v-6.275l-2.845,2.809l-0.703,-0.712L23.818,22H20.7v-1h7.6v1h-3.118l3.365,3.323L27.845,26.034z" fill="#F7BFBF"/>
+      <path d="M24.5,17.5c-3.866,0,-7,3.134,-7,7c0,3.866,3.134,7,7,7s7,-3.134,7,-7C31.5,20.634,28.366,17.5,24.5,17.5zM27.845,26.034L25,23.225V29.5h-1v-6.275l-2.845,2.809l-0.703,-0.712L23.818,22H20.7v-1h7.6v1h-3.118l3.365,3.323L27.845,26.034z" fill="#DB2E2A" opacity="0.3"/>
+      <path d="M24.5,32c-4.135,0,-7.5,-3.364,-7.5,-7.5c0,-4.135,3.365,-7.5,7.5,-7.5c4.136,0,7.5,3.365,7.5,7.5C32,28.636,28.636,32,24.5,32zM24.5,18c-3.584,0,-6.5,2.916,-6.5,6.5c0,3.584,2.916,6.5,6.5,6.5c3.584,0,6.5,-2.916,6.5,-6.5C31,20.916,28.084,18,24.5,18z" fill="#DB2E2A"/>
+      <polygon points="25,29.5 24,29.5 24,23.225 21.155,26.034 20.452,25.323 23.818,22 20.7,22 20.7,21 28.3,21 28.3,22 25.182,22 28.548,25.323 27.845,26.034 25,23.225" fill="#FFFFFF" stroke-linejoin="miter"/>
+    </g>
+  </g>
+</svg>

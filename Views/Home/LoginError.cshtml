@@ -1,0 +1,85 @@
+﻿@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
+@model Susteni.Models.Account.AccountModel
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+
+@{
+    ViewData["Title"] = Localizer["Loggpaa"];
+}
+
+<div id="logonForm">
+
+    <div class="form-group row">
+        <div class="col-lg-5 padding-0">
+            <table style="border-collapse: collapse; border-spacing: 0;">
+                <tr>
+                    <td rowspan="2" style="width: 120px;">
+                        <img src="~/images/logo_susteni.svg" style="width: 100px" alt="mainlogo" />
+                    </td>
+                    <td style="font-size: 40px; font-weight: 700;  color: #346D83; margin-top:0px; margin-left: 30px; margin-bottom: 0px; vertical-align:bottom;" class="unselectable">
+                        @Localizer["Susteni"]
+                        <span style="font-size: 40px; color: #579DB6; margin-top:0px; margin-left: 5px; vertical-align: bottom;" class="unselectable">
+                            @Localizer["Office"]
+                        </span>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="font-size: 20px; font-weight: 700;  color: darkslategrey; margin-top:0px; padding-left: 1px; margin-bottom: 0px; vertical-align:text-top;" class="unselectable">
+                        Solving the waste of energy
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <div class="col-lg-4">
+            <h3 class="unselectable" id="fellesraadNavn" style="margin-top: 25px;"></h3>
+        </div>
+    </div>
+
+    <div class="row" style="margin-top: 200px;">
+        <div class="col-2">
+        </div>
+        <div class="col-10">
+            <h2>@(Model.LoginView.ErrorText)</h2>
+            <p style="margin-top: 50px;">@(Model.LoginView.ErrorTextHjelp)</p>
+        </div>
+    </div>
+
+    <img src="~/images/Landskap.png" style="position: fixed; bottom: 0px; right: 0px; width: 20%;" alt="mainlogo" />
+
+</div>
+
+<script>
+
+    function sendSMS(fra) {
+        var $this = $('#logonForm3');
+
+        $.ajax({
+            url: '@Url.Action("SendSMS", "Home")',
+            data: $this.serialize(),
+            type: "POST"
+        }).done(function (result) {
+            if (result == true) {
+                if (fra == 0) {
+                    x = document.getElementById("verifiserKode");
+                }
+                else {
+                    x = document.getElementById("verifiserKode2");
+                }
+                x.style.display = "block";
+            }
+        });
+    }
+
+    function newMobile() {
+        var $this = $('#logonForm2');
+
+        $.ajax({
+            url: '@Url.Action("NyMobil", "Home")',
+            data: $this.serialize(),
+            type: "POST"
+        }).done(function (result) {
+            $("#logonForm").html(result);
+        });
+    }
+
+</script>

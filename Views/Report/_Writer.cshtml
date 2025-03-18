@@ -1,0 +1,186 @@
+﻿@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
+@using TXTextControl.Web.MVC
+@using TXTextControl.Web
+
+
+ <style>
+
+    #ribbonbar {
+        background-color: whitesmoke;
+    }
+
+    #tabReports {
+        display: none !important;
+    }
+
+    #tabPermissions {
+        display: none !important;
+    }
+
+    #tabFormFields {
+        display: none !important;
+    }
+
+    div.txui-dialog {
+        z-index: 19000;
+    }
+    
+ </style>
+
+<div id="writer" style="padding: 0px; background-color: #2b569a;">
+
+    <input hidden id="idFilnavn" />
+
+    <div id="engrafoWriter" style="display: flex; flex-direction: row; padding: 10px 10px 0px 10px; background-color: whitesmoke;">
+        <button type="button" onclick="PrintDoc()" class="commandSmal" style="width: 100px; margin-bottom: 10px; margin-right: 5px;">
+            <img src="~/images/Laser.svg" style="width: 24px; height: 24px;" />
+            Print
+        </button>
+
+@*         <button type="button" id="idLagre" onclick="LagreDocument(false)" class="commandSmal" style="width: 80px; margin-bottom: 10px; margin-right: 5px;">
+            <img src="~/images/Lagre.svg" style="width: 24px; height: 24px;" />
+            Lagre
+        </button> *@
+
+@*         <button type="button" onclick="LagreDocument(true)" id="idLagreSjekkInn" class="commandSmal" style="display: none; width: 160px; margin-bottom: 10px; margin-right: 5px;">
+            <img src="~/images/Lagre.svg" style="width: 24px; height: 24px;" />
+            Lagre og sjekkinn
+        </button>
+
+        <button type="button" id="idEkspeder" onclick="showDialogEkspeder()" class="commandSmal" style="width: 120px; margin-bottom: 10px; margin-right: 5px;">
+            <img src="~/images/invoice-mail-filled.svg" style="width: 24px; height: 24px;" />
+            Ekspeder
+        </button> *@
+
+         <button type="button" id="idHent" onclick="LoadDocument()" class="commandSmal" style="width: 160px; margin-bottom: 10px; margin-right: 5px;">
+            <img src="~/images/clipboard-paste.svg" style="width: 24px; height: 24px;" />
+            Get document
+        </button>
+
+         <button type="button" onclick="LagreDocumentPDF()" id="idLagrePDF" class="commandSmal" style="width: 160px; margin-bottom: 10px; margin-right: 5px;">
+            <img src="~/images/symbol-download.svg" style="width: 24px; height: 24px;" />
+            Download PDF
+        </button>
+
+        <button type="button" onclick="LagreDocumentDocX()" id="idLagrePDF" class="commandSmal" style="width: 160px; margin-bottom: 10px; margin-right: 5px;">
+            <img src="~/images/symbol-download.svg" style="width: 24px; height: 24px;" />
+            Download Word
+        </button>
+
+ @*       <div class="btn-group" role="group">
+            <a disabled class="btn dropdown-toggle commandSmal" data-bs-toggle="dropdown" style="width: 100px; margin-right: 5px;">
+                <img src="~/images/send-mail-front.svg" width="12" height="12" />
+                @Localizer["Send"]
+                <span class="caret"></span>
+            </a>
+        
+            <ul class="dropdown-menu" id="ddmenu">
+                <li>
+                    <button type="button" class="commandSmal" style="width: 160px; margin-bottom: 10px;">
+                        <img src="~/images/mail-front-filled.svg" style="width: 24px; height: 24px;" />
+                        pr. brev
+                    </button>
+                </li>
+                <li>
+                    <button type="button" class="commandSmal" style="width: 160px; margin-bottom: 10px;">
+                        <img src="~/images/mail-front-globe.svg" style="width: 24px; height: 24px;" />
+                        pr. E-Post
+                    </button>
+                </li>
+            </ul>
+        </div>
+
+        <button type="button" disabled class="commandSmal" style="width: 100px; margin-bottom: 10px; margin-right: 5px;">
+            <img src="~/images/document-text-a-ok-filled.svg" style="width: 24px; height: 24px;" />
+            Approve
+        </button>
+
+        <button type="button" disabled class="commandSmal" style="width: 110px; margin-bottom: 10px; margin-right: 5px;">
+            <img src="~/images/comment-text-add.svg" style="width: 24px; height: 24px;" />
+            Comment
+        </button>
+
+        <button type="button" disabled class="commandSmal" style="width: 170px; margin-bottom: 10px; margin-right: 5px;">
+            <img src="~/images/send-mail-front.svg" style="width: 24px; height: 24px;" />
+            Send approval
+        </button>
+
+        <button type="button" disabled class="commandSmal" style="width: 140px; margin-bottom: 10px;">
+            <img src="~/images/send-mail-front.svg" style="width: 24px; height: 24px;" />
+            Send comment
+        </button>*@
+
+        <input hidden id="dokumentGuid" />
+        <input hidden id="registreringGuid" />
+        <input hidden id="tmpDokumentGuid" />
+        <input hidden id="tittel" />
+        <input hidden id="format" />
+        <input hidden id="recNo" />
+    </div>
+
+    <div id="writerController" class="bg-warning" style="height: calc(90vh - 105px)">
+    
+        @Html.TXTextControl().TextControl(settings =>
+        {
+            settings.ContextMenusEnabled=true;
+            settings.TableGridLines=false;
+            settings.DocumentTargetMarkers=false;
+            settings.Height = "calc(90vh - 200px)";
+            settings.BackColor=System.Drawing.Color.WhiteSmoke;
+            settings.EditMode = EditMode.ReadAndSelect;
+        }).Render()
+
+    </div>
+</div>
+
+<script type="text/javascript">
+
+    TXTextControl.addEventListener("documentLoaded", setSecurity)
+
+
+    $(document).ready(function () {
+        });
+  
+    function PrintDoc() {
+        TXTextControl.printDocument(); 
+        }
+
+
+    function setSecurity(e)
+    {
+        console.log(e);
+        TXTextControl().TextControl(settings => {
+            settings.ContextMenusEnabled = true;
+            settings.TableGridLines = false;
+            settings.DocumentTargetMarkers = false;
+            settings.Height = "calc(90vh - 200px)";
+            settings.BackColor = System.Drawing.Color.WhiteSmoke;
+            settings.EditMode = EditMode.ReadAndSelect;
+        })
+    }
+
+    function LoadDocument() {
+        console.log("Laster dokument");
+        $.ajax({
+            url: "/Report/LoadDocument",
+            method: 'GET',
+            success: function (result) {
+                TXTextControl.loadDocument(TXTextControl.StreamType.WordprocessingML, result);
+                TXTextControl.zoom(170);
+                updateTOC();
+                }
+            });
+        }
+
+     setTimeout("LoadDocument()", 1000);
+
+    function updateTOC() {
+        TXTextControl.tablesOfContents.forEach(function (toc) {
+            if (toc != null) {
+                toc.update();
+            }
+        })
+    }
+
+</script>

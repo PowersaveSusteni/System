@@ -1,0 +1,144 @@
+﻿@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
+@model Susteni.Models.HelpDesk.HelpDeskModel
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+
+<script>
+
+
+    function SaveTickets() {
+        var $this = $('#Helpdesk');
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("SetHelpDesk", "HelpDesk")',
+            data: $this.serialize(),
+            dataType: 'json'
+        }).done(function (result) {
+            if (result.Success == true) {
+                var popup = $('#DialogSupport').data("kendoWindow");
+                popup.close();
+            }
+            else {
+                alert(result.Error[0].Message);
+            }
+        });
+    }
+
+</script>
+
+<form id="Helpdesk">
+
+    <input hidden asp-for="HelpDesk.HelpDeskGuid" class="form-control k-textbox">
+    <input hidden asp-for="HelpDesk.TiketId" class="form-control k-textbox">
+    <input hidden asp-for="HelpDesk.Program" class="form-control k-textbox">
+    <input hidden asp-for="HelpDesk.Modul" class="form-control k-textbox">
+    <input hidden asp-for="HelpDesk.Skjermbilde" class="form-control k-textbox">
+    <input hidden asp-for="HelpDesk.Prioritet" class="form-control k-textbox">
+    <input hidden asp-for="HelpDesk.Losning" class="form-control k-textbox">
+    <input hidden asp-for="HelpDesk.BrukerId" class="form-control k-textbox">
+    <input hidden asp-for="HelpDesk.Fellesraad" class="form-control k-textbox">
+    <input hidden asp-for="HelpDesk.StartDato" class="form-control k-textbox">
+    <input hidden asp-for="HelpDesk.Ferdig" class="form-control k-textbox">
+    <input hidden asp-for="HelpDesk.Aksept" class="form-control k-textbox">
+    <input hidden asp-for="HelpDesk.Status" class="form-control k-textbox">
+    <input hidden asp-for="HelpDesk.Program_GUID" class="form-control k-textbox">
+    <input hidden asp-for="HelpDesk.Saksbehandler" class="form-control k-textbox">
+    <input hidden asp-for="HelpDesk.ePostAdresse" class="form-control k-textbox">
+    <input hidden asp-for="HelpDesk.KommentarKunde" class="form-control k-textbox">
+    <input hidden asp-for="HelpDesk.Stjerner" class="form-control k-textbox">
+    <input hidden asp-for="HelpDesk.Fremdrift" class="form-control k-textbox">
+    <input hidden asp-for="HelpDesk.LinkGuid" class="form-control k-textbox">
+    <input hidden asp-for="HelpDesk.Tabell" class="form-control k-textbox">
+    <input hidden asp-for="HelpDesk.byte64String" class="form-control k-textbox">
+
+    <div class="row" style="height: 260px;">
+
+        <div class="col-8">
+            <div class="row align-items-center" style="display: flex; flex-direction: row;">
+                <label class="col-1 col-form-label">Tittel</label>
+                <div class="col-11">
+                    <input asp-for="HelpDesk.Tittel" class="form-control k-textbox">
+                </div>
+            </div>
+                                
+            <div class="row align-items-center" style="display: flex; flex-direction: row;">
+                <label class="col-1 col-form-label">Funksjon</label>
+                <div class="col-6">
+                    <input asp-for="HelpDesk.Skjermbilde" class="form-control k-textbox">
+                </div>
+            </div>
+
+            <div class="row align-items-center" style="display: flex; flex-direction: row; margin-top: 10px;">
+                <div class="col-1"></div>
+                <div class="col-11">
+                    @(Html.Kendo().RadioGroup()
+                        .Name("HelpDesk.TypeId")
+                        .InputName("HelpDesk.TypeId")
+                        .Layout(RadioGroupLayout.Horizontal)
+                        .Items(i =>
+                        {
+                            i.Add().Label("Bug").Value("1");
+                            i.Add().Label("Skrivefeil").Value("2");
+                            i.Add().Label("Endring").Value("3");
+                            i.Add().Label("Mangel").Value("4");
+                            i.Add().Label("Ønske").Value("9");
+                            i.Add().Label("Support").Value("0");
+                            i.Add().Label("Kommer").Value("7");
+                        })
+                        )
+                </div>
+            </div>
+
+            <div class="row align-items-start" style="display: flex; flex-direction: row; margin-top: 10px; margin-bottom: 10px;">
+                <div class="col-1"></div>
+                <div class="col-3">
+                    @(Html.Kendo().CheckBox().Name("HelpDesk.inklBilde").Checked(false).Label(Localizer["Ta med bilde"].Value))
+                </div>
+                <div id="idInfo" class="col-8">
+                    <span style="color: darkred">
+                        <p>Et bilde kan være til stor hjelp for oss for å forstå problemet og eventuell feilen som er årsaken til dette.</p>
+                        <p>Det er imidlertid viktig av du tenker over om dette bilde kan inneholde informasjon som vi ikke bør se. Dersom du mener at dette er uproblematisk og at bildet gir oss nytting informasjon, så kryss av for "Ta med bilde"</p>
+                    </span>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="col-4">
+            <div id="idBilde"></div>
+        </div>
+    </div>
+     
+    <div class="row">
+        <div class="col-12">
+            <h4>Beskrivelse av problemet</h4>
+        </div>
+        
+        <div class="col-12" style="padding: 0px;">
+            @(Html.Kendo().Editor()
+                .Name("HelpDesk.Beskrivelse")
+                .Encoded(false)
+                .HtmlAttributes(new { style = "margin: 0px; padding: 0px; width:calc(100% - 30px); height:300px;", aria_label = "Tekst" })
+                .StyleSheets(css => css
+                    .Add(Url.Content("~/css/editorStyles.css"))
+                    )
+                .Tools(tools => tools
+                    .Clear()                                                
+                    .Bold().Italic().Underline()
+                    .JustifyLeft().JustifyCenter().JustifyRight()
+                    .TableEditing()
+                    .Formatting()
+                    .ForeColor().BackColor()
+                    )
+                )
+        </div>
+    </div>
+
+
+    <div class="row" style="margin-top: 20px;">
+        <div class="col-12 text-right">
+            <button type='button' class='commandModern float-end' onclick='SaveTickets()' style="width: 200px;">Send inn</button>
+        </div>
+    </div>
+
+</form>

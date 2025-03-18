@@ -1,0 +1,1183 @@
+﻿@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
+@model Susteni.Models.Account.AccountModel
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+
+@{
+    ViewData["Title"] = Localizer["Users"];
+    ViewData["LogOnOk"] = "2";
+    ViewData["Menu"] = "Admin";
+}
+
+<form id="frmUsers" onsubmit="return false;" method="post" class="mt-3" autocomplete="off" autofill="off">
+
+    <div id="confirm"></div>
+
+    <div class="container-fluid padding-0">
+
+        <div class="row" style="min-height: 70px;">
+
+            <div class="col-md-2 unselectable">
+                <h3>@Localizer["Users"]</h3>
+            </div>
+
+            <div class="col-md-8" style="display: flex; flex-direction: row;">
+
+                <button type="button" name="slette" class="command" id="endrePassord" style="width: 200px; margin-right: 7px;">
+                    <img src="~/images/password-filled-edit-filled.svg" />
+                    @Localizer["Change password"]
+                </button>
+
+@*                 <button disabled type="button" name="slette" class="command" onclick="sendNyttPassord()" style="width: 200px; margin-right: 7px;">
+                    <img src="~/images/password-filled-send-filled.svg" />
+                    @Localizer["Send new password"]
+                </button> *@
+
+            </div>
+
+        </div>
+
+        <div class="row" style="border: 1px solid lightgrey; padding-top: 10px; padding-right: 10px; padding-bottom: 10px; margin: 0px;">
+
+            <div class="col-md-4" id="foresporsler">
+
+                <div class="row" style="display: flex; flex-direction: row; margin-bottom: 20px;">
+
+                    <div col="col-12">
+
+                        <div style="display: flex; flex-direction: row;">
+                            <button type="button" id="idNewUser" class="commandline" onclick="showDialogNyBruker()" id="nyButton">
+                                <img src="~/images/Ny.svg" />
+                                @Localizer["New"]
+                            </button>
+
+                            <button disabled type="button" id="idSaveUser" class="commandline" onclick="lagreBruker()">
+                                <img src="~/images/Lagre.svg" />
+                                @Localizer["Save"]
+                            </button>
+
+                            <button disabled type="button" id="idRemoveUser" class="commandline" onclick="removeUser()">
+                                <img src="~/images/Slette.svg" />
+                                @Localizer["Remove"]
+                            </button>
+
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <h4 class="unselectable">@Localizer["Users list"]</h4>
+                    <div class="row align-items-center">
+                    <label class="col-2 col-form-label">Name</label>
+                    <div class="col-10" style="display: flex; flex-direction: row;">
+                        <input type="text" id="KundeNavn" autocomplete="off" class="form-control sokeFelt" oninput="finnKunde()" style="width: calc(100% - 30px)">
+                        <button type="button" class="commandInline" onclick="clearKunde()">
+                            <img src="~/images/button-remove.svg" />
+                        </button>
+                    </div>
+                </div>
+
+                     @(Html.Kendo().Grid<Susteni.Models.AccountSignedInItem>()
+                        .Name("listeBrukere")
+                        .Columns(columns =>
+                        {
+                            columns.Bound(q => q.UserGuid).Width(150).Visible(false);
+                            columns.Bound(q => q.UserId).Width(150).Title(Localizer["User Id"].Value).Filterable(false);
+                            columns.Bound(q => q.UserName).Width(150).Title(Localizer["Name"].Value);
+                        })
+                        .Sortable()                        
+                        .Navigatable()
+                        .Scrollable()
+                        .HtmlAttributes(new { style = "height: calc(100vh - 430px);"})
+                        .Selectable(s => s
+                            .Mode(GridSelectionMode.Single)
+                            .Type(GridSelectionType.Row))
+                        .Events(events => events
+                            .Change("onBrukerChange").DataBound("onDataBound"))
+                        .DataSource(dataSource => dataSource
+                            .Ajax()
+                        .Read(read => read.Action("GetUserCustomerList", "Account"))
+                        )
+                    ) 
+
+                </div>
+
+            </div>
+
+             <div class="col-md-8">
+                <partial name="_UserInfo" />
+            </div> 
+
+        </div>
+
+    </div>
+
+</form>
+
+<style>
+    .k-fab-text {
+        display: none;
+    }
+
+    .btn img {
+        width: 24px;
+        height: 24px;
+    }
+
+    .btn {
+        padding: 5px;
+    }
+
+    data {
+        background-color: aliceblue;
+    }
+</style>
+
+<script id="successTemplate" type="text/x-kendo-template">
+    <div class="upload-success">
+        <img src="@Url.Content("~/images/emoticon-happy.svg")" style="float:left; height:48px; width:48px; margin-right: 16px;"/>
+        <p>#= message #</p>
+    </div>
+</script>
+
+
+<script id="errorTemplate" type="text/x-kendo-template">
+    <div class="wrong-pass">
+        <img src="@Url.Content("~/images/emoticon-sad.svg")" style="float:left; height:48px; width:48px; margin-right: 16px;"/>
+        <p>#= message #</p>
+    </div>
+</script>
+
+
+@(Html.Kendo().Notification()
+    .Name("notification")
+    .Position(p => p.Pinned(true).Top(30).Right(30))
+    .Stacking(NotificationStackingSettings.Down)
+    .AutoHideAfter(5000)
+    .Templates(t =>
+    {
+        t.Add().Type("success").ClientTemplateID("successTemplate");
+        t.Add().Type("error").ClientTemplateID("errorTemplate");
+    })
+)
+
+
+<div id="dialogbokser">
+
+    @(Html.Kendo().Window()
+            .Name("DialogNyBruker")
+            .Title(Localizer["New user"].Value)
+            .Visible(false)
+            .Width(850)
+            .Modal(true)
+            .Draggable()
+        )
+
+    @(Html.Kendo().Window()
+        .Name("DialogSupport")
+        .Title(Localizer["Support"].Value)
+        .Visible(false)
+        .Width(1200)
+        .Modal(true)
+        .Draggable()
+        )
+
+ 
+    @(Html.Kendo().Dialog()
+            .Name("UserShipsDialog")
+            .Title(Localizer["Users ship"].Value)
+            .Content(
+                Html.Kendo().TreeView()
+                    .Name("treeviewUserShips")
+                    .DataTextField("Name")
+                    .LoadOnDemand(true)
+                    .ExpandAll(true)
+                    .Checkboxes(checkboxes => checkboxes
+                            .Name("checkedvalue")
+                            .CheckChildren(true))
+                    .AutoScroll(false)
+                    .DataSource(dataSource => dataSource
+                        .Read(read => read
+                        .Action("UserShipItem", "Account").Data("filterUser")
+                        )
+                    .Model(model => {
+                        model.Id("UserShipGuid");
+                        model.HasChildren("hasChildren");
+                    })
+                    )
+                    //.Events(ev => ev.DataBound("treeViewDataRessursBound").Check("treeViewCheck"))
+                    .ToHtmlString()
+                )
+            .Width(400)
+            .Height(600)
+            .Modal(false)
+            .Visible(false)
+            .Actions(actions =>
+            {
+                actions.Add().Text(Localizer["Cancel"].Value);
+                actions.Add().Text(Localizer["Save"].Value).Action("onUserShipsOK").Primary(true);
+            })
+            .Events(ev => ev.Close("onClose").Open("onOpen"))
+        ) 
+          
+</div>
+
+
+<script id="dialogbokser2">
+
+    function showDialogMinKirkeApp() {
+        var RessursGuid = document.getElementById("Ressurs_RessursGuid").value;
+        $.ajax({
+            url: "/Funksjoner/getMinKirkeAppInfo",
+            data: { ressursGuid: RessursGuid },
+            method: 'GET',
+            success: function (result) {
+                $('#dialogMinKirkeapp').html(result);
+                var popup = $('#dialogMinKirkeapp').data("kendoWindow");
+                popup.center().open();
+            }
+        });
+    }
+
+    function showUserShipsDialog() {
+        tw = $('#treeviewUserShips').data("kendoTreeView");
+        tw.dataSource.read();
+
+        $('#UserShipsDialog').data("kendoDialog").open();
+    }
+
+
+    function showDialogNyBruker() {
+        $.ajax({
+            url: '@Url.Action("DialogNewUser", "Account")',
+            type: 'GET'
+            }).done(function (result) {
+                $('#DialogNyBruker').html(result);
+                var popup = $('#DialogNyBruker').data("kendoWindow");
+                popup.center().open();
+            });
+        }
+
+    function showDialogFunksjoner() {
+        $('#dialogFunksjonsliste').data("kendoDialog").open();
+    }
+
+    function onClose() {
+        $("#showDialogBtn").fadeIn();
+    }
+
+    function onOpen() {
+        $("#showDialogBtn").fadeOut();
+    }
+
+</script>
+
+<script id="filter">  
+    var resType = 0;
+    var hovedmeny = "";
+    var BrukerGuid  = "";
+
+    function filterMenyer() {
+        var brukerId = document.getElementById("Bruker_BrukerId").value;
+        filterTekst ="Hovedmeny='" + hovedmeny + "' AND FunksjonGuid NOT IN (SELECT FunksjonGuid FROM BRUKER_FUNKSJONER WHERE BrukerId='" +  brukerId + "')";
+        return {filterTekst: filterTekst}
+    }
+
+    function filterMine() {
+        var brukerId = document.getElementById("Bruker_BrukerId").value;
+        filterTekst ="Hovedmeny='" + hovedmeny + "' AND FunksjonGuid IN (SELECT FunksjonGuid FROM BRUKER_FUNKSJONER WHERE BrukerId='" +  brukerId + "')"
+        return {filterTekst: filterTekst}
+    }
+
+    function finnKunde() {
+        fv = document.getElementById("KundeNavn").value;
+        ds = $("#listeBrukere").data("kendoGrid").dataSource;
+        ds.filter({ logic: "or", filters: [{ field: "UserName", operator: "contains", value: fv }] });
+        }
+
+    function clearKunde() {
+        document.getElementById("KundeNavn").value = "";
+        ds = $("#listeBrukere").data("kendoGrid").dataSource;
+        ds.filter({});
+        }
+        
+    function filterType() {        
+        return { resType: resType }
+        }
+
+    function filterUser(e) {
+        var listBoxF = $("#listeBrukere").data("kendoGrid");
+        var selectedF = listBoxF.select();
+        var selItemF = listBoxF.dataItem(selectedF);
+        var UserId = "";
+
+        if (selItemF != null && typeof selItemF != 'undefined') {
+            UserId = selItemF.UserId;
+            }
+
+        return {
+            UserId: UserId
+            }
+        }
+
+    function filterRessurs(e) {
+        var listBoxF = $("#listeBrukere").data("kendoGrid");
+        var selectedF = listBoxF.select();
+        var selItemF = listBoxF.dataItem(selectedF);
+        var ressursGuid = "";
+
+        if (selItemF != null && typeof selItemF != 'undefined') {
+            ressursGuid = selItemF.RessursGuid;
+            }
+
+        return {
+            ressursGuid: ressursGuid
+            }
+        }
+
+    function filterSkjerming() {
+        var listBoxF = $("#listeRolleBrukere").data("kendoGrid");
+        var selectedF = listBoxF.select();
+        var selItemF = listBoxF.dataItem(selectedF);
+        var brukerArkivGuid = "";
+
+        if (selItemF != null && typeof selItemF != 'undefined') {
+            brukerArkivGuid = selItemF.brukerArkivGuid;
+            }
+
+        return {
+            brukerArkivGuid: brukerArkivGuid
+            }
+        }
+
+    function filterBrukerSokn(e) {
+        var lvBruker = $("#listeBrukere").data("kendoGrid");
+        var selectedF = lvBruker.select();
+        var selItemF = lvBruker.dataItem(selectedF);
+        var brukerId = "";
+
+        if (selItemF != null && typeof selItemF != 'undefined') {
+            brukerId = selItemF.BrukerId;
+            }
+
+        var lvSokn = $("#brukerSokn").data("kendoListBox");
+        var selectedF = lvSokn.select();
+        var selItemF = lvSokn.dataItem(selectedF);
+        var soknId = "";
+
+        if (typeof selItemF != 'undefined') {
+            soknId = selItemF.SoknId;
+            }
+
+        return {
+            brukerId: brukerId,
+            soknId: soknId
+            }
+        }
+
+    function filterBrukerArkiv(e) {
+        var listBoxF = $("#listeBrukere").data("kendoGrid");
+        var selectedF = listBoxF.select();
+        var selItemF = listBoxF.dataItem(selectedF);
+        var brukerId = "";
+
+        if (selItemF != null && typeof selItemF != 'undefined') {
+            brukerId = selItemF.nBrukerGuid;
+            }
+
+        return {
+            brukerId: brukerId,
+            arkivDelGuid: arkivDelGuid
+            }
+        }
+
+    function filterTMT() {
+        return { taMedTomme: false }
+        }
+
+    function valgteListe() {
+        var listBoxF = $("#ListeGrid").data("kendoGrid");
+        var selectedF = listBoxF.select();
+        var selItemF = listBoxF.dataItem(selectedF);
+        var Id = 0;
+
+        if (selItemF != null) {
+            Id = selItemF.id;
+            }
+        return { listeId: Id }
+        }
+
+</script>
+
+<script id="engrafo" type="text/javascript">
+
+    function addSupport() {
+        $.ajax({
+            url: '@Url.Action("DialogSupport", "HelpDesk")',
+            type: 'GET'
+        }).done(function (result) {
+            $('#DialogSupport').html(result);
+
+            xB = document.getElementById("idBilde");
+
+            document.getElementById("HelpDesk_Modul").value = "Users";
+            document.getElementById("HelpDesk_Program").value = "2";
+            document.getElementById("HelpDesk_Status").value = "1";
+
+            const screenshotTarget = document.body;
+
+            html2canvas(screenshotTarget).then((canvas) => {
+                const base64image = canvas.toDataURL("image/png");
+                xB.innerHTML = "<img src='" + base64image + "' style='max-height: 260px; max-width: 350px;' alt='Bilde' / >";
+                document.getElementById("HelpDesk_byte64String").value = base64image
+            });
+
+            var popup = $('#DialogSupport').data("kendoWindow");
+            popup.center().open();
+        });
+    }
+
+
+    function onDataBound(e) {
+        var grid = $("#listeBrukere").data("kendoGrid");
+        var currRowIndex = -1;
+
+        $("#listeBrukere tbody tr").each(function () {
+            var currentRowData = grid.dataItem(this);
+            if (currentRowData.UserGuid == UserGuid) {
+                currRowIndex = this.rowIndex;
+            }
+        });
+
+        if (currRowIndex >= 0) {
+            grid.select("tr:eq(" + (currRowIndex) + ")");
+            grid.trigger("change");
+        }
+    }
+
+    function onArkivSelect(e) {
+        var tree = $('#Arkiv').data('kendoTreeView');
+        var dataItem = tree.dataItem(e.node);
+
+        if (dataItem != null) {
+            arkivGuid = dataItem.id;
+            mappeType = dataItem.mappeType;
+            if (mappeType == 1) {
+                arkivDelGuid = arkivGuid;
+                var lvBrukerSokn = $("#listeRolleBrukere").data("kendoGrid");
+                lvBrukerSokn.dataSource.read();
+            }
+            else {
+                arkivDelGuid = "";
+            }
+        }
+    }
+
+    function engrafoBrukerRollerOpprett(e) {
+        var listBoxF = $("#listeBrukere").data("kendoGrid");
+        var selectedF = listBoxF.select();
+        var selItemF = listBoxF.dataItem(selectedF);
+        var brukerId = "";
+        var navn = "";
+
+        if (selItemF != null && typeof selItemF != 'undefined') {
+            brukerId = selItemF.nBrukerGuid;
+            navn = selItemF.Fornavn + ' ' + selItemF.Etternavn;
+        }
+
+        var grdRolleBrukere = $("#listeRolleBrukere").data("kendoGrid");
+        var selectedRB = grdRolleBrukere.select();
+        var selItemRB = grdRolleBrukere.dataItem(selectedRB);
+        var rolleGuid = "";
+
+        if (selItemRB != null && typeof selItemRB != 'undefined') {
+            rolleGuid = selItemRB.rolleGuid;
+            rolleNavn = selItemRB.rolleNavn;
+        }
+
+        if (brukerId != "" && rolleGuid != "") {
+            var tittel = "OPPRETT BRUKERROLLE";
+            var nei = "Nei";
+            var content = "<div id='question'>Vil du tildele rollen <b>" + rolleNavn + "</b> til <b> " + navn + "</b></div>";
+
+            $("#confirm").kendoConfirm({
+                title: tittel,
+                content: content,
+                messages: {
+                    okText: "Ja",
+                    cancel: nei
+                }
+            }).data("kendoConfirm").result.done(function () {
+                $('body').append($('<div id="confirm">'));
+
+                $.ajax({
+                    url: '@Url.Action("OpprettEngrafoBrukerRolle", "Engrafo")',
+                    data: { rolleGuid: rolleGuid, brukerGuid: brukerId, arkivdelGuid: arkivDelGuid },
+                    type: "POST"
+                }).done(function (result) {
+                    grdRolleBrukere.dataSource.read();
+
+                });
+            }).fail(function () {
+                $('body').append($('<div id="confirm">'));
+            });
+        }
+    }
+
+    function engrafoBrukerRollerSlette(e) {
+        var listBoxF = $("#listeBrukere").data("kendoGrid");
+        var selectedF = listBoxF.select();
+        var selItemF = listBoxF.dataItem(selectedF);
+        var brukerId = "";
+        var navn = "";
+
+        if (selItemF != null && typeof selItemF != 'undefined') {
+            brukerId = selItemF.nBrukerGuid;
+            navn = selItemF.Fornavn + ' ' + selItemF.Etternavn;
+        }
+
+        var grdRolleBrukere = $("#listeRolleBrukere").data("kendoGrid");
+        var selectedRB = grdRolleBrukere.select();
+        var selItemRB = grdRolleBrukere.dataItem(selectedRB);
+        var rolleGuid = "";
+
+        if (selItemRB != null && typeof selItemRB != 'undefined') {
+            rolleGuid = selItemRB.brukerArkivGuid;
+            rolleNavn = selItemRB.rolleNavn;
+        }
+
+        if (brukerId != "" && rolleGuid != "") {
+            var tittel = "AVSLUTTE BRUKERROLLE";
+            var nei = "Nei";
+            var content = "<div id='question'>Vil du fjerne/avslutte rollen <b>" + rolleNavn + "</b> som <b>" + navn + "</b> har?</div>";
+
+
+            $("#confirm").kendoConfirm({
+                title: tittel,
+                content: content,
+                messages: {
+                    okText: "Ja",
+                    cancel: nei
+                }
+            }).data("kendoConfirm").result.done(function () {
+                $('body').append($('<div id="confirm">'));
+
+                $.ajax({
+                    url: '@Url.Action("AvsluttEngrafoBrukerRolle", "Engrafo")',
+                    data: { brukerRolleGuid: rolleGuid},
+                    type: "POST"
+                }).done(function (result) {
+                    grdRolleBrukere.dataSource.read();
+                });
+            }).fail(function () {
+                $('body').append($('<div id="confirm">'));
+            });
+        }
+    }
+
+    function endreBrukerRolle(e) {
+        var grdRolleBrukere = $("#listeRolleBrukere").data("kendoGrid");
+        var selectedRB = grdRolleBrukere.select();
+        var selItemRB = grdRolleBrukere.dataItem(selectedRB);
+        var rolleGuid = "";
+
+        if (selItemRB != null && typeof selItemRB != 'undefined') {
+             rolleGuid = selItemRB.brukerArkivGuid;
+            $.ajax({
+                url: '@Url.Action("DialogRolle", "Engrafo")',
+                type: 'GET'
+                }).done(function (result) {
+                    $('#DialogBrukerRolle').html(result);
+                    $.ajax({
+                        url: '@Url.Action("GetEngrafoBrukerRolle", "Engrafo")',
+                        data: { brukerArkivGuid: rolleGuid},
+                        type: "GET"
+                        }).done(function (result) {
+                            $("#DialogBrukerRolle").html(result);
+
+                            var popup = $('#DialogBrukerRolle').data("kendoWindow");
+                            popup.center().open();
+                        });
+                });
+            }
+        }
+
+
+    function sendNyttPassord(e) {
+        xEP = document.getElementById("Ressurs_EPost");
+        xBI = document.getElementById("Bruker_BrukerId");
+
+        if (xEP.value != "" && xBI.value != "") {
+
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("OpprettNyttPassord", "AdminBruker")'
+                })
+            .done(function (passord) {
+
+                $.ajax({
+                    url: '@Url.Action("ByttPassord", "AdminBruker")',
+                    data: { brukerId: xBI.value, passord: passord },
+                    type: "POST"
+                    })
+                .done(function (result) {
+                    
+                    $.ajax({
+                        type: "POST",
+                        url: '@Url.Action("SendNyttPassord", "AdminBruker")',
+                                data: { ePostAdresse: xEP.value, Brukerid: xBI.value, password: passord }
+                        })
+                    .done(function (result) {
+                        var notification = $("#notification").data("kendoNotification");
+                        notification.show({ title: "Bestilling", message: "Nytt passord sendt til " + BrukerId }, "success");
+
+                        });
+
+                    });
+
+                });
+            }
+        }
+
+
+    function getId() {
+        genPassord();
+        genBrukerId();
+    }
+
+    function genPassord(e) {
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("OpprettNyttPassord", "AdminBruker")'
+            })
+        .done(function (passord) {
+                document.getElementById("BPassord").value = passord;
+            });
+        }
+
+
+    function genBrukerId(e) {
+        xBF = document.getElementById("BFornavn");
+        xBE = document.getElementById("BEtternavn");
+
+        if (xBF.value != "" && xBE.value != "") {
+
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("OpprettNyBrukerId", "AdminBruker")',
+                data: {fornavn: xBF.value, etternavn: xBE.value}
+                })
+            .done(function (brukerId) {
+                document.getElementById("BBrukerId").value = brukerId;                   
+                });
+            }
+        }
+
+</script>
+
+<script id="events" type="text/javascript">
+    var currentTab = "";
+    var BrukerId = "";
+
+    function customPlaceholder(draggedItem) {
+            return draggedItem
+                .clone()
+                .addClass("custom-placeholder")
+                .removeClass("k-ghost");
+        }
+
+    function onBrukerChange(e) {
+        var selected = this.select();
+        var data = this.dataItem(selected);
+
+        if (data != null) {
+            UserId = data.UserId;
+            UserGuid = data.UserGuid;
+
+            $.ajax({
+                url: '@Url.Action("GetAccountUser", "Account")',
+                data: { UserId: UserId },
+                type: "GET"
+                })
+            .done(function (result) {
+                $("#profilData").html(result);
+
+                    var SuperAdmin = @ViewData["SuperAdmin"];
+
+                    if (!SuperAdmin) {
+                        document.getElementById("superAdmin").style.display = "none";
+                    }
+
+                    document.getElementById("idSaveUser").disabled = false;
+                document.getElementById("idRemoveUser").disabled = false;
+                });
+            }
+        }
+
+    function onModulChange(e) {
+        var selected = this.select();
+        var data = this.dataItem(selected);
+        modul = "";
+
+        if (data != null) {
+            hovedmeny = data;
+
+            var lvBruker = $("#lstMenyvalg").data("kendoListBox");
+            lvBruker.dataSource.read();
+
+            var lvMine = $("#lstMinMeny").data("kendoListBox");
+            lvMine.dataSource.read();
+            }
+        }
+
+    function onMenyRemove(e){
+        console.log(e.dataItems[0].FunksjonGuid);
+        if (e.dataItems.length > 0) {
+            funksjonGuid = e.dataItems[0].FunksjonGuid;
+            Funksjon = e.dataItems[0].Funksjon;
+            var brukerId = document.getElementById("Bruker_BrukerId").value;
+            $.ajax({
+                url: '@Url.Action("removeBrukerFunksjon", "Funksjoner")',
+                data: { FunksjonGuid: funksjonGuid, BrukerId: brukerId },
+                type: "POST"
+                });
+            }
+        }
+
+    function onMenyAdd(e) {
+        if (e.dataItems.length>0) {
+            funksjonGuid = e.dataItems[0].FunksjonGuid;
+            Funksjon =  e.dataItems[0].Funksjon;
+            var brukerId = document.getElementById("Bruker_BrukerId").value;
+            $.ajax({
+                url: '@Url.Action("LagreBrukerFunksjon", "Funksjoner")',
+                data: { funksjonGuid: funksjonGuid, funksjon: Funksjon, BrukerId: brukerId },
+                type: "POST"
+                }).done(function (result) {
+                    });
+        }
+    }
+
+
+    function onSoknChange(e) {
+        btn = document.getElementById("btnRolle");
+        btn.disabled = false;
+        var grdRoller = $("#brukerRoller").data("kendoGrid");
+        grdRoller.dataSource.read();
+
+        
+        var selected = this.select();
+        var data = this.dataItem(selected);
+
+        $.ajax({
+            url: '@Url.Action("GetBrukerTilgang", "AdminBruker")',
+            data: { SoknNr: data.SoknNr, BrukerId: BrukerId },
+            type: "GET"
+            })
+        .done(function (result) {
+            $("#brukerTilgangForm").html(result);
+            })
+        }
+
+    function onListeTypeChange(e) {
+        resType = e.newValue;
+        var lvBruker = $("#listeBrukere").data("kendoGrid");
+        lvBruker.dataSource.read();
+        }
+
+    function onRolleChange(e) {
+        var selected = this.select();
+        var data = this.dataItem(selected);
+
+        if (data != null) {
+            brukerArkivGuid = data.brukerArkivGuid;
+
+            $.ajax({
+                url: '@Url.Action("GetEngrafoBrukerRolleInfo", "Engrafo")',
+                data: { brukerArkivGuid: brukerArkivGuid },
+                type: "GET"
+            }).done(function (result) {
+                var fabAR = $("#fabAktiverRolle").data("kendoFloatingActionButton");
+                var fabSR = $("#fabAvsluttRolle").data("kendoFloatingActionButton");
+                var fabRR = $("#fabRedigerRolle").data("kendoFloatingActionButton");
+                var fabS = $("#fabSkjerming").data("kendoFloatingActionButton");
+
+                if (result.BrukerArkiv_GUID != "") {
+                    fabAR.hide();
+                    fabSR.show();
+                    fabRR.show();
+                    fabS.show();
+                }
+                else {
+                    fabAR.show();
+                    fabSR.hide();
+                    fabRR.hide();
+                    fabS.hide();
+                    }
+                });
+            }
+        }
+
+</script>
+
+<script id="funksjoner">
+    var UserId = "";
+    var UserGuid = "";
+
+    $("#endrePassord").on("click", function () {
+        window.myprompt("Angi nytt passord:", "").then(function (data) {
+            if (data != "") {
+                $.ajax({
+                    url: '@Url.Action("ChangeUsersPassword", "Account")',
+                    data: { UserId: UserId, Password: data },
+                    type: "POST"
+                }).always(function (result) {
+                    
+                    });
+            }
+        }, function () {
+            window.myalert("Cancel entering value.");
+        })
+    });
+
+    $("#opprettBruker").on("click", function () {
+        xBID = document.getElementById("Bruker_BrukerId").value;
+        window.myprompt("Angi bruker id:", xBID).then(function (data) {
+            if (data != "") {
+
+                var listBoxF = $("#listeBrukere").data("kendoGrid");
+                var selectedF = listBoxF.select();
+                var selItemF = listBoxF.dataItem(selectedF);
+                var brukerId = data;
+                var RessursGuid = "";
+                if (selItemF != null && typeof selItemF != 'undefined') {
+                    RessursGuid = selItemF.RessursGuid;
+                }
+
+                window.myprompt("Angi nytt passord:", "").then(function (data) {
+                    if (data != "") {
+                        $.ajax({
+                            url: '@Url.Action("OpprettLogon", "AdminBruker")',
+                            data: { RessursGuid: RessursGuid, brukerId: brukerId, passord: data },
+                            type: "POST"
+                        }).always(function (result) {
+                            listBoxF.dataSource.read();
+                            window.myalert("Bruker opprettet");
+                        });
+                    }
+                });
+            }
+        }, function () {
+            window.myalert("Cancel entering value.");
+        })
+    });
+
+    function mypromptBrukerId(content, defaultValue) {
+        return $("<div></div>").kendoPrompt({
+            title: "BrukerId",
+            value: defaultValue,
+            content: content
+        }).data("kendoPrompt").open().result;
+    }
+
+    function myprompt(content, defaultValue) {
+        return $("<div></div>").kendoPrompt({
+            title: "Passord",
+            value: defaultValue,
+            content: content
+        }).data("kendoPrompt").open().result;
+    }
+
+
+    function onBrukerRolleOK(e) {
+
+        var lvBruker = $("#listeBrukere").data("kendoGrid");
+        var selF = lvBruker.select();
+        var selIF = lvBruker.dataItem(selF);
+        var brukerId = "";
+
+        if (typeof selIF != 'undefined') {
+            brukerId = selIF.BrukerId;
+        }
+
+        var listBoxS = $("#brukerSokn").data("kendoListBox");
+        var selectedS = listBoxS.select();
+        var selItemS = listBoxS.dataItem(selectedS);
+
+        var SoknId = "";
+
+        if (typeof selItemS != 'undefined') {
+            SoknId = selItemS.SoknId;
+        }
+
+        var treeView = $("#treeviewBrukerRoller").data("kendoTreeView");
+        var checkedNodes = getCheckedItems(treeView);
+        var nodes = "";
+        for (var i = 0; i < checkedNodes.length; i++) {
+            nodes += checkedNodes[i].ID + ":";
+        }
+
+        $.ajax({
+            url: '@Url.Action("setBrukerRoller", "AdminBruker")',
+            data: { rollerGuid: nodes, brukerId: brukerId, soknId: SoknId },
+            type: "GET"
+        }).always(function (result) {
+            var listView = $("#brukerRoller").data("kendoGrid");
+            listView.dataSource.read();
+
+            });
+    }
+
+
+    function onBrukerFellesraadOK(e) {
+        var lvBruker = $("#listeBrukere").data("kendoGrid");
+        var selectedF = lvBruker.select();
+        var selItemF = lvBruker.dataItem(selectedF);
+        var brukerId = "";
+
+        if (typeof selItemF != 'undefined') {
+            brukerId = selItemF.BrukerId;
+        }
+
+
+        var lvFellesraad = $("#brukerFellesraadNye").data("kendoListBox");
+        var selectedF = lvFellesraad.select();
+        var selItemF = lvFellesraad.dataItem(selectedF);
+        var fellesraad = "";
+
+        if (typeof selItemF != 'undefined') {
+            fellesraad = selItemF.Fellesraad;
+        }
+
+        $.ajax({
+            url: '@Url.Action("LeggTilBrukerFellesraad", "AdminBruker")',
+            data: { fellesraad: fellesraad, brukerId: brukerId },
+            type: "GET"
+        }).done(function (result) {
+            var lvBF = $("#brukerFellesråd").data("kendoListBox");
+            lvBF.dataSource.read();
+        });
+    }
+
+    function onUserShipsOK(e) {
+        var lvBruker = $("#listeBrukere").data("kendoGrid");
+        var selectedF = lvBruker.select();
+        var selItemF = lvBruker.dataItem(selectedF);
+        
+
+        if (typeof selItemF != 'undefined') {
+            UserId = selItemF.UserId;
+        }
+
+        var treeView = $("#treeviewUserShips").data("kendoTreeView");
+        var checkedNodes = getCheckedItems(treeView);
+        var listBox = $("#userShips").data("kendoListBox");
+
+        var nodes = "";
+        for (var i = 0; i < checkedNodes.length; i++) {
+            if (nodes == "") {
+                nodes = checkedNodes[i].UserShipGuid;
+                }
+            else {
+                nodes += ":" + checkedNodes[i].UserShipGuid;
+                }
+            }
+        $.ajax({
+            url: '@Url.Action("SetUserShipsList", "Account")',
+            data: { UserId: UserId, ShipGuidList: nodes },
+            type: "GET"
+        }).always(function (result) {
+            listBox.dataSource.read();
+            });
+    }
+
+    function lagreBruker() {
+        var $this = $('form').serialize();
+        var gridBruker = $("#listeBrukere").data("kendoGrid");
+
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("SetAccountUser", "Account")',
+            data: $this,
+            dataType: 'json'
+            })
+        .done(function (result) {
+            if (result.Status >= 0) {
+
+                var notification = $("#notification").data("kendoNotification");
+                notification.show({ title: "Bestilling", message: "Endringene lagret"}, "success");
+
+                if (result.Status >= 1) {
+                    gridBruker.dataSource.read();
+                    }
+                }
+            else {
+                alert(result.Description);
+                }
+
+            })
+        .fail(function (result) {
+            alert('an Error has occurred, please try again');
+        });
+    }
+
+    function removeUser(e) {
+        var tittel = "DELETE";
+        var nei = "No";
+        var content = "<div id='question'>Do you want to remove this user</div>";
+
+        $("#confirm").kendoConfirm({
+            title: tittel,
+            content: content,
+            messages: {
+                okText: "yes",
+                cancel: nei
+            }
+        }).data("kendoConfirm").result.done(function () {
+            $('body').append($('<div id="confirm">'));
+
+            $.ajax({
+                url: '@Url.Action("DropAccountUser", "Account")',
+                type: "GET",
+                dataType: "json",
+                data: { UserId: UserId }
+            }).done(function (result) {
+                $("#listeBrukere").data("kendoGrid").dataSource.read();
+            });
+        });
+    }
+
+ 
+
+    function slettBruker() {
+        var tittel = "SLETTE BRUKER";
+        var nei = "Nei";
+        var content = "<div id='warning'>Vil du slette valgte bruker?</div>";
+
+
+        $("#confirm").kendoConfirm({
+            title: tittel,
+            content: content,
+            messages: {
+                okText: "Ja",
+                cancel: nei
+            }
+            }).data("kendoConfirm").result.done(function () {
+                $('body').append($('<div id="confirm">'));
+
+                var listBoxF = $("#listeBrukere").data("kendoGrid");
+                var selectedF = listBoxF.select();
+                var selItemF = listBoxF.dataItem(selectedF);
+                var BrukerId = "";
+                var RessursGuid = "";
+
+                if (typeof selItemF != 'undefined') {
+                    BrukerId = selItemF.BrukerId;
+                    RessursGuid = selItemF.RessursGuid;
+                }
+
+                $.ajax({
+                    url: '@Url.Action("RemoveBruker", "AdminBruker")',
+                    data: { BrukerId: BrukerId, RessursGuid: RessursGuid },
+                    type: "POST"
+                }).done(function (result) {
+                    listBoxF.dataSource.read();
+                });
+
+            });
+        }
+
+    function OpprettNyBruker() {
+        var $this = $('#wizard').serialize();
+
+        $.ajax({
+                type: "POST",
+            url: '@Url.Action("CreateUser", "Account")',
+                data: $this,
+                dataType: 'json'
+            }).done(function (result) {
+                if (result.Status >= 1) {
+                    var notification = $("#notification").data("kendoNotification");
+                    notification.show({ title: "Bestilling", message: "New user is created"}, "success");
+
+                    UserGuid = result.NewGuid;
+
+                    var popup = $('#DialogNyBruker').data("kendoWindow");
+                    popup.close();
+
+                    $("#listeBrukere").data("kendoGrid").dataSource.read();
+                    }
+                else {
+                    alert(result.Description);
+                    }
+
+            }).fail(function (result) {
+                alert('an Error has occurred, please try again');
+            });
+    }
+
+</script>
+
+<script id="tw">
+
+    function treeViewCheck(e) {
+        setTimeout(function () {
+            updateSelectedCount(e.sender);
+        })
+    }
+
+    function updateSelectedCount(treeView) {
+        $(".selected-count").html(getCheckedItems(treeView).length + " Employees selected");
+    }
+
+    function treeViewDataRessursBound(e) {
+        e.sender.expand(e.node);
+    }
+
+    function getCheckedItems(treeview) {
+        var nodes = treeview.dataSource.view();
+        return getCheckedNodes(nodes);
+    }
+
+    function getCheckedNodes(nodes) {
+        var node, childCheckedNodes;
+        var checkedNodes = [];
+
+        for (var i = 0; i < nodes.length; i++) {
+            node = nodes[i];
+            if (node.checked) {
+                checkedNodes.push(node);
+            }
+
+            if (node.hasChildren) {
+                childCheckedNodes = getCheckedNodes(node.children.view());
+
+                if (childCheckedNodes.length > 0) {
+                    checkedNodes = checkedNodes.concat(childCheckedNodes);
+                }
+            }
+        }
+        return checkedNodes;
+    }
+
+
+    $(window).on("resize", function(){
+        $("#listeBrukere").data("kendoGrid").refresh();
+        });
+
+</script>
+
+
+<script type="text/javascript">
+
+    $(document).ready(function () {
+
+        var SuperAdmin = @ViewData["SuperAdmin"];
+
+        if (!SuperAdmin) {
+            document.getElementById("superAdmin").style.display = "none";
+            }     
+
+        });
+
+</script>

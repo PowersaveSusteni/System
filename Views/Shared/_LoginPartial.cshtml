@@ -1,0 +1,18 @@
+@using System.Security.Principal
+@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+
+@if (ViewData["LogOnOk"] != null && ViewData["LogOnOk"].ToString() == "2")
+{
+    <ul class="nav navbar-nav navbar-right">
+        @*<li class="nav-item"><a asp-area="Identity" asp-page="" title="Manage">@ViewData["Brukernavn"]</a></li>*@
+        <li class="nav-item"><a asp-area="" asp-controller="Home" asp-action="Logout">@Localizer["Sign out"]</a></li>
+    </ul>
+}
+else
+{
+    <ul class="nav navbar-nav navbar-right">
+        <li class="nav-item"><a asp-area="" asp-controller="Home" asp-action="Login">@Localizer["Sign in"]</a></li>
+    </ul>
+}

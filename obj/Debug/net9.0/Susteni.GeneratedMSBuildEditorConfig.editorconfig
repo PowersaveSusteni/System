@@ -1,0 +1,609 @@
+is_global = true
+build_property.TargetFramework = net9.0
+build_property.TargetFramework = net9.0
+build_property.TargetPlatformMinVersion = 
+build_property.TargetPlatformMinVersion = 
+build_property.UsingMicrosoftNETSdkWeb = true
+build_property.UsingMicrosoftNETSdkWeb = true
+build_property.ProjectTypeGuids = 
+build_property.ProjectTypeGuids = 
+build_property.InvariantGlobalization = 
+build_property.InvariantGlobalization = 
+build_property.PlatformNeutralAssembly = 
+build_property.PlatformNeutralAssembly = 
+build_property.EnforceExtendedAnalyzerRules = 
+build_property.EnforceExtendedAnalyzerRules = 
+build_property._SupportedPlatformList = Linux,macOS,Windows
+build_property._SupportedPlatformList = Linux,macOS,Windows
+build_property.RootNamespace = Susteni
+build_property.RootNamespace = Susteni
+build_property.ProjectDir = C:\Visual Studio\Susteni Web\
+build_property.EnableComHosting = 
+build_property.EnableGeneratedComInterfaceComImportInterop = 
+build_property.RazorLangVersion = 9.0
+build_property.SupportLocalizedComponentNames = 
+build_property.GenerateRazorMetadataSourceChecksumAttributes = true
+build_property.MSBuildProjectDirectory = C:\Visual Studio\Susteni Web
+build_property._RazorSourceGeneratorDebug = 
+build_property.EffectiveAnalysisLevelStyle = 9.0
+build_property.EnableCodeStyleSeverity = 
+
+[C:/Visual Studio/Susteni Web/Views/Account/Eier.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWNjb3VudFxFaWVyLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/Susteni Web/Views/Account/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWNjb3VudFxJbmRleC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/Susteni Web/Views/Account/Kunder.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWNjb3VudFxLdW5kZXIuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/Susteni Web/Views/Account/NewUser.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWNjb3VudFxOZXdVc2VyLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/Susteni Web/Views/Account/_BrukerImport.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWNjb3VudFxfQnJ1a2VySW1wb3J0LmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/Susteni Web/Views/Account/_BrukerRessurs.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWNjb3VudFxfQnJ1a2VyUmVzc3Vycy5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/Susteni Web/Views/Account/_OAuth.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWNjb3VudFxfT0F1dGguY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/Susteni Web/Views/Account/_UserInfo.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWNjb3VudFxfVXNlckluZm8uY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/Susteni Web/Views/AdminBruker/Bruker.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWRtaW5CcnVrZXJcQnJ1a2VyLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/Susteni Web/Views/AdminBruker/NyBruker.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWRtaW5CcnVrZXJcTnlCcnVrZXIuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/Susteni Web/Views/AdminBruker/_Brukere.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWRtaW5CcnVrZXJcX0JydWtlcmUuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/Susteni Web/Views/AdminBruker/_BrukerTilgang.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWRtaW5CcnVrZXJcX0JydWtlclRpbGdhbmcuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/Susteni Web/Views/AdminBruker/_NyBruker.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWRtaW5CcnVrZXJcX055QnJ1a2VyLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/Susteni Web/Views/AdminBruker/_NyttPassord.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWRtaW5CcnVrZXJcX055dHRQYXNzb3JkLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/Susteni Web/Views/AdminRolle/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWRtaW5Sb2xsZVxJbmRleC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/Susteni Web/Views/Customer/Customers.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ3VzdG9tZXJcQ3VzdG9tZXJzLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/Susteni Web/Views/Customer/_CustomerInfo.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ3VzdG9tZXJcX0N1c3RvbWVySW5mby5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/Susteni Web/Views/Customer/_LastOppLogo.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ3VzdG9tZXJcX0xhc3RPcHBMb2dvLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/Susteni Web/Views/Functions/Endringslogg.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRnVuY3Rpb25zXEVuZHJpbmdzbG9nZy5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/Susteni Web/Views/Functions/EquipmentLibrary.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRnVuY3Rpb25zXEVxdWlwbWVudExpYnJhcnkuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/Susteni Web/Views/Functions/MinKirkeapp.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRnVuY3Rpb25zXE1pbktpcmtlYXBwLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/Susteni Web/Views/Functions/TypeEquipment.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRnVuY3Rpb25zXFR5cGVFcXVpcG1lbnQuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/Susteni Web/Views/Functions/TypeFuel.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRnVuY3Rpb25zXFR5cGVGdWVsLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/Susteni Web/Views/Functions/TypePowerProduction.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRnVuY3Rpb25zXFR5cGVQb3dlclByb2R1Y3Rpb24uY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/Susteni Web/Views/Functions/TypeShip.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRnVuY3Rpb25zXFR5cGVTaGlwLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/Susteni Web/Views/Functions/Vendor.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRnVuY3Rpb25zXFZlbmRvci5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/Susteni Web/Views/Functions/_EndringsloggInfo.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRnVuY3Rpb25zXF9FbmRyaW5nc2xvZ2dJbmZvLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/Susteni Web/Views/Functions/_EquipmentLibraryInfo.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRnVuY3Rpb25zXF9FcXVpcG1lbnRMaWJyYXJ5SW5mby5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/Susteni Web/Views/Functions/_FinnPoststed.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRnVuY3Rpb25zXF9GaW5uUG9zdHN0ZWQuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/Susteni Web/Views/Functions/_FinnSokn.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRnVuY3Rpb25zXF9GaW5uU29rbi5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/Susteni Web/Views/Functions/_Melding.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRnVuY3Rpb25zXF9NZWxkaW5nLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/Susteni Web/Views/Functions/_ModelInfo.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRnVuY3Rpb25zXF9Nb2RlbEluZm8uY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/Susteni Web/Views/Functions/_OMType.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRnVuY3Rpb25zXF9PTVR5cGUuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/Susteni Web/Views/Functions/_ShipTypeGenerator.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRnVuY3Rpb25zXF9TaGlwVHlwZUdlbmVyYXRvci5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/Susteni Web/Views/Functions/_TypeEquipment.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRnVuY3Rpb25zXF9UeXBlRXF1aXBtZW50LmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/Susteni Web/Views/Functions/_TypeFuel.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRnVuY3Rpb25zXF9UeXBlRnVlbC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/Susteni Web/Views/Functions/_TypePowerProduction.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRnVuY3Rpb25zXF9UeXBlUG93ZXJQcm9kdWN0aW9uLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/Susteni Web/Views/Functions/_TypeShip.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRnVuY3Rpb25zXF9UeXBlU2hpcC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/Susteni Web/Views/Functions/_UregistrertRessurs.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRnVuY3Rpb25zXF9VcmVnaXN0cmVydFJlc3N1cnMuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/Susteni Web/Views/Functions/_VendorInfo.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRnVuY3Rpb25zXF9WZW5kb3JJbmZvLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/Susteni Web/Views/Grunnregister/Rapporter.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcR3J1bm5yZWdpc3RlclxSYXBwb3J0ZXIuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/Susteni Web/Views/Grunnregister/VedlMaler.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcR3J1bm5yZWdpc3RlclxWZWRsTWFsZXIuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/Susteni Web/Views/Grunnregister/_VedlMalerInfo.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcR3J1bm5yZWdpc3RlclxfVmVkbE1hbGVySW5mby5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/Susteni Web/Views/Helpdesk/BrukerHDFerdig.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSGVscGRlc2tcQnJ1a2VySERGZXJkaWcuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/Susteni Web/Views/Helpdesk/BrukerHDLogg.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSGVscGRlc2tcQnJ1a2VySERMb2dnLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/Susteni Web/Views/Helpdesk/BugReport.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSGVscGRlc2tcQnVnUmVwb3J0LmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/Susteni Web/Views/Helpdesk/HelpDesk.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSGVscGRlc2tcSGVscERlc2suY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/Susteni Web/Views/Helpdesk/HelpDeskRediger.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSGVscGRlc2tcSGVscERlc2tSZWRpZ2VyLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/Susteni Web/Views/Helpdesk/Support.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSGVscGRlc2tcU3VwcG9ydC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/Susteni Web/Views/Helpdesk/SupportEndre.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSGVscGRlc2tcU3VwcG9ydEVuZHJlLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/Susteni Web/Views/Helpdesk/_HelpDeskBilde.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSGVscGRlc2tcX0hlbHBEZXNrQmlsZGUuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/Susteni Web/Views/Helpdesk/_HelpDeskBildeFull.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSGVscGRlc2tcX0hlbHBEZXNrQmlsZGVGdWxsLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/Susteni Web/Views/Helpdesk/_HelpDeskBildeInfo.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSGVscGRlc2tcX0hlbHBEZXNrQmlsZGVJbmZvLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/Susteni Web/Views/Helpdesk/_HelpDeskInfo.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSGVscGRlc2tcX0hlbHBEZXNrSW5mby5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/Susteni Web/Views/Helpdesk/_HelpDeskLogg.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSGVscGRlc2tcX0hlbHBEZXNrTG9nZy5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/Susteni Web/Views/Hjelp/HelpSystem.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSGplbHBcSGVscFN5c3RlbS5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/Susteni Web/Views/Hjelp/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSGplbHBcSW5kZXguY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/Susteni Web/Views/Hjelp/_HelpInfo.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSGplbHBcX0hlbHBJbmZvLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/Susteni Web/Views/Hjelp/_HelpSystemInfo.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSGplbHBcX0hlbHBTeXN0ZW1JbmZvLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/Susteni Web/Views/Home/Admin.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxBZG1pbi5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/Susteni Web/Views/Home/Engrafo.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxFbmdyYWZvLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/Susteni Web/Views/Home/GP.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxHUC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/Susteni Web/Views/Home/Grunnregister.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxHcnVubnJlZ2lzdGVyLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/Susteni Web/Views/Home/HD.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxIRC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/Susteni Web/Views/Home/Hjem.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxIamVtLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/Susteni Web/Views/Home/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxJbmRleC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/Susteni Web/Views/Home/Index_New.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxJbmRleF9OZXcuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/Susteni Web/Views/Home/Login.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxMb2dpbi5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/Susteni Web/Views/Home/LoginError.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxMb2dpbkVycm9yLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/Susteni Web/Views/Home/Logout.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxMb2dvdXQuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/Susteni Web/Views/Home/Privacy.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxQcml2YWN5LmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/Susteni Web/Views/Home/Rapporter.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxSYXBwb3J0ZXIuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/Susteni Web/Views/Home/Rutiner.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxSdXRpbmVyLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/Susteni Web/Views/Home/signin-oidc.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxzaWduaW4tb2lkYy5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/Susteni Web/Views/Home/signout-oidc.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxzaWdub3V0LW9pZGMuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/Susteni Web/Views/Home/Sokn.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxTb2tuLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/Susteni Web/Views/Home/Statistikk.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxTdGF0aXN0aWtrLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/Susteni Web/Views/Home/UnauthorizedTenant.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxVbmF1dGhvcml6ZWRUZW5hbnQuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/Susteni Web/Views/Home/_Bruker.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxfQnJ1a2VyLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/Susteni Web/Views/Report/LetterTemplates.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUmVwb3J0XExldHRlclRlbXBsYXRlcy5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/Susteni Web/Views/Report/ReportDef.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUmVwb3J0XFJlcG9ydERlZi5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/Susteni Web/Views/Report/Reportlist.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUmVwb3J0XFJlcG9ydGxpc3QuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/Susteni Web/Views/Report/SQLMaler.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUmVwb3J0XFNRTE1hbGVyLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/Susteni Web/Views/Report/Templates.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUmVwb3J0XFRlbXBsYXRlcy5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/Susteni Web/Views/Report/_LastOppFil.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUmVwb3J0XF9MYXN0T3BwRmlsLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/Susteni Web/Views/Report/_LastOppPreview.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUmVwb3J0XF9MYXN0T3BwUHJldmlldy5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/Susteni Web/Views/Report/_pdfViewer.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUmVwb3J0XF9wZGZWaWV3ZXIuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/Susteni Web/Views/Report/_ReportDefInfo.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUmVwb3J0XF9SZXBvcnREZWZJbmZvLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/Susteni Web/Views/Report/_ReportFormler.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUmVwb3J0XF9SZXBvcnRGb3JtbGVyLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/Susteni Web/Views/Report/_ReportQuestion.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUmVwb3J0XF9SZXBvcnRRdWVzdGlvbi5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/Susteni Web/Views/Report/_ReportSQL.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUmVwb3J0XF9SZXBvcnRTUUwuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/Susteni Web/Views/Report/_Telerik.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUmVwb3J0XF9UZWxlcmlrLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/Susteni Web/Views/Report/_VedlikeholdMal.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUmVwb3J0XF9WZWRsaWtlaG9sZE1hbC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/Susteni Web/Views/Report/_VedlikeholdMalPreview.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUmVwb3J0XF9WZWRsaWtlaG9sZE1hbFByZXZpZXcuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/Susteni Web/Views/Report/_Writer.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUmVwb3J0XF9Xcml0ZXIuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/Susteni Web/Views/Rutiner/Festere.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUnV0aW5lclxGZXN0ZXJlLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/Susteni Web/Views/Rutiner/HelpDesk.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUnV0aW5lclxIZWxwRGVzay5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/Susteni Web/Views/Rutiner/_FesterInfo.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUnV0aW5lclxfRmVzdGVySW5mby5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/Susteni Web/Views/Shared/EditorTemplates/Boolean.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXEVkaXRvclRlbXBsYXRlc1xCb29sZWFuLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/Susteni Web/Views/Shared/EditorTemplates/Country.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXEVkaXRvclRlbXBsYXRlc1xDb3VudHJ5LmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/Susteni Web/Views/Shared/EditorTemplates/Currency.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXEVkaXRvclRlbXBsYXRlc1xDdXJyZW5jeS5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/Susteni Web/Views/Shared/EditorTemplates/Date.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXEVkaXRvclRlbXBsYXRlc1xEYXRlLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/Susteni Web/Views/Shared/EditorTemplates/DateTime.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXEVkaXRvclRlbXBsYXRlc1xEYXRlVGltZS5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/Susteni Web/Views/Shared/EditorTemplates/Email.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXEVkaXRvclRlbXBsYXRlc1xFbWFpbC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/Susteni Web/Views/Shared/EditorTemplates/EmailAddress.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXEVkaXRvclRlbXBsYXRlc1xFbWFpbEFkZHJlc3MuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/Susteni Web/Views/Shared/EditorTemplates/GridForeignKey.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXEVkaXRvclRlbXBsYXRlc1xHcmlkRm9yZWlnbktleS5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/Susteni Web/Views/Shared/EditorTemplates/Integer.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXEVkaXRvclRlbXBsYXRlc1xJbnRlZ2VyLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/Susteni Web/Views/Shared/EditorTemplates/Number.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXEVkaXRvclRlbXBsYXRlc1xOdW1iZXIuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/Susteni Web/Views/Shared/EditorTemplates/Password.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXEVkaXRvclRlbXBsYXRlc1xQYXNzd29yZC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/Susteni Web/Views/Shared/EditorTemplates/String.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXEVkaXRvclRlbXBsYXRlc1xTdHJpbmcuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/Susteni Web/Views/Shared/EditorTemplates/Time.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXEVkaXRvclRlbXBsYXRlc1xUaW1lLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/Susteni Web/Views/Shared/EditorTemplates/Url.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXEVkaXRvclRlbXBsYXRlc1xVcmwuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/Susteni Web/Views/Shared/Error.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXEVycm9yLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/Susteni Web/Views/Shared/_CookieConsentPartial.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXF9Db29raWVDb25zZW50UGFydGlhbC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/Susteni Web/Views/Shared/_Layout.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXF9MYXlvdXQuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/Susteni Web/Views/Shared/_Login.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXF9Mb2dpbi5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/Susteni Web/Views/Shared/_LoginPartial.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXF9Mb2dpblBhcnRpYWwuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/Susteni Web/Views/Shared/_ValidationScriptsPartial.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXF9WYWxpZGF0aW9uU2NyaXB0c1BhcnRpYWwuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/Susteni Web/Views/Ship/ElProduction.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hpcFxFbFByb2R1Y3Rpb24uY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/Susteni Web/Views/Ship/FuelSavings.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hpcFxGdWVsU2F2aW5ncy5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/Susteni Web/Views/Ship/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hpcFxJbmRleC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/Susteni Web/Views/Ship/InvestmentPlan.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hpcFxJbnZlc3RtZW50UGxhbi5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/Susteni Web/Views/Ship/PowerProduction.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hpcFxQb3dlclByb2R1Y3Rpb24uY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/Susteni Web/Views/Ship/Ships.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hpcFxTaGlwcy5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/Susteni Web/Views/Ship/Summary.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hpcFxTdW1tYXJ5LmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/Susteni Web/Views/Ship/_ElProductionInfo.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hpcFxfRWxQcm9kdWN0aW9uSW5mby5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/Susteni Web/Views/Ship/_EquipmentMode.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hpcFxfRXF1aXBtZW50TW9kZS5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/Susteni Web/Views/Ship/_FuelConsumption.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hpcFxfRnVlbENvbnN1bXB0aW9uLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/Susteni Web/Views/Ship/_FuelSavingInfo.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hpcFxfRnVlbFNhdmluZ0luZm8uY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/Susteni Web/Views/Ship/_FuelSavingSummary.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hpcFxfRnVlbFNhdmluZ1N1bW1hcnkuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/Susteni Web/Views/Ship/_Generator.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hpcFxfR2VuZXJhdG9yLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/Susteni Web/Views/Ship/_GeneratorHours.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hpcFxfR2VuZXJhdG9ySG91cnMuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/Susteni Web/Views/Ship/_GeneratorImport.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hpcFxfR2VuZXJhdG9ySW1wb3J0LmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/Susteni Web/Views/Ship/_GeneratorMode.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hpcFxfR2VuZXJhdG9yTW9kZS5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/Susteni Web/Views/Ship/_HeatPowerGenerator.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hpcFxfSGVhdFBvd2VyR2VuZXJhdG9yLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/Susteni Web/Views/Ship/_LastOppBilde.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hpcFxfTGFzdE9wcEJpbGRlLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/Susteni Web/Views/Ship/_NewShip.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hpcFxfTmV3U2hpcC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/Susteni Web/Views/Ship/_OperationMode.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hpcFxfT3BlcmF0aW9uTW9kZS5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/Susteni Web/Views/Ship/_ProfileInfo.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hpcFxfUHJvZmlsZUluZm8uY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/Susteni Web/Views/Ship/_ProfileNew.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hpcFxfUHJvZmlsZU5ldy5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/Susteni Web/Views/Ship/_ShipEquipment.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hpcFxfU2hpcEVxdWlwbWVudC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/Susteni Web/Views/Ship/_ShipInfo.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hpcFxfU2hpcEluZm8uY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/Susteni Web/Views/Support/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU3VwcG9ydFxJbmRleC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/Susteni Web/Views/_ViewImports.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcX1ZpZXdJbXBvcnRzLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Visual Studio/Susteni Web/Views/_ViewStart.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcX1ZpZXdTdGFydC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 

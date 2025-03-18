@@ -1,0 +1,312 @@
+﻿@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
+@model Susteni.Models.ReportModel
+
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+
+<div class="container-fluid padding-0" id="ReportDefForm">
+                                    
+    <input hidden asp-for="Report.ReportGuid" class="form-control">
+    <input hidden asp-for="Report.OpprettetDate" class="form-control">
+    <input hidden asp-for="Report.EndretAv" class="form-control">
+    <input type = "hidden" asp-for="Report.EndretDato" class="form-control">
+    <input type = "hidden" asp-for="Report.SlettetAv" class="form-control">
+    <input type = "hidden" asp-for="Report.SlettetDato" class="form-control">
+    <input type = "hidden" asp-for="Report.DatoEndret" class="form-control">
+    <input type = "hidden" asp-for="Report.PrintCount" class="form-control">
+    <input type = "hidden" asp-for="Report.LastPrintDate" class="form-control">
+    <input type = "hidden" asp-for="Report.Sortering" class="form-control">
+
+    <div class="col-12" style="margin-top: 10px;">
+        <div class="panel with-nav-tabs panel-default" id="dataenter" style="height: calc(100vh - 210px);">
+            <div class="panel-body data padding-0">
+                <div class="tab-content data">
+                    <div class="panel-heading" id="Tab">
+                        <ul class="nav nav-tabs">
+                            <li class="nav-item"><a class="@(Model.Report.ActivTab == "tabGenerell" ? "nav-link active" : "nav-link")" id="idGenerell" aria-current="page" href="#tabGenerell" data-bs-toggle="tab">@Localizer["Generelly"]</a></li>
+                            <li class="nav-item"><a class="@(Model.Report.ActivTab == "tabFiler" ? "nav-link active" : "nav-link")" href="#tabFiler" data-bs-toggle="tab">@Localizer["Files"]</a></li>
+                            <li class="nav-item"><a class="@(Model.Report.ActivTab == "tabSporsmal" ? "nav-link active" : "nav-link")" href="#tabSporsmal" data-bs-toggle="tab">@Localizer["Question"]</a></li>
+                            <li class="nav-item"><a class="@(Model.Report.ActivTab == "tabFormler" ? "nav-link active" : "nav-link")" href="#tabFormler" data-bs-toggle="tab">@Localizer["Formulas"]</a></li>
+                            <li class="nav-item"><a class="@(Model.Report.ActivTab == "tabSQL" ? "nav-link active" : "nav-link")" href="#tabSQL" data-bs-toggle="tab">@Localizer["SQL"]</a></li>
+                        </ul>
+                    </div>
+                    <div class="panel-body">
+                        <div class="tab-content" style="margin-top: 10px;">
+
+                            <div class="@(Model.Report.ActivTab == "tabGenerell" ? "tab-pane fade show active" : "tab-pane fade")" style="padding: 10px;" role="tabpanel" id="tabGenerell">
+
+                                <div class="row">
+                                    <div class="col-12">
+                                        <div class="row align-items-center" style="display: flex; flex-direction: row;">
+                                            <label class="col-1 col-form-label">Title</label>
+                                            <div class="col-md-6">
+                                                <input asp-for="Report.Tittel" class="form-control k-textbox">
+                                            </div>
+                                            <label class="col-1 col-form-label">RapId</label>
+                                            <div class="col-md-1">
+                                                <input asp-for="Report.RapId" class="form-control k-textbox">
+                                            </div>                                            
+                                            <div class="col-lg-2">
+                                                @(Html.Kendo().CheckBox().Name("Report.Aktiv").Checked(Model.Report.Aktiv).Label(Localizer["Active"].Value))
+                                            </div>
+                                        </div>
+
+                                        <div class="row" style="display: flex; flex-direction: row; margin-top: 7px;">
+                                            <label class="col-1 col-form-label">Description</label>
+                                            <div class="col-md-10">
+                                                <div class="k-w-300">
+                                                    @(Html.Kendo().TextArea()
+                                                        .Name("Report.Beskrivelse")
+                                                        .Placeholder("Description")
+                                                        .Rows(4)
+                                                        .MaxLength(2000)
+                                                        .Value(Model.Report.Beskrivelse)
+                                                        .HtmlAttributes(new { style = "width: 100%"})
+                                                    )
+                                                </div>
+                                                <div class="k-form-footer">
+                                                    <div class="k-counter-container"><span class="k-counter-value">0</span>/2000</div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="row align-items-center" style="display: flex; flex-direction: row;">
+                                            <Label class="col-1 col-form-label">@Localizer["Typ"]</label>
+                                            <div class="col-md-9">
+                                                @(Html.Kendo().RadioGroup()
+                                                    .Name("Report.RapType")
+                                                    .Layout(RadioGroupLayout.Horizontal)
+                                                    .Items(i =>
+                                                        {
+                                                        i.Add().Label("Crystal Report").Value("0");
+                                                        i.Add().Label("Word").Value("1");
+                                                        i.Add().Label("Excel").Value("2");
+                                                        i.Add().Label("Telerik").Value("5");
+                                                        i.Add().Label("PDF").Value("9");
+                                                        })
+                                                    .Value(Model.Report.RapType.ToString())
+                                                    )
+                                            </div>
+                                        </div>
+
+                                        <div class="row align-items-center" style="display: flex; flex-direction: row;">
+                                            <label class="col-1 col-form-label">Filname</label>
+                                            <div class="col-md-2">
+                                                <input asp-for="Report.Filnavn" class="form-control k-textbox">
+                                            </div>
+                                        </div>
+
+                                        <div class="row align-items-center" style="display: flex; flex-direction: row;">
+                                            <label class="col-1 col-form-label">Modul</label>
+                                            <div class="col-md-2">
+                                                @(
+                                                  Html.Kendo().ComboBox()
+                                                      .Name("Report.Skjerm")
+                                                      .HtmlAttributes(new { style = "width:100%;" })
+                                                      .Value(Model.Report.Skjerm)
+                                                      .Height(310)
+                                                      .Items(i =>
+                                                          {
+                                                              i.Add().Text("Ship").Value("Ship");
+                                                              i.Add().Text("Investment Plan").Value("InvestmentPlan");
+                                                              i.Add().Text("Energy Optimizing").Value("EnergyOptimizing");
+                                                              i.Add().Text("Power Production").Value("PowerProduction");
+                                                        })
+                                                    ) 
+                                            </div>
+                                        </div>
+
+                                    </div>
+
+                                    <div class="col-6" style="margin-top: 10px;">
+                                        <div class="row align-items-center" style="display: flex; flex-direction: row;">
+                                            <label class="col-2 col-form-label">Folder</label>
+                                            <div class="col-md-4">
+                                                <input asp-for="Report.Mappe" class="form-control k-textbox">
+                                            </div>
+                                        </div>
+
+                                    </div>
+
+                                    <div class="col-6">
+@*                                         <div class="row align-items-center" style="display: none;">
+                                            <div class="col-1"></div>
+                                            <div>
+                                                @(Html.Kendo().CheckBox().Name("Report.KunEnRecord").Checked(Model.Report.KunEnRecord).Label(Localizer["KunEnRecord"].Value))
+                                            </div>
+                                        </div>
+
+                                        <div class="row align-items-center" style="display: flex; flex-direction: row;">
+                                            <div class="col-1"></div>
+                                            <div>
+                                                @(Html.Kendo().CheckBox().Name("Report.EgenSelektering").Checked(Model.Report.EgenSelektering).Label(Localizer["Krever ikke at en registering er valgt"].Value))
+                                            </div>
+                                        </div> *@
+
+                                    </div>
+
+                                </div>
+                            </div>
+
+                            <div class="@(Model.Report.ActivTab == "tabFiler" ? "tab-pane fade show active" : "tab-pane fade")" style="padding: 10px;" role="tabpanel" id="tabFiler">
+
+                                <div class="row">
+                                    <button disabled type="button" id="PreviewUpload" class="commandSmal" onclick="showDialogLastOppPreview()" style="width: 160px; margin-left: 10px">
+                                        @Localizer["Preview picture"]
+                                        <img src="~/images/button-upload.svg" style="width: 24px; height: 24px;" />
+                                    </button>
+                                      
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-6">
+                                        @(Html.Kendo().Grid<Susteni.Models.ReportFilesItem>()
+                                            .Name("Filer")
+                                            .Columns(columns => {
+                                                columns.Bound(q => q.ReportFilesGuid).Visible(false);
+                                                columns.Bound(q => q.CustomerGuid).Visible(false);
+                                                columns.Bound(q => q.Dato).Title("Date").Format("{0: dd.MM.yyyy}").Width(100);
+                                                columns.Bound(q => q.Versjon).Title("Version");
+                                                columns.Bound(q => q.EndretDato).Title("Change date").Format("{0: dd.MM.yyyy}").Width(100);
+                                                columns.Bound(q => q.EndretAv).Title("User");
+                                            })
+                                            .Sortable()
+                                            .Navigatable()
+                                            .Height(400)
+                                            .Scrollable()
+                                            .Events(e => e.Change("onFilerChange"))
+                                            .Selectable(s => s
+                                                .Mode(GridSelectionMode.Single)
+                                                .Type(GridSelectionType.Row))
+                                            .DataSource(dataSource => dataSource
+                                                .Ajax()
+                                                .Read(read => read.Action("getReportFilerListe", "Report").Data("filterReport"))
+                                                )
+                                            )
+                                    </div>
+                                    <div class="col-6">
+                                        <div id="filPreview">                                        
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+
+
+                            <div class="@(Model.Report.ActivTab == "tabSporsmal" ? "tab-pane fade show active" : "tab-pane fade")" style="padding: 10px;" role="tabpanel" id="tabSporsmal">
+                                <div class="row">
+                                    <div class="col-lg-4">
+                                          @(Html.Kendo().Grid<Susteni.Models.ReportQuestionItem>()
+                                            .Name("Sporsmal")
+                                            .Columns(columns => {
+                                                columns.Bound(q => q.ReportSporsmalGuid).Width(90).Visible(false);
+                                                columns.Bound(q => q.Kode).Title("Code").Width(90);
+                                                columns.Bound(q => q.TypeNavn).Width(90).Title("Typ");
+                                                columns.Bound(q => q.Tekst).Title("Text");
+                                                columns.Bound(q => q.PosX).Width(60).Title("X");
+                                                columns.Bound(q => q.PosY).Width(60).Title("Y");
+                                            })
+                                            .Sortable()
+                                            .Navigatable()
+                                            .Scrollable()
+                                            .Selectable(s => s
+                                                .Mode(GridSelectionMode.Single)
+                                                .Type(GridSelectionType.Row))
+                                            .Events(events => events
+                                                .Change("onSporsmalSelect"))
+                                            .DataSource(dataSource => dataSource
+                                                .Ajax()
+                                                .Read(read => read.Action("GetReportQuestionList", "Report").Data("filterReport"))
+                                                )
+                                            ) 
+                                    </div>
+                                    <div class="col-lg-8">
+                                        <partial name="_ReportQuestion" />
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="@(Model.Report.ActivTab == "tabFormler" ? "tab-pane fade show active" : "tab-pane fade")" style="padding: 10px;" role="tabpanel" id="tabFormler">
+                                <div class="row">
+                                    <div class="col-lg-3">
+@*                                           @(Html.Kendo().Grid<Susteni.Models.ReportFormelItem>()
+                                            .Name("Formler")
+                                            .Columns(columns => {
+                                                columns.Bound(q => q.ReportFormelGuid).Visible(false);
+                                                columns.Bound(q => q.FormelNavn).Width(45).Title("Name");
+                                            })
+                                            .Sortable()
+                                            .Navigatable()
+                                            .Scrollable()
+                                            .Selectable(s => s
+                                                .Mode(GridSelectionMode.Single)
+                                                .Type(GridSelectionType.Row))
+                                            .Events(events => events
+                                                .Change("onFormelSelect"))
+                                            .DataSource(dataSource => dataSource
+                                                .Ajax()
+                                                .Read(read => read.Action("getReportFormelListe", "Report").Data("filterReport"))
+                                                )
+                                            )  *@
+                                    </div>
+                                    <div class="col-lg-9">
+                                        <partial name="_ReportFormler" />
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="@(Model.Report.ActivTab == "tabSQL" ? "tab-pane fade show active" : "tab-pane fade")" style="padding: 10px;" role="tabpanel" id="tabSQL">
+                                <div class="row">
+                                    <div class="col-lg-2">
+                                        <h5>Flettekoder</h5>
+                                        @(Html.Kendo().TreeView()
+                                        .Name("ReporterSQL")
+                                        .DataTextField("Name")
+                                        .HtmlAttributes(new { style="background-color: white; height: (100% - 0px);" })
+                                        .LoadOnDemand(false)
+                                        .Events(events => events
+                                            .Change("onSQLMalSelect")
+                                            )
+                                        .DataSource(DataSource => DataSource
+                                            .Custom()
+                                            .Transport(t => t.Read("readHandlerSQL"))
+                                            .Schema(s => s.Model ( m => m.Children("items")))
+                                            )
+                                            ) 
+                                    </div>
+                                    <div class="col-lg-10">
+                                        <partial name="_ReportSQL" />
+                                    </div>
+                                </div>
+                            </div>
+
+
+
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+
+    $('#myTab a').click(function (e) {
+        e.preventDefault();
+        $(this).tab('show');
+    });
+
+    $("ul.nav-tabs > li > a").on("shown.bs.tab", function (e) {
+        var id = $(e.target).attr("href").substr(1);
+
+        $.ajax({
+            url: '@Url.Action("SetTab", "Report")',
+            data: { tab: id },
+            type: "GET"
+        });
+       
+    });
+
+</script>

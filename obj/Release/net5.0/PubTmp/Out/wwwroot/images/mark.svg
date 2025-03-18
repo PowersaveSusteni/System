@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="32px" height="32px" viewBox="0 0 32 32" enable-background="new 0 0 32 32" xml:space="preserve">
+  <g id="icon">
+    <rect x="8.28408" y="9.09049" width="16.5315" height="10.1901" fill="#fefe00" stroke="#07003c" stroke-width="0.3" stroke-linecap="round" stroke-miterlimit="4" stroke-linejoin="round" fill-opacity="1" stroke-opacity="1"/>
+    <path d="M8.28408,0.146621V6.7079H24.8156v-6.78121" fill="none" stroke="#000000" stroke-width="0.3" stroke-linecap="butt" stroke-miterlimit="4" stroke-linejoin="miter" stroke-opacity="1"/>
+    <path d="M27.748,0.146621V6.7079h4.21535" fill="none" stroke="#000000" stroke-width="0.3" stroke-linecap="butt" stroke-miterlimit="4" stroke-linejoin="miter" stroke-opacity="1"/>
+    <path d="m31.9267,9.09049h-4.1787v10.1901h4.21535" fill="none" stroke="#000000" stroke-width="0.3" stroke-linecap="butt" stroke-miterlimit="4" stroke-linejoin="miter" stroke-opacity="1"/>
+    <path d="M5.49828,0.0733104V6.7079h-5.57159" fill="none" stroke="#000000" stroke-width="0.3" stroke-linecap="butt" stroke-miterlimit="4" stroke-linejoin="miter" stroke-opacity="1"/>
+    <path d="M0.0366552,9.09049H5.49828v10.1901h-5.53494" fill="none" stroke="#000000" stroke-width="0.3" stroke-linecap="butt" stroke-miterlimit="4" stroke-linejoin="miter" stroke-opacity="1"/>
+    <path d="M32,21.8465H27.748V32.0733" fill="none" stroke="#000000" stroke-width="0.3" stroke-linecap="butt" stroke-miterlimit="4" stroke-linejoin="miter" stroke-opacity="1"/>
+    <path d="M8.28408,32V21.8465H24.8156v10.1901" fill="none" stroke="#000000" stroke-width="0.3" stroke-linecap="butt" stroke-miterlimit="4" stroke-linejoin="miter" stroke-opacity="1"/>
+    <path d="m0,21.8465c0.476518,0,5.49828,0,5.49828,0V32.0733" fill="none" stroke="#000000" stroke-width="0.3" stroke-linecap="butt" stroke-miterlimit="4" stroke-linejoin="miter" stroke-opacity="1"/>
+  </g>
+</svg>

@@ -1,0 +1,210 @@
+﻿@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
+@model Susteni.Models.Kontakt.KontaktModel
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+
+<script>
+
+    function onReskontroChange() {
+        xVF = document.getElementById("visFaktura");
+        var grdGravlagte = $("#ReskontroListe").data("kendoGrid");
+        var selectedF = grdGravlagte.select();
+        var selItemF = grdGravlagte.dataItem(selectedF);
+        if (selectedF.length > 0) {
+            if (selItemF.Tilgang == true) {
+                xVF.disabled = false;
+            }
+            else {
+                xVF.disabled = true;
+            }
+        }
+    }
+
+</script>
+
+<div id="kontaktFullForm" class="container-fluid padding-0">
+
+    <div id="hidden">
+        <input type="hidden" asp-for="Kontakt.KontaktGuid" class="form-control">
+        <input type="hidden" asp-for="Kontakt.ID" class="form-control">
+        <input type="hidden" asp-for="Kontakt.ErKontakt" class="form-control">
+        <input hidden type="checkbox" asp-for="Kontakt.ErDod">
+        <input type="hidden" asp-for="Kontakt.Pub360RecNo" class="form-control">
+        <input type="hidden" asp-for="Kontakt.SlettetDato" class="form-control">
+        <input type="hidden" asp-for="Kontakt.OpprettetDate" class="form-control">
+        <input type="hidden" asp-for="Kontakt.Fellesraad" class="form-control">
+        <input type="hidden" asp-for="Kontakt.EndretDato" class="form-control">
+        <input type="hidden" asp-for="Kontakt.SlettetAv" class="form-control">
+        <input type="hidden" asp-for="Kontakt.SlettetDato" class="form-control">
+        <input type="hidden" asp-for="Kontakt.Fodt" class="form-control">
+        <input type="hidden" asp-for="Kontakt.SoknNr" class="form-control">
+        <input type="hidden" asp-for="Kontakt.FodeSted" class="form-control">
+        <input type="hidden" asp-for="Kontakt.ChkDate" class="form-control">
+        <input type="hidden" asp-for="Kontakt.ChkDate" class="form-control">
+        <input type="hidden" asp-for="Kontakt.SistEndringType" class="form-control">
+        <input type="hidden" asp-for="Kontakt.SlektsnavnUgift" class="form-control">
+        <input type="hidden" asp-for="Kontakt.SoknNr" class="form-control">
+        <input type="hidden" asp-for="Kontakt.Program" class="form-control">
+        <input type="hidden" asp-for="Kontakt.DapsDato" class="form-control">
+        <input type="hidden" asp-for="Kontakt.Kjonn" class="form-control">
+        <input type="hidden" asp-for="Kontakt.DåpsSted" class="form-control">
+        <input type="hidden" asp-for="Kontakt.SivStatId" class="form-control">
+        <input type="hidden" asp-for="Kontakt.Kjonn" class="form-control">
+        <input type="hidden" asp-for="Kontakt.PostNrId" class="form-control">
+        <input type="hidden" asp-for="Kontakt.TypeKontakt" class="form-control">
+        <input type="hidden" asp-for="Kontakt.FulltNavn" class="form-control">
+    </div>
+
+    <div class="col-12" style="margin-bottom: 0px; margin-top: 10px;">
+        <div class="panel with-nav-tabs panel-default" id="dataenter">
+            <div class="panel-body data padding-0" id="dataenterpanel" style="min-height: 180px; padding: 10px;">
+
+                <div class="row">
+                    <div class="col-4">
+
+                        <div class="row align-items-center" style="display: flex; flex-direction: row;">
+                            <Label class="col-12 col-form-label">@Localizer["Type"]</Label>
+                            <div class="col-10">
+                                @if (Model != null)
+                                {
+                                    @(Html.Kendo().DropDownList()
+                                        .Name("Kontakt.TypeKunde")
+                                        .DataTextField("Text")
+                                        .DataValueField("Value")
+                                        .BindTo(new List<SelectListItem>() {
+                                new SelectListItem() {
+                                Text = Localizer["Person"].Value , Value = "0"
+                                },
+                                new SelectListItem() {
+                                Text = Localizer["Firma"].Value, Value = "1"
+                                }
+                                })
+                                        .SelectedIndex(Model.Kontakt.TypeKunde)
+                                        .HtmlAttributes(new { style = "width: 210px;" })
+                                        )
+                                }
+                            </div>
+                        </div>
+
+                        <div class="row align-items-center" style="display: flex; flex-direction: row;">
+                            <label class="col-12 col-form-label">Fødselsnummer</label>
+                            <div class="col-md-9">
+                                <input asp-for="Kontakt.PersonNr" class="form-control k-textbox">
+                            </div>
+                        </div>
+
+
+                    </div>
+
+                    <div class="col-8">
+
+                        <div class="row align-items-center" style="display: flex; flex-direction: row;">
+                            <label class="col-12 col-form-label">Navn</label>
+                            <div class="col-4">
+                                <input asp-for="Kontakt.Fornavn" class="form-control k-textbox nodvendigFelt">
+                            </div>
+
+                            <div class="col-4">
+                                <input asp-for="Kontakt.Mellomnavn" class="form-control k-textbox">
+                            </div>
+
+                            <div class="col-4">
+                                <input asp-for="Kontakt.Etternavn" class="form-control k-textbox nodvendigFelt">
+                            </div>
+                        </div>
+
+
+                        <div class="row align-items-center" style="display: flex; flex-direction: row; margin-top: 5px;">
+                            <div class="col-12">
+                                <input asp-for="Kontakt.Adresse" class="form-control k-textbox">
+                            </div>
+                        </div>
+
+                        <div class="row align-items-center" style="display: flex; flex-direction: row; margin-top: 5px;">
+                            <div class="col-2">
+                                <input asp-for="Kontakt.PostNr" class="form-control k-textbox nodvendigFelt" oninput="findPoststed('Post')">
+                            </div>
+
+                            <div class="col-5">
+                                <input readonly asp-for="Kontakt.Sted" class="form-control k-textbox">
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+
+</div>
+
+
+<script>
+
+
+    $("#ReskontroListe").on("dblclick", "tr.k-state-selected", function () {
+        showFaktura();
+    });
+
+
+    $('#myTab a').click(function (e) {
+        e.preventDefault();
+        $(this).tab('show');
+    });
+
+    $("ul.nav-tabs > li > a").on("shown.bs.tab", function (e) {
+        var id = $(e.target).attr("href").substr(1);
+        if (id == "tabKontaktinformasjon" || id == "tabOkonomi" || id == "tabAnnet") {
+            $.ajax({
+                url: '@Url.Action("SetTab", "Kontakt")',
+                data: { tab: id },
+                type: "GET"
+            });
+        }
+        else if (id != "tabKontaktinformasjon" && id != "tabOkonomi" && id != "tabAnnet") {
+
+            if (id == "tabReskontro") {
+                grid = $("#ReskontroListe").data("kendoGrid");
+                grid.refresh();
+            }
+            else if (id == "tabGraver") {
+                grid = $("#KontaktGravListe").data("kendoGrid");
+                grid.refresh();
+            }
+            else if (id == "tabAvtaler") {
+                grid = $("#AvtaleListe").data("kendoGrid");
+                grid.refresh();
+            }
+            else if (id == "tabDokument") {
+                grid = $("#dokumentListe").data("kendoGrid");
+                grid.refresh();
+            }
+            else if (id == "tabStell") {
+                grid = $("#StellListe").data("kendoGrid");
+                grid.refresh();
+            }
+            else if (id == "tabBestillinger") {
+                grid = $("#BestillingListe").data("kendoGrid");
+                grid.refresh();
+            }
+            else if (id == "tabOrdrer") {
+                grid = $("#OrdreListe").data("kendoGrid");
+                grid.refresh();
+            }
+            else if (id == "tabAbonnement") {
+                grid = $("#abbListe").data("kendoGrid");
+                grid.refresh();
+            }
+
+            $.ajax({
+                url: '@Url.Action("SetTabBunn", "Kontakt")',
+                data: { tab: id },
+                type: "GET"
+            });
+        }
+
+    });
+
+</script>

@@ -1,0 +1,41 @@
+﻿@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+
+<form action="Lagre" id="fromGravarkivBilde" method="post" class="mt-3">
+    <div class="form-group row" style="margin-top: 20px;">
+
+        <div class="col-lg-4" style="margin-left: 20px;" id="tips">
+            <p class="unselectable">
+                For å laste opp et bilde, trykk på knappen <strong>Velg...</strong>.<br /><br />Du kan laste opp flere bilder i en operasjon ved å velge flere etter hverandre mens man holder nede CTRL tasten.
+            </p>
+
+        </div>
+
+        <div class="col-lg-1">
+        </div>
+
+        <div class="col-lg-6">
+
+            @(Html.Kendo().Upload()
+                .Name("files")
+                .Async(a => a
+                    .SaveUrl(Url.Action("Async_SaveLogo", "Upload"))
+                    .AutoUpload(true)
+                    )
+                .Events(e => e
+                    .Upload("onUploadLogo").Complete("onUploadSuccess")
+                    )
+                )
+
+        </div>
+
+    </div>
+</form>
+
+<style>
+    p {
+        font-size: 14px;
+    }
+</style>
+

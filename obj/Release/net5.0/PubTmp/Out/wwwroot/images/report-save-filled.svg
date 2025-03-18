@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="32px" height="32px" viewBox="0 0 32 32" enable-background="new 0 0 32 32" xml:space="preserve">
+  <g id="main">
+    <g id="icon">
+      <path d="M3.5,3.034L3.5,27.03L3.5,29.5L16.5,29.5L16.5,16.5L18.5,16.5L26.5,16.5L26.5,0.5344L26.5,0.5L3.5,0.5z" fill="#FFFFFF"/>
+      <path d="M3,0.5L3,3.034L4,3.034L4,1L26,1L26,16.5L27,16.5L27,0.5344L27,0.5L27,0L26.5,0L3.5,0L3,0M3,29.5L3,30L3.5,30L16.5,30L16.5,29L4,29L4,27.03L3,27.03z" fill="#383838"/>
+      <path d="M1,5L6,5L6,4L1,4M1,8L6,8L6,7L1,7M1,11L6,11L6,10L1,10M1,14L6,14L6,13L1,13M1,17L6,17L6,16L1,16M1,20L6,20L6,19L1,19M1,23L6,23L6,22L1,22M1,26L6,26L6,25L1,25z" fill="#787979"/>
+      <path d="M9.5,11.5L22.5,11.5L22.5,6.5L9.5,6.5z" fill="#FFFFFF"/>
+      <path d="M9,6.5L9,11.5L9,12L9.5,12L22.5,12L23,12L23,11.5L23,6.5L23,6L22.5,6L9.5,6L9,6M22,7L22,11L10,11L10,7z" fill="#228BCB"/>
+      <path d="M12,24L16.5,24L16.5,23L12,23z" fill="#787979"/>
+      <path d="M10,22L16.5,22L16.5,21L10,21z" fill="#787979"/>
+    </g>
+    <g id="overlay">
+      <polygon points="29.5,18.5 29.5,23.5 20.6,23.5 20.6,18.5 18.5,18.5 18.5,29.281 20.764,31.5 21.5,31.5 21.5,26.6 28.5,26.6 28.5,31.5 31.5,31.5 31.5,18.5" fill="#DFBCD9" stroke-linejoin="miter"/>
+      <path d="M32,32H20.56L18,29.491V18h14V32zM20.968,31H31V19H19v10.071L20.968,31z" fill="#A0519F"/>
+      <rect x="21.5" y="26.5" width="7" height="5" fill="#FFFFFF" stroke="#A0519F" stroke-width="1" stroke-miterlimit="1" transform="matrix(-1 -1.22465e-16 1.22465e-16 -1 50 58)"/>
+      <line x1="24.5" y1="30" x2="24.5" y2="28" fill="#FFFFFF" stroke="#A0519F" stroke-width="1" stroke-miterlimit="1"/>
+      <rect x="20.5" y="18.5" width="9" height="5" fill="#FFFFFF" stroke="#A0519F" stroke-width="1" stroke-miterlimit="1" transform="matrix(-1 -1.22465e-16 1.22465e-16 -1 50 42)"/>
+    </g>
+  </g>
+</svg>

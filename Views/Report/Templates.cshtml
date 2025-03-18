@@ -1,0 +1,732 @@
+﻿@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
+@model Susteni.Models.ReportModel
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@using TXTextControl.Web.MVC
+@using TXTextControl.Web
+
+@{
+    ViewData["Title"] = Localizer["Vedlikehold maler"];
+    ViewData["LogOnOk"] = "2";
+    ViewData["Menu"] = "Engrafo";
+}
+
+<script type="text/x-kendo-tmpl" id="templateBMV">
+    <div class="rapport">
+        <h3>#:RapId#</h3>
+        <img src="data:image/png;base64, #:Preview#" alt="Rapport" />
+        <h3>#:Tittel#</h3>
+    </div>
+</script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.2.2/pdf.js"></script>
+
+<style>
+    .k-grid td, .k-grid .k-table-td {
+        border-block-end-width: 0px;
+        vertical-align: middle;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        }
+
+    .k-grid table {
+        table-layout: fixed;
+        }
+
+</style>
+
+<form id="brevmalerForm" class="mt-3">
+    <div id="confirm"></div>
+    <div class="row" id="heading">
+        <div class="col-md-12">
+            <div style="display: flex; flex-direction: row;">
+
+                <button type="button" onclick="DuplicateReport()" class="command" style="width: 230px; margin-right: 7px;">
+                    <img src="~/images/clipboard-copy.svg" />
+                    @Localizer["Duplicate templates"]
+                    <p>Create a copy of selected template</p>
+                </button>
+
+                <button type="button" onclick="showDialogLastOppDokument()" class="command" style="width: 250px; margin-right: 7px;">
+                    <img src="~/images/document-upload.svg" />
+                    @Localizer["Upload new templates"]
+                    <p>Upload a new template from local computer</p>
+                </button>
+
+                <button type="button" onclick="LagreDocument()" class="command" style="width: 250px; margin-right: 7px;">
+                    <img src="~/images/Lagre.svg" />
+                    @Localizer["Save"]
+                    <p>Store the templates in the database</p>
+                </button>
+
+                <button type="button" onclick="removeDocument()" class="command" style="width: 250px; margin-right: 7px;">
+                    <img src="~/images/document-text-graph-trash.svg" />
+                    @Localizer["Remove"]
+                    <p>Remove the template</p>
+                </button>
+
+                    
+                <div id="importerer" style="display: none;">
+                    <div id="info" style="margin-top: 10px;">Lagrer malen ...</div>
+                    @(Html.Kendo().Loader()
+                        .Name("loader")
+                        .Size(LoaderSize.Large)
+                        )
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+
+        <div class="col-lg-2">
+            <div class="col-lg-12" style="margin-bottom: 10px;">
+                <h4>Modules</h4>
+                @(Html.Kendo().DropDownList()
+                    .Name("lstSkjerm")
+                    .ValuePrimitive(true)
+                    .Height(310)
+                    .Events(e => e.Change("onSkjermChange"))
+                    .DataSource(source => source
+                        .Ajax()
+                        .Read(read => read.Action("GetReportScreens", "Report"))
+                        )
+                    )
+            </div>
+                <div class="col-lg-12" style="height: calc(100vh - 260px);">
+                    <h4>Brevmaler</h4>
+                    @(Html.Kendo().ListView<Susteni.Models.ReportListeItem>()
+                    .Name("lvBrevmaler")
+                    .HtmlAttributes(new { style="height: 100%;" })
+                    .TagName("div")
+                    .ClientTemplateId("templateBMV")
+                    .Scrollable(ListViewScrollableMode.Endless)
+                    .Selectable(ListViewSelectionMode.Single)
+                    .Events(e => e.Change("onMalChange"))
+                    .DataSource(dataSource => dataSource
+                        .Ajax()
+                        .Read(read => read.Action("GetTemplateList", "Report").Data("skjermFilter"))
+                        )
+                    )               
+                </div>
+            </div>           
+
+            <div class="col-lg-2">
+                <h4>Flettefelt</h4>
+                    @(Html.Kendo().Grid<Susteni.Models.SQLVerdierItem>()
+                    .Name("grdSQLVerdier")
+                    .Columns(columns =>
+                    {
+                        columns.Bound(q => q.FeltNavn).Width(150);
+                        columns.Bound(q => q.Verdi);
+                    })
+                    .Scrollable()
+                    .Height("calc(100vh - 200px)")
+                    .Events(e => e.DataBound("onSQLDatabound"))
+                    .Selectable(s => s
+                        .Mode(GridSelectionMode.Single)
+                        .Type(GridSelectionType.Row))
+                    .DataSource(dataSource => dataSource
+                        .Ajax()
+                        .Read(read => read.Action("GetSQLInformasjon", "Report").Data("filterRapport"))
+                        )
+                    )
+            </div>
+
+            <div class="col-lg-8">
+                
+                <div class="panel with-nav-tabs panel-default" id="dataenter" style="height: calc(100vh - 180px);">
+                    <div class="panel-body data padding-0">
+                        <div class="tab-content data">
+                            <div class="panel-heading" id="Tab">
+                                <ul class="nav nav-tabs">
+                                    <li class="nav-item"><a class="nav-link active" aria-current="page" href="#tabBrevmal" data-bs-toggle="tab">@Localizer["Brevmal"]</a></li>
+                                    <li class="nav-item"><a class="nav-link" href="#tabPreview" data-bs-toggle="tab">@Localizer["Forhåndsvisning"]</a></li>
+                                </ul>
+                            </div>
+                            <div class="panel-body">
+                                <div class="tab-content" >
+
+                                    <div class="tab-pane fade show active" style="padding: 0px;" role="tabpanel" id="tabBrevmal">
+                                        <partial name="_VedlikeholdMal" />                                            
+                                    </div>
+
+                                    <div class="tab-pane" style="padding: 0px;" role="tabpanel" id="tabPreview">
+                                        <div class="row g-0">
+                                            <div id="pdfViewer">
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+               
+            </div>
+
+        </div> 
+</form>
+
+
+<script id="successTemplate" type="text/x-kendo-template">
+    <div class="upload-success">
+        <img src="@Url.Content("~/images/emoticon-happy.svg")" style="float:left; height:48px; width:48px; margin-right: 16px;"/>
+        <p>#= message #</p>
+    </div>
+</script>
+
+
+<script id="errorTemplate" type="text/x-kendo-template">
+    <div class="wrong-pass">
+        <img src="@Url.Content("~/images/emoticon-sad.svg")" style="float:left; height:48px; width:48px; margin-right: 16px;"/>
+        <p>#= message #</p>
+    </div>
+</script>
+
+
+@(Html.Kendo().Notification()
+    .Name("notification")
+    .Position(p => p.Pinned(true).Top(30).Right(30))
+    .Stacking(NotificationStackingSettings.Down)
+    .AutoHideAfter(5000)
+    .Templates(t =>
+    {
+        t.Add().Type("success").ClientTemplateID("successTemplate");
+        t.Add().Type("error").ClientTemplateID("errorTemplate");
+    })
+)
+
+
+@(Html.Kendo().Window()
+        .Name("DialogSupport")
+        .Title(Localizer["Support"].Value)
+        .Visible(false)
+        .Width(1200)
+        .Modal(true)
+        .Draggable()
+        )
+
+
+
+<style>
+    .commandMenuSmal {
+        width: 100%;
+        text-align: left;
+        border: 0px solid;
+        background-color: white;
+    }
+
+    .commandMenuSmal:hover {
+        color: darkred;
+    }
+
+    #lvBrevmaler {
+        height: 617px;
+        font: inherit;
+    }
+
+
+    .rapport {
+        float: left;
+        position: relative;
+        width: 225px;
+        height: 380px;
+        margin: 10px 5px 5px 5px;
+        padding: 0;
+    }
+
+    .rapport img {
+        float: left;
+        width: 200px;
+        max-height: 380px;
+        margin-left: 10px;
+        margin-bottom: 5px;
+        margin-right: 10px;
+    }
+
+    .rapport h3 {
+        margin-top: 0px;
+        margin-left: 10px;
+        text-align: left;
+        max-width: 141px;
+        line-height: 1.1em;
+        font-size: 14px;
+        font-weight: normal;
+        text-transform: uppercase;
+        color: #999;
+    }
+
+    .rapport p {
+        margin-top: 10px;
+        font-size: 14px;
+            color: #999;
+        }
+
+    .rapport:hover h3 {
+        color: darkred;
+    }
+
+    .rapport:hover p {
+        color: black;
+    }
+
+    .k-listview .k-state-selected {
+        border: 1px dashed;
+        border-color: blue;
+        border-top-left-radius: 8px;
+        border-top-right-radius: 8px;
+        background-color: white;
+        color: black;
+    }
+
+    .k-listview .k-state-selected h3 {
+        color: black;
+    }
+
+    .fixed {
+        position: absolute;
+        border: 0px solid lightgray;
+    }
+
+    #sporsmal .k-liste {
+        color: rgb(66, 66, 66);
+        border: 1px solid lightgray;
+    }
+
+    #sporsmal .k-liste:focus {
+        color: rgb(66, 66, 66);
+        border: 1px solid lightgray;
+    }
+
+    #sporsmal .k-input {
+        height: 30px;
+    }
+
+    .commandSmal img {
+        width: 24px;
+        height: 24px;
+    }
+
+    .k-fab-text {
+        display: none;
+    }
+
+</style>
+
+<div id="dialogLastOppFilerWindows">
+    @(Html.Kendo().Window()
+        .Name("dialogLastOppFiler")
+        .Title(Localizer["Last opp maler"].Value)
+        .HtmlAttributes("style= border:1px;")
+        .Visible(false)
+        .Height(500)
+        .Width(1000)
+        .Modal(true)
+        .Draggable()
+        )
+
+</div>
+
+
+<div id="dialogWriterWindow2">
+    @(Html.Kendo().Window()
+        .Name("dialogWriter2")
+        .Title("Utskrift")
+        .Visible(false)
+        .Height(1000)
+        .Width(1600)
+        .Modal(true)
+        .Draggable()
+        )
+</div>
+
+<script id="filter" type="text/javascript">
+    var skjerm = "Adresseliste";
+    var modul = 0;
+
+    var registreringGuid = "";
+
+    function skjermFilter() {
+        return { skjerm: skjerm, kategori: "", filterTekst: "Aktiv=1 AND RapId IN (SELECT RapId FROM RAPPORT_FILER WHERE Fellesraad IN ('0000','#Fellesraad#'))", preview: true }
+    }
+
+    function filterRapport() {
+        return { RapId: RapId}
+    }
+
+    function filterModul() {        
+        return {Modul: modul, ArkivType: 1}
+    }
+</script>
+
+
+<script id="Rapport">
+    var rolle = "";
+    var RapId = "";
+
+   
+    function showDialogLastOppDokument() {
+
+        $.ajax({
+            url: "/Engrafo/DialogLastOppMal",
+            method: 'GET',
+            success: function (result) {
+                $('#dialogLastOppFiler').html(result);
+                var ddlModul = document.getElementById("lstSkjerm").value;
+                modul = ddlModul;
+
+                var ddlSkjermModul = $("#lstSkjermModul").data("kendoDropDownList");
+                ddlSkjermModul.value(ddlModul);
+                $("#lstsqlMaler").data("kendoDropDownList").dataSource.read();
+
+                var popup = $('#dialogLastOppFiler').data("kendoWindow");
+                popup.center().open();
+            }
+        });
+    }
+
+    function createDocument() {
+        var lvDocument = $("#lvBrevmaler").data("kendoListView");
+        var selF = lvDocument.select();
+        var selIF = lvDocument.dataItem(selF);
+        var base64string = "";
+        var dokumentGuid = "";
+
+        var $this = $('#brevmalerForm').serialize();
+
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("CreateDocument", "Engrafo")',
+            data: $this
+        }).done(function (result) {
+            if (result.ErrorCode > 0) {
+                alert(result.ErrorTekst);
+            }
+            else {
+                dokumentGuid = result.NewGuid;
+
+                $.ajax({
+                    type: "GET",
+                    url: '@Url.Action("DialogEditor", "Engrafo")',
+                }).done(function (result) {
+                    $('#dialogWriter2').html(result);
+                    var xD = document.getElementById("dokumentGuid");
+                    xD.value = dokumentGuid;
+                    var popup = $('#dialogWriter2').data("kendoWindow");
+                    popup.center().open();                   
+                    });
+                }
+
+        });
+    }
+
+    $('#grdSQLVerdier tr').dblclick(function() { 
+           alert('dblclick'); 
+           $(".k-list-container .k-item").addClass("k-font-small");
+    });
+
+    function onMalChange(e) {
+        var selected = this.select();
+        var data = this.dataItem(selected);
+        RapId = data.RapId;
+        LoadDocument();
+        var sqlGrid = $("#grdSQLVerdier").data("kendoGrid");
+        sqlGrid.dataSource.read();
+    }
+
+    function onSkjermModulChange(e) {
+        var selected = this.select();
+        var data = this.dataItem(selected);
+        skjerm = data;
+               
+        var grid = $("#lstsqlMaler").data("kendoDropDownList");
+        grid.dataSource.read();       
+    }
+
+    function onSkjermChange(e) {
+        var selected = this.select();
+        var data = this.dataItem(selected);
+        skjerm = data;
+
+        var grid = $("#lvBrevmaler").data("kendoListView");
+        grid.dataSource.read();       
+    }
+    
+    function onSQLDatabound(e) {
+        var grid = this;
+        grid.tbody.find("tr").dblclick(function (e) {
+            var dataItem = grid.dataItem(this);
+            var sel = TXTextControl.selection;
+            TXTextControl.documentTargets.add(dataItem.FeltNavn + "Start");
+            sel.load(TXTextControl.StreamType.PlainText, btoa("<<" + dataItem.FeltNavn + ">> "));
+            TXTextControl.documentTargets.add(dataItem.FeltNavn + "End");
+            });
+        $("#grdSQLVerdier tbody tr").each(function () {
+            var currentRowData = grid.dataItem(this);
+
+            //Read field contains data if this email is readed
+            $(this).css("background-color", currentRowData.BackColor)
+            $(this).css("color", currentRowData.ForeColor)
+
+            if (currentRowData.FontNavn != "") {
+                $(this).css("font-family", currentRowData.FontNavn)
+            }
+
+        });
+    }
+
+    function LoadDocument() {
+ 
+       if (RapId != "") {
+            $.ajax({
+                url: "/Report/GetDocumentTemplate",
+                data: { RapId: RapId },
+                method: 'GET',
+                success: function (result) {
+                    TXTextControl.loadDocument(TXTextControl.StreamType.WordprocessingML, result);
+                    TXTextControl.zoom(120);
+                    }
+            });        
+        }
+    }
+
+    function LagreDocument() {
+        TXTextControl.saveDocument(TXTextControl.StreamType.WordprocessingML, function (e) {
+            //Performe something with e.data
+            var base64string = e.data;
+
+            xI = document.getElementById("importerer");
+            xI.style.display = "";
+
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("SetDocumentTemplate", "Report")',
+                data: {RapId: RapId, base64Dokument: base64string }
+            }).done(function (result) {
+                if (result.Success == true) {
+                    var lvDocument = $("#lvBrevmaler").data("kendoListView");
+                    var selF = lvDocument.select();
+                    
+                    tittel = selF[0].innerText;
+
+                    // textHtml = '\n <img src=\"data:image/png;base64,' + result.InfoText + '\" alt=\"Rapport\">\n<h3>' + tittel + '</h3>\n';
+                    // selF[0].innerHTML = textHtml;
+
+                    xI.style.display = "none";
+
+                    var notification = $("#notification").data("kendoNotification");
+                    notification.show({title: "Tamplate", message: "The Template is saved"}, "success");
+
+                }
+                });
+        });
+    }
+
+    function removeDocument() {
+        var tittel = "DELETE";
+        var nei = "No";
+        var content = "<div id='question'>Do you want to remove this equipment from the list</div>";
+
+        $("#confirm").kendoConfirm({
+            title: tittel,
+            content: content,
+            messages: {
+                okText: "yes",
+                cancel: nei
+                }
+            })
+        .data("kendoConfirm").result.done(function () {
+            $('body').append($('<div id="confirm">'));
+
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("RemoveReport", "Report")',
+                data: { RapId: RapId }
+                })
+            .done(function (result) {
+                $("#lvBrevmaler").data("kendoListView").dataSource.read();
+                alert("The selected template is removed");
+                });
+            })
+        .fail(function (result) {
+            $('body').append($('<div id="confirm">'));
+            });
+        }
+
+    function onUploadTemplate(e) {
+        var lvDocument = $("#lstSkjermModul").data("kendoDropDownList");
+        var selF = lvDocument.select();
+        var selIF = lvDocument.dataItem(selF);
+        modul = 0;
+        modulTekst = "";
+
+        if (typeof selIF != 'undefined') {
+            modulTekst = selIF;
+            }
+
+        switch (modulTekst) {
+            case "Stell":
+                modul = 70;
+                break;
+            case "Gudstjeneste":
+                modul = 40;
+                break;
+            case "Vielse":
+                modul = 30;
+                break;
+            case "Dåp":
+                modul = 50;
+                break;
+            case "Bestilling":
+                modul = 10;
+                break;
+            default:
+                modul = 0
+
+        }
+
+        var lvSqlMal = $("#lstsqlMaler").data("kendoDropDownList");
+        var selF = lvSqlMal.select();
+        var selIF = lvSqlMal.dataItem(selF);
+
+        if (typeof selIF != 'undefined') {
+            MalGuid = selIF.SqlMal_GUID;
+            }
+
+        var tittel = document.getElementById("NyRapportTittel").value;
+
+        e.data = {
+            tittel: tittel,
+            MalGuid: MalGuid,
+            skjerm: modulTekst,
+            modul: modul
+        };
+    }
+
+    function onUploadTemplateSuccess(e) {
+        var popup = $('#dialogLastOppFiler').data("kendoWindow");
+        popup.close();
+
+        var listBox = $("#lvBrevmaler").data("kendoListView");
+        listBox.dataSource.read();
+    }
+
+    function getTemplateTitle(content, defaultValue) {
+        return $("<div></div>").kendoPrompt({
+            title: "Title",
+            value: defaultValue,
+            content: content
+        }).data("kendoPrompt").open().result;
+    }
+
+    function DuplicateReport() {
+        var lvDocument = $("#lvBrevmaler").data("kendoListView");
+        var selF = lvDocument.select();
+        var selIF = lvDocument.dataItem(selF);
+
+        if (selIF != undefined) {
+            console.log(selIF);
+            window.getTemplateTitle("Title:", "").then(function (data) {
+                if (data != "") {
+                    $.ajax({
+                        type: "GET",
+                        timeout: 0,
+                        url: '@Url.Action("DuplicateReport", "Report")',
+                        data: { rapId: selIF.RapId, title: data }
+                        })
+                    .done(function (result) {
+                        if (result.Success) {
+                            if (result.Refresh) {
+                                $("#lvBrevmaler").data("kendoListView").dataSource.read();
+                            }
+                        }
+                        else {
+                            alert(result.Error[0].Message);
+                        }
+                    });
+                }
+            });
+        }
+    }
+    
+
+</script>
+
+<script id="funksjoner">
+
+
+    function addSupport() {
+        $.ajax({
+            url: '@Url.Action("DialogSupport", "HelpDesk")',
+            type: 'GET'
+        }).done(function (result) {
+            $('#DialogSupport').html(result);
+
+            xB = document.getElementById("idBilde");
+
+            document.getElementById("HelpDesk_Modul").value = "Templates";
+            document.getElementById("HelpDesk_Program").value = "2";
+            document.getElementById("HelpDesk_Status").value = "1";
+
+            const screenshotTarget = document.body;
+
+            html2canvas(screenshotTarget).then((canvas) => {
+                const base64image = canvas.toDataURL("image/png");
+                xB.innerHTML = "<img src='" + base64image + "' style='max-height: 260px; max-width: 350px;' alt='Bilde' / >";
+                document.getElementById("HelpDesk_byte64String").value = base64image
+            });
+
+            var popup = $('#DialogSupport').data("kendoWindow");
+            popup.center().open();
+        });
+    }
+
+    $(document).bind('keydown', function(e) {
+        if(e.ctrlKey && (e.which == 83)) {
+            e.preventDefault();
+            LagreDocument();
+            }
+    });
+
+    function DokumentPreview() {
+        TXTextControl.saveDocument(TXTextControl.StreamType.WordprocessingML, function (e) {
+
+            var base64string = e.data;
+
+            $.ajax({
+                type: "POST",
+                timeout: 0,
+                url: '@Url.Action("getRapportPreview", "Report")',
+                data: {Base64Dokumnet: base64string, RapId: RapId }
+                }).done(function (result) {
+                    var pdfViewer = $("#pdfViewer").data("kendoPDFViewer");  
+                    if (!pdfViewer) {
+                        pdfViewer = $("#pdfViewer").kendoPDFViewer({
+                            pdfjsProcessing: {
+                                file: ""
+                            },
+                            width: "100%",
+                            height: "calc(100vh - 220px)"
+                            }).data("kendoPDFViewer");
+                        }                    
+
+                    var pdfHandlerUrl = "/Report/VisRapport?rapId=" + RapId;
+
+                    pdfViewer.fromFile(pdfHandlerUrl);
+                    pdfViewer.loadPage(1);
+                });
+            });      
+        }
+
+     $("ul.nav-tabs > li > a").on("shown.bs.tab", function (e) {
+        var id = $(e.target).attr("href").substr(1);
+
+        if (id == "tabPreview") {
+            DokumentPreview();
+            }
+
+        });
+</script>
